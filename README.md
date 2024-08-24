@@ -1,1 +1,1 @@
-This is the GitHub for MAT 6903 (Mathematical Research 1) at UWF during the Fall 2024 semester. -- Alberto Dominguez
+GitHub for UWF MAT 6903 Mathematics Research 1 in Fall 2024 (w Prof. Pu)
