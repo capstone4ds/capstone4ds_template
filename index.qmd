@@ -1,14 +1,11 @@
 ---
-title: "Writing a great story for data science projects - spring 2025"
-subtitle: "This is a Report Template Quarto"
-author: "Students names (Advisor: Dr. Cohen)"
+title: "Supplychain Managment using GenAI"
+author: "Rahul Reddy"
 date: '`r Sys.Date()`'
 format:
   html:
     code-fold: true
 course: Capstone Projects in Data Science
-bibliography: references.bib # file contains bibtex for references
-#always_allow_html: true # this allows to get PDF with HTML features
 self-contained: true
 execute: 
   warning: false
@@ -21,132 +18,163 @@ editor:
 Slides: [slides.html](slides.html){target="_blank"} ( Go to `slides.qmd`
 to edit)
 
-::: callout-important
-**Remember:** Your goal is to make your audience understand and care
-about your findings. By crafting a compelling story, you can effectively
-communicate the value of your data science project.
-
-Carefully read this template since it has instructions and tips to
-writing!
-:::
 
 ## Introduction
 
-The introduction should:
+The In light of the growing complexity of global supply chains in the age of Industry 4.0, there is a 
+pressing need for sophisticated technologies to help increase operational efficiency and 
+resilience. Supply chain optimization in any supply chain management is meant at reducing 
+costs, increasing the delivery time and being able to adjust to the disruptions. Nevertheless, 
+the achievement of these goals is difficult because the data is limited, there are privacy 
+concerns and the supply chain environments are dynamic.
+In this study, we attempt to answer these challenges via the integration of artificial intelligence 
+(AI), in particular synthetic data generation. Through use of the Gaussian Copula within the 
+Synthetic Data Vault (SDV) framework, the study creates high fidelity synthetic datasets that 
+resemble real world data while maintaining the integrity of sensitive observations. Then these 
+datasets are enriched with key variables - supplier reliability, season demand, and external 
+disruptions - to train machine learning models for predicting shipping delays and facilitating 
+supply chain operations.
+The predictions are also validated through simulation testing under dynamic conditions 
+inspired by the idea of digital supply chain twins. The results highlight the feasibility of 
+combining generative AI with machine learning to architect scalable and privacy preserving 
+supply chain management solutions in the modern world. The concept of this approach is in 
+line with the rising degree of importance of resilience, sustainability, and ethics in data 
+practices at the global supply chain.
 
--   Develop a storyline that captures attention and maintains interest.
+## Background/Motivation
+Context: It studies the growing complexity of the global supply chain while addressing their 
+needs for efficiency, resilience, and their ability to adapt to constraints such as data scarcity, 
+privacy concerns and dynamic environments.
+Research Gap: Real world supply chain data is often limited and sensitive, and the traditional 
+optimization methods are not particularly good tools for real time monitoring and predictive 
+analysis. Using AI driven approaches such as synthetic data generation and machine learning, 
+the study seeks to fill this gap.
+Significance: The research achieves better data availability without compromising the privacy 
+of the underlying information by leveraging synthetic datasets in training the models and 
+performing the experimentation. This is important because of the supply chain resilience and 
+decision making that is key in the age of Industry 4.0
 
--   Your audience is your peers
+## Methods Used
+## Synthetic Data Generation:
 
--   Clearly state the problem or question you're addressing.
+Replicated real world data properties using the Synthetic Data Vault (SDV) framework with a
+Gaussian Copula model while preserving privacy.
+Features revealing operationally meaningful insights (e.g., supplier reliability, seasonal demand) 
+are added to the enriched dataset.
+Descriptive statistics and visual comparisons towards valided data fidelity.
+Machine Learning Model:
+Random Forest Classifier was used to predict shipping delays on enriched synthetic data.
+Car price, sales, shipping duration and one hot encoded seasonal demand variables were the 
+features.
+Precison, Recall, F1-score, and AUC ROC were used to evalute the perfomance of the model.
+Simulation Testing:
+Supplier reliability and external disruptions were varied in dynamic real world scenarios.
+Modeling supplier reliability fluctuations was achieved through the use of random noise and 
+through probabilistic disruption.
+Simulated outcomes were validated against predictions of the model.
+Visualization and Dashboarding:
+Created an interactive dashboard with Python’s Dash framework.
+Supplied metrics like reliability, delay duration and resulting impact of interruptions to help 
+make decisions.
 
-<!-- -->
+## Significance of the Work
+Key Findings: With 1,000 to 87,700 records, the synthetic dataset was near perfect with 
+respect to fidelity to the original data. In static conditions, the Random Forest Classifier 
+performed with 100% accuracy, precision, and recall. Delay was found to be highly sensitive to 
+external disruptions and low supplier reliability using simulations.
+Broader Impact: It validates the use of generative AI to optimize supply chain whilst addressing 
+the ethical concerns of data privacy. It offers actionable insights to stakeholders who can 
+predict and reduce risks in line with sustainable supply chain management principles.
+Implications: The case study demonstrates the scalability of the combination of synthetic data 
+with AI to enable resolution of complex supply chain challenges. It shows how digital supply 
+chain twins can be integrated to generate proactive risk management and resilience.
+Relevance to other work
+ It expands beyond Min’s (2010) focus on AI tools for supply chain analytics and 
+Dubey et. al’s (2020) talk of AI driven supply chain resilience. It uses the concept of digital 
+supply chain twins put forward by Ivanov and Dolgui (2020) for disturbance management.
+Differentiation: Specific to the generation of synthetic data to address data limitations, and a 
+less explored area in prior studies. It introduces simulation testing as a dynamic validation 
+technique connecting the theoretical models with the real world applications.
+Cited Seminal Works: References foundational texts like Chopra & Meindl (2007) for supply 
+chain strategies and Sánchez-Flores et al. (2020) for supply chain management which is 
+sustainable.
+Relevance to Capstone Project
+Applicability: The method that the study takes to generate synthetic data will help you in 
+deciding on how to pre process and what do to for privacy preservation of the data that you 
+use. In similar contexts such as fraud detection or loan prediction, machine learning models 
+like Random Forests offer robust baseline results that can be used for predictive modelling.
+Incorporation: We can adapt the methodology of enriching datasets with the operational 
+features to use financial or customer behavior attributes in your project. Dash boarding 
+techniques inspire real time visualization of monitoring and analyzing of prediction.
+Expansion or Divergence: Your capstone could try out other machine learning algorithms such 
+as Gradient Boosting or Neural Networks to handle overfitting that you observed in this study. 
+Combine real world data validation or compare synthetic and real datasets, to verify 
+generalizability.
 
--   Introduce why it is relevant needs.
+## Conclusion:
+Integrating generative AI techniques and machine learning models into supply chain 
+optimization are the focus of this research, which contributors significantly advance the state of 
+the art considering topical challenges in this area. The study deals with the data scarcity and 
+privacy problem in real world, by using Gaussian Copula model for generating synthetic data. A 
+statistical fidelity validated synthetic dataset allowed robust machine learning models which in 
+turn predict shipping delays and improve operations. Industry 4.0 principles were embodied by 
+the innovative combination of predictive analytics with simulation testing under dynamic 
+conditions for the resilience and adaptability of the framework.
+The real-world implementation of this was further emphasized by the use of interactive 
+dashboards for visualization and real-time insights, for making data driven decisions. 
+Nevertheless, some of these limitations include potential overfitting, simplified assumptions in 
+simulations, and the inherent issues of synthetic data. To extend the applicability of the 
+proposed framework, addressing these concerns with real world validation, expanded 
+simulation scenarios, real time data integration, and ethical safeguards can further refine the 
+proposed framework.
+The implications of the findings for supply chain management are particularly important in 
+terms of improving resilience to disruptions and attaining operational sustainability. Moreover, 
+this research also helps advance the literature on AI based supply chain management and is a 
+foundation for next wave of innovations like agent based modeling, real time streaming 
+capability and scaled computational infrastructure. This study armed with digital supply chain 
+twinning, and resolved ethical and representational concerns about synthetic data generation, 
+made a pathway for a transformative impact on global supply chains
 
--   Provide an overview of your approach.
-
-Example of writing including citing references:
-
-*This is an introduction to ..... regression, which is a non-parametric
-estimator that estimates the conditional expectation of two variables
-which is random. The goal of a kernel regression is to discover the
-non-linear relationship between two random variables. To discover the
-non-linear relationship, kernel estimator or kernel smoothing is the
-main method to estimate the curve for non-parametric statistics. In
-kernel estimator, weight function is known as kernel function
-[@efr2008]. Cite this paper [@bro2014principal]. The GEE [@wang2014].
-The PCA [@daffertshofer2004pca]*. Topology can be used in machine learning [@adams2021topology]
-
-*This is my work and I want to add more work...*
 
 ## Methods
 
--   Detail the models or algorithms used.
+Synthetic Data Generation
+To overcome the challenges of limited or sensitive real-world supply chain data, synthetic data was generated using the Synthetic Data Vault (SDV) framework, specifically employing the Gaussian Copula model. The Gaussian Copula model is a statistical method that captures the dependencies between variables by modeling their joint distribution. This approach ensures that the synthetic data retains the statistical properties of the original dataset while maintaining privacy and scalability. The original dataset was preprocessed to normalize numerical features such as CarPrice and Sales to prevent large value ranges from affecting the model's performance. Metadata for the dataset was created using SingleTableMetadata from SDV, which formally defines the schema, data types, and constraints of the data. The Gaussian Copula Synthesizer was then trained on this metadata and fitted to the original data. Using this trained model, synthetic samples were generated in batches to produce a dataset of 87,700 rows. The fidelity of the synthetic data was validated through descriptive statistics and visual comparisons. For example, histograms of numerical features in both original and synthetic datasets were compared to ensure alignment in distributions. This process aligns with Min’s (2010) emphasis on leveraging artificial intelligence (AI) tools for enhancing supply chain analytics by addressing data limitations effectively. Mathematically, if X represents a random variable vector in the original dataset, its copula CC is defined as:
 
--   Justify your choices based on the problem and data.
-
-*The common non-parametric regression model is*
-$Y_i = m(X_i) + \varepsilon_i$*, where* $Y_i$ *can be defined as the sum
-of the regression function value* $m(x)$ *for* $X_i$*. Here* $m(x)$ *is
-unknown and* $\varepsilon_i$ *some errors. With the help of this
-definition, we can create the estimation for local averaging i.e.*
-$m(x)$ *can be estimated with the product of* $Y_i$ *average and* $X_i$
-*is near to* $x$*. In other words, this means that we are discovering
-the line through the data points with the help of surrounding data
-points. The estimation formula is printed below [@R-base]:*
 
 $$
-M_n(x) = \sum_{i=1}^{n} W_n (X_i) Y_i  \tag{1}
-$$$W_n(x)$ *is the sum of weights that belongs to all real numbers.
-Weights are positive numbers and small if* $X_i$ *is far from* $x$*.*
+\begin{equation}
+C(u_1, u_2, \ldots, u_d) = P(U_1 \leq u_1, U_2 \leq u_2, \ldots, U_d \leq u_d),
+\end{equation}
+where ( U_i = F_i(X_i) ), and ( F_i )  is the cumulative distribution function (CDF) of (X_i).
+$$
 
+## Data Enrichment and Preprocessing
+The synthetic dataset was enriched with additional features relevant to supply chain optimization. For example, ShippingDuration was calculated as the difference between ShipDate and OrderDate. Features such as SupplierReliability, SeasonalDemand, and ExternalDisruption were added to capture operational dynamics. Categorical variables like SeasonalDemand were one-hot encoded for compatibility with machine learning models. Data cleaning steps included removing sensitive or irrelevant columns (e.g., supplier contact details) and imputing missing values using forward-fill techniques. A binary target variable (Delay > 5 days) was created to classify shipping delays.
 
-*Another equation:*
+## Supply Chain Optimization Using Machine Learning
+The enriched dataset was utilized to train a supervised machine learning model aimed at predicting delays and identifying optimization opportunities. Following Dubey et al.’s (2020) discussion on AI-driven supply chain resilience in Industry 4.0, a Random Forest Classifier was selected for its robustness in handling complex interactions between features. The dataset was split into training (80%) and testing (20%) subsets. The Random Forest algorithm trained on features such as CarPrice, Sales, ShippingDuration, SupplierReliability, and one-hot encoded seasonal demand variables. The target variable was whether a delay exceeded five days. The model's performance was evaluated using metrics such as precision (PP), recall (RR), F1-score (F1F1), and Area Under the Receiver Operating Characteristic Curve (AUC-ROC). 
+
+## Simulation Testing
+To validate predictions in dynamic real-world scenarios, simulation testing was conducted. Inspired by Ivanov & Dolgui’s (2020) concept of digital supply chain twins for managing disruption risks, simulated scenarios introduced variability in supplier reliability and external disruptions. For each simulation run:
+	Supplier reliability scores were adjusted using random noise sampled from a normal distribution N(0,5)).
+	External disruptions were introduced with a 15% probability.
+	Shipping durations were dynamically adjusted based on reliability scores and disruptions.
+The resolution action (Resolved vs. Not Resolved) depended on whether shipping durations exceeded seven days. Prediction accuracy for resolution actions was calculated by comparing model predictions against simulated outcomes. Mean Squared Error (MSE) between predicted delays ( y_"pred "  ) and actual delays ( y_"true "  ) quantified delay prediction accuracy:
+          
+
 
 $$
-y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i
+\begin{equation}
+\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} \left( y_{\text{true},i} - y_{\text{pred},i} \right)^2
+\end{equation}
 $$
 
 ## Analysis and Results
 
-### Data Exploration and Visualization
-
--   Describe your data sources and collection process.
-
--   Present initial findings and insights through visualizations.
-
--   Highlight unexpected patterns or anomalies.
-
-A study was conducted to determine how...
-
-```{r, warning=FALSE, echo=T, message=FALSE}
-# loading packages 
-library(tidyverse)
-library(knitr)
-library(ggthemes)
-library(ggrepel)
-library(dslabs)
-```
-
-```{r, warning=FALSE, echo=TRUE}
-# Load Data
-kable(head(murders))
-
-ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total)) 
-
-  ggplot1 + geom_point(aes(col=region), size = 4) +
-  geom_text_repel(aes(label=abb)) +
-  scale_x_log10() +
-  scale_y_log10() +
-  geom_smooth(formula = "y~x", method=lm,se = F)+
-  xlab("Populations in millions (log10 scale)") + 
-  ylab("Total number of murders (log10 scale)") +
-  ggtitle("US Gun Murders in 2010") +
-  scale_color_discrete(name = "Region")+
-      theme_bw()
-  
-
-```
-
-### Modeling and Results
-
--   Explain your data preprocessing and cleaning steps.
-
--   Present your key findings in a clear and concise manner.
-
--   Use visuals to support your claims.
-
--   **Tell a story about what the data reveals.**
-
-```{r}
-
-```
-
-### Conclusion
-
--   Summarize your key findings.
-
--   Discuss the implications of your results.
-
 ## References
+
+1) Min, Hokey. "Artificial intelligence in supply chain management: theory and applications." International Journal of Logistics: Research and Applications 13.1 (2010): 13-39.
+2) Dubey, R., Gunasekaran, A., & Papadopoulos, T. (2020). AI-driven supply chain resilience in the era of Industry 4.0. The International Journal of Logistics Management, 31(1), 123-148.
+3) Ivanov, D., & Dolgui, A. (2020). A digital supply chain twin for managing the disruption risks and resilience in the era of Industry 4.0. Production Planning & Control, 31(13), 973-985.
+
