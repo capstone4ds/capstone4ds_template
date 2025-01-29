@@ -55,7 +55,7 @@ Differentiation:  Specific to the generation of synthetic data to address data l
 
 Cited Seminal Works: References foundational texts like Chopra & Meindl (2007) for supply chain strategies and Sánchez-Flores et al. (2020) for supply chain management which is sustainable.
 
-Relevance to Capstone Project (15%)
+Relevance to Capstone Project 
 
 Applicability: The method that the study takes to generate synthetic data will help you in deciding on how to pre process and what do to for privacy preservation of the data that you use. In similar contexts such as fraud detection or loan prediction, machine learning models like Random Forests offer robust baseline results that can be used for predictive modelling.
 
