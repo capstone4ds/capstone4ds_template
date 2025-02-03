@@ -163,7 +163,6 @@ To validate predictions in dynamic real-world scenarios, simulation testing was 
 The resolution action (Resolved vs. Not Resolved) depended on whether shipping durations exceeded seven days. Prediction accuracy for resolution actions was calculated by comparing model predictions against simulated outcomes. Mean Squared Error (MSE) between predicted delays ( y_"pred "  ) and actual delays ( y_"true "  ) quantified delay prediction accuracy:
           
 
-
 $$
 \begin{equation}
 \text{MSE} = \frac{1}{n} \sum_{i=1}^{n} \left( y_{\text{true},i} - y_{\text{pred},i} \right)^2

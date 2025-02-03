@@ -1,0 +1,206 @@
+---
+title: "Supplychain Managment using GenAI"
+author: "Rahul Reddy"
+date: '`r Sys.Date()`'
+format:
+  html:
+    code-fold: true
+course: Capstone Projects in Data Science
+self-contained: true
+execute: 
+  warning: false
+  message: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## Introduction
+
+In recent years Artificial Intelligence (AI) is of great interest and
+much attention for integration in Supply Chain Management, especially
+due to the global disruptions in the form of pandemics, geopolitical
+insecurity, and technology revolution. With markets becoming more
+dynamic and unpredictable; traditional supply chain models have been
+unable to ‘amend', so that it matches what is happening in the markets
+thereby; it is really important for suppliers to be introduced to
+methods of increasing their resilience and overall performance. In my
+opinion, the transformed opportunity provided by AI-driven innovations
+is through the introduction of advanced analytics, automation and
+predictive capabilities to optimize the supply chain operations.
+
+The paper by Belhadi et al. (2024) which reviews the use of AI in
+improving Supply Chain Resiliences (SCRes) and Supply Chain Performance
+(SCP) in a dynamic market environment is used as the focal point of this
+literature review. Thus, this study is presented as an attempt of
+filling the gap found in SCP empirical research by SCRes and the direct
+and indirect impact of AI on SCP. The authors used an empirical study of
+data from manufacturing firms in many industries and in various
+locations to perform empirical analysis of the use of the Structural
+Equation Modeling (SEM) approach to study AI based supply chain
+improvements. It is based on these findings that it can be concluded
+that SCRes are not only driven by SCP activity but also created by
+strengthened SC supply resources’ Adaptive Capabilities (AC) and Supply
+Chain Collaboration (SCC). These enablers are acting as such: proactive
+risk mitigation, strategic decision making and operational agility in
+long terms sustainability of supply chain operations. Moreover, the
+study also highlights the moderating role of the Firm’s Supply Chain
+Dynamism (SCD) to illustrate how the dynamics in the market conditions
+should call for a change in the firm’s AI capabilities.
+
+This review presents the key contributions and the meaning of the study
+to the current supply chain problems through its methodological
+framework. Finally, this research also has a value at the professional
+and researcher communities who are in the efforts of making the supply
+chains more resilient and high performing, given the more volatile
+business environment, by using such Transformative impacts of AI.
+
+## Background motivation:
+
+As noted by Belhadi et al. (2024), it is crucial to invest more into
+understanding how AI can assist supply chain resilience and performance
+(SCP), since the dynamism and uncertainty in society are increasing more
+and more. However, although the supply chain infrastructure has
+undergone extensive strategic planning and is heavily modernized,
+current supply chain management methods are found inadequate when faced
+with the recent global crises, i.e., pandemics and geopolitical
+instability. AI presents interesting solution to the challenges in
+information processing and decision making; however, lack of research
+specifically focusing on the contribution of AI to SCP boosting through
+more SCRes. The gap that this study wishes to fill is to investigate the
+direct and indirect impacts of the AI on supply chain operations.
+
+## Methodology:
+
+In order to analyze the validity of the proposed research framework
+formulated with the Organizational Information Processing Theory (OIPT)
+in relation to the role of AI in Supply Chain Resilience (SCRes) and
+Supply Chain Performance (SCP), this study employs a quantitative
+research design based on Structural Equation Modeling (SEM). Data was
+collected through a structured survey that was sent to manufacturing
+companies located across all the regions, being a supply chain manager,
+an executive, or an operational specialist who is involved in supply
+chain management of an AI led manner. The four measured factors were
+automation, machine learning, predictive analytics and Ai Capabilities
+(AI). Supply Chain Resilience (SCRes) has been measured through
+indicators specifying the risk management, the adaptive capacity,
+response efficiency; Supply Chain Performance (SCP) has been evaluated
+taking into account the order fulfillment rate, lead time and cost
+efficiency. Market demands change rate, supplier stability,
+technological disruption were measured as supply chain dynamism (SCD).
+Finally, Adaptive Capabilities (AC) and Supply Chain Collaboration (SCC)
+serve as key mediators in the relationship between AI and SCRes.
+Confirmatory Factor Analysis (CFA): Employment to substantiates the
+reliability and validity of the determination constructs.
+
+To analyze the significance of the relationships between AI, SCRes and
+SCP, Structural path analysis was done.
+
+## Model Fit:
+
+Fit of the model was measured by using Chi square scale (χ2),
+Comparative Fit Index (CFI), Root Mean Square Error of Approximation
+(RMSEA), and Standardized Root Mean Square Residual (SRMR).
+
+Therefore, the path coefficients were tested using t values and p
+values, with p \< 0.05 as the taxing figure for statistical
+significance.
+
+Mathematical Model: The relationship between AI capabilities, SCRes, and
+SCP is modeled using the following equation:
+
+$$
+\text{SCP} = \beta_0 + \beta_1(\text{AI}) + \beta_2(\text{SCRes}) + \beta_3(\text{AC}) + \beta_4(\text{SCC}) + \epsilon
+$$
+
+Where: SCP represents Supply Chain Performance AI denotes Artificial
+Intelligence capabilities SCRes indicates Supply Chain Resilience AC and
+SCC are Adaptive Capabilities and Supply Chain Collaboration
+respectively Represents the error term ε
+
+## Significance of work:
+
+This research has important implication in validating empirically on how
+innovations powered by AI are an important mechanism for improving
+supply chain resilience and performance. By taking into account the
+problem of the use of the measured parameters (SCP, SCRes) by the
+organization for the reduction of risks and navigation in changing
+market conditions, the study links directly and indirectly SCI and AI
+with SCP, SCRes. Unlike previous ones focused on short term performance
+improvements, this study introduces the use of AI to build the long term
+resilience with the strength of adaptive capabilities and cooperation of
+the partners in the supply chain. The results highlight the
+effectiveness of AI driven predictive analytics, machine learning
+models, automation technologies in helping firms take corrective action,
+work out response strategies and achieve improved decision making.
+Specifically, the research restates that Supply chain dynamism moderates
+the use of AI as firms operating in highly volatile markets must fine
+tune their use of AI within the practices unique to them. In addition,
+this also expands the body of knowledge on digital supply chain
+transformation as well as the possible business insights operating on
+digital supply chain transformation with the use of AI. Beyond the realm
+of academia, their implications are practical advice for supply chain
+professionals, policymakers, and technology developers on making use of
+AI power for generating resilient and efficient supply chain management.
+
+$$
+P(D_t) = 1 - e^{-\lambda (\text{AI}_t + \text{SCRes}_t)}
+$$
+
+P(D_t): Probability of disruption at time t. λ (lambda): Sensitivity
+factor. This parameter controls how strongly the combined effect of AI
+and SCRes influences the probability of disruption. A larger λ means a
+greater impact. AI_t: AI capabilities at time t. SCRes_t: Supply chain
+resilience at time t. Interpretation: This equation suggests that both
+AI capabilities and supply chain resilience reduce the probability of
+disruption. The negative exponential function ensures that the
+probability is always between 0 and 1. As AI or SCRes increase, the
+exponent becomes a larger negative number, making the overall term
+closer to zero, and thus P(D_t) closer to zero.
+
+## Connection to Other Work:
+
+However, this study contributes to existing research in several ways.
+Empirically testing AI’s role in SCRes and SCP, this extends Grover et
+al. (2020) and Dubey et al. (2020). As opposed to existing research on
+AI as an optimization tool for short term performance enhancement, this
+study emphasizes the role that AI has in creating resilience and thus
+long term SCP stability. This supports Scholten et al. (2019) on the
+contribution of SC Collaboration and adaptive capabilities to increase
+SCRes. The finding provides additional evidence in the digital
+transformation and Industry 4.0 research in supply chain management.
+
+## Relevance to Capstone Project:
+
+This paper will be widely applicable for a capstone project pertaining
+to an AI driven Supply chain optimization. Specifically: An OIPT and SEM
+based research framework is presented so that it can be a basis of
+analysis of the impact of AI on supply chain in the real world. The
+study also helps in clarifying how AI forecasting and automation
+technologies may assist in breaking and raising the efficiency of the
+supply chain. The study can also conduct a longitudinal impact of AI
+adoption in the supply chains or the comparison of the AI driven
+resilience strategies across industries as a potential capstone module.
+
+## Conclusion:
+
+It confirms the strength of AI to make a substantial difference in the
+supply chain management. It investigates the ways in which an IT
+positive enabler of resilience and long term performance can be
+empowered by means of empirical evidence and also on how IT provide can
+evolve to achieve those outcomes. These findings can be further extended
+by further research of industry specific AI implementation,
+establishment of the impact on sustainability or risk mitigation.
+
+This literature review becomes a useful ground for the capstone research
+on the supply chain’s digital transformation carried out stemming from
+the fact that the future investigation would be in the context of the
+digital supply chain transformation.
+
+## Reference:
+
+Belhadi, A., Mani, V., Kamble, S. S., Khan, S. A. R., & Verma, S.
+(2024). Artificial intelligence-driven innovation for enhancing supply
+chain resilience and performance under the effect of supply chain
+dynamism: an empirical investigation. Annals of Operations Research,
+333(2), 627-652.
