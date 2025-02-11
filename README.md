@@ -1,3 +1,66 @@
+Literature Review:
+Literature Review
+
+This project aims to predict trial exhaustion rates and joint injury risks using biomechanical data alongside simulated physiological metrics. The work builds upon established methods in sports science and biomechanics while incorporating modern data science techniques such as feature engineering, temporal modeling, and ensemble methods. The project is structured into two main pipelines—regression and classification—each targeting different predictive goals based on a comprehensive set of features derived from trial-level data.
+
+Data Loading and Preprocessing
+
+The project begins by merging a CSV dataset containing trial-level measurements (e.g., joint energy and joint power) with participant information using unique identifiers (such as trial_id and player_participant_id). Extensive data cleaning—such as imputing or dropping missing values—is conducted with logging and debugging functions to ensure data integrity.
+
+Feature Engineering
+
+A critical component of this project is the derivation of new features that capture both biomechanical outputs and simulated physiological states:
+
+    Joint Metrics:
+    Aggregated values for joint energy and joint power are calculated by summing measurements across multiple joints. These serve as primary indicators of physical output.
+
+    Simulated Physiological Measures:
+    A simulated heart rate is computed as a function of mean energy and joint energy, acting as a proxy for physiological stress. Additionally, “fake body” metrics (including sleep quality, sleep duration, resting heart rate, heart rate variability, and stress index) are introduced to simulate wearable data that may influence fatigue and injury risk.
+
+    Temporal Dynamics:
+    Lag features (e.g., exhaustion from the previous trial) and rolling statistics (such as moving averages and volatility measures) are computed to capture trends and variability across trials. The trial exhaustion rate is then calculated as the change in exhaustion score per trial.
+
+    Asymmetry Features:
+    Differences between left and right joint metrics are measured to identify potential imbalances that could lead to injury.
+
+Workout Simulation
+
+A novel aspect of the project is the simulation of two workouts. The first workout consists of the original 125 trials, while the second is a duplicate that simulates gradual deterioration in the fake body metrics (e.g., reduced sleep quality, increased resting heart rate). These are distinguished by adding a workout_id and a trial counter, and then concatenated into a single dataset to enable downstream analysis.
+
+Pipeline 1: Regression for Predicting Trial Exhaustion Rate
+
+The first pipeline focuses on forecasting the trial exhaustion rate, defined as the change in exhaustion per trial. Input features include:
+
+    Aggregated Joint Metrics: Joint energy and power sums.
+    Simulated Physiological Features: Simulated heart rate and fake body metrics.
+    Temporal Features: Lag features (e.g., previous trial exhaustion) and rolling averages (e.g., five-trial moving averages) capturing trends and volatility.
+
+A baseline linear regression model is used initially, with the potential to progress to more complex models such as Random Forests, Gradient Boosting, or LSTM networks. Evaluation metrics include MAE, RMSE, and R², with visualizations comparing predicted and actual values over time.
+
+Pipeline 2: Classification for Predicting Joint Injury Risk
+
+The second pipeline targets the prediction of injury risk for specific joints using a classification approach. Here, the key features are:
+
+    Joint-Specific Metrics: Measurements from individual joints (e.g., energy and power for the left ankle or right elbow).
+    Asymmetry and Rolling Features: Calculated differences between bilateral joint metrics and cumulative load measures that capture stress over multiple trials.
+    Simulated Physiological Features and Temporal Indicators: Fake body metrics and lag features similar to the regression pipeline.
+
+Injury risk is determined by labeling trials based on whether a rolling sum of joint stress exceeds a predefined threshold (e.g., the 75th percentile). The modeling starts with logistic regression or decision trees and may evolve to more advanced classifiers like Random Forests or neural network-based methods. Evaluation is conducted using accuracy, precision, recall, F1-score, and ROC-AUC, supplemented by feature importance analysis (e.g., via SHAP).
+
+Integration and Modularity
+
+Both pipelines share common preprocessing and feature engineering modules, ensuring modularity and facilitating debugging and iterative improvements. Visualization tools such as histograms, correlation matrices, and temporal trend plots are employed to validate each step of the data transformation process.
+
+Conclusion
+
+This capstone project integrates biomechanical data with simulated physiological metrics to predict both trial exhaustion and joint injury risks. By leveraging temporal features, asymmetry measures, and innovative workout simulation, the project not only establishes robust predictive models but also contributes valuable insights to the literature on performance analytics in sports and rehabilitation. The modular, iterative approach ensures that each component—from data preprocessing to model evaluation—is transparent, reproducible, and adaptable for future research.
+
+
+------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
 Links so far:
 https://www.datacamp.com/tutorial/introduction-to-shap-values-machine-learning-interpretability
 
