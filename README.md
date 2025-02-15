@@ -1,5 +1,9 @@
+Dataset Upgraded to real athlete data from Driveline Baseball (I'm interning.) My study is going to add on one or two key aspects more key to being specific in injury prevention: 1) EMG sensors to measure the muscle contraction, acceleration and gyroscope during the pitching motion to see how we can prevent injury to the UCL by putting this sensors on the FCR (and two other muscles I'm forgetting.) Anyways I'm putting the data together now at: https://github.com/ghadfield32/emg_fatigue_analysis
+
+Will put my final copies into this repo once I've put it together. I have a pipeline premade for my lstm at: https://github.com/ghadfield32/spl_freethrow_biomechanics_analysis_ml_prediction/blob/main/notebooks/Deep_Learning_Final/lstm_rnn_energy_predict_granular_dataset_final_project.ipynb
+
+
 Literature Review:
-Literature Review
 
 This project aims to predict trial exhaustion rates and joint injury risks using biomechanical data alongside simulated physiological metrics. The work builds upon established methods in sports science and biomechanics while incorporating modern data science techniques such as feature engineering, temporal modeling, and ensemble methods. The project is structured into two main pipelines—regression and classification—each targeting different predictive goals based on a comprehensive set of features derived from trial-level data.
 
