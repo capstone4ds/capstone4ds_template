@@ -1,0 +1,46 @@
+---
+title: "Supplychain Managment using GenAI"
+author: "Rahul Reddy"
+date: '`r Sys.Date()`'
+format:
+  html:
+    code-fold: true
+course: Capstone Projects in Data Science
+self-contained: true
+execute: 
+  warning: false
+  message: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## Introduction 
+ 
+## Problem Definition:
+
+The online payment fraud issue is a most complex challenge which has a very fast growth in online commerce. The purpose of bank security and e-commerce platforms and individuals' daily transaction management is to prevent and detect embezzlement owing to the considerable financial losses that exist with even minimal activity rates. The problem needs additional complication because fraud less transactions occur at only 0.1% rate with most transactions being legitimate which results in severe dataset imbalance through hundreds of thousands of innocent transactions outpacing fraudulent transactions. Traditional detection methods have this limitation because they produce many incorrect alerts because the system contains only rare fraudulent instances in its tail distribution, making it hard to spot abnormal activity without an excessive number of false positives or negatives. The skills of cybercriminals evolve to beat security standards because an increasing number of people engage in online payment fraud. Today, payments are running on payments that update more often than usual rule-based systems can handle, and adaptive fraudsters are exploiting those weaknesses. Therefore, virtually all of these static computer systems cannot identify the emergence of new fraud behavior patterns in the financial system and they become a threat. Alternative to that are especially the Machine learning models that can learn such complex and nonlinear relationships (ex: decision trees). System Brainly. So, they just change, depending on new fraud tactics that evolve with the ages, as they learn from new data and grow more accurately with the passing time at their predictions.
+
+The financial consequence of the outcome of fraud of online payment is not only a direct financial loss, it also leads to a loss of trust with the customer. Along with charges, the failure to detect fraud also led to higher cost in the form of chargebacks, legal expenses and greater legal battle of fighting against fraud which generated a greater volume. Additionally, the risk of fraud in customers is higher, which leads to the rejection of trust of the online payment system service by costumers which in damage tops service Company reputation so. Given that so many faces are associated with this type of fraud, a high level of robust, yet agile, fraud detection systems that can identify fraud effectively yet performing is timely and accurate identification of fraudulent transaction so essence.
+
+The project combats these challenges through the combination of advanced model optimization techniques along with interpretable decision trees for analysis. The end goal is to develop a system that detects frauds efficiently and reserves high detection accuracy despite constant changes in the online payment fraud marketplace. All digital financial operations must fulfill their intended functions without any exceptions to prevent detrimental risks and continual financial losses.
+
+## Context and Background: 
+The rise of electronic commerce has made money more convenient, and more exploitable.  The amount and sophistication of data on online purchases bog down conventional methods of prevention of fraud.  Rule-based systems and human audits can't keep pace with more and more complex methods of fraud.
+
+Machine learning and data mining solutions are exceptionally effective.  They can scan massive datasets for infinitesimal abnormalities indicative of fraud.  In contrast with static rule-based solutions, more modern techniques such as decision trees, random forests, and ensembles learn from experience.  The flexibility of this means they can learn of complex, nonlinear correlations and find evolving trends of fraud.  Other statistical techniques, such as logarithmic conversion and correlation examination, also generate improved predictive performance.
+
+The dynamic fraud online environment requires hardened and adaptive systems.  Continuous surveillance, real-time data fusion, and iterative model refresh are critical.  These innovations drive low false positives with accuracy of detection, retaining customer trust and reducing the cost of operations.  The movement from reactive, rule-based systems towards proactively data-driven systems represents a paradigm for fraud detection, where systems learn and evolve with the evolving environment of threats.
+
+## Objectives and Goals: 
+This project aims to establish an automated, viable system capable of identifying authentic versus fraudulent online payment transactions. This system is designed to minimize false negatives—those cases where fraud occurs and goes undetected, potentially costing the business greatly—as well as false positives, in which legitimate customers are unnecessarily flagged for fraudulent activity. With the goal of improving risk management processes through advanced machine learning techniques, the project will help ensure timely identification and observation of suspicious activity.
+A primary aim is to create a predictive model that successfully classifies transactions as either genuine or fraudulent. The project undertakes careful data preprocessing, namely handling the data normalization, class imbalance, and feature engineering process that builds a solid and promising base for the model to work upon. The model will be evaluated using metrics such as precision, recall, F1-score, and overall accuracy, with a focus on recall to include as many fraudulent cases as possible.
+Besides high detection accuracy, another important goal is to make sure the model is interpretable (explainable). Does this imply that the system didn’t just classify transactions accurately but also explained why it flagged a certain transaction as fraudulent. Visualization tools— including decision tree diagrams, confusion matrices, and ROC curves—will be incorporated to illustrate the model’s decision-making rationale for stakeholders, engendering trust and informing subsequent refinements.
+Finally, the initiative also envisions for a scalable infrastructure, updatable with updating data and new trends of fraud on a periodic basis. With updatable and scalable infrastructure, longevity and effectiveness of the solution can be guaranteed in the dynamically changing online payment environment. The iterative approach will guarantee the validity of online transactions and lead towards a realistic, data-driven solution for online fraud of payments.
+
+## Summary of Approach:  
+The project has a systematic and data-driven strategy for identifying fraudulent online payments with methods of complex machine learning techniques. The process commences with data collection from a known source ( Kaggle) where data from the dataset has been analyzed and preprocessed extensively. The data preprocessing technique consists of data cleaning, addressing missing values, and feature engineering steps such as logarithm conversion for normalizing distributions and correlation checks for identifying strongest factors.
+
+Next, the data are divided into training and testing subsets for fair testing of the performance of the model. A decision tree algorithm then becomes the primary classification model, whose use has been selected for its explainability and its ability for discovering data relationship of a nonlinear nature. Hyper parameter tuning with grid searching and other similar methods are performed for best parameters such as tree depth and splitting criterion, such that the model will not under-fit and also not overfit. The model’s performance can be measured with strict performance metrics such as accuracy, F1-score, and recall, where its primary goal is maximizing recall and limiting false negatives. The behavior and decision boundaries of the model can also be interpreted with methods such as confusion matrices and ROC curves.
+
+Finally, the process has been iterative and adaptive, involving real-time observation and periodic revisions for the sake of incorporating novel data and novel trends in fraud. The end-to-end, step-by-step process not only expects maximum accuracy of detection, but also explainability and scalability of the process of fraud discovery.
