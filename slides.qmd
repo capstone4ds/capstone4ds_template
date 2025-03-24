@@ -1,117 +1,121 @@
 ---
-title: "Present a great story for data science projects"
-subtitle: "This is a Slide Template"
-author: "Students names (Advisor: Dr. Cohen)"
-date: '`r Sys.Date()`'
-format:
-  revealjs
-course: Capstone Projects in Data Science
-bibliography: references.bib # file contains bibtex for references
-#always_allow_html: true # this allows to get PDF with HTML features
-self-contained: true
-execute: 
-  warning: false
-  message: false
-editor: 
-  markdown: 
-    wrap: 72
+title: "Capstone Project: Modeling Fatigue and Injury Risk in Baseball Pitching"
+author: "Geoffrey Hadfield"
+date: "2025-03-24"
+format: html
+editor: visual
 ---
 
-::: callout-important
-**Remember:** Your goal is to make your audience understand and care
-about your findings. By crafting a compelling story, you can effectively
-communicate the value of your data science project.
+Abstract
 
-Carefully read this template since it has instructions and tips to
-writing!
+In this capstone project, we leverage real athlete data from Driveline Baseball alongside novel sensor measurements to predict fatigue and joint injury risks in baseball pitchers. Using an LSTM-based recurrent neural network (RNN) architecture, the project combines biomechanical data with simulated physiological metrics. Two parallel pipelines—one for regression (predicting trial exhaustion rates) and another for classification (identifying joint injury risk)—are developed. This work integrates advanced feature engineering, temporal dynamics, and modular data preprocessing, offering robust insights for injury prevention and performance analytics.
+Introduction
 
-More information about `revealjs`:
-<https://quarto.org/docs/reference/formats/presentations/revealjs.html>
-:::
+Recent advances in sports science have underscored the importance of combining biomechanical and physiological data for injury prevention. In my internship at Driveline Baseball, the dataset was upgraded to include real athlete data. To further enhance the analysis, this project incorporates EMG sensors to capture muscle contraction, acceleration, and gyroscopic measurements during the pitching motion. These additional measurements—placed on the flexor carpi radialis (FCR) and other key muscles—aim to improve the prediction of ulnar collateral ligament (UCL) injuries.
 
-## Introduction  {.smaller}
+Two resources support this work:
 
--   Develop a storyline that captures attention and maintains interest.
+    The raw sensor data is being compiled and will be available at emg_fatigue_analysis.
 
--   Your audience is your peers
+    A pre-established pipeline for LSTM-based fatigue prediction is available at LSTM RNN Pipeline.
 
--   Clearly state the problem or question you're addressing.
+Literature Review
 
--   Introduce why it is relevant needs.
+The literature indicates that predicting fatigue and injury risk in athletes requires an integration of biomechanical outputs with physiological signals. Key findings from previous studies include:
 
--   Provide an overview of your approach.
+    Athlete Burnout: Research has shown that burnout is influenced by multiple factors (e.g., stress, training load, support systems) that vary among athletes. Customizing training and recovery protocols based on individual warning signs may mitigate injury risks.
 
-In kernel estimator, weight function is known as kernel function
-[@efr2008]. Cite this paper [@bro2014principal]. The GEE [@wang2014].
-The PCA [@daffertshofer2004pca]\*
+    Fatigue Data Collection: Detailed datasets have been published to capture muscle activity, motion capture data, and self-reported fatigue levels during shoulder rotations. These resources serve as a foundation for building predictive algorithms.
 
-## Methods
+    Methodological Advances: Recent studies have applied neural network architectures to model fatigue—such as a fully-connected network for predicting crack growth in metals [DOI: 10.1016/j.engfracmech.2020.107402]—and used combined physical and physiological workload metrics to forecast injury risk in professional soccer players [DOI: 10.52082/jssm.2024.537].
 
--   Detail the models or algorithms used.
+These studies, along with tutorials on SHAP values and Bayesian optimization from DataCamp, inform our approach to feature engineering and model selection.
+Methodology
+Data Loading and Preprocessing
 
--   Justify your choices based on the problem and data.
+The project begins by merging a CSV file containing trial-level measurements (e.g., joint energy and power) with participant metadata using unique identifiers like trial_id and player_participant_id. Rigorous data cleaning (including imputation and removal of missing values) is performed with comprehensive logging and debugging routines.
+Feature Engineering
 
+Key features derived in this project include:
 
+    Joint Metrics: Aggregated joint energy and power are computed to serve as primary indicators of physical output.
 
-## Data Exploration and Visualization
+    Simulated Physiological Measures: A simulated heart rate is calculated as a function of mean and joint energy. In addition, “fake body” metrics (sleep quality, sleep duration, resting heart rate, heart rate variability, and stress index) are introduced to mimic wearable sensor data.
 
--   Describe your data sources and collection process.
+    Temporal Dynamics: Lag features (e.g., previous trial exhaustion) and rolling statistics (moving averages, volatility measures) capture trends across trials. The trial exhaustion rate is defined as the change in exhaustion per trial.
 
--   Present initial findings and insights through visualizations.
+    Asymmetry Features: Differences between left and right joint metrics are measured to detect imbalances that may predispose athletes to injury.
 
--   Highlight unexpected patterns or anomalies.
+Workout Simulation
 
-## Data Exploration and Visualization {.smaller}
+To mimic the progression of fatigue:
 
-A study was conducted to determine how...
+    Workout 1: Contains the original 125 trials.
 
-```{r, warning=FALSE, echo=F, message=FALSE}
-# loading packages 
-library(tidyverse)
-library(knitr)
-library(ggthemes)
-library(ggrepel)
-library(dslabs)
-```
+    Workout 2: Is a duplicate of the original trials but simulates gradual deterioration in fake body metrics (e.g., lower sleep quality, higher resting heart rate) by adding a workout_id and trial counter.
 
-```{r, warning=FALSE, echo=F}
-# Load Data
-#kable(head(murders))
+These two datasets are concatenated to form a comprehensive dataset for subsequent modeling.
+Predictive Modeling Pipelines
+Pipeline 1: Regression for Predicting Trial Exhaustion Rate
 
-ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total)) 
+    Input Features: Aggregated joint metrics, simulated physiological features, and temporal features.
 
-  ggplot1 + geom_point(aes(col=region), size = 4) +
-  geom_text_repel(aes(label=abb)) +
-  scale_x_log10() +
-  scale_y_log10() +
-  geom_smooth(formula = "y~x", method=lm,se = F)+
-  xlab("Populations in millions (log10 scale)") + 
-  ylab("Total number of murders (log10 scale)") +
-  ggtitle("US Gun Murders in 2010") +
-  scale_color_discrete(name = "Region")+
-      theme_bw()
-  
+    Model: A baseline linear regression model is used, with future plans to incorporate Random Forests, Gradient Boosting, or LSTM networks.
 
-```
+    Evaluation: Model performance is assessed using Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), and R², along with visualizations comparing predicted versus actual exhaustion rates.
 
-## Modeling and Results
+Pipeline 2: Classification for Predicting Joint Injury Risk
 
--   Explain your data preprocessing and cleaning steps.
+    Input Features: Joint-specific metrics, asymmetry measurements, and cumulative load indicators.
 
--   Present your key findings in a clear and concise manner.
+    Labeling: Trials are classified as high injury risk if a rolling sum of joint stress exceeds a threshold (e.g., the 75th percentile).
 
--   Use visuals to support your claims.
+    Model: Initially, logistic regression or decision tree classifiers are employed. Future work may involve Random Forests or neural network-based methods.
 
--   **Tell a story about what the data reveals.**
+    Evaluation: Metrics such as accuracy, precision, recall, F1-score, and ROC-AUC are used, supplemented by feature importance analyses using SHAP values.
 
-```{r}
+Integration and Modularity
 
-```
+Both pipelines share common preprocessing and feature engineering modules, ensuring that the workflow is modular and reproducible. Visualization tools—including histograms, correlation matrices, and temporal trend plots—are used throughout the analysis to validate each transformation step.
+Experimental Results
 
-## Conclusion
+The LSTM-based regression model for fatigue prediction demonstrated promising results:
 
--   Summarize your key findings.
+    MSE: 0.00596
 
--   Discuss the implications of your results.
+    MAE: 0.01762
 
-## References
+    R² Score: 0.91808
+
+Similarly, the injury risk classifier achieved strong performance:
+
+    Overall Accuracy: 98.16%
+
+    Precision: 93.84%
+
+    Recall: 99.77%
+
+    F1 Score: 96.72%
+
+Joint-specific models yielded varying metrics, reflecting the inherent complexity of localized biomechanical data.
+Discussion
+
+This project illustrates the successful application of deep learning to model fatigue and predict injury risk in a real-world sports setting. Key challenges included managing the variability in biomechanical signals and optimizing model performance through careful feature engineering. The integration of temporal dynamics and asymmetry features was critical in capturing the underlying physiological responses. Future work may explore attention mechanisms or hybrid architectures to further refine predictive accuracy.
+Conclusion
+
+By combining real athlete data with simulated physiological metrics, this capstone project provides a novel approach to predicting fatigue and injury risks in baseball pitchers. The dual-pipeline strategy (regression and classification) along with modular integration of preprocessing and feature engineering modules establishes a robust framework that is transparent, reproducible, and adaptable for future research and practical deployment.
+References
+
+    DataCamp Tutorial: Introduction to SHAP Values for Machine Learning Interpretability
+
+    DataCamp Tutorial: Mastering Bayesian Optimization in Data Science
+
+    Fatigue Analysis Study, DOI: 10.1016/j.engfracmech.2020.107402
+
+    Injury Prediction Study, DOI: 10.52082/jssm.2024.537
+
+    Nature Articles:
+
+        Factors Leading to Athlete Burnout
+
+        Dataset for Fatigue Analysis during Shoulder Rotations
