@@ -1,0 +1,460 @@
+---
+title: "Online Payment Fraud Detection using Machine Learning"
+author: "Rahul Reddy"
+date: '`r Sys.Date()`'
+format:
+  html:
+    code-fold: true
+course: Capstone Projects in Data Science
+self-contained: true
+execute: 
+  warning: false
+  message: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## Introduction
+
+## Problem Definition:
+
+The online payment fraud issue is a most complex challenge which has a
+very fast growth in online commerce. The purpose of bank security and
+e-commerce platforms and individuals’ daily transaction management is to
+prevent and detect embezzlement owing to the considerable financial
+losses that exist with even minimal activity rates. The problem needs
+additional complication because fraud less transactions occur at only
+0.1% rate with most transactions being legitimate which results in
+severe dataset imbalance through hundreds of thousands of innocent
+transactions outpacing fraudulent transactions. Traditional detection
+methods have this limitation because they produce many incorrect alerts
+because the system contains only rare fraudulent instances in its tail
+distribution, making it hard to spot abnormal activity without an
+excessive number of false positives or negatives. The skills of
+cybercriminals evolve to beat security standards because an increasing
+number of people engage in online payment fraud. Today, payments are
+running on payments that update more often than usual rule-based systems
+can handle, and adaptive fraudsters are exploiting those weaknesses.
+Therefore, virtually all of these static computer systems cannot
+identify the emergence of new fraud behavior patterns in the financial
+system and they become a threat. Alternative to that are especially the
+Machine learning models that can learn such complex and nonlinear
+relationships (ex: decision trees). System Brainly. So, they just
+change, depending on new fraud tactics that evolve with the ages, as
+they learn from new data and grow more accurately with the passing time
+at their predictions. The financial consequence of the outcome of fraud
+of online payment is not only a direct financial loss, it also leads to
+a loss of trust with the customer. Along with charges, the failure to
+detect fraud also led to higher cost in the form of chargebacks, legal
+expenses and greater legal battle of fighting against fraud which
+generated a greater volume. Additionally, the risk of fraud in customers
+is higher, which leads to the rejection of trust of the online payment
+system service by costumers which in damage tops service Company
+reputation so. Given that so many faces are associated with this type of
+fraud, a high level of robust, yet agile, fraud detection systems that
+can identify fraud effectively yet performing is timely and accurate
+identification of fraudulent transaction so essence. The project combats
+these challenges through the combination of advanced model optimization
+techniques along with interpretable decision trees for analysis. The end
+goal is to develop a system that detects frauds efficiently and reserves
+high detection accuracy despite constant changes in the online payment
+fraud marketplace. All digital financial operations must fulfill their
+intended functions without any exceptions to prevent detrimental risks
+and continual financial losses.
+
+## Context and Background:
+
+The rise of electronic commerce has made money more convenient, and more
+exploitable. The amount and sophistication of data on online purchases
+bog down conventional methods of prevention of fraud. Rule-based systems
+and human audits can’t keep pace with more and more complex methods of
+fraud. Machine learning and data mining solutions are exceptionally
+effective. They can scan massive datasets for infinitesimal
+abnormalities indicative of fraud. In contrast with static rule-based
+solutions, more modern techniques such as decision trees, random
+forests, and ensembles learn from experience. The flexibility of this
+means they can learn of complex, nonlinear correlations and find
+evolving trends of fraud. Other statistical techniques, such as
+logarithmic conversion and correlation examination, also generate
+improved predictive performance. The dynamic fraud online environment
+requires hardened and adaptive systems. Continuous surveillance,
+real-time data fusion, and iterative model refresh are critical. These
+innovations drive low false positives with accuracy of detection,
+retaining customer trust and reducing the cost of operations. The
+movement from reactive, rule-based systems towards proactively
+data-driven systems represents a paradigm for fraud detection, where
+systems learn and evolve with the evolving environment of threats.
+
+## Objectives and Goals:
+
+This project aims to establish an automated, viable system capable of
+identifying authentic versus fraudulent online payment transactions.
+This system is designed to minimize false negatives—those cases where
+fraud occurs and goes undetected, potentially costing the business
+greatly—as well as false positives, in which legitimate customers are
+unnecessarily flagged for fraudulent activity. With the goal of
+improving risk management processes through advanced machine learning
+techniques, the project will help ensure timely identification and
+observation of suspicious activity. A primary aim is to create a
+predictive model that successfully classifies transactions as either
+genuine or fraudulent. The project undertakes careful data
+preprocessing, namely handling the data normalization, class imbalance,
+and feature engineering process that builds a solid and promising base
+for the model to work upon. The model will be evaluated using metrics
+such as precision, recall, F1-score, and overall accuracy, with a focus
+on recall to include as many fraudulent cases as possible. Besides high
+detection accuracy, another important goal is to make sure the model is
+interpretable (explainable). Does this imply that the system didn’t just
+classify transactions accurately but also explained why it flagged a
+certain transaction as fraudulent. Visualization tools— including
+decision tree diagrams, confusion matrices, and ROC curves—will be
+incorporated to illustrate the model’s decision-making rationale for
+stakeholders, engendering trust and informing subsequent refinements.
+Finally, the initiative also envisions for a scalable infrastructure,
+updatable with updating data and new trends of fraud on a periodic
+basis. With updatable and scalable infrastructure, longevity and
+effectiveness of the solution can be guaranteed in the dynamically
+changing online payment environment. The iterative approach will
+guarantee the validity of online transactions and lead towards a
+realistic, data-driven solution for online fraud of payments.
+
+## Summary of Approach:
+
+The project has a systematic and data-driven strategy for identifying
+fraudulent online payments with methods of complex machine learning
+techniques. The process commences with data collection from a known
+source ( Kaggle) where data from the dataset has been analyzed and
+preprocessed extensively. The data preprocessing technique consists of
+data cleaning, addressing missing values, and feature engineering steps
+such as logarithm conversion for normalizing distributions and
+correlation checks for identifying strongest factors. Next, the data are
+divided into training and testing subsets for fair testing of the
+performance of the model. A decision tree algorithm then becomes the
+primary classification model, whose use has been selected for its
+explainability and its ability for discovering data relationship of a
+nonlinear nature. Hyper parameter tuning with grid searching and other
+similar methods are performed for best parameters such as tree depth and
+splitting criterion, such that the model will not under-fit and also not
+overfit. The model’s performance can be measured with strict performance
+metrics such as accuracy, F1-score, and recall, where its primary goal
+is maximizing recall and limiting false negatives. The behavior and
+decision boundaries of the model can also be interpreted with methods
+such as confusion matrices and ROC curves. Finally, the process has been
+iterative and adaptive, involving real-time observation and periodic
+revisions for the sake of incorporating novel data and novel trends in
+fraud. The end-to-end, step-by-step process not only expects maximum
+accuracy of detection, but also explainability and scalability of the
+process of fraud discovery.
+
+## Methods
+
+##Experimental Design and Analytical Procedures \## Data Understanding
+and Preprocessing First is the data assessment whereby, the details of
+the project dataset are studied and analyzed. The first step is to get
+our raw data in the form of using libraries specifically with python
+such as pandas where we write down the data that we are reading and we
+are able to identify all the relevant columns as the_geom work,
+transaction type, specific amount, subsequent balance, and fraudulent
+transactions. This enables to verify that all the fields have the
+correct data type, as well as the structure of the dataset that is going
+to follow the past analyses. We always do an exploratory data analysis,
+afterwards, in order to give an overview of the analyzed dataset after
+data ingestion. It also scales the transaction value, balance in
+accounts, and yes or no analysis (categorical data type). By doing this,
+we necessarily discover the trends which would alter model performance
+as transaction fraud is so rare compared to normal ones. Also, last but
+not least with data quality, cleaning and feature engineering are also
+done. Any errors from this stage are corrected, including omission, even
+errors in the values and any logical checks such as the balances at the
+end of these changes agree with the amounts in the transaction. On the
+other, we introduce new variables accounting for important features of
+the transaction such as the difference between the old and new balance
+as well as temporal trends derived from the ‘step’ variable. What it
+does is making an assurance that the other modeling exercises are
+carried out using a well prearranged dataset of the intended one.
+
+## Model Development
+
+In this phase we select and create suitable ML models aligned with what
+can help us to clear that fraud issue (as we are detecting frauds). We
+start out by looking into a selection of candidate models. In the next,
+we first have such a simple model as logistic regression which we can
+use as a baseline that then to see how good we are at first performance.
+For this reason, we further explore more complex forms of this kind
+(e.g. decision trees, random forests, and gradient boosting algorithms
+(e.g. XGBoost) that can model the non-linear relationships present in
+the transactional data. These models are particularly good for dealing
+with imbalanced data problem due to their nature of fraud detection in
+which the small part of the training set contains fraudulent cases.
+Additionally, we also use robust models training to also make sure that
+our models generalize as well to unseen data and to the model selection
+itself. To combat with complete bagging, we employ k fold cross
+validation which splits the dataset in k partitions and in each step one
+of the k transactions is used for training and validation. It reduces
+overfitting and the measure is also more precise. Finally, we also
+investigate whether time based splits can contribute further by ensuring
+there are temporal trends that are vital in fighting against fraud.
+Moreover, it is also necessary to carry Hyper parameter tuning for
+better model performance. Then we systematically explore many different
+parameter settings with methods like grid search, random search or
+Bayesian optimization. Ensemble methods are a good example of such an
+case: for example, if we are tuning the number of trees, their depth,
+learning rate, etc. In logistic regression we now adjust the
+regularization parameters such that we may balance between bias and
+variance.Indeed, such adjustments are necessary to improve the model’s
+ability to tell fraudulent from legitimate transactions. The last thing
+we do on the model development process is to analyze feature importance.
+To begin to investigate which features (transaction amount, change in
+account balances or transaction types) are best at predicting fraud, we
+look at. By looking at this, we will be able review the patterns of
+fraudulent behavior and look for some to better anticipate them in the
+future. Not only does it facilitate modifying the model, it has a scope
+to the stakeholder to incorporate critical factors related to the fraud
+detection mechanism.
+
+## Model evaluation and validation
+
+Given this, we then develop the model in an attempt to measure its
+performance by means of a thorough set of metrics known to be relevant
+in similar settings. Since the dataset is inherently unbalanced
+(fraudulent transactions are much less common than non fraudulent
+transactions) we give much importance to precision, recall and F1 score.
+Precision means that if a transaction gets flagged as a fraud, it is
+actually a fraud, which means that the inconvenience for real customers
+will be limited. On the other hand, measures your model’s capability of
+representing as much fraudulent cases as possible. The F1 score unifies
+precision and recall to provide balance on the model performance.
+Furthermore, we assess the model’s ability to discriminate this trait
+based on the AUC calculated for the trade off between the true and false
+positive rates at various threshold settings. In order to validate the
+generalizability and robustness of the model, we apply k fold cross
+validation. It is a method that splits the dataset into n partitions (or
+folds) and trains the model successively using it acrossibilities where
+each partition will act as a validation set at least once. Compared to
+such approaches, this one not only mitigates overfitting, but also gives
+us the assurance of a solid performance estimate on data unseen.
+Threshold tuning is carried out beyond cross validation to optimize the
+balance between capturing the fraudulent activities and minimizing false
+alarms. As a way to tell that our observed improvements are really
+statistically meaningful, we also perform significance testing (e.g.,
+McNemar’s test) and generate confidence intervals of key performance
+metrics. Together these steps make sure that the model is adequate and
+dependable as a practical foul defence in those real world fraud
+detection situations.
+
+## Experimental Design and Analytical Procedures
+
+Data Preprocessing: Cleaning and transforming data for analysis. Feature
+Engineering: Creating new features that enhance model performance. Model
+Training: Implementing the Decision Tree model using Python's
+scikit-learn library. Evaluation: Analyzing model performance using
+cross-validation and visualization techniques. Hyperparameter Tuning:
+Using GridSearchCV to optimize model parameters. Validation: Testing the
+model on unseen data to measure its generalizability.
+
+## Software tools
+
+# Programming Language: Python
+
+# Libraries and Frameworks:
+
+Data Manipulation: pandas, NumPy Machine Learning and Modeling:
+scikit-learn, XGBoost, TensorFlow (or PyTorch for deep learning
+applications) Visualization: matplotlib, seaborn Development
+Environment: VS Code Computational Resources:Utilize cloud platforms
+such as AWS or Google Cloud if large-scale data processing or training
+on complex models (e.g., neural networks) is required.
+
+## Ethical consideration
+
+With financial data it is imperative the project was GDPR compliant (and
+100% privacy and security was enforced) because this project has ethical
+considerations more than ever. Anonymization of personal identifiers is
+made to to protect individual’s privacy and in line with data protection
+law such as GDPR. Then, storage of the data in a secure way and only
+accessing it on control in another way gives out another layer of
+prevention of information leakage or breach that is unauthorized. Apart
+from that, we look out for any of these biases in our model to make sure
+we aren’t justifying treating any user group unfairly in our model, as
+we try to strike the right balance between not allowing fraudulent
+transactions to slip through while not flag certain legitimate
+transactions. In this respect, we remain transparent in the way we go
+about our work by writing about our methodologies, assumptions and
+limitations so it’s clear what our stakeholders need to be aware of, and
+that the decisions made by the model are open to audit and trust.
+
+## Methodologies Used:
+
+## Data preprocessing:
+
+First of all, pandas (pd.read_csv(“creditcard.csv")) is used to load the
+dataset. Checking for null values (df.isnull().values.any()). Plotting
+the class distribution of “Normal” vs. “Fraud” transactions. Splitting
+data into those that can be described as normal and those that can be
+described as fraudulent for additional study.
+
+## Exploratory Data Analysis (EDA):
+
+Special usage patterns of transaction classes display in the bar plot
+presentation. A statistical analysis of the transaction amounts from
+normal sources and fraudulent sources takes place after running
+(df.Amount.describe() ). The analysis needs visual distribution
+representations which include scatter plots and density plots to conduct
+data exploration.
+
+## Data Splitting:
+
+Prefixing model development with data splitting methodology from
+sklearn.model_selection.train_test_split function.
+
+## Modeling:
+
+This model relies on Keras to implement deep learning processes. The
+Model class forms the basis of the framework along with Dense and Input
+layers to create it. Regularization features part of the model through
+keras.regularizers mechanisms for controlling overfitting. The model
+utilizes model checkpointing and TensorBoard through callbacks while
+performing training operations.
+
+## Model Evaluation:
+
+The evaluation includes accuracy along with confusion matrix as well as
+precision, recall, F1-score and AUC (Area Under Curve). The evaluation
+methods include ROC curve visualization and confusion matrix display for
+analyzing model performance.
+
+## Results
+
+## Presentation of Data
+
+In the first epoch, after training the model with Keras using a neural
+network, the initial accuracy achieved was 46.82% while the validation
+accuracy was 63.29%. The model learned and adapted effectively as it
+progressed through training as its accuracy was approximately 63.80%.
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(keras)
+library(tensorflow)
+library(ggplot2)
+library(caret)
+library(reticulate)
+library(pROC)
+library(PRROC)
+library(reshape2)
+
+use_virtualenv("r-tensorflow") # Adjust if you're using conda
+
+set.seed(42)
+```
+
+## Load and Prepare Data
+
+```{r}
+df <- read_csv("creditcard.csv")
+dim(df)
+any(is.na(df))
+
+df %>%
+  count(Class) %>%
+  ggplot(aes(x = factor(Class), y = n, fill = factor(Class))) +
+  geom_col() +
+  labs(title = "Transaction Class Distribution", x = "Class", y = "Count") +
+  scale_x_discrete(labels = c("Normal", "Fraud")) +
+  theme_minimal()
+
+df <- df %>% select(-Time)
+df$Amount <- scale(df$Amount)
+
+train_index <- createDataPartition(df$Class, p = 0.8, list = FALSE)
+X_train <- df[train_index, ]
+X_test <- df[-train_index, ]
+
+X_train <- X_train %>% filter(Class == 0) %>% select(-Class)
+y_test <- X_test$Class
+X_test <- X_test %>% select(-Class)
+
+X_train <- as.matrix(X_train)
+X_test <- as.matrix(X_test)
+```
+
+## Build and Train Autoencoder
+
+```{r}
+input_dim <- ncol(X_train)
+encoding_dim <- 14
+
+input_layer <- layer_input(shape = input_dim)
+keras <- reticulate::import("keras")
+regularizers <- reticulate::import("keras")$regularizers
+
+encoder <- input_layer %>%
+  layer_dense(units = encoding_dim, activation = "tanh",
+              activity_regularizer = regularizers$l1(10e-5)) %>%
+  layer_dense(units = as.integer(encoding_dim / 2))
+
+decoder <- encoder %>%
+  layer_dense(units = as.integer(encoding_dim / 2), activation = "tanh") %>%
+  layer_dense(units = input_dim, activation = "relu")
+
+autoencoder <- keras_model(inputs = input_layer, outputs = decoder)
+autoencoder$compile(
+  optimizer = "adam",
+  loss = "mean_squared_error",
+  metrics = list("accuracy")
+)
+
+print(nrow(X_train))
+print(typeof(nrow(X_train)))
+print(as.integer(nrow(X_train)))
+size = list(as.integer(nrow(X_train)))  # ✅ NOT as.numeric()
+epochs <- as.integer(100)
+batch_size <- as.integer(32)
+
+autoencoder$fit(
+  x = X_train,
+  y = X_train,
+  epochs = epochs,
+  batch_size = batch_size,
+  validation_data = list(X_test, X_test),
+  shuffle = TRUE
+)
+
+
+```
+
+## Evaluate the Model
+
+```{r}
+predictions <- autoencoder$predict(X_test)
+
+mse <- apply((X_test - predictions)^2, 1, mean)
+
+error_df <- data.frame(
+  reconstruction_error = mse,
+  true_class = y_test
+)
+
+roc_obj <- roc(error_df$true_class, error_df$reconstruction_error)
+plot(roc_obj, col = "blue", main = "ROC Curve")
+auc(roc_obj)
+
+pr <- pr.curve(scores.class0 = error_df$reconstruction_error[error_df$true_class == 1],
+               scores.class1 = error_df$reconstruction_error[error_df$true_class == 0],
+               curve = TRUE)
+plot(pr)
+
+threshold <- 2.9
+y_pred <- ifelse(error_df$reconstruction_error > threshold, 1, 0)
+
+conf_matrix <- table(Predicted = y_pred, Actual = error_df$true_class)
+conf_matrix
+
+melted <- melt(conf_matrix)
+ggplot(melted, aes(x = Actual, y = Predicted, fill = value)) +
+  geom_tile() +
+  geom_text(aes(label = value), size = 5) +
+  labs(title = "Confusion Matrix") +
+  scale_fill_gradient(low = "white", high = "steelblue")
+```
