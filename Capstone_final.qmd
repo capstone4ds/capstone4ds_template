@@ -345,7 +345,10 @@ X_test <- X_test %>% select(-Class)
 X_train <- as.matrix(X_train)
 X_test <- as.matrix(X_test)
 ```
-
+                    Figure 1: Transaction Class Distribution
+                    
+                    
+                    
 The ‘Transaction Class Distribution’ bar graph, which demonstrated the
 notable difference between genuine and fraudulent transactions in the
 dataset, was a crucial visualization. This disparity highlights the
@@ -366,6 +369,12 @@ corrplot(corr_matrix, method = "color", type = "upper",
          tl.col = "black", tl.srt = 45, 
          addCoef.col = "black", number.cex = 0.5)
 ```
+
+                              Figure 2:Correlation Heatmap
+
+
+
+
 The correlation heatmap shown in the correlation heatmap is the result of
 using the corrplot package to generate a correlation graph of the credit
 card fraud dataset based on all numerical features. Two axes plotted are
@@ -385,6 +394,8 @@ dimensionality reduction. With regards to this project, it provides insight
 as to how certain transactions characteristics relate to one another and
 whether there are some that would enable us to differentiate abnormal
 versus normal behaviour more clearly.
+
+
 ## Build and Train Autoencoder
 
 ```{r, echo=FALSE, include=FALSE}
@@ -483,6 +494,10 @@ ggplot(error_df, aes(x = reconstruction_error)) +
   )
 ```
 
+                    Figure 3: Reconstruction Error Distribution
+
+
+
 In fact, the above graph is a Reconstruction Error Distribution by
 Class, showing the distribution of how well the autoencoder model
 reconstructs transactions for normal and fraudulent cases. The
@@ -520,7 +535,11 @@ plot(roc_obj, col = "blue", main = "ROC Curve")
 # Show AUC
 cat("AUC:", auc(roc_obj), "\n")
 ```
-
+                        Figure 4: ROC(Receiver operating characteristic) Curve
+                        
+                        
+                        
+                        
 The graph of the ROC curve showed the model’s ability to control the
 true positive rate vs the false positive rate and the ability to reduce
 false positive. Also, precision recall curves help us understand the
@@ -554,6 +573,10 @@ plot(pr,
      lwd = 2)
 
 ```
+
+                             Figure 5: PR (Precision Recall) Curve
+
+
 
 The Precision Recall (PR) curve of my autoencoder model shows its
 potential in sorting fraudulent to normal transactions in an extremely
@@ -596,7 +619,12 @@ ggplot(melted, aes(x = Actual, y = Predicted, fill = value)) +
   scale_fill_gradient(low = "white", high = "steelblue") +
   labs(title = "Confusion Matrix", x = "Actual", y = "Predicted")
 ```
+                           Figure 6: Confusion Matrix
 
+                  
+                  
+                  
+                  
 My results are based on the confusion matrix generated from the
 predictions of my model and delineate clearly between correctly
 identified normal transactions and difficulties in spotting fraud. The
@@ -630,6 +658,10 @@ ggplot(X_test, aes(x = Amount)) +
   theme_minimal()
 
 ```
+                                     Figure 7: Distribution of Transaction Amounts
+
+
+
 
 
 The name of the graph shown is “Distribution of Transaction Amounts,”
