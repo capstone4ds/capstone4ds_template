@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt # viz
 from scipy import stats
 import json
 from typing import List, Tuple
-
+from load_datasets import load_all_datasets
 from sklearn.ensemble import IsolationForest
 from sklearn.metrics import f1_score, balanced_accuracy_score, roc_auc_score, precision_recall_fscore_support
 from sklearn import metrics, linear_model
@@ -17,13 +17,14 @@ import torch.nn.functional as F
 from torch.utils.data import TensorDataset, DataLoader
 
 # Load dataset
-from google.colab import drive
-drive.mount('/content/drive')
+# Charger tous les fichiers
+datasets = load_all_datasets()
 
-# Load dataframes without parsing dates initially
-train_df = pd.read_csv("/content/drive/My Drive/training_data.csv")
-val_df = pd.read_csv("/content/drive/My Drive/validation_data.csv")
-test_df = pd.read_csv("/content/drive/My Drive/testing_data.csv")
+train_df = datasets["training"]
+test_df = datasets["test"]
+val_df= datasets["validation"])
+
+
 
 # Convert timestamp columns to datetime objects
 train_df['timestamp'] = pd.to_datetime(train_df['timestamp'], unit='s', errors='coerce')
