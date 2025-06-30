@@ -24,8 +24,6 @@ train_df = datasets["training"]
 test_df = datasets["test"]
 val_df= datasets["validation"])
 
-
-
 # Convert timestamp columns to datetime objects
 train_df['timestamp'] = pd.to_datetime(train_df['timestamp'], unit='s', errors='coerce')
 val_df['timestamp'] = pd.to_datetime(val_df['timestamp'], unit='s', errors='coerce')
