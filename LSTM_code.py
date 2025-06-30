@@ -15,3 +15,51 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import TensorDataset, DataLoader
+
+# Load dataset
+from google.colab import drive
+drive.mount('/content/drive')
+
+# Load dataframes without parsing dates initially
+train_df = pd.read_csv("/content/drive/My Drive/training_data.csv")
+val_df = pd.read_csv("/content/drive/My Drive/validation_data.csv")
+test_df = pd.read_csv("/content/drive/My Drive/testing_data.csv")
+
+# Convert timestamp columns to datetime objects
+train_df['timestamp'] = pd.to_datetime(train_df['timestamp'], unit='s', errors='coerce')
+val_df['timestamp'] = pd.to_datetime(val_df['timestamp'], unit='s', errors='coerce')
+test_df['timestamp'] = pd.to_datetime(test_df['timestamp'], unit='s', errors='coerce')
+
+# Optional: set plotting style
+sns.set(style="whitegrid")
+
+#Part 3 : ANALYSIS AND RESULTS#
+# ---- FIGURE 1: Most common event names in training data ----
+plt.figure(figsize=(10, 5))
+top_events = train_df['eventName'].value_counts().nlargest(10)
+sns.barplot(x=top_events.values, y=top_events.index, palette='Blues_r')
+plt.title("Top 10 Event Names in Training Data")
+plt.xlabel("Frequency")
+plt.ylabel("Event Name")
+plt.tight_layout()
+plt.show()
+
+# ---- FIGURE 2: Event frequency by hour ----
+train_df['hour'] = train_df['timestamp'].dt.hour
+plt.figure(figsize=(10, 5))
+sns.countplot(data=train_df, x='hour', palette='viridis')
+plt.title("System Events Distribution by Hour (Training Data)")
+plt.xlabel("Hour of Day")
+plt.ylabel("Number of Events")
+plt.tight_layout()
+plt.show()
+
+# ---- FIGURE 3: Count of evil vs. benign events in test set ----
+plt.figure(figsize=(6, 4))
+sns.countplot(data=test_df, x='evil', palette='coolwarm')
+plt.title("Malicious vs. Benign Events (Test Set)")
+plt.xlabel("Evil Label")
+plt.ylabel("Count")
+plt.xticks([0, 1], ['Benign (0)', 'Malicious (1)'])
+plt.tight_layout()
+plt.show()
