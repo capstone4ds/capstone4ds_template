@@ -1,6 +1,6 @@
 ---
-title: "Writing a great story for data science projects - Fall 2025 "
-subtitle: "This is a Report Template Quarto"
+title: "Methodological Insights into frequentist vs Bayesian Regression in Predicting Cardiovascular Disease: NHANES 2013–2014 Data "
+subtitle: "Manuscript"
 author: "Namita Mishra (Advisor: Dr. Cohen)"
 date: '`r Sys.Date()`'
 format:
@@ -76,7 +76,6 @@ Limitations:
 •	Elevated Uncertainty due to insufficient data contributes to broader confidence intervals in the computed posterior probabilities
 •	Systemic bias due to unrepresentative datasets compromise the fidelity of Bayesian calculations.
 •	Given the lack of comprehensive data, it is pertinent to combine Bayesian methods with other statistical and computational techniques for better diagnostic modalities. [@Chatzimichail2023]
-
 
 
 3.	[@van2021]
@@ -182,9 +181,18 @@ Limitations –
 •	The use of enhanced model should be validated through external validation by applying the proposed models to new subjects not included in the training the parameters of model.
 [@LiuIndividual]
 
+Aims and Study design
+
+We aimed to analyze the Datasets from CDC (NHANES) from 2013-2014, a two yearly data collected by NHANES that include demographic, socioeconomic, dietary, and health-related questions, as well as physical examinations (medical, dental, and physiological) and laboratory information as a deidentified data. e to analyze. 
+
+Aims
+•	To explore the demographic, behavioral, and health-related risk factors in a nationally representative U.S. population (NHANES) and assess their relationship of modifiable risk factors (smoking, obesity, dietary supplements, components on the study outcome (cardiovascular diseases) with chronic disease outcomes. 
+•	To model the cardiovascular diseases outcome as a function of predictors (BMI, total cholesterol, smoking status) including the effects of race and age as co-variates
+
+
 ## Methods
 
-PROBLEMS AND HEALTHCARE DATA 
+STATISTICAL PROBLEMS ANALYSING HEALTHCARE DATA 
 
 1.	Conventional regression is not efficient in using longitudinal, hierarchical, and multivariate data to analyze time-varying outcomes, correlations within patients, and dealing missing data in predicting individual patient health timelines and treatments over time 
 2.	Conventional diagnosis based on fixed cutoffs and rigid thresholds fails to capture and integrate the uncertainty and complex distributions of complex diagnostic tests. 
@@ -245,14 +253,13 @@ y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i
 $$
 
 
-
-
-
 ## Analysis and Results
 
 ### Data Exploration and Visualization
 
 -   Describe your data sources and collection process.
+
+NHANES (2013-2014) dataset dwonloaded from CDC website, on 
 
 -   Present initial findings and insights through visualizations.
 
@@ -267,21 +274,317 @@ library(knitr)
 library(ggthemes)
 library(ggrepel)
 library(dslabs)
+library(haven)
 ```
 
 ```{python}
 import pandas as pd
+
+
 ```
 
 ```{r, warning=FALSE, echo=TRUE}
 
 # Load Data
-kable(head(murders))
+ 
+library(haven)
+library(tidyverse)
+setwd("~/CapStone/NM_CapStoneProject/NM_Group_project/capstone4ds_NamitaMishra/Data")
 
 
+library(nhanesA)
+nhanesTables('EXAM', 2013)
+nhanesTables('DIETARY', 2013)
+nhanesTables('LAB', 2013)
+nhanesTables('QUESTIONNAIRE', 2013)
+nhanesTables('DEMOGRAPHICS', 2013)
+
+
+demo_h <- nhanes('DEMO_H')
+bmx_h  <- nhanes('BMX_H')
+dsqtot_h <- nhanes('DSQTOT_H')
+tchol_h <- nhanes('TCHOL_H')
+cdq_h <- nhanes('CDQ_H')
+smq_h <- nhanes('SMQ_H')
+mcq_h <- nhanes('MCQ_H')
+
+summary(demo_h)
+summary(bmx_h)
+summary(dsqtot_h)
+summary(tchol_h)
+summary(cdq_h)
+summary(smq_h)
+summary(mcq_h)
+
+
+# Demo
+nhanesCodebook('DEMO_H','RIAGENDR')
+nhanesCodebook('DEMO_H','RIDSTATR') 
+nhanesCodebook('DEMO_H','RIDRETH1') 
+
+# Body Measure
+nhanesCodebook('BMX_H' ,'BMDBMIC')
+
+# Labs
+nhanesCodebook('TCHOL_H' , 'LBDTCSI')
+
+# Questionnaire
+nhanesCodebook('MCQ_H' , 'MCQ160c') 
+nhanesCodebook('SMQ_H' ,'SMD030')
+nhanesCodebook('CDQ_H' , 'CDQ009F' )
+
+# Diet
+nhanesCodebook('DSQTOT_H' , 'DSD010 ')
+
+#Tables
+
+nhanesTables('EXAM', 2013)
+nhanesTables('DIETARY', 2013)
+nhanesTables('LAB', 2013)
+nhanesTables('QUESTIONNAIRE', 2013)
+nhanesTables('DEMOGRAPHICS', 2013)
+
+# Vars
+nhanesTableVars('DEMOGRAPHICS', 'DEMO_H' )
+nhanesTableVars('EXAM', 'BMX_H')
+nhanesTableVars('DIETARY','DSQTOT_H')
+nhanesTableVars('LAB','TCHOL_H')
+nhanesTableVars('QUESTIONNAIRE','SMQ_H','MCQ_H')
+
+
+library(purrr)
+
+Final_merge <- list(demo_h, bmx_h, dsqtot_h, tchol_h, mcq_h, cdq_h, smq_h) %>%
+  reduce(full_join, by = "SEQN")
+
+
+Final_merge_1 <- Final_merge %>% 
+      select(SEQN, RIDSTATR, RIAGENDR, RIDRETH1,
+             BMDBMIC, LBDTCSI, CDQ009F, MCQ160C, SMD030, DSD010)
+
+
+Final_merge_1 %>% group_by(BMDBMIC)%>% count(BMDBMIC)
+
+summary(Final_merge_1)
+
+
+```
+
+### Modeling and Results
+
+Data preprocessing and cleaning steps
+
+
+1.	Data Source
+Data were obtained from the 2013–2014 National Health and Nutrition Examination Survey (NHANES), a publicly available cross-sectional survey conducted by the Centers for Disease Control and Prevention (CDC) to assess the health and nutritional status of the U.S. population. Relevant datasets were downloaded from the NHANES repository in SAS XPT format.
+
+2.	Import into R
+The NHANES .XPT files were imported into R using the nhanes package, which automatically reads the SAS transport files into R as data frames (tibbles). For example, the demographic dataset was imported as:
+	demo_h <- nhanes('DEMO_H')
+This process was repeated for other relevant modules, including:
+•	BMX_H (Body Measures)
+•	SMD_H (Smoking)
+•	MCQ_H (Medical Conditions)
+•	CDQ_H (Dietary)
+•	TCHOL_H (Cholesterol)
+
+3.	Merging Datasets
+Datasets (5) merged by full_join using the unique participant identifier SEQN created a final analytic dataset with variables (10) mentioned in brackets are their (number of levels)
+1.	Variables: 
+1.	SEQN - Respondent sequence number 
+2.	RIDSTATR - Interview/Examination status (2)
+3.	RIAGENDR – Gender (2)
+4.	RIDRETH1 - Race/Hispanic origin (5)
+5.	BMDBMIC - BMI Category - Children/Youth (4)
+6.	LBDTCSI - Total Cholesterol (mmol/L) 
+7.	CDQ009F - Pain in left chest (1)
+8.	MCQ160C - Ever told you had coronary heart disease  (3)
+9.	SMD030_cat - Age started smoking cigarettes regularly (7)-SMD030_cat is the recoded smoking status from SMD030.
+10.	DSD010 - Any Dietary Supplements Taken? (4)
+
+
+4.	Data Cleaning and Recoding
+•	Categorical variables (smoking) were transformed to factors using mutate(across(..., as.factor).
+
+5.	Descriptive statistics
+•	Frequency tables and percentages were generated for categorical variables.
+•	Summary statistics (mean, SD, median, min, max) were computed for continuous variables (Total Cholesterol in mmol/L)
+•	Data structure, variable types, and missingness were reviewed using str(), summary(), and colSums(is.na(...)).
+•	Missing values were tabulated as below
+ 
+Analytic Data
+The final cleaned and organized dataset (Final_merge_1) with all selected variables, (categorical and continuous) was analyzed for descriptive and inferential analyses.
+
+
+-   Present your key findings in a clear and concise manner.
+
+-   Use visuals to support your claims.
+
+-   **Tell a story about what the data reveals.**
+
+```{r}
+
+# ANALYSIS
+
+summary(Final_merge_1)
+str(Final_merge_1)
+names (Final_merge_1)
+colSums(is.na(Final_merge_1)) # Number of missing values per variable
+
+total_rows <- nrow(Final_merge_1)
+total_rows
+
+
+# BMI 
+
+table(Final_merge_1$BMDBMIC, useNA = "ifany")
+
+# Smoking
+
+Final_merge_1 <- Final_merge_1 %>%
+  mutate(SMD030_cat = case_when(
+    
+    SMD030 == 0                ~ "Never smoked cigarettes regularly",
+    SMD030 >= 7 & SMD030 <= 64 ~ "Smoked (7–64 cigarettes/day or age at first smoking)",
+    SMD030 == 80               ~ "80 years or older",
+    SMD030 == 777              ~ "Refused",
+    SMD030 == 999              ~ "Don't know",
+    is.na(SMD030)              ~ "Missing",
+    TRUE                       ~ "Other"
+  )) %>%
+  mutate(SMD030_cat = factor(SMD030_cat,
+                             levels = c("Never smoked cigarettes regularly",
+                                        "Smoked (7–64 cigarettes/day or age at first smoking)",
+                                        "80 years or older",
+                                        "Refused",
+                                        "Don't know",
+                                        "Missing",
+                                        "Other")))
+
+
+table_SMD030_cat <-Final_merge_1 %>%
+  group_by(SMD030_cat) %>%
+  summarise(
+    Count = n(),
+    Percent = round(100 * n() / sum(!is.na(SMD030)), 1)) %>%
+    arrange(desc(Count))
+
+
+Final_merge_1 <- Final_merge_1 %>%
+  mutate(SMD030_age_cat = case_when(
+    
+    SMD030>=7 & SMD030<=20 ~ "<20 years",
+    SMD030>=21 & SMD030<=40 ~ "20 - 40 years",
+    SMD030>=41 & SMD030<=64 ~ "Above 40 years ",
+    is.na(SMD030)              ~ "Missing",
+    TRUE                       ~ "Other"
+  ))
+
+
+# # Descriptive Tables 
+
+table_SMD030_age_cat <-Final_merge_1 %>%
+  group_by(SMD030_age_cat) %>%
+  summarise(
+    Count = n(),
+    Percent = round(100 * n() / sum(!is.na(SMD030)), 1)) %>%
+    arrange(desc(Count))
+table_SMD030_age_cat
+
+
+table(Final_merge_1$SMD030_cat, useNA = "ifany")
+table_SMD030_cat
+table_SMD030_age_cat
+
+lapply(Final_merge_1[sapply(Final_merge_1, is.factor)], table)
+
+
+
+```
+
+
+
+
+```{r}
+
+
+# Visualization
+
+# Histograms 
+
+barplot(table(Final_merge_1$SMD030_age_cat),
+        main = "Distribution of Smoking",
+        xlab = "Gender", ylab = "Count",
+        col = "skyblue")
+
+barplot(table(Final_merge_1$MCQ160C),
+        main = "Distribution of CDQ009F",
+        xlab = "CDQ009F Categories", 
+        ylab = "Count",
+        col = "lightblue")
+
+barplot(table(Final_merge_1$LBDTCSI),
+        main = "Distribution of CDQ009F",
+        xlab = "CDQ009F Categories", 
+        ylab = "Count",
+        col = "lightblue")
+
+
+barplot(table_SMD030_age_cat$Count,
+        names.arg = table_SMD030_age_cat$SMD030_age_cat,
+        main = "Counts by Age Category",
+        xlab = "Age Range",
+        ylab = "Count of who start smoke reg by_age",
+        col = "skyblue")
+
+
+ 
+ggplot1 = Final_merge_1 %>% ggplot(mapping = aes(x=RIAGENDR, y=LBDTCSI, fill= RIDRETH1))
+  
+  ggplot1 + 
+  geom_point(aes(col = Final_merge_1$RIDRETH1), size = 4) +
+    facet_wrap(~RIDRETH1) +
+  xlab("GENDER") + 
+  ylab("TOTAL CHOLESTEROL") +
+      theme_bw()
+
+  
+  
+  ggplot2 = Final_merge_1 %>% ggplot(mapping = aes(x= LBDTCSI, y= MCQ160C, fill =LBDTCSI))
+  
+  ggplot2 + 
+    facet_wrap(~RIAGENDR) +
+  geom_point(aes(col = LBDTCSI), size = 2) +
+  xlab("Tot Chol") + 
+  ylab(" CVD Status ") +
+      theme_bw()
+  
+  
+ ggplot3 = Final_merge_1 %>% ggplot(mapping = aes(x=CDQ009F, y=MCQ160C, fill= DSD010))
+  
+  ggplot3 + 
+  geom_point(aes(col = DSD010), size = 4) +
+    facet_wrap(~MCQ160C) +
+  xlab("Left Chest pain") + 
+  ylab("CVD Status") +
+      theme_bw()
+  
+  
+  ggplot4 = Final_merge_1 %>% ggplot(mapping = aes(x=SMD030_age_cat, y=MCQ160C, fill= RIAGENDR))
+  
+  ggplot4 + 
+  geom_point(aes(col = Final_merge_1$RIAGENDR), size = 4) +
+    facet_wrap(~SMD030_age_cat) +
+  xlab("Smoking age_group") + 
+  ylab("CVD Status") +
+      theme_bw()
+   
+  
+  
 ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total)) 
 
-  ggplot1 + geom_point(aes(col=region), size = 4) +
+  ggplot1 + 
+  geom_point(aes(col=region), size = 4) +
   geom_text_repel(aes(label=abb)) +
   scale_x_log10() +
   scale_y_log10() +
@@ -291,21 +594,8 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
   ggtitle("US Gun Murders in 2010") +
   scale_color_discrete(name = "Region")+
       theme_bw()
-  
 
-```
 
-### Modeling and Results
-
--   Explain your data preprocessing and cleaning steps.
-
--   Present your key findings in a clear and concise manner.
-
--   Use visuals to support your claims.
-
--   **Tell a story about what the data reveals.**
-
-```{r}
 
 
 
