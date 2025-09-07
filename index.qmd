@@ -1,5 +1,5 @@
 ---
-title: "Methodological Insights into frequentist vs Bayesian Regression in Predicting Cardiovascular Disease: NHANES 2013–2014 Data "
+title: "Methodological Insights in Predicting Cardiovascular Disease: Frequentist vs Bayesian Regression, NHANES 2013–2014 Data "
 subtitle: "Manuscript"
 author: "Namita Mishra (Advisor: Dr. Cohen)"
 date: '`r Sys.Date()`'
