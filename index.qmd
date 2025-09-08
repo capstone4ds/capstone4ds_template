@@ -36,7 +36,6 @@ Nice report!
 
 1.  [@Zeg2020]
 
-
 What is the goal of the paper? The authors aimed to develop a bayesian
 hierarchical model for multivariate longitudinal data to predict the
 health status, trajectory, and likely intervention effects for each
@@ -885,4 +884,3 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 -   Discuss the implications of your results.
 
 ## References
-
