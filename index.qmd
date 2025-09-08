@@ -80,7 +80,7 @@ measurements.
 Results/limitations, if any. Three case studies on pneumonia etiology in
 children, prostate cancer, and major mental disorders, were chosen to
 provide different challenges to the model development. In Prostate
-Cancer Case Study to correctly identify low risk patient population,
+Cancer Case Study to correctly identify low-risk patient population,
 they developed and applied hierarchical model to possibly reduce the
 risk overtreatment, complications and adverse effects from treatment, as
 well as financial burden, for patients (Disease reclassification).
@@ -89,15 +89,16 @@ Limitation: the models were entirely parametric and recommend extensions
 to nonparametric or more flexible parametric models. To have improved
 approach for neuroimage or genomic data. @Zeger2020
 
-2.  What is the goal of the paper? The authors aim to apply
-    computational tool implementing Bayesian inference to calculate the
-    posterior probability of disease diagnosis to develop three modules
-    designed to define and compare parametric (with a fixed set of
-    parameters) and nonparametric distributions (which do not make a
-    priori assumptions about the distribution’s mathematical form) and
-    analyses National Health and Nutrition Examination Survey datasets
-    from two separate diagnostic tests on both diseased and nondiseased
-    populations.
+2.  Bayesian Inference
+
+What is the goal of the paper? The authors aim to apply computational
+tool implementing Bayesian inference to calculate the posterior
+probability of disease diagnosis to develop three modules designed to
+define and compare parametric (with a fixed set of parameters) and
+nonparametric distributions (which do not make a priori assumptions
+about the distribution’s mathematical form) and analyses National Health
+and Nutrition Examination Survey datasets from two separate diagnostic
+tests on both diseased and nondiseased populations.
 
 Why is it important? Medical diagnosis is crucial for treatment and
 management decisions and uses conventional methods for diagnosis using
@@ -175,25 +176,25 @@ Limitations: • The models were entirely parametric and recommend
 extensions to nonparametric or more flexible parametric models and aim
 to improv approach for neuroimage or genomic data. • Due to limited
 availability of scholarly publications is an issue with over-dependence
-on Prior Probabilities improve• Elevated Uncertainty due to insufficient
-data contributes to broader confidence intervals in the computed
-posterior probabilities • Systemic bias due to unrepresentative datasets
-compromise the fidelity of Bayesian calculations. • Given the lack of
-comprehensive data, it is pertinent to combine Bayesian methods with
-other statistical and computational techniques for better diagnostic
-modalities.\@Chatzimichail2023
+on Prior Probabilities improve • Elevated Uncertainty due to
+insufficient data contributes to broader confidence intervals in the
+computed posterior probabilities • Systemic bias due to unrepresentative
+datasets compromise the fidelity of Bayesian calculations. • Given the
+lack of comprehensive data, it is pertinent to combine Bayesian methods
+with other statistical and computational techniques for better
+diagnostic modalities. @Chatzimichail2023
 
-3.  What is the goal of the paper? The study describes the stages of
-    Bayesian analysis, specifying the prior and data models, deriving
-    inference, model checking and refinement by discussing the
-    importance of prior and posterior predictive checking, selecting a
-    proper sampling technique from a posterior distribution, variational
-    inference and variable selection and its application across various
-    research fields. The study proposes strategies for reproducibility
-    and reporting standards, outlining an updated WAMBS (when to Worry
-    and how to Avoid the Misuse of Bayesian Statistics) checklist and
-    also outline the impact of Bayesian analysis on artificial
-    intelligence in the future.
+3.  Bayesian inference What is the goal of the paper? The study
+    describes the stages of Bayesian analysis, specifying the prior and
+    data models, deriving inference, model checking and refinement by
+    discussing the importance of prior and posterior predictive
+    checking, selecting a proper sampling technique from a posterior
+    distribution, variational inference and variable selection and its
+    application across various research fields. The study proposes
+    strategies for reproducibility and reporting standards, outlining an
+    updated WAMBS (when to Worry and how to Avoid the Misuse of Bayesian
+    Statistics) checklist and also outline the impact of Bayesian
+    analysis on artificial intelligence in the future.
 
 Why is it important? Bayesian statistics is suitable for quantitative
 researchers working across a broad range of science-related areas that
@@ -253,7 +254,9 @@ Limitations: In temporal models, posterior inference challenges are
 inherent to spatial and/or temporal dependencies, such as
 autocorrelation of parameters over time. @VandeSchoot2021
 
-4.  What is the goal of the paper? The author provides guidance on
+4.  Bayesian Normal linear regression
+
+    What is the goal of the paper? The author provides guidance on
     Bayesian inference for regression on performing Bayesian Normal
     linear regression in metrology to calibrate instruments and evaluate
     inter-laboratory comparisons to determine fundamental constants.
@@ -298,13 +301,13 @@ Results/limitations, if any. The knowledge from related previous
 experiments (Normal inverse Gamma distributions) allow for analytic
 posterior calculations of many quantities of interest. @Klauenberg2015
 
-5.  What is the goal of the paper? The goal of this article is therefore
-    to develop a Bayesian model in which a linear regression analysis on
-    current data is augmented with the reported regression coefficients
-    (and standard errors) of previous studies. The study developed and
-    conducted test a formal method for augmenting data in linear
-    regression analyses with previous studies including both
-    exchangeable and unexchangable.
+5.  Bayesian linear regression What is the goal of the paper? The goal
+    of this article is therefore to develop a Bayesian model in which a
+    linear regression analysis on current data is augmented with the
+    reported regression coefficients (and standard errors) of previous
+    studies. The study developed and conducted test a formal method for
+    augmenting data in linear regression analyses with previous studies
+    including both exchangeable and unexchangable.
 
 Why is it important? Due to the frequent combination of multiple testing
 with relatively low statistical power, is problematic in the framework
@@ -375,7 +378,7 @@ exchangeability assumption.
 
 Limitations • The restriction that all studies have to have the same set
 of predictors. • A problem would arise when the predictor variables were
-correlated.\@DeLeeuw2012a
+correlated.@DeLeeuw2012a
 
 6.  What is the goal of the paper? The develop a proposed models using a
     longitudinal follow-up cohort study to predict the risk of incident
