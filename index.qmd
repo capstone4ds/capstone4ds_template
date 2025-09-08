@@ -34,7 +34,7 @@ Nice report!
 
 ## Introduction
 
-1.  [@Zeg2020]
+1.**Bayesian Hierarchical Model**
 
 What is the goal of the paper? The authors aimed to develop a bayesian
 hierarchical model for multivariate longitudinal data to predict the
@@ -87,17 +87,19 @@ well as financial burden, for patients (Disease reclassification).
 Prostate cancer software was then implemented within the JHM HER.
 Limitation: the models were entirely parametric and recommend extensions
 to nonparametric or more flexible parametric models. To have improved
-approach for neuroimage or genomic data.[@Zeger2020Using]
+approach for neuroimage or genomic data. @Zeger2020
 
-2.  [@Chatzimichail2023] What is the goal of the paper? The authors aim
-    to apply computational tool implementing Bayesian inference to
-    calculate the posterior probability of disease diagnosis to develop
-    three modules designed to define and compare parametric (with a
-    fixed set of parameters) and nonparametric distributions (which do
-    not make a priori assumptions about the distribution’s mathematical
-    form) and analyses National Health and Nutrition Examination Survey
-    datasets from two separate diagnostic tests on both diseased and
-    nondiseased populations.
+2.  
+
+    What is the goal of the paper? The authors aim to apply
+    computational tool implementing Bayesian inference to calculate the
+    posterior probability of disease diagnosis to develop three modules
+    designed to define and compare parametric (with a fixed set of
+    parameters) and nonparametric distributions (which do not make a
+    priori assumptions about the distribution’s mathematical form) and
+    analyses National Health and Nutrition Examination Survey datasets
+    from two separate diagnostic tests on both diseased and nondiseased
+    populations.
 
 Why is it important? Medical diagnosis is crucial for treatment and
 management decisions and uses conventional methods for diagnosis using
@@ -114,7 +116,7 @@ multimodality
 
 How is it solved? – methods To authors explored and developed
 specialized computational tool employing Bayesian inference (Bayesian
-diagnostic approach is) to calculate the posterior probability of
+diagnostic approach) is to calculate the posterior probability of
 disease diagnosis in theWolfram Language. Bayesian paradigm, calculates
 and integrate prior probabilities of disease with distributions of
 diagnostic measurands in both diseased and nondiseased populations, the
@@ -122,10 +124,47 @@ approach enables the evaluation of the information conveyed via
 diagnostic measurements and the combination of data from multiple
 diagnostic tests, to improve diagnostic accuracy and precision while
 introducing flexibility, adaptability, and versatility into the
-diagnostic process. The foundational data is crucial in establishing the
-essential context against which new diagnostic measurements can be
-compared and the absence of such normative data could potentially
-compromise the reliability and validity of Bayesian diagnostic methods.
+diagnostic proWhy is this important? Medical diagnosis is essential for
+making treatment and management decisions. Conventional diagnostic
+methods rely on clinical criteria and fixed numerical thresholds, which
+limit the ability to capture other information about complex
+relationships between diagnostic tests and the varying prevalence of
+diseases. The probability distributions associated with quantitative
+diagnostic test results often show overlap between the diseased and
+nondiseased groups. Binary methods fail to reflect the complexity and
+heterogeneity of disease presentations across diverse populations. The
+use of normal distribution in traditional approaches is criticized,
+especially when clinical measurements display skewness, bimodality, or
+multimodality. How is this addressed? To tackle this, researchers have
+developed specialized computational tools employing Bayesian
+inference—also known as the Bayesian diagnostic approach—to calculate
+the posterior probability of a disease diagnosis using the Wolfram
+Language. The Bayesian paradigm combines prior disease probabilities
+with the distributions of diagnostic measurements in both diseased and
+nondiseased groups. This approach allows for the evaluation of the
+information conveyed by diagnostic tests and the integration of data
+from multiple tests, improving diagnostic accuracy and adaptability.
+Establishing foundational data is crucial for providing the necessary
+context to compare new measurements, and the lack of such normative data
+can undermine the reliability and validity of Bayesian methods. Results
+and limitations: Nonparametric Bayesian models tend to fit data
+distributions better, especially given limited existing literature, and
+are more robust in capturing complex data patterns. These models produce
+multimodal probability patterns for disease, unlike the bimodal,
+double-sigmoidal curves seen with parametric models. Limitations include
+a reliance on parametric models with a need to extend to nonparametric
+or more flexible parametric models, especially for neuroimaging or
+genomic data. Limited scholarly publications lead to over-dependence on
+prior probabilities. Insufficient data increases uncertainty, resulting
+in broader confidence intervals for posterior probabilities. Systemic
+bias from unrepresentative datasets can compromise the accuracy of
+Bayesian calculations. Due to incomplete data, it is advisable to
+combine Bayesian methods with other statistical and computational
+techniques to enhance diagnostic capabilities. The foundational data is
+crucial in establishing the essential context against which new
+diagnostic measurements can be compared and the absence of such
+normative data could potentially compromise the reliability and validity
+of Bayesian diagnostic methods.
 
 Results/limitations, if any. Nonparametric Bayesian models produce a
 better fit to data distributions, considering limited existing
@@ -138,17 +177,19 @@ Limitations: • The models were entirely parametric and recommend
 extensions to nonparametric or more flexible parametric models and aim
 to improv approach for neuroimage or genomic data. • Due to limited
 availability of scholarly publications is an issue with over-dependence
-on Prior Probabilities • Elevated Uncertainty due to insufficient data
-contributes to broader confidence intervals in the computed posterior
-probabilities • Systemic bias due to unrepresentative datasets
+on Prior Probabilities improve• Elevated Uncertainty due to insufficient
+data contributes to broader confidence intervals in the computed
+posterior probabilities • Systemic bias due to unrepresentative datasets
 compromise the fidelity of Bayesian calculations. • Given the lack of
 comprehensive data, it is pertinent to combine Bayesian methods with
 other statistical and computational techniques for better diagnostic
-modalities. [@Chatzimichail2023]
+modalities.@Chatzimichail2023
 
-3.  [@van2021] What is the goal of the paper? The study describes the
-    stages of Bayesian analysis, specifying the prior and data models,
-    deriving inference, model checking and refinement by discussing the
+3.  
+
+    What is the goal of the paper? The study describes the stages of
+    Bayesian analysis, specifying the prior and data models, deriving
+    inference, model checking and refinement by discussing the
     importance of prior and posterior predictive checking, selecting a
     proper sampling technique from a posterior distribution, variational
     inference and variable selection and its application across various
@@ -214,13 +255,12 @@ about evolutionary processes in cancer.
 
 Limitations: In temporal models, posterior inference challenges are
 inherent to spatial and/or temporal dependencies, such as
-autocorrelation of parameters over time. [@van2021]
+autocorrelation of parameters over time. @VandeSchoot2021
 
-4.  [@Klauenberg2015] What is the goal of the paper? The author provides
-    guidance on Bayesian inference for regression on performing Bayesian
-    Normal linear regression in metrology to calibrate instruments and
-    evaluate inter-laboratory comparisons to determine fundamental
-    constants.
+4.  What is the goal of the paper? The author provides guidance on
+    Bayesian inference for regression on performing Bayesian Normal
+    linear regression in metrology to calibrate instruments and evaluate
+    inter-laboratory comparisons to determine fundamental constants.
 
 Why is it important? The measurement errors are assumed to be additive,
 independent and identically distributed according to a Gaussian
@@ -260,15 +300,15 @@ in data acquisition all influence the inference.
 
 Results/limitations, if any. The knowledge from related previous
 experiments (Normal inverse Gamma distributions) allow for analytic
-posterior calculations of many quantities of interest. [@Klauenberg2015]
+posterior calculations of many quantities of interest. @Klauenberg2015
 
-5.  [@deLeeuwAugmenting] What is the goal of the paper? The goal of this
-    article is therefore to develop a Bayesian model in which a linear
-    regression analysis on current data is augmented with the reported
-    regression coefficients (and standard errors) of previous studies.
-    The study developed and conducted test a formal method for
-    augmenting data in linear regression analyses with previous studies
-    including both exchangeable and unexchangable.
+5.  What is the goal of the paper? The goal of this article is therefore
+    to develop a Bayesian model in which a linear regression analysis on
+    current data is augmented with the reported regression coefficients
+    (and standard errors) of previous studies. The study developed and
+    conducted test a formal method for augmenting data in linear
+    regression analyses with previous studies including both
+    exchangeable and unexchangable.
 
 Why is it important? Due to the frequent combination of multiple testing
 with relatively low statistical power, is problematic in the framework
@@ -339,58 +379,58 @@ exchangeability assumption.
 
 Limitations • The restriction that all studies have to have the same set
 of predictors. • A problem would arise when the predictor variables were
-correlated. [@deLeeuwAugmenting]
+correlated.@DeLeeuw2012a
 
-6.  [@LiuIndividual] What is the goal of the paper? The develop a
-    proposed models using a longitudinal follow-up cohort study to
-    predict the risk of incident cardiovascular disease by incorporating
-    demographic features (basic), six metabolic syndrome components
-    (metabolic score) and conventional risk factors (enhanced model).
-    The study on participants free of CVD at baseline, followed up over
-    five years, used Bayesian clinical reasoning model to diagnose new
-    CVD cases. Why is it important? • Considering early diagnosis and
-    prevention, identifying subjects with high risk for cardiovascular
-    disease (CVD) is of paramount importance to health interventions. •
-    The limited molecular information (costly and unavilabilty) to
-    clinical practice look for alternative approaches to efficiently
-    identify high-risk subjects using information form routinely-checked
-    biological markers before doing these expensive molecular tests . •
-    Framingham Risk Score method, tailored for such a purpose is not
-    sufficient because of the differences in ethnic groups and areas,
-    varied socio-economic status, require the construction of their own
-    models. Heterogeneity (variation with geographic, ethnic group, and
-    nation, and different characteristics of social contextual network)
-    is often unobservable and un-measurable. How is it solved? – methods
-    Subjects enrolled in a Keelung Community-based Integrated Screening
-    (KCIS) Program, for mass screening (20–79 years) in the Keelung city
-    of Taiwan, followed for 5 years to identify incident cancers and
-    chronic diseases (cardiovascular disease). The study classified the
-    risk of having incident CVD cases or death from CVD by dint of
-    available calculated standardized risk score of the MetS components
-    (fasting glucose, blood pressure, HDL-C, triglyceride and waist
-    circumference) together with conventional risk factors (gender,
-    heredity, smoking, alcohol drinking, family history of parent's CVD
-    and betel quid and other relevant factors). Emulate a clinician's
-    evaluation process, the author used Bayesian clinical reasoning
-    approach in a sequential manner to develop three models considering
-    regression coefficients of all predictors as normal distribution for
-    individual risk prediction allowing for uncertainty of clinical
-    weights. The credible intervals of predicted risk estimates were
-    obtained by averaging out. The individual risk is elicited by prior
-    speculation (first impression) updated by objective observed data
-    (patient's history and laboratory findings). In Bayesian clinical
-    reasoning model, the regression coefficients for computing risk
-    score were as random variable with certain statistical distribution
-    (e.g. normal distribution) rather than a fixed value (traditional
-    risk prediction model by frequentist). The updated prior
-    distribution with the likelihood based on current data provided into
-    posterior distribution to predict the risk for a specific disease.
-    The (basic) basic model was developed via logistic regression which
-    used prior information constructed on gender, age, age2 and period
-    in further analysis. The second (classical) model, the metabolic
-    score model (MS model), was established based on six MetS components
-    and then the third (enhanced model) incorporated information on
-    smoking, drinking, betel-quid, and family history of CVD.
+6.  What is the goal of the paper? The develop a proposed models using a
+    longitudinal follow-up cohort study to predict the risk of incident
+    cardiovascular disease by incorporating demographic features
+    (basic), six metabolic syndrome components (metabolic score) and
+    conventional risk factors (enhanced model). The study on
+    participants free of CVD at baseline, followed up over five years,
+    used Bayesian clinical reasoning model to diagnose new CVD cases.
+    Why is it important? • Considering early diagnosis and prevention,
+    identifying subjects with high risk for cardiovascular disease (CVD)
+    is of paramount importance to health interventions. • The limited
+    molecular information (costly and unavilabilty) to clinical practice
+    look for alternative approaches to efficiently identify high-risk
+    subjects using information form routinely-checked biological markers
+    before doing these expensive molecular tests . • Framingham Risk
+    Score method, tailored for such a purpose is not sufficient because
+    of the differences in ethnic groups and areas, varied socio-economic
+    status, require the construction of their own models. Heterogeneity
+    (variation with geographic, ethnic group, and nation, and different
+    characteristics of social contextual network) is often unobservable
+    and un-measurable. How is it solved? – methods Subjects enrolled in
+    a Keelung Community-based Integrated Screening (KCIS) Program, for
+    mass screening (20–79 years) in the Keelung city of Taiwan, followed
+    for 5 years to identify incident cancers and chronic diseases
+    (cardiovascular disease). The study classified the risk of having
+    incident CVD cases or death from CVD by dint of available calculated
+    standardized risk score of the MetS components (fasting glucose,
+    blood pressure, HDL-C, triglyceride and waist circumference)
+    together with conventional risk factors (gender, heredity, smoking,
+    alcohol drinking, family history of parent's CVD and betel quid and
+    other relevant factors). Emulate a clinician's evaluation process,
+    the author used Bayesian clinical reasoning approach in a sequential
+    manner to develop three models considering regression coefficients
+    of all predictors as normal distribution for individual risk
+    prediction allowing for uncertainty of clinical weights. The
+    credible intervals of predicted risk estimates were obtained by
+    averaging out. The individual risk is elicited by prior speculation
+    (first impression) updated by objective observed data (patient's
+    history and laboratory findings). In Bayesian clinical reasoning
+    model, the regression coefficients for computing risk score were as
+    random variable with certain statistical distribution (e.g. normal
+    distribution) rather than a fixed value (traditional risk prediction
+    model by frequentist). The updated prior distribution with the
+    likelihood based on current data provided into posterior
+    distribution to predict the risk for a specific disease. The (basic)
+    basic model was developed via logistic regression which used prior
+    information constructed on gender, age, age2 and period in further
+    analysis. The second (classical) model, the metabolic score model
+    (MS model), was established based on six MetS components and then
+    the third (enhanced model) incorporated information on smoking,
+    drinking, betel-quid, and family history of CVD.
     Results/limitations, if any- • Compared to the basic model and
     classical model, the enhanced model had better performance. • The
     proposed models predicted CVD at individual level by incorporating
@@ -403,7 +443,7 @@ correlated. [@deLeeuwAugmenting]
     factors should be included. • The use of enhanced model should be
     validated through external validation by applying the proposed
     models to new subjects not included in the training the parameters
-    of model. [@LiuIndividual]
+    of model. @Liu2013
 
 Aims and Study design
 
