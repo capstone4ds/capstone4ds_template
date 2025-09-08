@@ -799,17 +799,6 @@ lapply(Final_merge_1[sapply(Final_merge_1, is.factor)], table)
 table(Final_merge_1$RIAGENDR, Final_merge_1$CDQ009F)
 
 
-barplot (table(Final_merge_1$CDQ009F, Final_merge_1$RIAGENDR),
-        main = "Chest pain",
-        xlab = "Chest Pain", ylab ="Count",
-        col = "skyblue")
-
-barplot (table(Final_merge_1$MCQ160C, Final_merge_1$RIAGENDR),
-        main = "CVD Status",
-        xlab = "CVD Status", ylab ="Count",
-        col = "skyblue")
-
-
 table(Final_merge_1$MCQ160C, Final_merge_1$CDQ009F)
     
 table(Final_merge_1$MCQ160C, Final_merge_1$SMD030_age_cat)
@@ -824,75 +813,7 @@ table(Final_merge_1$MCQ160C, Final_merge_1$SMD030_age_cat)
 
 # Visualization
 
-# Histograms 
-
-barplot(table(Final_merge_1$SMD030_age_cat),
-        main = "Distribution of Smoking",
-        xlab = "Gender", ylab = "Count",
-        col = "skyblue")
-
-barplot(table(Final_merge_1$MCQ160C),
-        main = "Distribution of CDQ009F",
-        xlab = "CDQ009F Categories", 
-        ylab = "Count",
-        col = "lightblue")
-
-barplot(table(Final_merge_1$LBDTCSI),
-        main = "Distribution of CDQ009F",
-        xlab = "CDQ009F Categories", 
-        ylab = "Count",
-        col = "lightblue")
-
-
-barplot(table_SMD030_age_cat$Count,
-        names.arg = table_SMD030_age_cat$SMD030_age_cat,
-        main = "Counts by Age Category",
-        xlab = "Age Range",
-        ylab = "Count of who start smoke reg by_age",
-        col = "skyblue")
-
-
- 
-
-ggplot1 = Final_merge_1 %>% ggplot(mapping = aes(x=RIAGENDR, y=LBDTCSI, fill= RIDRETH1))
-  
-  ggplot1 + 
-  geom_point(aes(col = Final_merge_1$RIDRETH1), size = 4) +
-    facet_wrap(~RIDRETH1) +
-  xlab("GENDER") + 
-  ylab("TOTAL CHOLESTEROL") +
-      theme_bw()
-
-  
-  
-  ggplot2 = Final_merge_1 %>% ggplot(mapping = aes(x= LBDTCSI, y= MCQ160C, fill =LBDTCSI))
-  
-  ggplot2 + 
-    facet_wrap(~RIAGENDR) +
-  geom_point(aes(col = LBDTCSI), size = 2) +
-  xlab("Tot Chol") + 
-  ylab(" CVD Status ") +
-      theme_bw()
-  
-  
- ggplot3 = Final_merge_1 %>% ggplot(mapping = aes(x=CDQ009F, y=MCQ160C, fill= DSD010))
-  
-  ggplot3 + 
-  geom_point(aes(col = DSD010), size = 4) +
-    facet_wrap(~MCQ160C) +
-  xlab("Left Chest pain") + 
-  ylab("CVD Status") +
-      theme_bw()
-  
-  
-  ggplot4 = Final_merge_1 %>% ggplot(mapping = aes(x=SMD030_age_cat, y=MCQ160C, fill= RIAGENDR))
-  
-  ggplot4 + 
-  geom_point(aes(col = Final_merge_1$RIAGENDR), size = 4) +
-    facet_wrap(~SMD030_age_cat) +
-  xlab("Smoking age_group") + 
-  ylab("CVD Status") +
-      theme_bw()
+# 
    
   
   
