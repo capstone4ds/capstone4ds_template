@@ -34,7 +34,8 @@ Nice report!
 
 ## Introduction
 
-1.  [@Zeger2020]
+1.  [@Zeg2020]
+
 
 What is the goal of the paper? The authors aimed to develop a bayesian
 hierarchical model for multivariate longitudinal data to predict the
@@ -885,4 +886,3 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 
 ## References
 
-1.  
