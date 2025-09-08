@@ -378,7 +378,7 @@ exchangeability assumption.
 
 Limitations • The restriction that all studies have to have the same set
 of predictors. • A problem would arise when the predictor variables were
-correlated.@DeLeeuw2012a
+correlated. @DeLeeuw2012a
 
 6.  What is the goal of the paper? The develop a proposed models using a
     longitudinal follow-up cohort study to predict the risk of incident
