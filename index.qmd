@@ -89,9 +89,7 @@ Limitation: the models were entirely parametric and recommend extensions
 to nonparametric or more flexible parametric models. To have improved
 approach for neuroimage or genomic data. @Zeger2020
 
-2.  
-
-    What is the goal of the paper? The authors aim to apply
+2.  What is the goal of the paper? The authors aim to apply
     computational tool implementing Bayesian inference to calculate the
     posterior probability of disease diagnosis to develop three modules
     designed to define and compare parametric (with a fixed set of
@@ -183,11 +181,9 @@ posterior probabilities • Systemic bias due to unrepresentative datasets
 compromise the fidelity of Bayesian calculations. • Given the lack of
 comprehensive data, it is pertinent to combine Bayesian methods with
 other statistical and computational techniques for better diagnostic
-modalities.@Chatzimichail2023
+modalities.\@Chatzimichail2023
 
-3.  
-
-    What is the goal of the paper? The study describes the stages of
+3.  What is the goal of the paper? The study describes the stages of
     Bayesian analysis, specifying the prior and data models, deriving
     inference, model checking and refinement by discussing the
     importance of prior and posterior predictive checking, selecting a
@@ -379,7 +375,7 @@ exchangeability assumption.
 
 Limitations • The restriction that all studies have to have the same set
 of predictors. • A problem would arise when the predictor variables were
-correlated.@DeLeeuw2012a
+correlated.\@DeLeeuw2012a
 
 6.  What is the goal of the paper? The develop a proposed models using a
     longitudinal follow-up cohort study to predict the risk of incident
