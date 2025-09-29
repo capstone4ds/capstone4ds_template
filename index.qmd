@@ -1347,9 +1347,9 @@ fitted_long <- data.frame(
 )
 ggplot(fitted_long, aes(x = Age, y = .value, group = draw)) +
   geom_line(size = 0.1, alpha = 0.4) +
-  labs(y = "Predicted probability of Diabetes tomorrow")
+  labs(y = "Predicted probability of Diabetes")
 
-
+# Race
 
 fitted_long <- data.frame(
   Race = rep(Imputed_data1$Race, times = 100),
@@ -1358,7 +1358,7 @@ fitted_long <- data.frame(
 )
 ggplot(fitted_long, aes(x = Race, y = .value, group = draw)) +
   geom_line(size = 0.1, alpha = 0.4) +
-  labs(y = "Predicted probability of Diabetes tomorrow")
+  labs(y = "Predicted probability of Diabetes")
 
 # Gender
 fitted_long <- data.frame(
@@ -1368,7 +1368,7 @@ fitted_long <- data.frame(
 )
 ggplot(fitted_long, aes(x = Gender, y = .value, group = draw)) +
   geom_line(size = 0.1, alpha = 0.4) +
-  labs(y = "Predicted probability of Diabetes tomorrow")
+  labs(y = "Predicted probability of Diabetes")
 
 
 
@@ -1394,22 +1394,119 @@ fitted_long <- data.frame(
        title = "Predicted Diabetes Probability by Race Category") +
   theme_minimal()
 
+  
+  
+ ggplot(Imputed_data1, aes(x = Age, y = Diabetes)) + 
+  geom_jitter(size = 0.2)
+
+ Imputed_data1 %>% 
+  mutate(age_bracket = 
+           cut(Age, breaks = seq(10, 100, by = 10))) %>% 
+  group_by(age_bracket) %>% 
+  summarise(Diabetes = mean(Diabetes == "Yes")) %>% 
+  ggplot(aes(x = age_bracket, y = Diabetes)) + 
+    geom_point() + 
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
+  
+   
+  ## predict values of 100 draws, Simulated predictions (binary diabetes outcome)
+ 
+ 
+pred <- posterior_predict(Diabetes_prior, newdata = Imputed_data1, draws = 100)
+
+# data frame for summarizing
+pred_df <- as.data.frame(t(pred)) 
+
+# proportion of diabetes = 1 per draw
+prop_diabetes <- colMeans(pred_df == 1)
+
+
+prop_df <- tibble(
+  draw = 1:length(prop_diabetes),
+  proportion_Diabetes = prop_diabetes
+)
+
+library(ggplot2)
+ggplot(prop_df, aes(x = proportion_Diabetes)) +
+  geom_histogram(color = "white")
 
   
 
 
 ```
-
+- Histogram (predicted values of 100 draws) - the observed proportion of having Diabetes on 100 rows.
+- To examine the probability of Diabetes with age groups -A scatterplot of the proportion of Diabetes grouped by age.
 
 
 
 ```{r}
-#| eval: false
-#| include: false
+#| label: Modeling
+#| echo: true
 
 library(brms)
 library(GGally)
 
+# Simulate the model
+
+
+Diabetes_model_1 <- update(Diabetes_prior,sample_prior = "yes"   # includes priors + data likelihood
+)
+
+
+# Age
+# Posterior fitted values (probabilities of Diabetes)
+fitted_draws <- fitted(
+  Diabetes_model_1,         # <-- use posterior model here
+  newdata = Imputed_data1,
+  summary = FALSE,          # full posterior draws
+  nsamples = 100            # sample 100 posterior draws
+)
+
+# Reshape into long format
+fitted_long <- data.frame(
+  BMI = rep(Imputed_data1$BMI, times = 100),
+  draw = rep(1:100, each = nrow(Imputed_data1)),
+  .value = as.vector(t(fitted_draws))
+)
+
+# Plot posterior fitted lines
+library(ggplot2)
+ggplot(fitted_long, aes(x = BMI, y = .value, group = draw)) +
+  geom_line(size = 0.1, alpha = 0.4) +
+  labs(
+    y = "Predicted probability of Diabetes",
+    title = "Posterior fitted draws by BMI"
+  )
+
+
+
+# Age
+# Reshape into long format
+
+fitted_long <- data.frame(
+  BMI = rep(Imputed_data1$BMI, times = 100),
+  draw = rep(1:100, each = nrow(Imputed_data1)),
+  .value = as.vector(t(fitted_draws))
+)
+fitted_long <- data.frame(
+  Age = rep(Imputed_data1$Age, times = 100),
+  draw = rep(1:100, each = nrow(Imputed_data1)),
+  .value = as.vector(t(fitted_draws))
+)
+
+# Plot posterior fitted lines
+library(ggplot2)
+ggplot(fitted_long, aes(x = Age, y = .value, group = draw)) +
+  geom_line(size = 0.1, alpha = 0.4) +
+  labs(
+    y = "Predicted probability of Diabetes",
+    title = "Posterior fitted draws by Age"
+  )
+
+
+# MCMC trace, density, & autocorrelation plots
+
+plot(Diabetes_model_1, combo = c("dens", "trace"))
 
 
 ```
@@ -1436,6 +1533,8 @@ library(GGally)
 -   Multivariate logistic regression on imputed dataset (MI + MLR)
 
 -   Bayesian Logistic Regression on imputed data
+The spread of these lines provides an indication of the variability or uncertainty in the predicted probabilities within each BMI group (posterior model). 
+the plots visually demonstrate the well-established relationship between BMI and the predicted probability of diabetes, with the risk significantly increasing as BMI moves from normal weight to overweight and obese categories
 
 ### Conclusion
 
