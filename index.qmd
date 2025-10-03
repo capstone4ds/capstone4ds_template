@@ -325,6 +325,7 @@ merged_data <- exam_sub %>%
 head(merged_data)
 
 names(merged_data)
+saveRDS(merged_data, "data/nhanes2013_2014_prepared.rds")
 
 
 
@@ -1246,7 +1247,6 @@ library(GGally)
 Diabetes_model_1 <- update(Diabetes_prior,sample_prior = "yes"   # includes priors + data likelihood
 )
 
-
 # BMI
 # Posterior fitted values (probabilities of Diabetes)
 fitted_draws <- fitted(
@@ -1567,6 +1567,7 @@ when data were sparse.
 ```{r}
 #| label: results
 summary (merged_data)
+
 summary (Imputed_data1)
 summary(m_imp)
 coef(m_imp)
@@ -1594,68 +1595,91 @@ adjR2(m_imp)
 summary(m_firth)
 
 summary(Diabetes_prior)
+summary(Diabetes_model_1)
 
 
 
 ```
 
 ```{r}
-#| eval: false
-#| include: false
+#| label: Table of model summaries
+#| echo: true
+
+
+### another format table
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(broom)
+
+# Example: three regression models
+# m_imputed <- glm(DIABETES ~ AGE + BMI + HTN + HDL, data = df1, family = binomial)
+# m_firth <- logistf(Diabetes ~ BMI + Age + Gender + Race, data = merged_data)
+# Diabetes_model_1 <- update(Diabetes_prior,sample_prior = "yes"   # includes priors + data likelihood)
 
 
 library(dplyr)
-library(tibble)
 library(knitr)
+library(kableExtra)
+library(broom)
 
-# --- Step 1: Frequentist logistic regression (from m_imp) ---
-freq_summary <- coef(summary(m_imp)) %>%
-  as.data.frame() %>%
-  rownames_to_column(var = "Predictor") %>%
-  rename(Estimate = Estimate, Std.Error = `Std. Error`, z = `z value`, p_value = `Pr(>|z|)`) %>%
+# Tidy the imputed logistic regression model
+sum_imp <- broom::tidy(m_imp) %>%
   mutate(
-    OR = exp(Estimate),
-    Lower_CI = exp(Estimate - 1.96*Std.Error),
-    Upper_CI = exp(Estimate + 1.96*Std.Error),
-    Model = "Frequentist"
+    OR = exp(estimate),                # Odds ratio
+    `Lower 95% CI` = exp(estimate - 1.96*std.error),  # Lower CI
+    `Upper 95% CI` = exp(estimate + 1.96*std.error)   # Upper CI
   ) %>%
-  select(Model, Predictor, OR, Lower_CI, Upper_CI, p_value)
+  select(term, estimate, std.error, OR, `Lower 95% CI`, `Upper 95% CI`, p.value)
 
-# --- Step 2: Bayesian logistic regression (from Diabetes_prior) ---
-# Assuming you have a summary data frame like: Diabetes_prior_summary
-bayes_summary <- Diabetes_prior$summary %>%
-  as.data.frame() %>%
-  rownames_to_column(var = "Predictor") %>%
-  rename(Estimate = Estimate, Lower_CI = l.95..CI, Upper_CI = u.95..CI) %>%
-  mutate(
-    OR = exp(Estimate),
-    Model = "Bayesian",
-    p_value = NA
-  ) %>%
-  select(Model, Predictor, OR, Lower_CI, Upper_CI, p_value)
+# Display as a table
+kbl(sum_imp, digits = 3, booktabs = TRUE, caption = "Imputed Logistic Regression Results") %>%
+  kable_classic(full_width = F) 
 
-# --- Step 3: Firth penalized logistic regression (from m_firth) ---
-firth_coef <- m_firth$coefficients
-firth_se <- m_firth$se
-firth_summary <- tibble(
-  Predictor = names(firth_coef),
-  Estimate = firth_coef,
-  Std.Error = firth_se,
-  Lower_CI = m_firth$ci.lower,
-  Upper_CI = m_firth$ci.upper,
-  Model = "Firth",
-  p_value = m_firth$prob
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(logistf)
+
+# Extract results from Firth regression
+sum_firth <- data.frame(
+  term = names(m_firth$coef),            # predictor names
+  estimate = m_firth$coef,               # regression coefficients
+  std.error = sqrt(diag(vcov(m_firth))), # standard errors
+  p.value = m_firth$prob                 # p-values
 ) %>%
   mutate(
-    OR = exp(Estimate)
+    OR = exp(estimate),                             # odds ratio
+    `Lower 95% CI` = exp(estimate - 1.96*std.error), 
+    `Upper 95% CI` = exp(estimate + 1.96*std.error)
+  )
+
+# Display the table
+kbl(sum_firth, digits = 3, booktabs = TRUE, caption = "Firth Logistic Regression Results") %>%
+  kable_classic(full_width = F)
+
+
+
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(broom.mixed)   # tidy for brms
+library(brms)
+
+# Extract posterior summaries
+sum_bayes <- broom.mixed::tidy(Diabetes_model_1, effects = "fixed") %>%
+  mutate(
+    OR = exp(estimate),                  # odds ratio
+    `Lower 95% CI` = exp(estimate - 1.96*std.error),
+    `Upper 95% CI` = exp(estimate + 1.96*std.error)
   ) %>%
-  select(Model, Predictor, OR, Lower_CI, Upper_CI, p_value)
+  select(term, estimate, std.error, OR, `Lower 95% CI`, `Upper 95% CI`)
 
-# --- Step 4: Combine all summaries ---
-all_summary <- bind_rows(freq_summary, bayes_summary, firth_summary)
+# Display table
+kbl(sum_bayes, digits = 3, booktabs = TRUE, caption = "Bayesian Logistic Regression Results (brms)") %>%
+  kable_classic(full_width = F)
 
-# --- Step 5: Print as nice table ---
-kable(all_summary, digits = 3, caption = "Regression Results: Frequentist, Bayesian, and Firth Models")
+
 
 
 ```
