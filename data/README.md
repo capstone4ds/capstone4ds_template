@@ -72,10 +72,9 @@
 ---
 
 ## Design Considerations
-
-    * **Survey-weighted MLE** directly modeled NHANES’s complex design (strata, PSU, and weights).
-    * **Bayesian model** applied normalized sampling weights as **importance weights**, approximating design effects but not fully modeling them.
-   * Hence, Bayesian results are **model-based** (conditional on data and priors) rather than **population-weighted** estimates.
+**Survey-weighted MLE** directly modeled NHANES’s complex design (strata, PSU, and weights).
+**Bayesian model** applied normalized sampling weights as **importance weights**, approximating design effects but not fully modeling them.
+Hence, Bayesian results are **model-based** (conditional on data and priors) rather than **population-weighted** estimates.
 
 ---
 
@@ -120,8 +119,7 @@
 ---
 
 ## Acknowledgments
-
-    Special thanks to **Dr. Ashraf Cohen** for mentorship and guidance, and to the **NHANES program** for providing high-quality public data for epidemiological research.
+      Special thanks to **Dr. Ashraf Cohen** for mentorship and guidance, and to the **NHANES program** for providing high-quality public data for epidemiological research.
 ---
 
 ## References
