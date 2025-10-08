@@ -21,6 +21,7 @@ editor:
 Slides: [slides.html](slides.html){target="_blank"} ( Go to `slides.qmd`
 to edit)
 
+
 ------------------------------------------------------------------------
 
 ## Introduction
@@ -1108,8 +1109,7 @@ Design considerations:
 # Bayesian model with normalized weights- 
 - instead of fully modeling the survey design, it used normalized sampling weights as importance weights
 - the scaled weights that sum to the sample size approximates the effect of survey weights, but does not fully account for: Stratification, clustering, design-based variance adjustments.
-
-# Bayesian inference treats the weighted likelihood as from a regular model, ignoring some survey design features.
+- Bayesian inference treats the weighted likelihood as from a regular model, ignoring some survey design features.
 
 
 # Discussions

@@ -6,13 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<<<<<<< HEAD
-<meta name="author" content="Namita Mishra (Advisor: Dr. Ashraf Cohen)">
-<meta name="dcterms.date" content="2025-10-08">
-=======
 <meta name="author" content="Namita Mishra, Autumn Wilcox, Ecil Teodoro (Advisor: Dr. Ashraf Cohen)">
-<meta name="dcterms.date" content="2025-10-03">
->>>>>>> 583205566b8c37dbe23ca5ac12058159975a38ad
+<meta name="dcterms.date" content="2025-10-08">
 
 <title>Bayesian Logistic Regression - Application in Probability Prediction of disease (Diabetes)</title>
 <style>
@@ -4659,10 +4654,7 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 </ul>
 <p>Effect stability: point estimates in rhe Bayesian model’s closely aligned with those from the frequentist, indicating that prior regularization stabilized the estimates in the presence of modest missingness.</p>
 <p>Uncertainty quantification: Bayesian credible intervals of odds ration were slightly narrower yet overlapped the frequentist confidence intervals, suggest comparable inferential precision while offering improved interpretability.</p>
-<p>Design considerations: # Survey-weighted MLE (Maximum Likelihood Estimator) - incorporates each observation weighted according to its survey weight. - provide estimates that reflect the population-level parameters, not just the sample- produces population-representative estimates. # Bayesian model with normalized weights- - instead of fully modeling the survey design, it used normalized sampling weights as importance weights - the scaled weights that sum to the sample size approximates the effect of survey weights, but does not fully account for: Stratification, clustering, design-based variance adjustments.</p>
-</section>
-<section id="bayesian-inference-treats-the-weighted-likelihood-as-from-a-regular-model-ignoring-some-survey-design-features." class="level1">
-<h1>Bayesian inference treats the weighted likelihood as from a regular model, ignoring some survey design features.</h1>
+<p>Design considerations: # Survey-weighted MLE (Maximum Likelihood Estimator) - incorporates each observation weighted according to its survey weight. - provide estimates that reflect the population-level parameters, not just the sample- produces population-representative estimates. # Bayesian model with normalized weights- - instead of fully modeling the survey design, it used normalized sampling weights as importance weights - the scaled weights that sum to the sample size approximates the effect of survey weights, but does not fully account for: Stratification, clustering, design-based variance adjustments. - Bayesian inference treats the weighted likelihood as from a regular model, ignoring some survey design features.</p>
 </section>
 <section id="discussions" class="level1">
 <h1>Discussions</h1>
