@@ -120,7 +120,7 @@ Hence, Bayesian results are **model-based** (conditional on data and priors) rat
 ---
 
 ## Acknowledgments
-      Special thanks to **Dr. Ashraf Cohen** for mentorship and guidance, and to the **NHANES program** for providing high-quality public data for epidemiological research.
+* Special thanks to **Dr. Ashraf Cohen** for mentorship and guidance, and to the **NHANES program** for providing high-quality public data for epidemiological research.
 ---
 
 ## References
