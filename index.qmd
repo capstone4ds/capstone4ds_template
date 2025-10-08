@@ -1,7 +1,7 @@
 ---
 title: "Bayesian Logistic Regression - Application in Probability Prediction of disease (Diabetes) "
 subtitle: "CapStone Project_2025"
-author: "Namita Mishra (Advisor: Dr. Ashraf Cohen)"
+author: "Namita Mishra, Autumn Wilcox, Ecil Teodoro (Advisor: Dr. Ashraf Cohen)"
 date: '`r Sys.Date()`'
 format:
   html:
