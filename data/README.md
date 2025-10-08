@@ -7,10 +7,10 @@
 **Date:** October 2025
 ---
 
-**Project Overview
+Project Overview
 
-      Diabetes Mellitus (DM) is a chronic metabolic disease characterized by elevated blood glucose levels, leading to serious damage to the heart, blood vessels, eyes, kidneys, and nerves over time. Early detection is crucial for prevention and control.
-    This project applies **Bayesian Logistic Regression** and **Survey-weighted Maximum Likelihood Estimation (MLE)** to predict diabetes probability using national-level survey data.
+* Diabetes Mellitus (DM) is a chronic metabolic disease characterized by elevated blood glucose levels, leading to serious damage to the heart, blood vessels, eyes, kidneys, and nerves over time. Early detection is crucial for prevention and control.
+* This project applies **Bayesian Logistic Regression** and **Survey-weighted Maximum Likelihood Estimation (MLE)** to predict diabetes probability using national-level survey data.
 ---
 
 ## **Dataset** National Health and Nutrition Examination Survey (NHANES)
