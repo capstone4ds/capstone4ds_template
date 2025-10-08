@@ -6,6 +6,7 @@
 **Author:** Namita Mishra (Advisor: Dr. Ashraf Cohen)
 **Date:** October 2025
 ---
+
 **Project Overview**
 
       Diabetes Mellitus (DM) is a chronic metabolic disease characterized by elevated blood glucose levels, leading to serious damage to the heart, blood vessels, eyes, kidneys, and nerves over time. Early detection is crucial for prevention and control.
@@ -14,9 +15,9 @@
 
 ## **Dataset** National Health and Nutrition Examination Survey (NHANES)
 
-    * **Cycle:** 2013–2014
-    * **Sample:** U.S. adults (≥20 years)
-    * **Variables Used:**
+**Cycle:** 2013–2014
+**Sample:** U.S. adults (≥20 years)
+**Variables Used:**
 
   * `DIQ010`: Doctor told you have diabetes
   * `RIDAGEYR`: Age in years
