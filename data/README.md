@@ -68,8 +68,8 @@ Project Overview
 | **Male**               |            ↑ 1.22 |             ↑ 1.18 |      [1.05, 1.33] |
 | **Non-Hispanic Black** |            ↑ 1.45 |             ↑ 1.38 |      [1.20, 1.59] |
 
-    Both models identified **age**, **BMI**, and **race/ethnicity** as strong predictors of diabetes.
-    The Bayesian model produced smoother posterior distributions and credible intervals reflecting parameter uncertainty.
+* Both models identified **age**, **BMI**, and **race/ethnicity** as strong predictors of diabetes.
+* The Bayesian model produced smoother posterior distributions and credible intervals reflecting parameter uncertainty.
 ---
 
 ## Design Considerations
