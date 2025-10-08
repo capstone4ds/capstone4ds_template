@@ -482,7 +482,6 @@ cat("Adults n =", nrow(adult), "\n")
 # data exploration
 
 print(table(adult$diabetes_dx, useNA = "ifany"))
-
 print(table(adult$sex, useNA = "ifany"))
 print(table(adult$race, useNA = "ifany"))
 
