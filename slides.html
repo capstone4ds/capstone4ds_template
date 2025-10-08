@@ -444,7 +444,7 @@
   <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="Namita Mishra (Advisor: Dr. Ashraf Cohen)">
-  <meta name="dcterms.date" content="2025-09-24">
+  <meta name="dcterms.date" content="2025-10-08">
   <title>Bayesian Logistic Regression Application in Diabetes Probability Prediction</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1175,49 +1175,57 @@ Namita Mishra (Advisor: Dr. Ashraf Cohen)
 </div>
 </div>
 
-  <p class="date">2025-09-24</p>
+  <p class="date">2025-10-08</p>
 </section>
 <section class="slide level2">
 
-<div class="callout callout-important callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Important</strong></p>
-</div>
-<div class="callout-content">
-<p><strong>Remember:</strong> Your goal is to make your audience understand and care about your findings. By crafting a compelling story, you can effectively communicate the value of your data science project.</p>
-<p>Carefully read this template since it has instructions and tips to writing!</p>
-<p>More information about <code>revealjs</code>: <a href="https://quarto.org/docs/reference/formats/presentations/revealjs.html" class="uri">https://quarto.org/docs/reference/formats/presentations/revealjs.html</a></p>
-</div>
-</div>
-</div>
+<p>More information about <code>revealjs</code>: <a href="https://quarto.org/docs/reference/formats/presentations/revealjs.html" class="uri">https://quarto.org/docs/reference/formats/presentations/revealjs.html</a> :::</p>
 </section>
-<section id="introduction" class="slide level2">
-<h2>Introduction</h2>
+<section id="type-2-diabetes-t2d-a-public-health-concern-worldwide" class="slide level2">
+<h2>Type 2 Diabetes (T2D), a public health concern worldwide:</h2>
 <ul>
-<li><p>Type 2 Diabetes (T2D), a public health concern worldwide - body doesn’t make enough insulin or can’t use the insulin it makes causing increase in blood sugar level posing risks of heart disease and other organ damage</p></li>
-<li><p>Understanding factors contributing to Diabetes age, body mass index (BMI): early intervention at population level.</p></li>
-<li><p>Problem: Traditional statistical approaches fail to analyze complex relationships or uncertainty present in healthcare data.</p></li>
+<li>body doesn’t make enough insulin or is not used properly and cause rise in the blood sugar level</li>
+<li>affects organs and lead s to multi-organ failure.</li>
+<li>Understanding risk factors (age, body mass index, genetics)-is an early intervention at population level.</li>
 </ul>
 </section>
-<section id="goal-address-challenges-in-healthcare-data-analysis-where-traditional-statistical-approaches-fail" class="slide level2">
-<h2>Goal: Address challenges in healthcare data analysis where traditional statistical approaches fail</h2>
+<section id="statistical-problem" class="slide level2">
+<h2>Statistical Problem:</h2>
 <ul>
-<li><p>To analyze complex relationships or uncertainty in predictions, we compare both Frequentist and Bayesian methods on the NHANES dataset.</p></li>
-<li><p>Identify the association of risk factors for diabetes prediction and measure the predictive performance of the model, demonstrating methodological perspectives to enhance actionable insights in healthcare.</p></li>
+<li>Traditional statistical approaches fail to analyze complex relationships or uncertainty present in healthcare data apart from missing data in data collected through surveys</li>
+</ul>
+</section>
+<section id="study-goal" class="slide level2">
+<h2>Study Goal:</h2>
+<ul>
+<li>Address statistical challenges where traditional statistical approaches fail</li>
+<li>We conduct and compare Frequentist and Bayesian methods on the NHANES dataset (2013-2014).</li>
+<li>We aim to identify the association of risk factors and diabetes as a dichotomous response variable (classification) demonstrating model performance and methodological perspectives and insights into analyzing healthcare data anomalies.</li>
 </ul>
 </section>
 <section id="methods" class="slide level2">
 <h2>Methods</h2>
 <ul>
-<li>A study conducted on NHANES dataset aims to determine how healthcare data with missing values can be analyzed using Bayesian regression Model.</li>
-<li>Bayesian Regression Model was found appropriate for the given data, based on the data characteristics and the model characteristics</li>
+<li>EDA of weighted NHANES dataset reveal missing values</li>
+<li>Multivariate linear regression on weighted dataset resulted in complete case analysis with reduced sample size.</li>
+<li>MICE imputed dataset by numerous plausible values and the dataset was then analyzed</li>
 </ul>
-<p>Bayesian Regression Model - - could incorporation of prior knowledge could stabilize the estimates - could account for uncertainty and provide full posterior distributions, offering robust inference than traditional frequentist methods, where estimates are unstable - can handle imputation to handle missing data toperform Bayesian regression <span class="citation" data-cites="Austin2021">Austin et al. (<a href="#/references" role="doc-biblioref" onclick>2021</a>)</span></p>
-<p>Data Source -(<a href="https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2013">NHANES</a>) from NHANES (CDC) .xpt files imported using r from three datasets (demographics, exam, questionnaire). Selected variables were merged into a dataframe, cleaned, and explored for analysis to predict the probability of diabetes (Response variable) based on BMI, age, and race (Predictors).</p>
+</section>
+<section id="bayesian-regression" class="slide level2">
+<h2>Bayesian regression</h2>
+<ul>
+<li>Conducted on imputed data after normalizing age and BMI</li>
+<li>Bayesian Regression Model was found appropriate for the given data with dichotomous output and independent relationship between variables</li>
+<li>The model allows an effective analysis by incorporation of prior knowledge<br>
+-stabilize the estimates -could account for uncertainty -provide full posterior distributions -offering robust inference compared to the traditional methods (where estimates are unstable)
+<ul>
+<li>can handle imputation conducted for missing data <span class="citation" data-cites="Austin2021">Austin et al. (<a href="#/references-1" role="doc-biblioref" onclick>2021</a>)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="data-source" class="slide level2">
+<h2>Data Source</h2>
+<p>-(<a href="https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2013">NHANES</a>) from NHANES (CDC) .xpt files from three datasets (demographics, exam, questionnaire) with selected variables were merged into a dataframe, cleaned, and explored for analysis. The final observations (n=10175 with 10 variables)</p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -1257,38 +1265,228 @@ Namita Mishra (Advisor: Dr. Ashraf Cohen)
 </section>
 <section id="data-exploration-and-visualization-1" class="slide level2 smaller">
 <h2>Data Exploration and Visualization</h2>
+<pre><code>## Our Question
+
+- Can Bayesian logistic regression provide **more stable** and **transparent** inference than classical MLE for diabetes-related outcomes in **NHANES 2013–2014**?
+---
+
+
+## Data Pipeline (Reproducible)
+
+- Source: NHANES 2013–2014  
+- Files: **BMX_H**, **DEMO_H**, **DIQ_H**  
+- Preprocessing and cleanng
+
+::: {.cell}
+::: {.cell-output-display}
+
+
+|  SEQN| RIDAGEYR| RIAGENDR| RIDRETH1| SDMVPSU| SDMVSTRA| WTMEC2YR| BMXBMI| DIQ010| DIQ050|
+|-----:|--------:|--------:|--------:|-------:|--------:|--------:|------:|------:|------:|
+| 73557|       69|        1|        4|       1|      112| 13481.04|   26.7|      1|      1|
+| 73558|       54|        1|        3|       1|      108| 24471.77|   28.6|      1|      1|
+| 73559|       72|        1|        3|       1|      109| 57193.29|   28.9|      1|      1|
+| 73560|        9|        1|        3|       2|      109| 55766.51|   17.1|      2|      2|
+| 73561|       73|        2|        3|       2|      116| 65541.87|   19.7|      2|      2|
+| 73562|       56|        1|        1|       1|      111| 25344.99|   41.7|      2|      2|
+
+
+:::
+:::
+
+The observations were reduced to &gt; 20 years age (n=5769) 
+
+
+
+::: {.cell}
+::: {.cell-output .cell-output-stdout}
+</code></pre>
+<p>Adults n = 5769</p>
+<pre><code>
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+</code></pre>
+<p>0 1 <na> 4974 618 177</na></p>
+<pre><code>
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+</code></pre>
+<p>Male Female 2758 3011</p>
+<pre><code>
+
+:::
+
+::: {.cell-output .cell-output-stdout}
+</code></pre>
+<pre><code>    NH White Mexican American   Other Hispanic         NH Black 
+        2472              767              508             1177 
+ Other/Multi 
+         845 </code></pre>
+<pre><code>
+
+:::
+:::
+
+
+---
+
+## Methods
+
+We applied four approaches:
+
+1. **MLE Logistic Regression** – unstable due to quasi-separation.
+2. **MICE + MLR** – stable across ~9,813 cases but poor fit.
+4. **Bayesian Logistic Regression** – priors regularize, stable posteriors, uncertainty fully captured.
+
+---
+
+
+**Multiple Logistic regression** on survey weighted dataset
+
+-We conducted frequentist method **Multiple Logistic regression** on a
+survey-weighted dataset, for complete case analysis and data exploration
+
+
+
+
+::: {.cell}
+::: {.cell-output .cell-output-stdout}
+</code></pre>
+<p>Complete-case N for survey-weighted model: 5349</p>
+<pre><code>
+
+:::
+:::
+
+
+
+##Multiple Imputation (MI) can be performed using mice package in R
+    and adds sampling variability to the imputations.
+
+-   Iterative MICE imputes missing values of one variable at a time,
+    using regression models based on the other variables in the dataset.
+
+-   In the chain process, each imputed variable become a predictor for
+    the subsequent imputation, and the entire process is repeated
+    multiple times to create several complete datasets, each reflecting
+    different possibilities for the missing data.
+
+
+
+::: {.cell}
+::: {.cell-output .cell-output-stdout}
+</code></pre>
+<p>iter imp variable 1 1 bmi 1 2 bmi 1 3 bmi 1 4 bmi 1 5 bmi 2 1 bmi 2 2 bmi 2 3 bmi 2 4 bmi 2 5 bmi 3 1 bmi 3 2 bmi 3 3 bmi 3 4 bmi 3 5 bmi 4 1 bmi 4 2 bmi 4 3 bmi 4 4 bmi 4 5 bmi 5 1 bmi 5 2 bmi 5 3 bmi 5 4 bmi 5 5 bmi</p>
+<pre><code>
+
+:::
+:::
+
+---
+Bayesian Logistic Regression is based on binomial probability Bayes&#39;
+    rules, and predicts probability of disease outcome
+-   Bayes analyzes linear relation between the predictor (Age, Race,
+    BMI, Gender) and outcome response variable (Diabetes).
+-   it considers that predictors and response variables are independent.
+-   Regression a of a discrete variable (0 or 1) is a Bernoulli
+    probability model that classifies categorical response variables -
+    predicting Diabetes.
+-   Logit link provides probabilities for the response variable.
+-   We use Weakly informative priors Normal (0, 2.5) for logistic regression coefficients and            intercept, Normal(0, 10), allows a wide range of baseline log-odds and helps with convergence        and avoids extreme estimates. Good default for most applications in social, health, or               epidemiological studies.
+---
+
+
+
+
+## Bayesian probability equation
+
+P(β,Ymis​∣Yobs​,X)∝P(Yobs​,Ymis​∣X,β)⋅P(β)
+
+## Modeling
+
+
+
+::: {.cell}
+::: {.cell-output .cell-output-stdout}
+</code></pre>
+<p>Running /opt/R/4.4.2/lib/R/bin/R CMD SHLIB foo.c using C compiler: ‘gcc (GCC) 11.5.0 20240719 (Red Hat 11.5.0-2)’ gcc -I”/opt/R/4.4.2/lib/R/include” -DNDEBUG -I”/opt/R/4.4.2/lib/R/library/Rcpp/include/” -I”/opt/R/4.4.2/lib/R/library/RcppEigen/include/” -I”/opt/R/4.4.2/lib/R/library/RcppEigen/include/unsupported” -I”/opt/R/4.4.2/lib/R/library/BH/include” -I”/opt/R/4.4.2/lib/R/library/StanHeaders/include/src/” -I”/opt/R/4.4.2/lib/R/library/StanHeaders/include/” -I”/opt/R/4.4.2/lib/R/library/RcppParallel/include/” -I”/opt/R/4.4.2/lib/R/library/rstan/include” -DEIGEN_NO_DEBUG -DBOOST_DISABLE_ASSERTS -DBOOST_PENDING_INTEGER_LOG2_HPP -DSTAN_THREADS -DUSE_STANC3 -DSTRICT_R_HEADERS -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION -D_HAS_AUTO_PTR_ETC=0 -include ‘/opt/R/4.4.2/lib/R/library/StanHeaders/include/stan/math/prim/fun/Eigen.hpp’ -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1 -I/usr/local/include -fpic -g -O2 -c foo.c -o foo.o In file included from /opt/R/4.4.2/lib/R/library/RcppEigen/include/Eigen/Core:19, from /opt/R/4.4.2/lib/R/library/RcppEigen/include/Eigen/Dense:1, from /opt/R/4.4.2/lib/R/library/StanHeaders/include/stan/math/prim/fun/Eigen.hpp:22, from <command-line>: /opt/R/4.4.2/lib/R/library/RcppEigen/include/Eigen/src/Core/util/Macros.h:679:10: fatal error: cmath: No such file or directory 679 | #include <cmath> | ^~~~~~~ compilation terminated. make: *** [/opt/R/4.4.2/lib/R/etc/Makeconf:195: foo.o] Error 1</cmath></command-line></p>
+<pre><code>
+
+:::
+:::
+
+
+
+---
+
+## Comparison of summaries
+
+Odds ratios (per 1 SD) with 95% CIs across models
+Model   BMI (per 1 SD) OR (95% CI)  Age (per 1 SD) OR (95% CI)
+Survey-weighted MLE 1.89 (1.65–2.15)    3.03 (2.70–3.40)
+MICE pooled 1.73 (1.58–1.89)    2.90 (2.60–3.24)
+Bayesian    1.87 (1.71–2.05)    2.99 (2.64–3.37)
+
+---
+
+## Assumptions for Bayesian Regression
+
+
+
+
+::: {.cell}
+::: {.cell-output-display}
+![](slides_files/figure-revealjs/unnamed-chunk-7-1.png){width=960}
+:::
+
+::: {.cell-output-display}
+![](slides_files/figure-revealjs/unnamed-chunk-7-2.png){width=960}
+:::
+
+::: {.cell-output-display}
+![](slides_files/figure-revealjs/unnamed-chunk-7-3.png){width=960}
+:::
+
+::: {.cell-output-display}
+![](slides_files/figure-revealjs/unnamed-chunk-7-4.png){width=960}
+:::
+
+::: {.cell-output .cell-output-stdout}
+</code></pre>
+<pre><code>Estimate  Est.Error      Q2.5     Q97.5</code></pre>
+<p>R2 0.1313796 0.01250984 0.1074504 0.1565533 ```</p>
+<p>::: :::</p>
 </section>
-<section id="modeling-and-results" class="slide level2">
-<h2>Modeling and Results</h2>
-<p>Data preprocessing:</p>
+<section id="results" class="slide level2">
+<h2>Results</h2>
 <ul>
-<li><p>Raw data analysis: finds quasi-separation due to listwise deletion of missing values with a resulting small sample size, revealing missingness due to MAR or MNAR</p></li>
-<li><p>Multiple Imputation, data analytics, and visuals</p>
-<ul>
-<li><p>Missingness - No NA’s and the sample size was retained</p></li>
-<li><p>Trace plots and density plots - compare distributions of imputed vs observed values</p></li>
-<li><p>Quality check on imputation - Number of imputations, means, variances, and proportions for consistency of all datasets generated, VIFs or correlations, and structural violations for categorical variables</p></li>
-<li><p>Standardization of continuous predictors and ensuring outcome variability is maintained</p></li>
-</ul>
-<p>Bayesian Logistic Regression analytics and findings from posteriors</p>
-<ul>
-<li></li>
-</ul></li>
-<li><p><strong>Tell a story about what the data reveals</strong></p></li>
+<li><strong>MLE:</strong> collapsed; unstable estimates.</li>
+<li><strong>MICE + MLR:</strong> stable across ~9,813; Hosmer-Lemeshow misfit (p &lt; 0.001).</li>
+<li><strong>Bayesian:</strong> stable, interpretable ORs with credible intervals; best handling of missingness + separation.</li>
 </ul>
 </section>
-<section id="bayesian-probability-equation" class="slide level2">
-<h2>Bayesian probability equation</h2>
-<p>P(β,Ymis​∣Yobs​,X)∝P(Yobs​,Ymis​∣X,β)⋅P(β)</p>
+<section id="discussion" class="slide level2">
+<h2>Discussion</h2>
+<ul>
+<li><strong>Best approach:</strong> MICE + Bayesian logistic regression</li>
+<li><strong>Priors:</strong> weakly-informative + literature-informed (Ali 2024)</li>
+<li><strong>Limitations:</strong> subjective priors, computation time, proxy outcome (<code>DIQ240</code>)</li>
+</ul>
+</section>
+<section id="references" class="slide level2">
+<h2>References</h2>
+<div class="refs">
+
+</div>
 </section>
 <section id="conclusion" class="slide level2">
 <h2>Conclusion</h2>
-<ul>
-<li><p>Summarize your key findings.</p></li>
-<li><p>Discuss the implications of your results.</p></li>
-</ul>
 </section>
-<section id="references" class="slide level2 smaller scrollable">
+<section id="references-1" class="slide level2 smaller scrollable">
 <h2>References</h2>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">

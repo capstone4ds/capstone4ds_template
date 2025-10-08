@@ -171,30 +171,28 @@ classifying patients health status and mortality rates.
 
 **Aims**
 
-The present study focuses on the application of Bayesian logistic
-regression to predict diabetes status based on body mass index (BMI),
-age, gender, and race as predictors using a retrospective dataset
-(2013–2014 NHANES survey). The dataset reveals challenges such as
-quasi-separation, missing values, and a relatively small effective
-sample size, and the traditional logistic regression has limitations in
-dealing with these anomalies. Initial data exploration yielded 9,813
-observations across five selected variables. The results from complete
-case analysis, listwise deletion, substantially reduced the sample size
-to only 14 complete cases and presented quasi-separation with
-implausibly large coefficients and unstable estimates. The analytic
-limitations of traditional logistic regression motivate us to perform
-Multiple Imputation by Chained Equations (MICE) in conjunction with
-Bayesian logistic regression. The approach could provide a flexible
-framework for modeling uncertainty, incorporating prior knowledge, and
-addressing issues related to quasi-separation and limited sample size.
+The present study aims to apply Bayesian logistic regression to predict
+diabetes status and estimate the association between body mass index
+(BMI), age (\>20 years age group), gender, and race as predictors and
+diabetes as the response variable using a retrospective dataset
+(2013–2014 NHANES survey). NHANES is a complex survey, and is not sampled uniformly: It uses stratification, clustering, and oversampling of certain groups in the population. We use Bayesian analytic approach to evaluates the
+challenges of dataset anomalies (missingness, complete case analysis and separation) for
+which traditional logistic regression is not efficient in predicting
+health status. 
 
 ## Method and Data Preparation
 
-Statistical Tool R, R packages, and libraries are used to import, manage
-and analyze the data. Data is collected from NHANES 2-year
-cross-sectional data (2013-2014 year) using 3 datasets (demographics,
-exam, questionnaire) @CenterforHealthStatistics1999. Haven package
-coverted .XPT files in R to dataframe (df).
+**Statistical Tool**: R, R packages, and libraries are used to import data,
+data wrangling and analysis.
+
+**Data collection**: is from NHANES 2-year cross-sectional weighted data
+(2013-2014 year). We imported three datasets (demographics, exam,
+questionnaire) with selected variable of interest
+@CenterforHealthStatistics1999. Haven package coverted .XPT files in R to dataframe (df).
+
+**Modeling** - to estimate the association between BMI, age, sex, and race/ethnicity and
+doctor-diagnosed diabetes (`DIQ010`). 
+
 
 ```{r}
 #| label: Libraries
@@ -216,7 +214,6 @@ library(dplyr)
 library(tidyr)
 library(forcats)
 library(ggplot2)
-
 library(classpackage)
 library(janitor)
 install.packages("gt")   
@@ -228,32 +225,34 @@ library(logistf)
 
 ```
 
-Data Management
+**Method**
 
-Subsets created from the original weighted 3 datasets (demographics,
-exam, questionnaire) were merged using ID into a single dataframe. The
-merged dataframe included selected variables of interest.
+**Data pre-processing and cleaning**
+Subsets are created from the original weighted datasets (demographics,
+exam, questionnaire) with selected variables are merged using ID to
+create a single dataframe.
 
-1.  Response Variable (Binary, Diabetes) was defined as - "Is there one
-    Dr you see for diabetes"
-2.  Predictor Variables (Body Mass Index, factor, 4 levels) The original
-    data has BMDBMIC (measured BMI) as categorical and had no missing
-    values. It (BMI) has the following 4 levels:\
+1.  Response Variable: Binary, **type 2 / diagnosed diabetes**
+    (excluding gestational diabetes) -“Doctor told you have diabetes?” DIQ010
+    combined with `DIQ050` a **secondary variable** describing
+    **treatment status (insulin use) to exclude those cases**
+2.  Predictor Variables (Body Mass Index, factor, 4 levels are analyzed
+    after standardization).\
     o Underweight (\<5th percentile)\
     o Normal (5th–\<85th)\
     o Overweight (85th–\<95th) o Obese (≥95th percentile)\
     o Missing We kept it as it is as categorization provides clinically
     interpretable groups
 3.  Covariates:
+    1.  Gender (factor, 2 levels): Male: Female
+    2.  Ethnicity (factor, 5 levels): Mexican American, Non-Hispanic,
+        White Non-Hispanic, Black Other Hispanic, Other Race - Including
+        multi-racial
+    3.  Age (number, continuous)
 
--   Gender (factor, 2 levels): Male: Female
--   Ethnicity (factor, 5 levels): Mexican American, Non-Hispanic, White
-    Non-Hispanic, Black Other Hispanic, Other Race - Including
-    Multi-Racial
--   Age (num, continuous)
 
 ```{r message=FALSE, warning=FALSE}
-#| label: nhanes tables
+#| label: nhanes tables and merged data
 #| include: false
 
             
@@ -271,12 +270,11 @@ library ("nhanesA")
 nhanesCodebook("DEMO_H",'RIDRETH1')
 nhanesCodebook("DEMO_H",'RIAGENDR')
 nhanesCodebook("DEMO_H",'RIDAGEYR')
-nhanesCodebook("DIQ_H","DIQ240")
+nhanesCodebook("DIQ_H","DIQ010, DIQ050")
 nhanesCodebook("BMX_H",'BMDBMIC')
 
   #  .xpt files read ( 2013–2014)                      
                       bmx_h <- nhanes("BMX_H")         #Exam
-                      smq_h <- nhanes("SMQ_H")         #Quest
                       demo_h <- nhanes("DEMO_H")       #Demo
                       diq_h <- nhanes("DIQ_H")         #diabetes
 
@@ -292,76 +290,37 @@ exam_sub <- bmx_h %>%
     BMI = BMDBMIC
   )
 
-demo_sub <- demo_h %>%
-  select(SEQN, RIDAGEYR, RIAGENDR, RIDRETH1, SDMVPSU, SDMVSTRA, WTMEC2YR) %>%
-  rename(
-    ID = SEQN,
-    Age = RIDAGEYR,
-    Gender = RIAGENDR,
-    Race = RIDRETH1,
-    PSU = SDMVPSU,
-    Strata = SDMVSTRA,
-    Weight = WTMEC2YR
-  )
+
+need_demo <- c("SEQN","RIDAGEYR","RIAGENDR","RIDRETH1","SDMVPSU","SDMVSTRA","WTMEC2YR")
+stopifnot(all(c("SEQN","BMXBMI") %in% names(bmx_h)))
+stopifnot(all(need_demo %in% names(demo_h)))
+if (!("DIQ010" %in% names(diq_h))) {
+  stop("DIQ010 is not in DIQ_H. Check the cycle name 'DIQ_H' and nhanesA version.")
+}
 
 
-diq_sub <- diq_h %>%
-  select(SEQN, DIQ240) %>%
-  rename(
-    ID = SEQN,
-    Diabetes = DIQ240
-  )
-
-
-# Names of all variables 
-names(exam_sub)
-names(demo_sub)
-names(diq_sub)
+# ---- Select only needed variables ----
+exam_sub <- bmx_h  %>% select(SEQN, BMXBMI)
+demo_sub <- demo_h %>% select(all_of(need_demo))
+diq_sub  <- diq_h  %>% select(SEQN, DIQ010, dplyr::any_of("DIQ050"))
 
 # merged dataframe
-merged_data <- exam_sub %>%
-  left_join(demo_sub, by = "ID") %>%
-  left_join(diq_sub, by = "ID")
-head(merged_data)
+
+merged_data <- demo_sub %>%
+  left_join(exam_sub, by = "SEQN") %>%
+  left_join(diq_sub,  by = "SEQN")
 
 names(merged_data)
 saveRDS(merged_data, "data/nhanes2013_2014_prepared.rds")
 
 
-
 ```
 
-```{r}
-library(gt)
-# formation of table with variable details
+Merged dataset created, cleaned and visualized for any anamolies and to present results from Data Exploration (summary and tables presented below). 
 
-variables <- c("ID",       "BMI" ,     "Age",      "Gender" ,  "Race",     "PSU",      "Strata",   "Weight" ,  "Diabetes")
-df <- data.frame(Variable = variables, Description = descriptions <- c("Respondent sequence number", 
-        "BMI calculated as weight in kilograms divided by height in meters squared, and then rounded to one decimal place.", 
-                  "Age in years of the participant at the time of screening. Individuals 80 and over are topcoded at 80 years of Age.", 
-                  "Gender", 
-                  "Race/ethnicity Recode of reported race and Hispanic origin information", 
-                  "Sample PSU", 
-                  "Sample strata", 
-                  "MEC exam weight", 
-                  "Diabetes status Is there one doctor or other health professional {you usually see/SP usually sees} for {your/his/her} diabetes? Do not include specialists to whom {you have/SP has} been referred such as diabetes educators, dieticians or foot and eye doctors."))
-df %>%
-  gt %>%
-  tab_header(
-    title = "Table Variable Description"
-  ) %>%
-  tab_footnote(
-    footnote = "Each variable in the dataset, accompanied by a qualitative description from the study team."
-  )
-          
-
-```
-
-The dataframe structure, missing values and a plot of the data and the
-breakdown of the missingness reveal only 14 complete cases with no NAs.
 
 ```{r}
-#| label: weighted means
+#| label: data structure and missing data
 #| echo: true
 
 # weighted means of each variable                       
@@ -376,1299 +335,822 @@ plot_missing(merged_data, title="Figure 2(Merged dataset). Breakdown of missing 
 
 ```
 
+
 ```{r message=FALSE, warning=FALSE}
-#| label: merged dataframe
+#| label: merged dataframe and character handling
 #| echo: true
 
-# Correct survey design
-nhanes_design <- svydesign(
-  id = ~PSU,        # primary sampling unit
-  strata = ~Strata, # stratification variable
-  weights = ~Weight,# survey weights
-  data = merged_data,
-  nest = TRUE
-)
 
-# Weighted proportion of Diabetes
-svymean(~Diabetes, design = nhanes_design, na.rm = TRUE)
-svymean(~Age , design = nhanes_design, na.rm = TRUE)
-svymean(~BMI, design = nhanes_design, na.rm = TRUE)
-svymean(~Gender, design = nhanes_design, na.rm = TRUE)
-svymean(~Race, design = nhanes_design, na.rm = TRUE)
+# print(glimpse(merged_data))
+print(table(merged_data$BMDBMIC, useNA = "ifany"))
+print(table(merged_data$DIQ010,  useNA = "ifany"))
 
-```
-
-## Explain your data preprocessing and cleaning steps.
-
--   Using library(survey), the weighted means and sd of the variables
-    extracted
--   Data varaibles categorized and recoded.
--   Special codes are not random and cannot be dropped, the informative
-    missingness if ignored (MAR or MNAR) could introduce bias, we
-    transformed special codes into NAs (based on the variable codebook).
--   All NAs were included in the analysis. NAs are automatically
-    excluded (row-wise deletion) in linear regression lm ()
-
-```{r}
-#| label: new columns
-#| include: false
- 
-# cleaning of special characters(7,9,77,99) from merged_data (Raw data)
-
-special_codes <- c(7, 9, 77, 99)  
-cols_to_clean <- c("ID",       "BMI" ,     "Age",      "Gender" ,  "Race",     "PSU",      "Strata",   "Weight" ,  "Diabetes")
-
-# Loop over columns
-for (v in cols_to_clean) {if (is.character(merged_data[[v]]) || is.factor(merged_data[[v]])) {
-      merged_data[[v]][merged_data[[v]] %in% c("Don't know","Refused")] <- NA
-    }
+# ---- Coercion helpers (handle labelled/character) ----
+to_num <- function(x) {
+  if (is.numeric(x)) return(x)
+  xc <- as.character(x)
+  n <- suppressWarnings(readr::parse_number(xc))
+  if (mean(is.na(n)) > 0.80) {
+    xlow <- tolower(trimws(xc))
+    n <- dplyr::case_when(
+      xlow %in% c("1","yes","yes, told") ~ 1,
+      xlow %in% c("2","no","no, not told") ~ 2,
+      xlow %in% c("3","borderline") ~ 3,
+      xlow %in% c("7","refused") ~ 7,
+      xlow %in% c("9","don't know","dont know","unknown") ~ 9,
+      TRUE ~ NA_real_
+    )
   }
-
-summary(merged_data)  ## no removal of NAs in merged_data 
-        
-```
-
-```{r}
-#| label: summary_raw data
-#| echo: true
-
-library(dplyr)
-library(knitr)
-
-# 1. continuous variable summary
-cont_summary <- merged_data %>%
-  summarise(
-    Mean = round(mean(Age, na.rm = TRUE), 2),
-    SD   = round(sd(Age, na.rm = TRUE), 2),
-    Min  = min(Age, na.rm = TRUE),
-    Max  = max(Age, na.rm = TRUE)
-  ) %>%
-  mutate(
-    Variable = "Age",
-    Category = "Continuous",
-    Count = nrow(merged_data) - sum(is.na(merged_data$Age)),
-    Proportion = NA
-  ) %>%
-  select(Variable, Category, Count, Proportion, Mean, SD, Min, Max)
-
-# 2. categorical variables
-cat_summary <- function(df, var, name) {
-  df %>%
-    count({{var}}) %>%
-    mutate(
-      Proportion = round(n / sum(n), 3),
-      Variable = name,
-      Mean = NA, SD = NA, Min = NA, Max = NA
-    ) %>%
-    rename(Category = {{var}}, Count = n) %>%
-    select(Variable, Category, Count, Proportion, Mean, SD, Min, Max)
+  as.numeric(n)
 }
 
-# 3. summaries for categorical variables
-gender_summary <- cat_summary(merged_data, Gender, "Gender")
-BMI_summary    <- cat_summary(merged_data, BMI, "BMI Category")
-race_summary   <- cat_summary(merged_data, Race, "Race")
-diab_summary   <- cat_summary(merged_data, Diabetes, "Diabetes")
+merged_data <- merged_data %>%
+  mutate(
+    DIQ010   = to_num(DIQ010),
+    DIQ050   = to_num(if (!"DIQ050" %in% names(.)) NA_real_ else DIQ050),
+    BMXBMI   = suppressWarnings(as.numeric(BMXBMI)),
+    RIDAGEYR = suppressWarnings(as.numeric(RIDAGEYR)),
+    RIAGENDR = suppressWarnings(as.numeric(RIAGENDR)),
+    RIDRETH1 = suppressWarnings(as.numeric(RIDRETH1)),
+    SDMVPSU  = suppressWarnings(as.numeric(SDMVPSU)),
+    SDMVSTRA = suppressWarnings(as.numeric(SDMVSTRA)),
+    WTMEC2YR = suppressWarnings(as.numeric(WTMEC2YR))
+  )
 
-# 4. combine all into one table
-final_table <- bind_rows(
-  cont_summary,
-  gender_summary,
-  BMI_summary,
-  race_summary,
-  diab_summary
+# ---- Diagnostics BEFORE save ----
+cat("DIQ010 counts BEFORE save:\n")
+print(table(merged_data$DIQ010, useNA = "ifany"))
+cat("Count with DIQ010 in {1,2}:", sum(merged_data$DIQ010 %in% c(1,2), na.rm = TRUE), "\n")
+
+# ---- Save to file for reuse ----
+dir.create("data", showWarnings = FALSE)
+# ---- Save ----
+dir.create("data", showWarnings = FALSE, recursive = TRUE)
+saveRDS(merged_data, "data/merged_2013_2014.rds")
+message("Saved: data/merged_2013_2014.rds")
+
+
+```
+**EDA**
+
+-   Used library(survey) to get weighted means and sd of the variables.
+    The BMI and age were standardized.
+-   Age was recoded into different variabless, including only \>20 years
+    in the analysis.
+-   BMI is recoded and categorized as-"18.5,18.5–\<25,25–\<30,30–\<35,35–\<40,≥40          years).
+-   Ethnicity is recoded as "Mexican American" = "1", "Other Hispanic" =
+    "2", "NH White" = "3", "NH Black" = "4", "Other/Multi" = "5"
+-   Since special codes are not random, cannot be dropped; the
+    informative missingness if ignored (MAR or MNAR) could introduce
+    bias. We transformed special codes (3,7,) to NA and included all NAs in
+    the analysis. Visulaization of missing data presented below.
+-   A final analytic dataset was created ('adult') with "NH White" and "Male" as
+    the reference group
+
+```{r}
+#| label: Basic Exploration (adults)
+## 
+# ---------------- Basic Exploration (adults) ----------------
+
+# Keep adults only and build analysis variables
+adult <- merged_data %>%
+  dplyr::filter(RIDAGEYR >= 20) %>%
+  dplyr::transmute(
+    # --- keep survey design variables so svydesign() can see them ---
+    SDMVPSU, SDMVSTRA, WTMEC2YR,
+
+    # --- outcome: DIQ010 (1 yes, 2 no; 3/7/9 -> NA) ---
+    diabetes_dx = dplyr::case_when(
+      DIQ010 == 1 ~ 1,
+      DIQ010 == 2 ~ 0,
+      DIQ010 %in% c(3, 7, 9) ~ NA_real_,
+      TRUE ~ NA_real_
+    ),
+
+    # --- predictors (raw) ---
+    bmi  = BMXBMI,
+    age  = RIDAGEYR,
+
+    # sex (1=Male, 2=Female)
+    sex  = forcats::fct_recode(factor(RIAGENDR), Male = "1", Female = "2"),
+
+    # race (5-level)
+    race = forcats::fct_recode(
+      factor(RIDRETH1),
+      "Mexican American" = "1",
+      "Other Hispanic"   = "2",
+      "NH White"         = "3",
+      "NH Black"         = "4",
+      "Other/Multi"      = "5"
+    ),
+
+    # keep DIQ050 so we can safely reference it (may be absent/NA in some rows)
+    
+    DIQ050 = DIQ050
+  ) %>%
+  # standardize continuous predictors
+  dplyr::mutate(
+    age_c = as.numeric(scale(age)),
+    bmi_c = as.numeric(scale(bmi)),
+    bmi_cat = cut(
+      bmi,
+      breaks = c(-Inf, 18.5, 25, 30, 35, 40, Inf),
+      labels = c("<18.5","18.5–<25","25–<30","30–<35","35–<40","≥40"),
+      right = FALSE
+    )
+  ) %>%
+  # adjust outcome: if female & DIQ050==1 ("only when pregnant"), set to 0 (not diabetes)
+  dplyr::mutate(
+    diabetes_dx = ifelse(sex == "Female" & !is.na(DIQ050) & DIQ050 == 1, 0, diabetes_dx)
+  )
+
+# Make NH White the reference level for race (clearer interpretation)
+adult <- adult %>%
+  dplyr::mutate(
+    race = forcats::fct_relevel(race, "NH White")
+  )
+
+# --- sanity checks ---
+cat("Adults n =", nrow(adult), "\n")
+
+
+
+```
+ 
+```{r}
+#| label: Data exploration
+# data exploration
+
+print(table(adult$diabetes_dx, useNA = "ifany"))
+
+print(table(adult$sex, useNA = "ifany"))
+print(table(adult$race, useNA = "ifany"))
+
+if (sum(!is.na(adult$diabetes_dx)) == 0) {
+  stop("Too few non-missing outcomes for modeling (n = 0). Check DIQ010 upstream.")
+}
+
+# (optional plots omitted for brevity)
+
+# save for downstream
+if (!dir.exists("data")) dir.create("data", recursive = TRUE)
+saveRDS(adult, "data/adult_cleaned_2013_2014.rds")
+
+```
+ 
+ 
+ 
+ 
+```{r}
+#| label: survey design
+# survey design
+# ---------------- Survey Design ----------------
+# Use exam weights because BMI (BMXBMI) is an MEC variable
+nhanes_design_adult <- survey::svydesign(
+  id = ~SDMVPSU,
+  strata = ~SDMVSTRA,
+  weights = ~WTMEC2YR,
+  nest = TRUE,
+  data = adult
 )
 
-# 5. display as a table
-kable(final_table, caption = "Table 1. Descriptive Statistics of Study Variables")
-
-```
-
-```{r}
-#| label: crosstabulation and table summary (raw)
-library(gt)
-
-# Cross-tabulation: Diabetes vs BMI
-tab1 <- table(merged_data$Diabetes, merged_data$BMI, useNA = "ifany")
-prop.table(tab1) * 100  # overall percentages
-
-# Cross-tabulation: Race vs Diabetes
-tab2 <- table(merged_data$Race, merged_data$Diabetes, useNA = "ifany")
-prop.table(tab2) * 100  # overall percentages
-
-# Cross-tabulation: Gender vs Diabetes
-tab3 <- table(merged_data$Gender, merged_data$Diabetes, useNA = "ifany")
-prop.table(tab3) * 100  # overall percentages
+# quick weighted checks
+survey::svymean(~age, nhanes_design_adult, na.rm = TRUE)
+survey::svymean(~diabetes_dx, nhanes_design_adult, na.rm = TRUE)
 
 
 ```
 
-```{r}
-#| label: Data Vizualization of variables and cross-tabulation (raw)
-#| echo: true
-## Bar plot of Age, gender, race, diabetes status, BMI ## 
+** Statistical Methods**
 
-plot_bar(merged_data, title = "Figure 3(Merged dataset). Frequency plots of categorical variables.")
+## Modeling
 
+**Multiple Logistic regression** on survey weighted dataset
 
-```
+-We conducted frequentist method **Multiple Logistic regression** on a
+survey-weighted dataset, for complete case analysis and data exploration
 
-Method
-
-The study conducted frequentist methods: Multiple Logistic regression
-model, Baseline Regression model and Firth penalized regression on
-NHANES dataset to predict Diabetes as a function of BMI, age, race, and
-gender and then compared results from MLR and Bayesian model.
-
-**Bayesian Logistic Regression**
-
--   Bayesian Logistic Regression statistical analysis is selected for
-    our data as the study response variable is a binary outcome
-    (Diabetes:yes/no)
--   Bayesian Logistic Regression is based on binomial probability Bayes
-    rules
--   Bayes rule analyzes linear relation between predictor (Age, Race,
-    BMI, Gender) and outcome response variable (Diabetes) where the
-    predictors and response variables are independent.
--   Regression of discrete variable that can have two values, 0 or 1 is
-    Bernoulli probability model to classify categorical response
-    variables - predicting Diabetes.
--   Logit link provides probabilities for the response variable.
-
-```{python}
-#| label: Python
-#| eval: false
-#| include: false
-
-```
-
-# Data exploration of the raw dataset
-
-Before running Bayesian regression, basic statistics, summary, anamolies
-and patterns reported Descriptive statistics of variable (counts,
-frequencies, proportions, mean and sd), and the proportions of
-variable/s calculated. Visualization using frequency plots for
-continuous and categorical variables
-
-(1) Multiple logistic regression on raw dataset
-
--   resulted in small sample size (n=14) - listwise deletion of NAs
--   quasi-separation @van2012flexible.
--   Data revealed breakdown of missingness missing at random and missing
-    not at random (MAR and MNAR) - A common reported issue of the
-    healthcare and public health datasets. Presented here is the plot
-    depicting breakdown of missingness
-
-(2) Baseline regression model (BMI only predictor)
-
--   Baseline model conducted to compare whether predictors significantly
-    improve predictive power.
--   The regression resulted in small drop and that BMI category adds
-    very little predictive value over just assuming the overall diabetes
-    prevalence.
--   Null deviance = 16.75 (baseline fit).
--   Residual deviance = 15.11 (with BMI).
-
-(3) Firth (penalized) regression
-
--   Firth (penalized) regression (frquentist approach) was considered to
-    handle quasi-separation, @DAngelo2025 that use Jeffreys prior for
-    bias correction. It does not provide posterior and no sampling using
-    MCMC (vs) bayesian logisitic regression.
-
-## Unexpected reports, patterns or anomalies in the raw data
-
--   Issue of quasi-complete separation (9799 observations dropped)
--   Reduced sample size with reduced number of complete cases (n=14).
--   The model is overfitted to this subset and cannot be generalized.
--   Huge coefficients (e.g., 94, –50, 73) and the tiny residual deviance
-    suggest perfect separation and sparse data in some categories with
-    very few observations, resulted in imbalance in the outcome (very
-    few cases of 0 or 1).
--   Logistic regression cannot estimate stable coefficients when
-    predictors perfectly classify the outcome.
--   Firth regression dealt with quasi-separation with coefficients as
-    finite, but the reduced sample size (n= 14) where estimates are
-    highly uncertain, wide confidence intervals → cannot make strong
-    claims about predictor effects.
--   multivariate missingness, non-monotone (arbitrary) missingness, a
-    connected pattern was observed in some cases in all variables. The
-    issue is crucial because in order to be able to estimate a
-    correlation coefficient between two variables, they need to be
-    connected, either directly by a set of cases that have scores on
-    both, or indirectly through their relation with a third set of
-    connected data.
-
-Model Interpretations: - Only 14 non-missing cases could not be trusted
-(small sample) and quasi-separation problem - Models with all predictors
-together and the baseline model resulted in unstable and extreme
-estimates with standard errors not meaningful. - Adding more predictors
-makes the deviance drop but indicated overfitting/separation, and no
-true explanatory power. - BMI anly model contributes very little to the
-response varaible. Race and gender make models appear stronger, but the
-small sample (n=14) with complete separation, could not be generalized.
-
-Considering the data anamolies, we decided to retain full N = \~9813,
-deal with small sample size and quasi-separation by conducting
 **Multivariate Imputation by Chained Equations (MICE)**
+-   We then conducted MICE to manage missiging data 
+-   Considering the small sample size, Multivariate Imputation by
+    Chained Equations (MICE) was conducted as an alternative to the
+    Bayesian Approach @JSSv045i03
 
-(4) **Multivariate Imputation by Chained Equations (MICE)**
+-   Multiple imputation (MI) is an alternative analytic approach for
+    small dataset with missingness.
 
--   Bayesian Approach @JSSv045i03
--   Multiple imputation (MI) is an alternative Bayesian approach for
-    small dataset.
 -   Flatness of the density, heavy tails, non-zero peakedness, skewness
     and multimodality do not hamper the good performance of multiple
     imputation for the mean structure in samples n \> 400 even for high
     percentages (75%) of missing data in one variable
     \@@van2012flexible.
--   Multiple Imputation (MI) use popular mice package in R) and adds
-    sampling variability to the imputations.
--   Iterative Imputation (MICE) imputes missing values of one variable
-    at a time, using regression models based on the other variables in
-    the dataset.
--   This is a chain process, with each imputed variable becoming a
-    predictor for the subsequent imputation and the entire process is
-    repeated multiple times to create several complete datasets, each
-    reflecting different possibilities for the missing data.
--   Each variable is imputed using its own appropriate univariate
-    regression model.
 
-```{r}
-#| label: MICE
-#| echo: true
+-   Multiple Imputation (MI) can be performed using mice package in R
+    and adds sampling variability to the imputations.
 
-## Multiple Imputation performed 
-# Subset variables for imputation in analytic_data df
-library(dplyr)
-library(ggplot2)
-library(mice)
-library(VIM)
-library(janitor)
+-   Iterative MICE imputes missing values of one variable at a time,
+    using regression models based on the other variables in the dataset.
 
-# 1. Select variables for imputation
-vars <- c("ID", "BMI", "Age", "Gender", "Race", "PSU", "Strata", "Weight", "Diabetes")
-analytic_data <- merged_data[, vars]
+-   In the chain process, each imputed variable become a predictor for
+    the subsequent imputation, and the entire process is repeated
+    multiple times to create several complete datasets, each reflecting
+    different possibilities for the missing data.
 
-glimpse(merged_data)
+**Bayesian Logistic Regression**
 
-# 2. Run mice to create 5 imputed datasets
-imputed_data <- mice(
-  analytic_data,
-  m = 5,              # number of imputed datasets
-  method = 'pmm',     # predictive mean matching
-  seed = 123
-)
-
-# 3. First imputed dataset
-Imputed_data1 <- complete(imputed_data, 1)
-
-# 4. Check missingness
-str(Imputed_data1)
-summary(Imputed_data1)
-colSums(is.na(Imputed_data1))
-
-plot_intro(Imputed_data1, title="Figure 8. Structure of variables and missing observations.")
-plot_bar(Imputed_data1, title = "Figure 9. Frequency plots of categorical variables.")
-plot_correlation(na.omit(Imputed_data1[, c("BMI", "Diabetes")]), maxcat=5L, title = "Figure")
-
-# 5. Cross-tabulation
-tab <- table(Imputed_data1$BMI, Imputed_data1$Diabetes)
-print(tab)
-
-# Chi-square test
-chisq.test(tab)
-
-# Cross-tabulation
-
-# BMI vs Diabetes
-tab_BMI <- table(Imputed_data1$BMI, Imputed_data1$Diabetes)
-print(tab_BMI)
-prop.table(tab_BMI, 1) * 100  # row percentages
-
-# Gender vs Diabetes
-tab_gender <- table(Imputed_data1$Gender, Imputed_data1$Diabetes)
-prop.table(tab_gender, 1) * 100
-
-# Race vs Diabetes
-tab_race <- table(Imputed_data1$Race, Imputed_data1$Diabetes)
-prop.table(tab_race, 1) * 100
-
-# Age vs Diabetes
-tab_age <- table(Imputed_data1$Age, Imputed_data1$Diabetes)
-head (prop.table(tab_age, 1) * 100)
+-   We selected Bayesian Logistic Regression since our study response variable is a binary outcome       (Diabetes:yes/no)
+-   Bayesian Logistic Regression is based on binomial probability Bayes'
+    rules, and predicts probability of disease outcome
+-   Bayes analyzes linear relation between the predictor (Age, Race,
+    BMI, Gender) and outcome response variable (Diabetes).
+-   it considers that predictors and response variables are independent.
+-   Regression a of a discrete variable (0 or 1) is a Bernoulli
+    probability model that classifies categorical response variables -
+    predicting Diabetes.
+-   Logit link provides probabilities for the response variable.
+-   We use Weakly informative priors Normal (0, 2.5) for logistic regression coefficients and            intercept, Normal(0, 10), allows a wide range of baseline log-odds and helps with convergence        and avoids extreme estimates. Good default for most applications in social, health, or               epidemiological studies.
 
 
-# Breakdown of Diabetes within BMI
-breakdown_BMI <- Imputed_data1 %>%
-  group_by(BMI, Diabetes) %>%
-  summarise(Count = n(), .groups = "drop") %>%
-  group_by(BMI) %>%
-  mutate(
-    Percent = round(100 * Count / sum(Count), 1)
-  )
-breakdown_BMI
-
-# 6. Frequency tables for categorical variables
-categorical_vars <- c("BMI", "Gender", "Race", "Diabetes")
-
-for (var in categorical_vars) {
-  cat("\nFrequency table for", var, ":\n")
-  print(table(Imputed_data1[[var]]))
-  print(round(prop.table(table(Imputed_data1[[var]])), 3))
-}
-
-# 7. Summary statistics for continuous variables
-continuous_vars <- c("Age")
-
-for (var in continuous_vars) {
-  cat("\nSummary statistics for", var, ":\n")
-  print(summary(Imputed_data1[[var]]))
-  print(paste("SD:", round(sd(Imputed_data1[[var]]), 2)))
-}
-
-# 8. Bar plots for categorical variables
-for (var in categorical_vars) {
-  ggplot(Imputed_data1, aes_string(x = var)) +
-    geom_bar(fill = "steelblue") +
-    labs(title = paste("Bar plot of", var), y = "Count") +
-    theme_minimal() -> p
-  print(p)
-}
-
-# 9. Histograms for continuous variables
-for (var in continuous_vars) {
-  ggplot(Imputed_data1, aes_string(x = var)) +
-    geom_histogram(fill = "skyblue", color = "black", bins = 30) +
-    labs(title = paste("Histogram of", var), y = "Frequency") +
-    theme_minimal() -> p
-  print(p)
-}
-
-# 10. Scatter plot example (BMI vs Age)
-ggplot(Imputed_data1, aes(x = Age, y = BMI, color = BMI)) +
-  geom_point(alpha = 0.6) +
-  labs(title = "Scatter plot of BMI vs Age", y = "BMI", x = "Age") +
-  theme_minimal()
-
-# 11. Relative breakdown of Diabetes by BMI
-ggplot(breakdown_BMI, aes(x = BMI, y = Percent, fill = Diabetes)) +
-  geom_col(position = "fill") +
-  scale_y_continuous(labels = scales::percent) +
-  labs(
-    title = "Relative Breakdown of Diabetes by BMI Category",
-    x = "BMI Category", y = "Proportion"
-  ) +
-  theme_minimal()
-
-# 12. Crosstab with percentages
-Imputed_data1 %>% 
-  tabyl(Diabetes, BMI) %>% 
-  adorn_percentages("col")
-
-# 13. Margin plot for BMI vs Diabetes
-marginplot(
-  Imputed_data1[, c("BMI", "Diabetes")],
-  col = mdc(1:2, trans = FALSE),
-  cex = 1.2,
-  cex.lab = 1.2,
-  cex.numbers = 1.3,
-  pch = 19
-)
-
-```
-
-**Results from MICE:**
-
--   MI resulted in 9813 observations with no NAs.
--   A bar plot on missingness is presented below.
--   A heatmap of correlation between BMI and Diabetes status reported no
-    strong linear association between variables.
--   Chi-square p-value = 0.5461, which is \> 0.05 revealing no evidence
-    of association.
--   Imputed data check in marginal plot - shows that the distribution of
-    imputed points is consistent with observed data
--   no strange outliers
-
-## Modeling
+## Model Equation
 
 **Bayesian Logistic Regression model**
 
 $$ \text{logit}(P(Y_i=1)) = \beta_0 + \beta_1 \cdot Age_i + \beta_2 \cdot BMI_i + \beta_3 \cdot Race_i + \beta_4 \cdot Gender_i $$
 
-*Linear Regression equation:*
+**Linear Regression equation:**
 
 $$ y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i $$
 
-**Comparison of multiple imputation and Bayesian data augmentation**
-
-+---------------------+----------------------------------------+
-| **Multiple          | **Bayesian data augmentation**         |
-| imputation**        |                                        |
-+=====================+========================================+
-| -   frequentist     | -   performs missing data imputation   |
-|     approach and    |     and regression model fitting       |
-|     requires no     |     simultaneously                     |
-|     priors, and has |                                        |
-|     moderate        | -   Markov Chain Monte Carlo (MCMC)    |
-|     flexibility     |     draws samples from the joint       |
-|                     |     posterior of regression            |
-|                     |     parameters, missing values and     |
-|                     |     provide complete datasets by       |
-|                     |     extracting posterior means,        |
-|                     |     credible intervals, and            |
-|                     |     probabilities                      |
-+---------------------+----------------------------------------+
-| -   handles missing | -   performed on the data with         |
-|     values first by |     missingness                        |
-|     imputation,     |                                        |
-|     performs        | -   shrink extreme estimates back      |
-|     regression      |     toward plausible values            |
-|     analysis, pools |                                        |
-|     results         |                                        |
-+---------------------+----------------------------------------+
-| -   propagate       | -   handles uncertainty in missing     |
-|     uncertainty     |     values fully propagated through    |
-|     added after     |     the model, naturally handles small |
-|     analysis        |     or sparse datasets and separation  |
-|     (pooling).      |     problems.                          |
-+---------------------+----------------------------------------+
-
-**Diagnostics performed before regression analysis**
+**Diagnostics performed before Bayesian Regression**
 
 (1) Modeling assumption check
 (2) Correlation matrix, Cook's distance, influential points
 (3) Model plot
 
-```{r}
-#| label: Imputed data, MLR and assumptions
-#| echo: true
-
-# MLR on imputed data
-# assumption check (# for correlation # )
-# correlation matrix
-# Frequentist logistic regression on imputed data
-
-m_imp <- glm(Diabetes ~ Age + Gender + Race + BMI,
-             data = Imputed_data1,
-             family = binomial)
-summary(m_imp)
-coef(m_imp)
-confint(m_imp)
-
-# Log-odds (link)
-Imputed_data1$logit <- predict(m_imp, type = "link") ## log (Odds) 
-
-# Probability
-Imputed_data1$prob <- exp(Imputed_data1$logit) / (1 + exp(Imputed_data1$logit)) # prob 
-
-# Plot predicted probability vs Age
-ggplot(Imputed_data1, aes(x = Age, y = prob)) +
-  geom_point(alpha = 0.3) +
-  geom_smooth(method = "loess") +
-  labs(x = "Age", y = "Predicted Probability of Diabetes")
-
-```
-
-Findings from regression of MI data set
-
-1.  MLR on imputed data (Frequentist approach)
-
--   Relationship between Age and log-odds of diabetes are roughly linear
-    but not perfectly, but are acceptable for logistic regression
-    assumptions.
-
--   Generalized Variance Inflation Factor (vif- adjusted report there is
-    no collinearity between predictors (GVIF between \~1.0–1.04) and we
-    can run model without removing or dropping or combining variables.
-
--   Cooks distance and influential points, we found - Most data points
-    are safe, not influencing the model In the data with (\~9813 cases),
-    cutoff ≈ 0.0004. A cluster at high leverage shows unusual predictor
-    values, but not high influence. A few above Cook’s Distance cutoff:
-    worth checking individually, but no major threat to model stability.
-    no outliers detected (not suspected = 9813)
-
--   Results from Hosmer–Lemeshow (H–L) at alpha =0.05, with p \< 0.001,
-    we find our logistic regression model does not fit the data well.
-
--   Graph shows Residual vs fitted (imputed data model)
-
-2.  Results from Bayesian Data Augmentation and logistic regression
-
--   We incorporate prior knowledge that BMI increases diabetes odds by
-    .,
--   We use priors for Bayesian logistic regression and compare the
-    models with different priors in the model
-    -   Prior (intercept) - We use intercept prior from this study data
-    -   Prior (coefficients) - BMI, Age, gender
-        -   Weak prior N (0,2.5) -βBMI∼N(μ,σ2)
-        -   A common approach is to use a normal distribution,
-            βBMI∼N(μ,σ2), for the regression coefficient. 
-        -   informative prior from previous studies βBMI∼N(μ,σ2) ,
-            βAge∼N(μ,σ2), βgender∼N(μ,σ2), βrace ∼N(μ,σ2)
-
-For males, the informative prior @Ali2024, we use is
-
-Normal(μ = 1.705, σ² = 0.448²).
 
 ```{r}
-#| label: Imputed model diagnostics
-#| 
-# Fitted values and residuals
-fitted_imputed1 <- fitted(m_imp)
-residual_imputed1 <- residuals(m_imp)
+#| label: modeling-Survey-weighted complete-case 
 
-# Residuals vs Fitted plot
-plot(fitted_imputed1, residual_imputed1,
-     xlab = "Fitted probabilities",
-     ylab = "Residuals",
-     main = "Residuals vs Fitted")
-abline(h = 0, col = "red", lty = 2)
+# Modeling
 
-# Collinearity check
-library(car)
-vif(m_imp)  # VIF > 5 indicates multicollinearity
-
-# Influential points
 library(broom)
-influence_m_imp <- broom::augment(m_imp)
-
-# Plot Cook's distance
-ggplot(influence_m_imp, aes(x = seq_along(.cooksd), y = .cooksd)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  geom_hline(yintercept = 4 / nrow(influence_m_imp), color = "red", linetype = "dashed") +
-  labs(x = "Observation", y = "Cook's Distance", title = "Influential Points (Cook's Distance)") +
-  theme_minimal()
-
-influence_m_imp <- influence_m_imp %>%
-  mutate(outlier = ifelse(abs(.std.resid) > 2, TRUE, FALSE))
-
-# Cook's distance plot
-ggplot(influence_m_imp, aes(x = .hat, y = .cooksd)) +
-  geom_point() +
-  labs(x = "Leverage", y = "Cook's Distance")
-
-
-###   Transform Response, check for Goodness-of-Fit   ###
-
-# Numeric response
-Imputed_data1$Diabetes_num <- ifelse(Imputed_data1$Diabetes == "Yes", 1, 0)
-
-# Hosmer-Lemeshow test
-
-library(ResourceSelection)
-hoslem.test(Imputed_data1$Diabetes_num, fitted(m_imp))
-
-# ANOVA for model
-anova(m_imp)
-anova(m_imp, test = "Chisq")
-
-# Adjusted R²
-library(glmtoolbox)
-adjR2(m_imp)
-
-
-
-
-# Residual vs fitted for imputed data
-plot(m_imp$fitted.values, resid(m_imp),
-     xlab = "Fitted values",
-     ylab = "Residuals",
-     main = "Residuals vs Fitted",
-     pch = 19, col = "blue")
-abline(h = 0, col = "red", lwd = 2)
-
-```
-
-Hosmer-Lemeshow test - was conducted to test for Goodness of fit of
-multivariate logistic regression model adjR2(m_imp) CHi-square test
-Visualization of the model (fitted vs residula values)
-
-To overcome the quasi-separation issue in the data, Firth (penalized
-regression model) was conducted and the summary presented with only 14
-complete observations.
-
-Next, to deal with the small sample size, imputation (MICE) was
-conducted along with the regression predicting Diabetes \~ BMI, Age,
-Gender, Race.
-
-Summar and visualization of one dataset extracted from the 5 datasets
-from MICE is presented here with along wiht the predicted values of the
-imputed model (m_imp), and plots of cross-tabulation between variables
-and response variable (Diabetes)
-
-```{r}
-#| label: firth, imputed data model
-#| echo: true
-
-# Frequentist logistic regression on raw datd - Firth logistic regression (penalized regression)
-library(logistf)
-
-m_firth <- logistf(Diabetes ~ BMI + Age + Gender + Race,
-                   data = merged_data)
-summary(m_firth)
-
-# Imputed data plots ## pred_prob_imputed #
- 
-Imputed_data1 <- Imputed_data1 %>%
-  mutate(pred_prob_imputed = predict(m_imp, type = "response")) # predicted probabilities
-
-Imputed_plot <- Imputed_data1 %>% select(BMI, pred_prob_imputed) %>% mutate(Source = "Imputed")
-
-
-# Rename probability column to common name
-Imputed_plot <- Imputed_plot %>% rename(Pred_Prob = pred_prob_imputed)
-
-
-ggplot(Imputed_data1, aes(x = BMI, y = pred_prob_imputed, fill = BMI)) +
-  geom_boxplot(alpha = 0.6) +
-  geom_jitter(width = 0.2, alpha = 0.3, size = 1) +
-  labs(x = "BMI Category", y = "Predicted Probability of Diabetes",
-       title = "Predicted Diabetes Probability by BMI Category") +
-  theme_minimal()
-
-
-merged_data_clean <- merged_data %>%
-  filter(!is.na(BMI), !is.na(Diabetes))
-
-ggplot(merged_data_clean, aes(x = BMI, fill = factor(Diabetes))) +
-  geom_bar(position = "fill") +
-  scale_y_continuous(labels = scales::percent) +
-  labs(x = "BMI Category", y = "Proportion with Diabetes",
-       fill = "Diabetes",
-       title = "Observed Diabetes Proportions by BMI Category") +
-  theme_minimal()
-
-
-ggplot(Imputed_data1, aes(x = Race, y = pred_prob_imputed, fill = Race)) +
-  geom_boxplot(alpha = 0.6) +
-  geom_jitter(width = 0.2, alpha = 0.3, size = 1) +
-  labs(x = "Race ", y = "Predicted Probability of Diabetes",
-       title = "Predicted Diabetes Probability by Race ") +
-  theme_minimal()
-
-
-merged_data_clean_Race <- merged_data %>%
-  filter(!is.na(Race), !is.na(Diabetes))
-
-ggplot(merged_data_clean, aes(x = Race, fill = factor(Diabetes))) +
-  geom_bar(position = "fill") +
-  scale_y_continuous(labels = scales::percent) +
-  labs(x = "Race ", y = "Proportion with Diabetes",
-       fill = "Diabetes",
-       title = "Observed Diabetes Proportions by Race ") +
-  theme_minimal()
-
-```
-
-Proportion of Diabetes status and the group category (age \<40 and \>40)
-is tabulated below
-
-```{r}
-#| label: Histo_age both data
-
-ggplot(merged_data, aes(x = Age, y = Diabetes)) + 
-  geom_jitter(size = 0.2)
-
-ggplot(Imputed_data1, aes(x = Age, y = Diabetes)) + 
-  geom_jitter(size = 0.2)
-
-
-
-            # Create age groups
-# Create contingency table with Diabetes
-
-Imputed_data1$Age_group <- ifelse(Imputed_data1$Age < 40, "<40", ">=40")
-
-tab_age <- table(Imputed_data1$Age_group, Imputed_data1$Diabetes)
-prop_age <- prop.table(tab_age, 1) * 100
-
-tab_age
-prop_age
-
-# Convert table to data frame
-df_age <- as.data.frame(tab_age)
-names(df_age) <- c("Age_group", "Diabetes", "Count")  # rename columns
-
-```
-
-```{r}
-#| echo: true
-
-
-## Reference: Gelman et al., 2008, “Weakly informative priors: Normal(0, 2.5) for coefficients (b) and Normal(0, 5) for the intercept as default weakly informative priors for logistic regression ##
-# bayesian logitic regression ## 
+library(mice)
 library(brms)
+library(posterior)
+library(bayesplot)
+library(knitr)
+
+# --- Guardrails for modeling ---
+n_outcome <- sum(!is.na(adult$diabetes_dx))
+if (n_outcome == 0) stop("Too few non-missing outcomes for modeling. n = 0")
+
+# Ensure factors and >=2 observed levels among complete outcomes
+adult <- adult %>%
+  dplyr::mutate(
+    sex  = if (!is.factor(sex))  factor(sex)  else sex,
+    race = if (!is.factor(race)) factor(race) else race
+  )
+
+if (nlevels(droplevels(adult$sex[!is.na(adult$diabetes_dx)]))  < 2)
+  stop("sex has <2 observed levels after filtering; check data availability.")
+if (nlevels(droplevels(adult$race[!is.na(adult$diabetes_dx)])) < 2)
+  stop("race has <2 observed levels after filtering; check Data Prep.")
+
+# ------------------------- 1) Survey-weighted complete-case -------------------------
+# Build a logical filter on the original adult data (same length as design$data)
+keep_cc <- with(
+  adult,
+  !is.na(diabetes_dx) & !is.na(age_c) & !is.na(bmi_c) &
+  !is.na(sex) & !is.na(race)
+)
+
+# Subset the survey design using the logical vector (same length as original)
+des_cc <- subset(nhanes_design_adult, keep_cc)
+
+# Corresponding complete-case data (optional)
+cc <- adult[keep_cc, ] |> droplevels()
+cat("\nComplete-case N for survey-weighted model:", nrow(cc), "\n")
+
+print(table(cc$race))
+print(table(cc$diabetes_dx))
+print(table(cc$sex))
+
+form_cc <- diabetes_dx ~ age_c + bmi_c + sex + race
+svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibinomial())
+summary(svy_fit)
+
+# Survey-weighted OR table (no intercept)
+svy_or <- broom::tidy(svy_fit, conf.int = TRUE) %>%
+  dplyr::mutate(OR = exp(estimate), LCL = exp(conf.low), UCL = exp(conf.high)) %>%
+  dplyr::select(term, OR, LCL, UCL, p.value) %>%
+  dplyr::filter(term != "(Intercept)")
+knitr::kable(svy_or, caption = "Survey-weighted odds ratios (per 1 SD)")
+
+```
+
+```{r}
+#| label: MICE
+#| include: false
+ 
+# ------------------------- 2) Multiple Imputation (predictors only) 
+mi_dat <- adult %>%
+  dplyr::select(diabetes_dx, age, bmi, sex, race, WTMEC2YR, SDMVPSU, SDMVSTRA)
+
+meth <- mice::make.method(mi_dat)
+pred <- mice::make.predictorMatrix(mi_dat)
+
+# Do not impute outcome
+meth["diabetes_dx"] <- ""
+pred["diabetes_dx", ] <- 0
+pred[,"diabetes_dx"] <- 1
+
+# Imputation methods
+meth["age"]  <- "norm"
+meth["bmi"]  <- "pmm"
+meth["sex"]  <- "polyreg"
+meth["race"] <- "polyreg"
+
+# Survey design vars as auxiliaries only
+meth[c("WTMEC2YR","SDMVPSU","SDMVSTRA")] <- ""
+pred[, c("WTMEC2YR","SDMVPSU","SDMVSTRA")] <- 1
+
+imp <- mice::mice(mi_dat, m = 5, method = meth, predictorMatrix = pred, seed = 123)
+
+
+```
+
+```{r}
+#| label: fit mutated model
+#| echo: true
+fit_mi <- with(imp, {
+  age_c <- as.numeric(scale(age))
+  bmi_c <- as.numeric(scale(bmi))
+  glm(diabetes_dx ~ age_c + bmi_c + sex + race, family = binomial())
+})
+pool_mi <- pool(fit_mi)
+summary(pool_mi)
+
+## table 
+
+mi_or <- summary(pool_mi, conf.int = TRUE, exponentiate = TRUE) %>%
+  dplyr::rename(
+    term = term, OR = estimate, LCL = `2.5 %`, UCL = `97.5 %`, p.value = p.value
+  ) %>%
+  dplyr::filter(term != "(Intercept)")
+knitr::kable(mi_or, caption = "MI pooled odds ratios (per 1 SD)")
+
+
+
+```
+
+```{r}
+#| label: Bayesian model and summary
+library(gt)
+
+# 3) Bayesian Logistic Regression (formula weights) 
+adult_imp1 <- complete(imp, 1) %>%
+  dplyr::mutate(
+    age_c  = as.numeric(scale(age)),
+    bmi_c  = as.numeric(scale(bmi)),
+    wt_norm = WTMEC2YR / mean(WTMEC2YR, na.rm = TRUE),
+    # ensure factor refs match survey/MICE:
+    race = forcats::fct_relevel(race, "NH White"),
+    sex  = forcats::fct_relevel(sex,  "Male")
+  ) %>%
+  dplyr::filter(!is.na(diabetes_dx), !is.na(age_c), !is.na(bmi_c),
+                !is.na(sex), !is.na(race)) %>%
+  droplevels()
+
+stopifnot(all(is.finite(adult_imp1$wt_norm)))
 
 priors <- c(
-  set_prior("normal(0, 2.5)", class = "b"),        # for coefficients
-  set_prior("normal(0, 5)", class = "Intercept")   # for intercept
+  set_prior("normal(0, 2.5)", class = "b"),
+  set_prior("student_t(3, 0, 10)", class = "Intercept")
 )
 
-
-formula_bayes <- bf(Diabetes ~ Age + BMI + Gender + Race)
-
-Diabetes_prior <- brm(
-  formula = formula_bayes,
-  data = Imputed_data1,
-  family = bernoulli(link = "logit"),   # logistic regression
-  prior = priors,
-  chains = 4,
-  iter = 2000,
-  seed = 123,
-  control = list(adapt_delta = 0.95)
+bayes_fit <- brm(
+  formula = diabetes_dx | weights(wt_norm) ~ age_c + bmi_c + sex + race,
+  data    = adult_imp1,
+  family  = bernoulli(link = "logit"),
+  prior   = priors,
+  chains  = 4, iter = 2000, seed = 123,
+  control = list(adapt_delta = 0.95),
+  refresh = 0   # quiet Stan output
 )
 
-## Bayes model summary
-summary(Diabetes_prior)
-plot(Diabetes_prior) 
-
-pp_check(Diabetes_prior)
+summary(bayes_fit)
 
 
-## Draws 
-
-# Generate fitted draws directly with brms
-fitted_draws <- fitted(
-  Diabetes_prior,
-  newdata = Imputed_data1,
-  summary = FALSE,   # gives all posterior draws instead of summary
-  nsamples = 100     # limit to 100 draws
-)
-
-# Convert to long format manually
+# Diabetes vs BMI
 
 
-fitted_long <- data.frame(
-  BMI = rep(Imputed_data1$BMI, times = 100),
-  draw = rep(1:100, each = nrow(Imputed_data1)),
-  .value = as.vector(t(fitted_draws))
-)
-
-### BMI Plot the fitted lines
-ggplot(fitted_long, aes(x = BMI, y = .value, group = draw)) +
-  geom_line(size = 0.1, alpha = 0.4) +
-  labs(y = "Predicted probability of Diabetes")
-
-### Age
-fitted_long <- data.frame(
-  Age = rep(Imputed_data1$Age, times = 100),
-  draw = rep(1:100, each = nrow(Imputed_data1)),
-  .value = as.vector(t(fitted_draws))
-)
-ggplot(fitted_long, aes(x = Age, y = .value, group = draw)) +
-  geom_line(size = 0.1, alpha = 0.4) +
-  labs(y = "Predicted probability of Diabetes")
+ggplot(adult_imp1, aes(x = factor(diabetes_dx), y = bmi, fill = factor(diabetes_dx))) +
+  geom_boxplot(alpha = 0.7) +
+  scale_x_discrete(labels = c("0" = "No Diabetes", "1" = "Diabetes")) +
+  labs(
+    x = "Diabetes Diagnosis",
+    y = "BMI",
+    title = "BMI Distribution by Diabetes Status"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
 
 
-### Race
 
-fitted_long <- data.frame(
-  Race = rep(Imputed_data1$Race, times = 100),
-  draw = rep(1:100, each = nrow(Imputed_data1)),
-  .value = as.vector(t(fitted_draws))
-)
-ggplot(fitted_long, aes(x = Race, y = .value, group = draw)) +
-  geom_line(size = 0.1, alpha = 0.4) +
-  labs(y = "Predicted probability of Diabetes")
-
-
-### Gender
-fitted_long <- data.frame(
-  Gender = rep(Imputed_data1$Gender, times = 100),
-  draw = rep(1:100, each = nrow(Imputed_data1)),
-  .value = as.vector(t(fitted_draws))
-)
-ggplot(fitted_long, aes(x = Gender, y = .value, group = draw)) +
-  geom_line(size = 0.1, alpha = 0.4) +
-  labs(y = "Predicted probability of Diabetes")
-
-
-### Age cut by 10 years and Diabetes plot and histogram (imputed data)
-
- Imputed_data1 %>% 
-  mutate(age_bracket = 
-           cut(Age, breaks = seq(10, 100, by = 10))) %>% 
-  group_by(age_bracket) %>% 
-  summarise(Diabetes = mean(Diabetes == "Yes")) %>% 
-  ggplot(aes(x = age_bracket, y = Diabetes)) + 
-    geom_point() + 
-    theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
-  
-   
-### predict values of 100 draws, Simulated predictions (binary diabetes outcome)
-
-pred <- posterior_predict(Diabetes_prior, newdata = Imputed_data1, draws = 100)
-
-# data frame for summarizing
-pred_df <- as.data.frame(t(pred)) 
-
-# proportion of diabetes = 1 per draw
-prop_diabetes <- colMeans(pred_df == 1)
-
-
-prop_df <- tibble(
-  draw = 1:length(prop_diabetes),
-  proportion_Diabetes = prop_diabetes    ## proportion of Diabetes with age cut category
-)
-
-library(ggplot2)
-ggplot(prop_df, aes(x = proportion_Diabetes)) +
-  geom_histogram(color = "white")
-
-  
+# logistic regression curve
+ggplot(adult_imp1, aes(x = bmi, y = diabetes_dx)) +
+  geom_point(aes(y = diabetes_dx), alpha = 0.2, position = position_jitter(height = 0.02)) +
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), se = TRUE, color = "blue") +
+  labs(
+    x = "BMI",
+    y = "Probability of Diabetes",
+    title = "Predicted Probability of Diabetes vs BMI"
+  ) +
+  theme_minimal()
 
 
 ```
 
-**Bayesian Logistic Regression Model** - prior (weakly informative prior
-used) - complilation, iterations, and posterior draws using NUTS
-sampling - Fitted draws from the model posterior (n=100) were analyzed -
-estimates, Rhat were analyzed for convergence. - plots are presented
-below - Histogram of predicted values (n=100 draws), shows observed
-proportion of Diabetes ostatus. - - Scatterplot of the proportion of
-Diabetes grouped by age.
-
-We created posterior model from the posterior draws (100), and analysed
-our simulated prior model. - plotted posterior predicted values of
-Diabetes against Age, Race and BMI
+Assumptions for Bayesian logistic regression 
+- posterior check
+- plots fro linearity
+- mcmc trace plots for convergence 
+- bayes_R2 for model fit
 
 ```{r}
-#| label: Modeling
-#| echo: true
+#| label: Assumptions (Bayesian)
 
-library(brms)
-library(GGally)
+summary(bayes_fit)
+plot(bayes_fit)          # Posterior distributions
 
-# Simulate the model
-
-
-Diabetes_model_1 <- update(Diabetes_prior,sample_prior = "yes"   # includes priors + data likelihood
-)
-
-# BMI
-# Posterior fitted values (probabilities of Diabetes)
-fitted_draws <- fitted(
-  Diabetes_model_1,         # <-- use posterior model here
-  newdata = Imputed_data1,
-  summary = FALSE,          # full posterior draws
-  nsamples = 100            # sample 100 posterior draws
-)
-
-# Reshape into long format
-fitted_long <- data.frame(
-  BMI = rep(Imputed_data1$BMI, times = 100),
-  draw = rep(1:100, each = nrow(Imputed_data1)),
-  .value = as.vector(t(fitted_draws))
-)
-
-# Plot posterior fitted lines (BMI)
-library(ggplot2)
-ggplot(fitted_long, aes(x = BMI, y = .value, group = draw)) +
-  geom_line(size = 0.1, alpha = 0.4) +
-  labs(
-    y = "Predicted probability of Diabetes",
-    title = "Posterior fitted draws by BMI"
-  )
-
-
-# Age
-# Reshape into long format
-
-fitted_long <- data.frame(
-  Age = rep(Imputed_data1$Age, times = 100),
-  draw = rep(1:100, each = nrow(Imputed_data1)),
-  .value = as.vector(t(fitted_draws))
-)
-
-# Plot posterior fitted lines
-library(ggplot2)
-ggplot(fitted_long, aes(x = Age, y = .value, group = draw)) +
-  geom_line(size = 0.1, alpha = 0.4) +
-  labs(
-    y = "Predicted probability of Diabetes",
-    title = "Posterior fitted draws by Age"
-  )
-
-
-
-# Race
-# Reshape into long format
-
-fitted_long <- data.frame(
-  Race = rep(Imputed_data1$Race, times = 100),
-  draw = rep(1:100, each = nrow(Imputed_data1)),
-  .value = as.vector(t(fitted_draws))
-)
-
-# Plot posterior fitted lines
-library(ggplot2)
-ggplot(fitted_long, aes(x = Race, y = .value, group = draw)) +
-  geom_line(size = 0.1, alpha = 0.4) +
-  labs(
-    y = "Predicted probability of Diabetes",
-    title = "Posterior fitted draws by Race"
-  )
-
-
-
-fitted_long <- data.frame(
-  Gender = rep(Imputed_data1$Gender, times = 100),
-  draw = rep(1:100, each = nrow(Imputed_data1)),
-  .value = as.vector(t(fitted_draws))
-)
-
-# Plot posterior fitted lines
-library(ggplot2)
-ggplot(fitted_long, aes(x = Gender, y = .value, group = draw)) +
-  geom_line(size = 0.1, alpha = 0.4) +
-  labs(
-    y = "Predicted probability of Diabetes",
-    title = "Posterior fitted draws by Gender"
-  )
-
-# MCMC trace, density, & autocorrelation plots
-
-plot(Diabetes_model_1, combo = c("dens", "trace"))
+pp_check(bayes_fit)      # Posterior predictive checks
+mcmc_trace(bayes_fit)    # Convergence (optional)
+bayes_R2(bayes_fit)      # Model fit
+    # Leave-one-out cross-validation
 
 
 ```
 
--   We performed Bayesian logistic regression to model the probability
-    of diabetes as a function of age, BMI, gender, and race. -
--   We used Weakly informative normal priors @Gosho2025 on all
-    regression coefficients. Models were fit using four MCMC chains with
-    2000 iterations each, including 1000 warm-up iterations. Convergence
-    was assessed using Rhat values, effective sample size, and trace
-    plots. Posterior predictive checks were used to evaluate model fit,
-    and coefficients were exponentiated to report odds ratios with 95%
-    credible intervals\
-    The cluster of points representing the higher probability of
-    diabetes appears to be denser among individuals in the middle to
-    older Age ranges (e.g., roughly from 40 to 80 years old), compared
-    to the younger Age ranges, although diabetes is present even at
-    younger Ages.
+Below are reported odds ratio from the posterior predicted values and the Bayesian regression summary
+
+
+```{r}
+#| label: Posterior ORs and tables
+#| echo: true
+#| 
+# Posterior ORs (drop intercept, clean labels)
+
+bayes_or <- posterior_summary(bayes_fit, pars = "^b_") %>%
+  as.data.frame() %>%
+  tibble::rownames_to_column("raw") %>%
+  dplyr::mutate(
+    term = gsub("^b_", "", raw),
+    term = gsub("race", "race:", term),
+    term = gsub("sex",  "sex:",  term),
+    term = gsub("OtherDMulti", "Other/Multi", term),
+    term = gsub("OtherHispanic", "Other Hispanic", term),
+    OR   = exp(Estimate),
+    LCL  = exp(Q2.5),
+    UCL  = exp(Q97.5)
+  ) %>%
+  dplyr::select(term, OR, LCL, UCL) %>%
+  dplyr::filter(term != "Intercept")
+
+knitr::kable(
+  bayes_or %>%
+    dplyr::mutate(dplyr::across(c(OR,LCL,UCL), ~round(.x, 2))),
+  digits = 2,
+  caption = "Bayesian posterior odds ratios (95% CrI) — reference: NH White (race), Male (sex)"
+)
+
+```
+
+```{r}
+# Combined table
+
+if (!dir.exists("outputs")) dir.create("outputs", recursive = TRUE)
+saveRDS(svy_fit,   "outputs/svy_fit.rds")
+saveRDS(pool_mi,   "outputs/pool_mi.rds")
+saveRDS(bayes_fit, "outputs/bayes_fit.rds")
+saveRDS(svy_or,    "outputs/survey_OR_table.rds")
+saveRDS(mi_or,     "outputs/mi_OR_table.rds")
+saveRDS(bayes_or,  "outputs/bayes_OR_table.rds")
+```
+
+```{r}
+# Results
+
+# ---- Build compact results table (BMI & Age only) ----
+library(dplyr); 
+library(tidyr); 
+library(knitr); 
+library(stringr)
+
+# pretty "OR (LCL–UCL)" string
+
+fmt_or <- function(or, lcl, ucl, digits = 2) {
+  paste0(
+    formatC(or,  format = "f", digits = digits), " (",
+    formatC(lcl, format = "f", digits = digits), "–",
+    formatC(ucl, format = "f", digits = digits), ")"
+  )
+}
+
+# guardrails: require these to exist from Modeling
+stopifnot(exists("svy_or"), exists("mi_or"), exists("bayes_or"))
+for (nm in c("svy_or","mi_or","bayes_or")) {
+  if (!all(c("term","OR","LCL","UCL") %in% names(get(nm)))) {
+    stop(nm, " must have columns: term, OR, LCL, UCL")
+  }
+}
+
+svy_tbl   <- svy_or   %>% mutate(Model = "Survey-weighted MLE")
+mi_tbl    <- mi_or    %>% mutate(Model = "MICE pooled")
+bayes_tbl <- bayes_or %>% mutate(Model = "Bayesian")
+
+all_tbl <- bind_rows(svy_tbl, mi_tbl, bayes_tbl) %>%
+  mutate(term = case_when(
+    str_detect(term, "bmi_c|\\bBMI\\b") ~ "BMI (per 1 SD)",
+    str_detect(term, "age_c|\\bAge\\b") ~ "Age (per 1 SD)",
+    TRUE ~ term
+  )) %>%
+  filter(term %in% c("BMI (per 1 SD)", "Age (per 1 SD)")) %>%
+  mutate(OR_CI = fmt_or(OR, LCL, UCL, digits = 2)) %>%
+  select(Model, term, OR_CI) %>%
+  arrange(
+    factor(Model, levels = c("Survey-weighted MLE","MICE pooled","Bayesian")),
+    factor(term,  levels = c("BMI (per 1 SD)","Age (per 1 SD)"))
+  )
+
+res_wide <- all_tbl %>%
+  pivot_wider(names_from = term, values_from = OR_CI) %>%
+  rename(
+    `BMI (per 1 SD) OR (95% CI)` = `BMI (per 1 SD)`,
+    `Age (per 1 SD) OR (95% CI)` = `Age (per 1 SD)`
+  )
+
+kable(
+  res_wide,
+  align = c("l","c","c"),
+  caption = "Odds ratios (per 1 SD) with 95% CIs across models"
+)
+
+
+```
+
+```{r}
+# Posterior predictive draws
+
+#Posterior predictive checks (binary outcome)
+pp_samples <- posterior_predict(bayes_fit, ndraws = 500)  # 500 draws
+
+# Check dimensions
+dim(pp_samples)  # rows = draws, cols = observations
+
+# Plot overlay of observed vs predicted counts
+ppc_dens_overlay(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:50, ]) +
+  labs(title = "Posterior Predictive Check: Density Overlay") +
+  theme_minimal()
+
+ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:50, ])
+
+
+# Alternative PP plots (histogram / barplot) for binary outcome
+
+ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:50, ]) +
+  labs(title = "Posterior Predictive Check: Barplot of Counts") +
+  theme_minimal()
+
+#PP check for proportions (useful for binary) # mean comparison
+
+ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "mean") +
+  labs(title = "Posterior Predictive Check: Mean of Replicates") +
+  theme_minimal()
+
+
+# PP checks with bayesplot options
+color_scheme_set("blue")
+ppc_scatter_avg(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ]) +
+  labs(title = "Observed vs Predicted (Avg) Posterior Predictive")
+
+```
+```{r}
+#| label: posterior Visualization
+
+
+library(brms)
+library(dplyr)
+library(tibble)
+
+post_sum <- posterior_summary(bayes_fit)
+colnames(post_sum)
+
+
+# Posterior summary
+post_logodds <- posterior_summary(bayes_fit) %>%
+  as.data.frame() %>%
+  rownames_to_column(var = "term") %>%
+  filter(term != "Intercept") %>%  # drop intercept if desired
+  select(term,"Estimate","Est.Error","Q2.5","Q97.5")
+
+post_logodds
+
+# View table
+library(ggplot2)
+
+ggplot(post_logodds, aes(x = term, y = Estimate)) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = Q2.5, ymax = Q97.5), width = 0.2) +
+  coord_flip() +
+  labs(title = "Posterior log-odds for predictors",
+       y = "Log-odds", x = "Predictor") +
+  theme_minimal()
+
+library(posterior)
+library(bayesplot)
+
+# Extract posterior draws as a draws_df # simulate posterior outcomes
+post <- as_draws_df(bayes_fit)
+
+pp_samples <- posterior_predict(bayes_fit, ndraws = 500)
+
+# Check parameter names
+colnames(post)
+
+
+# Density overlay for age and bmi
+mcmc_areas(post, pars = c( "b_age_c","b_bmi_c","b_sexFemale","b_raceMexicanAmerican", "b_raceOtherHispanic","b_raceNHBlack","b_raceOtherDMulti" ))
+
+
+# Convert to long format
+pp_long <- as.data.frame(pp_samples) %>%
+  mutate(draw = row_number()) %>%
+  pivot_longer(cols = -draw, names_to = "obs", values_to = "predicted") %>%
+  mutate(obs = as.integer(obs))
+
+# Add BMI and observed outcome from original dataset
+pp_long <- pp_long %>%
+  left_join(
+    adult_imp1 %>% mutate(obs = row_number()) %>% select(obs, bmi, diabetes_dx),
+    by = "obs"
+  )
+
+
+```
+# Results 
+
+1.  **Multiple Linear Regression**
+
+    Model**:**
+    `svyglm(formula = form_cc, design = des_cc, family = quasibinomial())`
+
+All predictors are significant: **age (p \< 0.001)** and **BMI (p \<
+0.001)** show strong positive associations with the outcome, while
+**being female (p = 0.0004)** is negatively associated. Other
+significant associations include **raceMexican American (p = 0.0008)**,
+**raceOther Hispanic (p = 0.0087)**, **raceNH Black (p = 0.0117)**, and
+**raceOther/Multi (p = 0.0014)**.
+
+2.  **MICE**
+
+    All predictors are statistically significant.
+
+    Positive associations: age (p \< 0.001), BMI (p \< 0.001), and all
+    race categories compared to reference.
+
+    Negative association: being female (p \< 0.001)
+
+<!-- -->
+
+3.  **Bayesian Regression**
+
+    Sampling**:** NUTS (4 chains, 2000 iterations each; 1000 warmup,
+    4000 post-warmup draws)
+
+    Convergence & Diagnostics
+
+    -   Rhat = 1.00 for all parameters → excellent convergence
+
+    -   Bulk_ESS / Tail_ESS: Large values (\>2000) → high effective
+        sample sizes, reliable posterior estimates.
+
+        Interpretation
+
+    -   Strong predictors: Age and BMI are strongly positively
+        associated with diabetes risk.
+
+    -   Sex effect: Females have a lower probability of diabetes
+        compared to males
+    -   R² = 0.13 shows 13% of the variance in the outcome (diabetes_dx) is explained by your predictors          (age, BMI, sex, race), 95% Credible Interval: 0.106–0.156, indicates that, given your model and           data, the true proportion of variance explained is plausibly between 10.6% and 15.6% and shows            uncertainty in the explained variance, which is natural for probabilistic models.
+    -   Est.Error = 0.0127, reflects the standard error of the R² estimate across posterior samples. The          small SE indicates that the R² estimate is fairly precise.
+
+    <!-- -->
+
+    -   Race/ethnicity: Mexican American, NH Black, and “Other/Diverse”
+        groups have higher odds of diabetes. Other Hispanic group has a
+        less certain effect.
+
+    <!-- -->
+
+    -   age_c-Each 1-unit increase in centered age increases the
+        log-odds of diabetes by 1.09. Strong positive effect.
+
+    -   bmi_c-Higher BMI is associated with higher diabetes risk.
+        sexFemale-Females have lower odds of diabetes compared to males.
+
+    -   raceMexicanAmerican-Higher odds of diabetes vs. reference race
+        (likely NH White)
+
+    -   raceOtherHispanic-Slightly higher odds vs reference, but
+        interval crosses zero → uncertain effect.
+
+    -   raceNHBlack-Significantly higher odds of diabetes compared to
+        reference. raceOtherDMulti-Higher odds of diabetes vs reference
+        group.
+
+Plots from posterior disctribution 
+- produces plots of the posterior distributions of all parameters in the model.
+(1)Density plot of posterior samples each parameter (e.g., intercept, slope) into a smoothed density curve, showing most of the posterior probability mass lies for best estimates and uncertainty.
 
 **Comparing Models**
 
--   Linear regression model on raw data
+-   All three models (survey-weighted MLE, multiple imputation,
+    Bayesian) agree closely on the direction and magnitude of the
+    effects of BMI and age.
 
--   Multivariate logistic regression on imputed dataset (MI + MLR)
+-   Age is a stronger predictor than BMI, nearly tripling the odds per 1
+    SD.
 
--   Bayesian Logistic Regression on imputed data The spread of these
-    lines provides an indication of the variability or uncertainty in
-    the predicted probabilities within each BMI group (posterior model).
-    the plots visually demonstrate the well-established relationship
-    between BMI and the predicted probability of diabetes, with the risk
-    significantly increasing as BMI moves from normal weight to
-    overweight and obese categories
+-   BMI significantly increases diabetes risk (\~1.7–1.9× per 1 SD).
 
-## All Results Summarized
+-   Differences between models are minor, indicating robust and reliable
+    findings despite missing data or modeling approach.
 
-**Sample Characteristics (merged data)**
+# Conclusion
 
--   Number of participants = 9,813 participants with the age range of 0
-    to 80 years (mean = 31.6 years, median = 27 years, IQR = 10–52
-    years), with 4,831 males (49.2%) and 4,982 females (50.8%). Largest
-    groups were Non-Hispanic White (n = 3,538, 36.0%) and Non-Hispanic
-    Black (n = 2,198, 22.4%), followed by Mexican American (n = 1,685,
-    17.2%), Other Hispanic (n = 930, 9.5%), and Other Race/Multiracial
-    (n = 1,462, 14.9%).
+-   Across multiple modeling approaches—survey-weighted maximum
+    likelihood, multiple imputation, and Bayesian regression—both age
+    and BMI were consistently strong predictors of diabetes. Each
+    standard deviation increase in age nearly tripled the odds of
+    diabetes, while a similar increase in BMI elevated the odds by
+    approximately 1.7–1.9 times. The consistency of these results across
+    models highlights the robustness of the associations and underscores
+    the importance of age and BMI as key risk factors for diabetes in
+    this population.
+    
+Effect stability: point estimates in rhe Bayesian model’s closely aligned with those from the frequentist,  indicating that prior regularization stabilized the estimates in the presence of modest missingness.
 
--   Body mass index (BMI) categories of 132 participants (1.3%)
-    classified as underweight, 2,167 (22.1%) as normal weight, 595
-    (6.1%) as overweight, and 629 (6.4%) as obese; however, BMI data
-    were missing for 6,290 participants (64.1%).
+Uncertainty quantification: Bayesian credible intervals of odds ration were slightly narrower yet overlapped the frequentist confidence intervals, suggest comparable inferential precision while offering improved interpretability.
 
--   Total of 553 participants (5.6%) reported having diabetes, while 169
-    (1.7%) reported no diabetes. A substantial proportion (9,091
-    participants, 92.6%) had missing diabetes data.
+Design considerations: 
+# Survey-weighted MLE (Maximum Likelihood Estimator) 
+- incorporates each observation weighted according to its survey weight.
+- provide estimates that reflect the population-level parameters, not just the sample- produces population-representative estimates.
+# Bayesian model with normalized weights- 
+- instead of fully modeling the survey design, it used normalized sampling weights as importance weights
+- the scaled weights that sum to the sample size approximates the effect of survey weights, but does not fully account for: Stratification, clustering, design-based variance adjustments.
 
--   Survey design variables included PSU (range = 1–2), strata (range =
-    104–118), and sampling weights (mean = 31,713; range =
-    3,748–171,395).
+# Bayesian inference treats the weighted likelihood as from a regular model, ignoring some survey design features.
 
-**Sample Characteristics (After Multiple Imputation)**
 
--   The imputed sample included 9,813 participants with age range of 0
-    to 80 years (mean = 31.6 years, median = 27 years, IQR = 10–52
-    years). Gender distribution remained nearly balanced with 4,831
-    males (49.2%) and 4,982 females (50.8%).
-
--   Race/ethnicity composition was Non-Hispanic White (n = 3,538,
-    36.0%), Non-Hispanic Black (n = 2,198, 22.4%), Mexican American (n =
-    1,685, 17.2%), Other Hispanic (n = 930, 9.5%), and Other
-    Race/Multiracial (n = 1,462, 14.9%).
-
--   Body mass index (BMI) distribution of 218 participants (2.2%)
-    classified as underweight, 5,107 (52.0%) as normal weight, 1,831
-    (18.7%) as overweight, and 2,657 (27.1%) as obese after imputation.
-
--   For diabetes status, 7,252 participants (73.9%) were classified as
-    having diabetes and 2,561 (26.1%) as not having diabetes. The
-    imputation model included predicted log-odds of diabetes (mean logit
-    = −1.05, range = −1.43 to −0.69) and corresponding predicted
-    probabilities (mean = 0.26, range = 0.19–0.33), which were used to
-    generate imputed diabetes outcomes.
-
--   Survey design variables were preserved, including PSU (range = 1–2),
-    strata (range = 104–118), and sampling weights (mean = 31,713; range
-    = 3,748–171,395).
-
-**Multivariable logistic regression model** to examine the association
-between demographic and anthropometric characteristics and diabetes
-status in the imputed dataset (N = 9,813).
-
--   Age was significantly associated with diabetes, with each additional
-    year corresponding to a small reduction in odds (OR = 0.995, 95% CI:
-    0.993–0.997, p \< 0.001).
-
--   Females had lower odds of diabetes compared with males (OR = 0.91,
-    95% CI: 0.84–1.00, p = 0.044).
-
--   Compared with Mexican Americans (reference), Non-Hispanic Whites had
-    significantly lower odds of diabetes (OR = 0.81, 95% CI: 0.71–0.92,
-    p = 0.002). Other Hispanic, Non-Hispanic Black, and Other
-    Race/Multiracial groups were not significantly different from the
-    reference group (all p \> 0.09).
-
--   BMI categories were not significantly associated with diabetes (all
-    p \> 0.65).
-
--   Model diagnostics:
-
-    -   ANOVA (Type II sequential tests): Age (χ²(1) = 31.17, p \<
-        0.001), Gender (χ²(1) = 3.93, p = 0.048), and Race (χ²(4) =
-        12.24, p = 0.016) significantly improved model fit, whereas BMI
-        (χ²(3) = 0.72, p = 0.868) did not.
-
-    -   Goodness-of-fit: The Hosmer–Lemeshow test indicated poor model
-        fit (χ²(8) = 12,190, p \< 0.001).
-
-    -   Predictor independence: Pearson’s chi-squared test across BMI
-        categories was nonsignificant (p = 0.546), indicating no strong
-        association between BMI and diabetes.
-
-    -   Multicollinearity: Variance inflation factors (VIFs) were all
-        close to 1, indicating no collinearity issues.
-
-    -   Explained variance: The adjusted R² for the model was very low
-        (Adj. R² = 0.003), indicating that the predictors explained \<1%
-        of the variance in diabetes status.
-
-Summary: Age, gender, and race/ethnicity (particularly Non-Hispanic
-White vs. Mexican American) were significant predictors of diabetes,
-while BMI categories were not.
-
-**Regression Analyses**
-
-Multiple modeling strategies, including frequentist, penalized
-likelihood, and Bayesian approaches, were conducted to assess predictors
-of diabetes.
-
-1.  Firth Penalized Logistic Regression
-
--   To analyze a sparse dataset (n = 14), Firth’s reduced bias in
-    logistic regression.
-
--   None of the predictors (BMI, age, gender, race) reached statistical
-    significance (all p \> 0.09).
-
--   Likelihood ratio and Wald tests were nonsignificant (LRT = 6.07, p =
-    0.64; Wald = 5.26, p = 0.73), suggesting the model provided limited
-    explanatory power in the small sample.
-
-(2) Frequentist Logistic Regression (Imputed Dataset)
-
--   Analysis of imputed dataset (N = 9,813), ANOVA tests showed, age (OR
-    ≈ 0.995, p \< 0.001), gender (female vs. male: OR ≈ 0.91, p =
-    0.044), and race/ethnicity (Non-Hispanic White vs. Mexican American:
-    OR ≈ 0.81, p = 0.002) were significantly associated with diabetes
-    status.
-
--   BMI categories were not significant predictors. The adjusted R² was
-    low (Adj. R² = 0.003), indicating limited variance explained.
-
-(3) Bayesian Logistic Regression
-
--   Bayesian estimation with weakly informative priors yielded results
-    consistent with the frequentist model.
-
--   Posterior means and 95% credible intervals indicated that increasing
-    age (Estimate = –0.00, 95% CrI: –0.01 to –0.00), female gender
-    (Estimate = –0.09, 95% CrI: –0.18 to 0.00), and Non-Hispanic White
-    ethnicity (Estimate = –0.21, 95% CrI: –0.34 to –0.08) were
-    associated with lower odds of diabetes.
-
--   BMI categories again showed no significant associations. Convergence
-    diagnostics were satisfactory (Rhat = 1.00 for all parameters; Bulk
-    ESS \> 1,800).
-
--   Bayesian logistic regression model is well-calibrated to reproduce
-    the data distribution, the likelihood assumption (Bernoulli with
-    logit link) is appropriate, no discrepancies (e.g., gray lines
-    shifted away from the observed density), observed, suggesting model
-    fit.
-
-### Conclusion
-
--   Using multiple imputation (MI) allowed inclusion of all 9,813
-    participants, increasing power and reducing bias compared to a
-    complete-case analysis. In epidemiologic studies, MI is critical
-    when missingness is non-negligible, especially for outcomes like
-    diabetes.
-
--   Across modeling frameworks, age, gender, and race/ethnicity
-    consistently emerged as predictors of diabetes status, while BMI was
-    not associated. The penalized regression model (n = 14) had
-    insufficient power, whereas both frequentist and Bayesian analyses
-    on the imputed dataset (N ≈ 9,813) showed concordant results,
-    validating the robustness of findings.
-
--   Posterior distributions and credible intervals from the Bayesian
-    method, provided , offered a probabilistic interpretation of effect
-    sizes that is more intuitive in uncertainty quantification by
-    incorporating prior knowledge.
-
--   The Firth penalized logistic regression on sparse data, underscores
-    the importance of adequate sample size for reliable inference,
-    reduce small-sample bias, but they cannot compensate for extreme
-    sparsity.
-
--   Low adjusted R² (\~0.003) and Hosmer-Lemeshow test results suggest
-    incorporating additional behavioral, clinical, and biological
-    variables to improve explanatory performance.
-
--   Low Multicollinearity Assessment emphasize on proper checking of
-    multicollinearity to ensure coefficient estimates are reliable and
-    interpretable.
-
--   Sequential deviance testing is a useful diagnostic to identify the
-    contribution of individual predictors in logistic regression,
-    complementing coefficient-based inference.
-
--   Handling missing data (via MI) and comparing frequentist, Bayesian,
-    and penalized approaches strengthens the credibility of results.
-
-## Discussions
+# Discussions
 
 The use of multiple imputation allowed for robust analysis despite
 missing data, increasing power and reducing bias. Comparison of
 frequentist and Bayesian models demonstrated consistency in significant
 predictors, while Bayesian approaches provided the advantage of
-posterior distributions and probabilistic interpretation. The Firth
-penalized regression highlighted the limitations of small-sample
-analyses, showing wide confidence intervals and nonsignificant results
-when data were sparse.
+posterior distributions and probabilistic interpretation. The =
 
-## References
+Across all models, both age and BMI emerged as strong and consistent
+predictors of diabetes. The consistency across modeling approaches
+strengthens the validity of these findings Multiple imputation accounted
+for potential biases due to missing data, and Bayesian modeling provided
+robust credible intervals that closely matched frequentist estimates.
+align with previous epidemiological research indicating that increasing
+age and higher BMI are among the most important determinants of type 2
+diabetes risk.Cumulative exposure to metabolic and lifestyle risk factors over time,
+and the role of excess adiposity and insulin related effects account for
+diabetes.
 
-## Codes for summaries and tables
+Survey weighted dataset strenghthens ensuring population
+representativeness, multiple imputation to handle missing data, and
+rigorous Bayesian estimation provided high effective sample sizes and R̂ ≈ 1.00 across parameters confirmed excellent model convergence. Bayesian logistic regression provided inference statistically  consistent and interpretable achieving the aim of this study. In future research hierarchical model using NHANES cycles or adding variables (lab tests) could assess nonlinear effects of metabolic risk factors.
 
-```{r}
-#| label: results
-summary (merged_data)
+# Limitations 
 
-summary (Imputed_data1)
-summary(m_imp)
-coef(m_imp)
-confint(m_imp)
-chisq.test(tab)
-vif(m_imp)
-hoslem.test(Imputed_data1$Diabetes_num, fitted(m_imp))
-influence_m_imp <- broom::augment(m_imp)
-marginplot(
-  Imputed_data1[, c("BMI", "Diabetes")],
-  col = mdc(1:2, trans = FALSE),
-  cex = 1.2,
-  cex.lab = 1.2,
-  cex.numbers = 1.3,
-  pch = 19
-)
+Our study was a cross-sectional study design - precludes potential residual confounding
+from unmeasured factors such as diet, physical activity, and genetic
+predisposition
 
-anova(m_imp)
-anova(m_imp, test = "Chisq")
+# Implications
+- age and BMI as robust and independent predictors of
+diabetes, underscore the importance of early targeted interventions in
+mitigating diabetes risk. 
+- Longitudinal studies and combining other statistical
+analytical methods with Bayesian can further enhance and provide better
+informed precision prevention strategies.
 
-# Adjusted R²
-library(glmtoolbox)
-adjR2(m_imp)
-
-summary(m_firth)
-
-summary(Diabetes_prior)
-summary(Diabetes_model_1)
-
-
-
-```
-
-```{r}
-#| label: Table of model summaries
-#| echo: true
-
-
-### separate table format 
-library(dplyr)
-library(knitr)
-library(kableExtra)
-library(broom)
-
-# Example: three regression models
-# m_imputed <- glm(DIABETES ~ AGE + BMI + HTN + HDL, data = df1, family = binomial)
-# m_firth <- logistf(Diabetes ~ BMI + Age + Gender + Race, data = merged_data)
-# Diabetes_model_1 <- update(Diabetes_prior,sample_prior = "yes"   # includes priors + data likelihood)
-
-
-# Tidy the imputed logistic regression model
-sum_imp <- broom::tidy(m_imp) %>%
-  mutate(
-    OR = exp(estimate),                # Odds ratio
-    `Lower 95% CI` = exp(estimate - 1.96*std.error),  # Lower CI
-    `Upper 95% CI` = exp(estimate + 1.96*std.error)   # Upper CI
-  ) %>%
-  select(term, estimate, std.error, OR, `Lower 95% CI`, `Upper 95% CI`, p.value)
-
-# Display as a table
-kbl(sum_imp, digits = 3, booktabs = TRUE, caption = "Imputed Logistic Regression Results") %>%
-  kable_classic(full_width = F) 
-
-library(logistf)
-
-# Extract results from Firth regression
-sum_firth <- data.frame(
-  term = names(m_firth$coef),            # predictor names
-  estimate = m_firth$coef,               # regression coefficients
-  std.error = sqrt(diag(vcov(m_firth))), # standard errors
-  p.value = m_firth$prob                 # p-values
-) %>%
-  mutate(
-    OR = exp(estimate),                             # odds ratio
-    `Lower 95% CI` = exp(estimate - 1.96*std.error), 
-    `Upper 95% CI` = exp(estimate + 1.96*std.error)
-  )
-
-# Display the table
-kbl(sum_firth, digits = 3, booktabs = TRUE, caption = "Firth Logistic Regression Results") %>%
-  kable_classic(full_width = F)
-
-
-
-library(broom.mixed)   # tidy for brms
-library(brms)
-
-# Extract posterior summaries
-sum_bayes <- broom.mixed::tidy(Diabetes_model_1, effects = "fixed") %>%
-  mutate(
-    OR = exp(estimate),                  # odds ratio
-    `Lower 95% CI` = exp(estimate - 1.96*std.error),
-    `Upper 95% CI` = exp(estimate + 1.96*std.error)
-  ) %>%
-  select(term, estimate, std.error, OR, `Lower 95% CI`, `Upper 95% CI`)
-
-# Display table
-kbl(sum_bayes, digits = 3, booktabs = TRUE, caption = "Bayesian Logistic Regression Results (brms)") %>%
-  kable_classic(full_width = F)
+## 
 
 
 
@@ -1676,4 +1158,13 @@ kbl(sum_bayes, digits = 3, booktabs = TRUE, caption = "Bayesian Logistic Regress
 
 
 
-```
+
+
+
+
+
+
+
+
+
+
