@@ -6,9 +6,9 @@
 **Author:** Namita Mishra (Advisor: Dr. Ashraf Cohen)
 **Date:** October 2025
 ---
+**Project Overview**
 
-    **Project Overview
-     Diabetes Mellitus (DM) is a chronic metabolic disease characterized by elevated blood glucose levels, leading to serious damage to the heart, blood vessels, eyes, kidneys, and nerves over time. Early detection is crucial for prevention and control.
+      Diabetes Mellitus (DM) is a chronic metabolic disease characterized by elevated blood glucose levels, leading to serious damage to the heart, blood vessels, eyes, kidneys, and nerves over time. Early detection is crucial for prevention and control.
     This project applies **Bayesian Logistic Regression** and **Survey-weighted Maximum Likelihood Estimation (MLE)** to predict diabetes probability using national-level survey data.
 ---
 
