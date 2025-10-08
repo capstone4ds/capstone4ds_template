@@ -7,16 +7,16 @@
 **Date:** October 2025
 ---
 
-**Project Overview
-Diabetes Mellitus (DM) is a chronic metabolic disease characterized by elevated blood glucose levels, leading to serious damage to the heart, blood vessels, eyes, kidneys, and nerves over time. Early detection is crucial for prevention and control.
-This project applies **Bayesian Logistic Regression** and **Survey-weighted Maximum Likelihood Estimation (MLE)** to predict diabetes probability using national-level survey data.
+    **Project Overview
+     Diabetes Mellitus (DM) is a chronic metabolic disease characterized by elevated blood glucose levels, leading to serious damage to the heart, blood vessels, eyes, kidneys, and nerves over time. Early detection is crucial for prevention and control.
+    This project applies **Bayesian Logistic Regression** and **Survey-weighted Maximum Likelihood Estimation (MLE)** to predict diabetes probability using national-level survey data.
 ---
 
 ## **Dataset** National Health and Nutrition Examination Survey (NHANES)
 
-* **Cycle:** 2013–2014
-* **Sample:** U.S. adults (≥20 years)
-* **Variables Used:**
+    * **Cycle:** 2013–2014
+    * **Sample:** U.S. adults (≥20 years)
+    * **Variables Used:**
 
   * `DIQ010`: Doctor told you have diabetes
   * `RIDAGEYR`: Age in years
@@ -26,7 +26,7 @@ This project applies **Bayesian Logistic Regression** and **Survey-weighted Maxi
   * `WTMEC2YR`: Sampling weights
   * `SDMVPSU`, `SDMVSTRA`: Design variables
 
-Data were preprocessed, cleaned, and subset to adults with complete anthropometric and questionnaire data.
+    Data were preprocessed, cleaned, and subset to adults with complete anthropometric and questionnaire data.
 ---
 
 ## Methods
@@ -67,15 +67,15 @@ Data were preprocessed, cleaned, and subset to adults with complete anthropometr
 | **Male**               |            ↑ 1.22 |             ↑ 1.18 |      [1.05, 1.33] |
 | **Non-Hispanic Black** |            ↑ 1.45 |             ↑ 1.38 |      [1.20, 1.59] |
 
-Both models identified **age**, **BMI**, and **race/ethnicity** as strong predictors of diabetes.
-The Bayesian model produced smoother posterior distributions and credible intervals reflecting parameter uncertainty.
+    Both models identified **age**, **BMI**, and **race/ethnicity** as strong predictors of diabetes.
+    The Bayesian model produced smoother posterior distributions and credible intervals reflecting parameter uncertainty.
 ---
 
 ## Design Considerations
 
-* **Survey-weighted MLE** directly modeled NHANES’s complex design (strata, PSU, and weights).
-* **Bayesian model** applied normalized sampling weights as **importance weights**, approximating design effects but not fully modeling them.
-* Hence, Bayesian results are **model-based** (conditional on data and priors) rather than **population-weighted** estimates.
+    * **Survey-weighted MLE** directly modeled NHANES’s complex design (strata, PSU, and weights).
+    * **Bayesian model** applied normalized sampling weights as **importance weights**, approximating design effects but not fully modeling them.
+   * Hence, Bayesian results are **model-based** (conditional on data and priors) rather than **population-weighted** estimates.
 
 ---
 
@@ -89,9 +89,9 @@ The Bayesian model produced smoother posterior distributions and credible interv
 
 * **R (v4.3+)**
 
-  * `tidyverse`, `survey`, `brms`, `mice`, `bayesplot`, `loo`, `ggplot2`
-* **Bayesian computation:** Stan backend
-* **Visualization:** Posterior intervals, trace plots, PPC plots
+    * `tidyverse`, `survey`, `brms`, `mice`, `bayesplot`, `loo`, `ggplot2`
+    * **Bayesian computation:** Stan backend
+    * **Visualization:** Posterior intervals, trace plots, PPC plots
 ---
 
 ## File Structure
@@ -121,7 +121,7 @@ The Bayesian model produced smoother posterior distributions and credible interv
 
 ## Acknowledgments
 
-Special thanks to **Dr. Ashraf Cohen** for mentorship and guidance, and to the **NHANES program** for providing high-quality public data for epidemiological research.
+    Special thanks to **Dr. Ashraf Cohen** for mentorship and guidance, and to the **NHANES program** for providing high-quality public data for epidemiological research.
 ---
 
 ## References
