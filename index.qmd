@@ -329,10 +329,15 @@ str(merged_data)
 plot_str(merged_data)
 introduce(merged_data)
 
-plot_intro(merged_data, title="Figure 1 (Merged dataset). Structure of variables and missing observations.")
-plot_missing(merged_data, title="Figure 2(Merged dataset). Breakdown of missing observations.")
+p1 <- plot_intro(merged_data, title="Figure 1 (Merged dataset). Structure of variables and missing observations.")
+p2 <- plot_missing(merged_data, title="Figure 2(Merged dataset). Breakdown of missing observations.")
 
 
+# Save it as a PNG file
+ggsave("Figure1_MergedDataset.png", plot = p1, width = 8, height = 6, dpi = 300)
+
+
+ggsave("Figure2_MergedDataset.png", plot = p2, width = 8, height = 6, dpi = 300)
 
 ```
 
@@ -558,6 +563,15 @@ survey-weighted dataset, for complete case analysis and data exploration
 
 **Bayesian Logistic Regression**
 
+Bayesian statistics is about updating beliefs with evidence:
+
+Posterior ∝ Likelihood × Prior
+
+- Prior (p(θ)): Your initial belief about a parameter before seeing the data.
+- Likelihood (p(y|θ)): How probable the observed data are given the parameters.
+This is derived from the model (e.g., logistic regression likelihood).
+- Posterior (p(θ|y)): Your updated belief about the parameter after seeing the data.
+
 -   We selected Bayesian Logistic Regression since our study response variable is a binary outcome       (Diabetes:yes/no)
 -   Bayesian Logistic Regression is based on binomial probability Bayes'
     rules, and predicts probability of disease outcome
@@ -570,6 +584,7 @@ survey-weighted dataset, for complete case analysis and data exploration
 -   Logit link provides probabilities for the response variable.
 -   We use Weakly informative priors Normal (0, 2.5) for logistic regression coefficients and            intercept, Normal(0, 10), allows a wide range of baseline log-odds and helps with convergence        and avoids extreme estimates. Good default for most applications in social, health, or               epidemiological studies.
 
+- we then summarize in Bayesian results (posterior mean, credible intervals, etc.).
 
 ## Model Equation
 
@@ -743,8 +758,10 @@ summary(bayes_fit)
 
 # Diabetes vs BMI
 
+library(ggplot2)
 
-ggplot(adult_imp1, aes(x = factor(diabetes_dx), y = bmi, fill = factor(diabetes_dx))) +
+# Create the plot
+p3 <- ggplot(adult_imp1, aes(x = factor(diabetes_dx), y = bmi, fill = factor(diabetes_dx))) +
   geom_boxplot(alpha = 0.7) +
   scale_x_discrete(labels = c("0" = "No Diabetes", "1" = "Diabetes")) +
   labs(
@@ -755,10 +772,12 @@ ggplot(adult_imp1, aes(x = factor(diabetes_dx), y = bmi, fill = factor(diabetes_
   theme_minimal() +
   theme(legend.position = "none")
 
+# Save the plot as an image file (PNG)
+ggsave("BMI_Distribution_by_Diabetes_Status.png", plot = p3, width = 7, height = 5, dpi = 300)
 
 
 # logistic regression curve
-ggplot(adult_imp1, aes(x = bmi, y = diabetes_dx)) +
+p4 <- ggplot(adult_imp1, aes(x = bmi, y = diabetes_dx)) +
   geom_point(aes(y = diabetes_dx), alpha = 0.2, position = position_jitter(height = 0.02)) +
   geom_smooth(method = "glm", method.args = list(family = "binomial"), se = TRUE, color = "blue") +
   labs(
@@ -767,6 +786,13 @@ ggplot(adult_imp1, aes(x = bmi, y = diabetes_dx)) +
     title = "Predicted Probability of Diabetes vs BMI"
   ) +
   theme_minimal()
+
+ggsave("Predicted Probability of Diabetes vs BMI.png", plot = p4, width = 7, height = 5, dpi = 300)
+
+
+
+
+
 
 
 ```
@@ -781,12 +807,19 @@ Assumptions for Bayesian logistic regression
 #| label: Assumptions (Bayesian)
 
 summary(bayes_fit)
-plot(bayes_fit)          # Posterior distributions
+p5 <- plot(bayes_fit)          # Posterior distributions
 
-pp_check(bayes_fit)      # Posterior predictive checks
+p6 <- pp_check(bayes_fit)      # Posterior predictive checks
 mcmc_trace(bayes_fit)    # Convergence (optional)
 bayes_R2(bayes_fit)      # Model fit
     # Leave-one-out cross-validation
+
+ggsave("bayes_fit_plot.png", plot = p5, width = 8, height = 6, dpi = 300)
+
+
+ggsave("pp_check.png", plot = p6, width = 8, height = 6, dpi = 300)
+
+
 
 
 ```
@@ -907,7 +940,7 @@ pp_samples <- posterior_predict(bayes_fit, ndraws = 500)  # 500 draws
 # Check dimensions
 dim(pp_samples)  # rows = draws, cols = observations
 
-# Plot overlay of observed vs predicted counts
+# Plot overlay of observed vs predicted counts (duplicate image)
 ppc_dens_overlay(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:50, ]) +
   labs(title = "Posterior Predictive Check: Density Overlay") +
   theme_minimal()
@@ -915,24 +948,34 @@ ppc_dens_overlay(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:50, ]) +
 ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:50, ])
 
 
-# Alternative PP plots (histogram / barplot) for binary outcome
+# Alternative PP plots (histogram / barplot) for binary outcome (bar chart preferred being discrete outcome)
 
-ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:50, ]) +
+p7 <- ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:50, ]) +
   labs(title = "Posterior Predictive Check: Barplot of Counts") +
   theme_minimal()
 
-#PP check for proportions (useful for binary) # mean comparison
+ggsave("ppc_bars.png", plot = p7, width = 8, height = 6, dpi = 300)
 
-ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "mean") +
+#PP check for proportions (useful for binary) # mean comparison
+## to check if the simulated means match the observed mean
+p8 <- ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "mean") +
   labs(title = "Posterior Predictive Check: Mean of Replicates") +
   theme_minimal()
+ggsave("ppc_stat_mean.png", plot = p8, width = 8, height = 6, dpi = 300)
 
+
+p9 <- ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "sd") +
+  labs(title = "PPC: Standard Deviation of Replicates") +
+  theme_minimal()
+ggsave("ppc_stat_sd.png", plot = p9, width = 8, height = 6, dpi = 300)
 
 # PP checks with bayesplot options
 color_scheme_set("blue")
-ppc_scatter_avg(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ]) +
+p10 <- ppc_scatter_avg(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ]) +
   labs(title = "Observed vs Predicted (Avg) Posterior Predictive")
 
+
+ggsave("ppc_scatter_avg.png", plot = p10, width = 8, height = 6, dpi = 300)
 ```
 ```{r}
 #| label: posterior Visualization
@@ -979,7 +1022,9 @@ colnames(post)
 
 
 # Density overlay for age and bmi
-mcmc_areas(post, pars = c( "b_age_c","b_bmi_c","b_sexFemale","b_raceMexicanAmerican", "b_raceOtherHispanic","b_raceNHBlack","b_raceOtherDMulti" ))
+p11 <- mcmc_areas(post, pars = c( "b_age_c","b_bmi_c","b_sexFemale","b_raceMexicanAmerican", "b_raceOtherHispanic","b_raceNHBlack","b_raceOtherDMulti" ))
+
+ggsave("mcmc_areas.png", plot = p11, width = 8, height = 6, dpi = 300)
 
 
 # Convert to long format
@@ -994,6 +1039,45 @@ pp_long <- pp_long %>%
     adult_imp1 %>% mutate(obs = row_number()) %>% select(obs, bmi, diabetes_dx),
     by = "obs"
   )
+
+###
+
+predicted <- fitted(bayes_fit, summary = TRUE)
+observed <- adult_imp1[, c("bmi", "age")]
+
+# Plot for bmi (obs vs pred)
+library(ggplot2)
+p12 <- ggplot(data = NULL, aes(x = observed$bmi, y = predicted[, "Estimate"])) +
+  geom_point() +
+  geom_errorbar(aes(ymin = predicted[, "Q2.5"], ymax = predicted[, "Q97.5"])) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red") +
+  xlab("Observed bmi") + ylab("Predicted bmi")
+
+ggsave("plot_bmi_obs_pred.png", plot = p12, width = 8, height = 6, dpi = 300)
+
+###
+
+library(ggplot2)
+library(dplyr)
+
+# Combine observed and predicted into one data frame
+plot_data <- adult_imp1 %>%
+  mutate(
+    predicted_bmi = predicted[, "Estimate"],
+    lower_ci = predicted[, "Q2.5"],
+    upper_ci = predicted[, "Q97.5"],
+    obs_index = 1:nrow(adult_imp1)  # index for x-axis
+  )
+
+# Line plot
+p13 <- ggplot(plot_data, aes(x = obs_index)) +
+  geom_line(aes(y = bmi, color = "Observed")) +               # observed BMI
+  geom_line(aes(y = predicted_bmi, color = "Predicted")) +   # predicted BMI
+  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2) +  # uncertainty
+  labs(x = "Observation", y = "BMI", color = "Legend") +
+  theme_minimal()
+
+ggsave("Line plot_bmi_obs_pred.png", plot = p13, width = 8, height = 6, dpi = 300)
 
 
 ```
@@ -1068,9 +1152,18 @@ significant associations include **raceMexican American (p = 0.0008)**,
         reference. raceOtherDMulti-Higher odds of diabetes vs reference
         group.
 
-Plots from posterior disctribution 
-- produces plots of the posterior distributions of all parameters in the model.
+**Posterior distribution** of all parameters in the model.
 (1)Density plot of posterior samples each parameter (e.g., intercept, slope) into a smoothed density curve, showing most of the posterior probability mass lies for best estimates and uncertainty.
+
+**Posterior Predictive Distribution** - generated from posterior predictive draws:
+𝑦rep∼𝑝(𝑦new∣𝜃)yrep​∼p(ynew​∣θ)
+simulate the data given posterior parameter estimates.Posterior predictive checks (PPC) compare these simulations to real data to assess model fit.
+
+**Incorporating Uncertainty** two sources of uncertainty:
+Parameter uncertainty: captured in the posterior distributions
+Predictive uncertainty: captured in posterior predictive draws
+
+Combining the two provide credible intervals for predictions, not just point predictions and specifies - Given the BMI, the probability of diabetes is likely between 40–55%.”
 
 **Comparing Models**
 
