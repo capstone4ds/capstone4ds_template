@@ -257,8 +257,7 @@ create a single dataframe.
 #| include: false
 
             
-options(repos = c(CRAN = "https://cloud.r-project.org"))
-install.packages("nhanesA")
+
 library ("nhanesA")     
  # imported datasets 
                        nhanesTables('EXAM', 2013)
@@ -300,7 +299,7 @@ if (!("DIQ010" %in% names(diq_h))) {
 }
 
 
-# ---- Select only needed variables ----
+      # ---- Select only needed variables ----
 exam_sub <- bmx_h  %>% select(SEQN, BMXBMI)
 demo_sub <- demo_h %>% select(all_of(need_demo))
 diq_sub  <- diq_h  %>% select(SEQN, DIQ010, dplyr::any_of("DIQ050"))
@@ -317,8 +316,7 @@ saveRDS(merged_data, "data/nhanes2013_2014_prepared.rds")
 
 ```
 
-Merged dataset created, cleaned and visualized for any anamolies and to present results from Data Exploration (summary and tables presented below). 
-
+Merged dataset created, cleaned and visualized for any anomalies and ata Exploration.
 
 ```{r}
 #| label: data structure and missing data
@@ -584,6 +582,8 @@ This is derived from the model (e.g., logistic regression likelihood).
 -   Logit link provides probabilities for the response variable.
 -   We use Weakly informative priors Normal (0, 2.5) for logistic regression coefficients and            intercept, Normal(0, 10), allows a wide range of baseline log-odds and helps with convergence        and avoids extreme estimates. Good default for most applications in social, health, or               epidemiological studies.
 
+- In Bayesian statistics, every unknown parameter (like a regression coefficient, mean, or variance) is treated as a random variable with a probability distribution that reflects uncertainty.
+
 - we then summarize in Bayesian results (posterior mean, credible intervals, etc.).
 
 ## Model Equation
@@ -654,6 +654,9 @@ form_cc <- diabetes_dx ~ age_c + bmi_c + sex + race
 svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibinomial())
 summary(svy_fit)
 
+plot(residuals(svy_fit, type='deviance'))
+
+
 # Survey-weighted OR table (no intercept)
 svy_or <- broom::tidy(svy_fit, conf.int = TRUE) %>%
   dplyr::mutate(OR = exp(estimate), LCL = exp(conf.low), UCL = exp(conf.high)) %>%
@@ -662,6 +665,7 @@ svy_or <- broom::tidy(svy_fit, conf.int = TRUE) %>%
 knitr::kable(svy_or, caption = "Survey-weighted odds ratios (per 1 SD)")
 
 ```
+The residual plot looks okay and does not show any pattern.
 
 ```{r}
 #| label: MICE
@@ -755,6 +759,67 @@ bayes_fit <- brm(
 
 summary(bayes_fit)
 
+prior_summary(bayes_fit)
+
+###
+library(ggplot2)
+
+# Example: priors for two coefficients
+prior_draws <- tibble(
+  term = rep(c("Age (per 1 SD)", "BMI (per 1 SD)"), each = 4000),
+  value = c(rnorm(4000, 0, 2.5), rnorm(4000, 0, 2.5))
+)
+
+ggplot(prior_draws, aes(x = value, fill = term)) +
+  geom_density(alpha = 0.5) +
+  theme_minimal() +
+  labs(title = "Prior Distributions for Coefficients",
+       x = "Coefficient Value", y = "Density") +
+  scale_fill_manual(values = c("skyblue", "orange"))
+
+###
+
+library(dplyr)
+# install.packages("remotes")  # if you don't have remotes
+remotes::install_github("mjskay/tidybayes")
+
+
+# posterior draws from fitted model
+library(posterior)
+library(dplyr)
+library(tidyr)
+
+# Convert posterior draws to tibble
+posterior_draws <- as_draws_df(bayes_fit) %>%   # from posterior package
+  select(b_age_c, b_bmi_c) %>%
+  as_tibble() %>%
+  mutate(draw = row_number()) %>%
+  pivot_longer(cols = c(b_age_c, b_bmi_c),
+               names_to = "term",
+               values_to = "value") %>%
+  mutate(type = "Posterior")
+
+
+# prior draws (simulate)
+prior_draws <- tibble(
+  term = rep(c("b_age_c", "b_bmi_c"), each = 4000),
+  value = c(rnorm(4000, 0, 2.5), rnorm(4000, 0, 2.5)),
+  type = "Prior"
+)
+
+prior_summary(bayes_fit)
+
+# combine
+combined <- bind_rows(prior_draws, posterior_draws)
+
+# plot
+ggplot(combined, aes(x = value, fill = type)) +
+  geom_density(alpha = 0.5) +
+  facet_wrap(~term, scales = "free") +
+  theme_minimal() +
+  labs(title = "Prior vs Posterior Distributions for Coefficients",
+       x = "Coefficient Value", y = "Density")
+
 
 # Diabetes vs BMI
 
@@ -797,9 +862,16 @@ ggsave("Predicted Probability of Diabetes vs BMI.png", plot = p4, width = 7, hei
 
 ```
 
+Once we get posterior draws, we study
+Summary stats	Mean, median, 95% credible intervals	summary(bayes_fit) or posterior_summary(bayes_fit)
+- Visualization	Distribution shape	mcmc_hist(posterior, pars = c("b_age")) or mcmc_areas()
+- Pairwise plots	Correlations between parameters	mcmc_pairs(posterior)
+- Posterior predictive checks	Compare model predictions vs observed data	pp_check(bayes_fit)
+- Model comparison	Using LOO or WAIC	loo(bayes_fit) or waic(bayes_fit)
+
 Assumptions for Bayesian logistic regression 
 - posterior check
-- plots fro linearity
+- plots for linearity
 - mcmc trace plots for convergence 
 - bayes_R2 for model fit
 
@@ -958,12 +1030,14 @@ ggsave("ppc_bars.png", plot = p7, width = 8, height = 6, dpi = 300)
 
 #PP check for proportions (useful for binary) # mean comparison
 ## to check if the simulated means match the observed mean
+
+## mean
 p8 <- ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "mean") +
   labs(title = "Posterior Predictive Check: Mean of Replicates") +
   theme_minimal()
 ggsave("ppc_stat_mean.png", plot = p8, width = 8, height = 6, dpi = 300)
 
-
+## sd
 p9 <- ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "sd") +
   labs(title = "PPC: Standard Deviation of Replicates") +
   theme_minimal()
@@ -983,13 +1057,12 @@ ggsave("ppc_scatter_avg.png", plot = p10, width = 8, height = 6, dpi = 300)
 
 library(brms)
 library(dplyr)
-library(tibble)
+
+# Posterior summary
 
 post_sum <- posterior_summary(bayes_fit)
 colnames(post_sum)
 
-
-# Posterior summary
 post_logodds <- posterior_summary(bayes_fit) %>%
   as.data.frame() %>%
   rownames_to_column(var = "term") %>%
@@ -1014,8 +1087,6 @@ library(bayesplot)
 
 # Extract posterior draws as a draws_df # simulate posterior outcomes
 post <- as_draws_df(bayes_fit)
-
-pp_samples <- posterior_predict(bayes_fit, ndraws = 500)
 
 # Check parameter names
 colnames(post)
@@ -1078,6 +1149,12 @@ p13 <- ggplot(plot_data, aes(x = obs_index)) +
   theme_minimal()
 
 ggsave("Line plot_bmi_obs_pred.png", plot = p13, width = 8, height = 6, dpi = 300)
+
+
+###
+summary(adult_imp1$bmi)
+summary(plot_data$bmi_c)
+
 
 
 ```
@@ -1244,7 +1321,82 @@ informed precision prevention strategies.
 
 ## 
 
+```{r}
+#| label: posterior EDA
 
+
+
+prior_summary(bayes_fit)
+prior_draws <- tibble(
+  term = rep(c("BMI (per 1 SD)", "Age (per 1 SD)"), each = 4000),
+  estimate = c(rnorm(4000, 0, 1), rnorm(4000, 0, 1)),
+  type = "Prior"
+)
+
+
+summary(prior_draws)
+
+
+
+post
+head(post)
+names(prior_draws)
+names(post_logodds)
+
+
+library(brms)
+library(dplyr)
+library(tidyr)
+
+# Extract posterior draws
+post <- as_draws_df(bayes_fit) %>%      # bayes_fit = your brms model
+  select(b_bmi_c, b_age_c) %>%               # select your coefficient columns
+  pivot_longer(
+    everything(),
+    names_to = "term",
+    values_to = "estimate"
+  ) %>%
+  mutate(
+    term = case_when(
+      term == "b_bmi_c" ~ "BMI (per 1 SD)",
+      term == "b_age_c" ~ "Age (per 1 SD)"
+    ),
+    type = "Posterior"
+  )
+
+
+## visualization of prior and predicted draws
+combined_draws <- bind_rows(prior_draws, post) 
+
+library(ggplot2)
+
+ggplot(combined_draws, aes(x = estimate, fill = type)) +
+  geom_density(alpha = 0.4) +
+  facet_wrap(~ term, scales = "free", ncol = 2) +
+  theme_minimal(base_size = 13) +
+  labs(
+    title = "Prior vs Posterior Distributions",
+    x = "Coefficient estimate",
+    y = "Density",
+    fill = ""
+  )
+
+
+## till now we compared prior and posterior distribution and have posterior summaries calculated
+
+
+```
+
+```{r}
+#| label: Post predicited outcome
+
+
+
+
+
+
+
+```
 
 
 
