@@ -3279,13 +3279,13 @@ window.Quarto = {
 <hr>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>A major public health concern<strong>Diabetes mellitus (DM)</strong> is associated with obesity, age, race, and gender and identifying associated risk factor is crucial for targeted intervention.<strong>Logistic Regression</strong> estimates the association between risk factors and binary outcomes (presence or absence of diabetes). Standard analytical approaches are insufficient in analyzing the complexity of healthcare data (DNA sequences, imaging, patient-reported outcomes, electronic health records (EHRs), longitudinal health measurements, diagnoses, and treatments. (Zeger et al., 2020). However, classical maximum likelihood estimation (MLE) yields unstable results in small samples with missing data, or quasi- and complete separation. The Bayesian hierarchical model with Markov Chain Monte Carlo (MCMC) implemented on multivariate longitudinal healthcare data by integrating prior knowledge predict health status (Zeger et al., 2020). Model with two levels of data structure: (1) repeated measures over time within individuals and (2) individuals nested within a population, with added exogenous covariates (e.g., age, clinical history), and endogenous covariates (e.g., current treatment), yield posterior distributions and marginal distributions from MCMC estimation of parameters provide risk prediction (pneumonia, prostate cancer, and mental disorders). The model’s limitation is its parametric nature.</p>
+<p>A major public health concern<strong>Diabetes mellitus (DM)</strong> is associated with obesity, age, race, and gender and identifying associated risk factor is crucial for targeted intervention <span class="citation" data-cites="DAngelo2025">D’Angelo and Ran (<a href="#ref-DAngelo2025" role="doc-biblioref">2025</a>)</span>. <strong>Logistic Regression</strong> estimates the association between risk factors and binary outcomes (presence or absence of diabetes). Standard analytical approaches are insufficient in analyzing the complexity of healthcare data (DNA sequences, imaging, patient-reported outcomes, electronic health records (EHRs), longitudinal health measurements, diagnoses, and treatments. <span class="citation" data-cites="Zeger2020">Zeger et al. (<a href="#ref-Zeger2020" role="doc-biblioref">2020</a>)</span>. However, classical maximum likelihood estimation (MLE) yields unstable results in small samples with missing data, or quasi- and complete separation. The Bayesian hierarchical model with Markov Chain Monte Carlo (MCMC) implemented on multivariate longitudinal healthcare data by integrating prior knowledge predict health status. Model with two levels of data structure: (1) repeated measures over time within individuals and (2) individuals nested within a population, with added exogenous covariates (e.g., age, clinical history), and endogenous covariates (e.g., current treatment), yield posterior distributions and marginal distributions from MCMC estimation of parameters provide risk prediction (pneumonia, prostate cancer, and mental disorders). The model’s limitation is its parametric nature.</p>
 <p>Application of <strong>Bayesian Inference</strong> <span class="citation" data-cites="Chatzimichail2023">Chatzimichail and Hatjimihail (<a href="#ref-Chatzimichail2023" role="doc-biblioref">2023</a>)</span>, comparing parametric (with a fixed set of parameters) and non-parametric distributions (which do not make a priori assumptions) on National Health and Nutrition Examination Survey data from two separate diagnostic tests on both diseased and non-diseased populations, and provides posterior probability classifying diseases. Clinical criteria and fixed numerical thresholds in conventional and the dichotomous method (overlap of probability distributions between the diseased and nondiseased groups) fails to capture the intricate relationship between diagnostic tests and the prevalence of the diseases, the complexity and heterogeneity across diverse populations and its applicability in skewed, bimodality, or multimodality data is critiqued. Bayesian nonparametric (vs parametric) is a flexible, adaptable, versatile, and robust approach, capturing complex data patterns, producing multimodal probability patterns vs the bimodal, double-sigmoidal curves in parametric models. Integrating priors, combined with multiple diagnostic tests, improves diagnostic accuracy and precision. Model applicability is limited by access to scholarly publications and over-dependence on priors. Combining with other statistical and computational techniques enhances diagnostic capabilities <span class="citation" data-cites="Chatzimichail2023">Chatzimichail and Hatjimihail (<a href="#ref-Chatzimichail2023" role="doc-biblioref">2023</a>)</span> to overcome systemic bias, unrepresentative, incomplete, and non-normal datasets.</p>
 <p><strong>Bayesian methodology</strong> by <span class="citation" data-cites="VandeSchoot2021">Schoot et al. (<a href="#ref-VandeSchoot2021" role="doc-biblioref">2021</a>)</span> emphasizes the importance of priors, data modeling, inferences, model checking, sampling from a posterior distribution, variational inferences, and variable selection for applicability across social sciences, ecology, genetics, and medicine. The variable selection is crucial as multicollinearity, insufficient sampling, and overfitting result in poor predictive performance and difficult interpretation. Informative, weakly informative, and diffuse prior incorporation depending on (un)certainty in (hyperparameters), where a larger variance representing greater uncertainty. Prior elicitation (experts, generic experts, data-based, and sample data using maximum likelihood or sample statistics), and prior sensitivity analysis of the likelihood assesses how the priors and the likelihood align. Prior provides data-informed shrinkage, regularization, or influence algorithms, providing a high-density region, improving estimation. Specifying prior information in small and less informative samples, strengthens the observed data with unknown parameters having varied values, observed data having fixed values, and the likelihood function generate a range of possible values and integrating the MCMC algorithm for sampled values from a given distribution through computer simulations provide empirical estimates of the posterior distribution (BRMS and Blavaan in R). The frequentist method does not consider the probability of the unknown parameters and considers them as fixed, while likelihood is based on the conditional probability distribution. Spatial and temporal Bayesian models has applicability in large-scale cancer genomic data, identifying novel molecular-level changes, interactions between mutated genes, capturing mutational signatures, allowing genomic-based patient stratification in clinical trials, and targeted treatments and in understanding cancer evolution. The Bayesian model is reproducible, but is limited by autocorrelation in the temporal model and by subjectivity in prior elicitation.</p>
-<p>Prior elicitation, analytical posteriors, robustness checks in <strong>Bayesian Normal linear regression, and parametric (conjugate) model incorporating Normal–Inverse-Gamma prior</strong> have been demonstrated in metrology <span class="citation" data-cites="Klauenberg2015">Klauenberg et al. (<a href="#ref-Klauenberg2015" role="doc-biblioref">2015</a>)</span> to calibrate instruments. In Gaussian, errors are independent and identically distributed, the variance is unknown, the relationship between X and Y is statistical, with noise and model uncertainty, and the regression can not be treated as a measurement function. Likelihood, Bayesian, bootstrap, etc., account for uncertainty, prior information, and observables (data) and unobservables (parameters and auxiliary variables) are unknown and random, and the assigned probability distributions update prior knowledge about the unobservables, enhance interpretation and robustify analyses. The Normal-Inverse Gamma (NIG) distribution from the same family as the conjugate prior with unknown mean and variance can specify vague or non-informative priors. Hierarchical prior add an additional layer of distributions, accounting for uncertainty to be more flexibly modeled.</p>
-<p><strong>Bayesian Hierarchical / meta-analytic linear regression</strong> model <span class="citation" data-cites="DeLeeuw2012">(<a href="#ref-DeLeeuw2012" role="doc-biblioref"><strong>DeLeeuw2012?</strong></a>)</span> augments data by incorporating both exchangeable and unexchangeable information on parameters addressing issues associated with multiple testing with low statistical power, and the issues of conducting separate significance tests across studies with different predictors, and the need for larger samples. Linear regression produce smaller, unreliable estimates vulnerable to sample variations. Priors from meta-analysis in Bayesian regression addresses the challenge of small sample size and unavailability of previous articles, resolving the limitations of univariate analyses, and the relationship issues among multiple regression parameters within a study. Priors based on previous data and current data are categorized (1) Exchangeable when the current data and previous studies share the same set of predictors, and (2) Unexchangeable when the predictors differ. The probability density function for the data (using the Gibbs sampler), and the likelihood function reflect prior assumptions about the model. The hierarchical unexchangeable model provide applicability is in studying differences in studies, enabling explicit testing of the exchangeability assumption. Application is limited due to the correlation between identical set of predictors. (DeLeeuw, 2012).</p>
+<p>Prior elicitation, analytical posteriors, robustness checks in <strong>Bayesian Normal linear regression, and parametric (conjugate) model incorporating Normal–Inverse-Gamma prior</strong> have been demonstrated in metrology <span class="citation" data-cites="Klauenberg2015">Klauenberg et al. (<a href="#ref-Klauenberg2015" role="doc-biblioref">2015</a>)</span>; to calibrate instruments. In Gaussian, errors are independent and identically distributed, the variance is unknown, the relationship between X and Y is statistical, with noise and model uncertainty, and the regression can not be treated as a measurement function. Likelihood, Bayesian, bootstrap, etc., account for uncertainty, prior information, and observables (data) and unobservables (parameters and auxiliary variables) are unknown and random, and the assigned probability distributions update prior knowledge about the unobservables, enhance interpretation and robustify analyses. The Normal-Inverse Gamma (NIG) distribution from the same family as the conjugate prior with unknown mean and variance can specify vague or non-informative priors. Hierarchical prior add an additional layer of distributions, accounting for uncertainty to be more flexibly modeled.</p>
+<p><strong>Bayesian Hierarchical / meta-analytic linear regression</strong> model augments data by incorporating both exchangeable and unexchangeable information on parameters addressing issues associated with multiple testing with low statistical power, and the issues of conducting separate significance tests across studies with different predictors, and the need for larger samples. Linear regression produce smaller, unreliable estimates vulnerable to sample variations. Priors from meta-analysis in Bayesian regression addresses the challenge of small sample size and unavailability of previous articles, resolving the limitations of univariate analyses, and the relationship issues among multiple regression parameters within a study. Priors based on previous data and current data are categorized (1) Exchangeable when the current data and previous studies share the same set of predictors, and (2) Unexchangeable when the predictors differ. The probability density function for the data (using the Gibbs sampler), and the likelihood function reflect prior assumptions about the model. The hierarchical unexchangeable model provide applicability is in studying differences in studies, enabling explicit testing of the exchangeability assumption. Application is limited due to the correlation between identical set of predictors. <span class="citation" data-cites="DeLeeuw2012a">Leeuw and Klugkist (<a href="#ref-DeLeeuw2012a" role="doc-biblioref">2012</a>)</span></p>
 <p><strong>Bayesian logistic regression (Bayesian GLM)**</strong>- A sequential clinical reasoning model. Liu (2013) demonstrated its applicability in screening adults (20–79 years, Taiwan) addressing the limited availability of molecular information and as an alternative method leveraging routinely collected biological markers classifying diseases. Sequential adding of predictors in three models: (1) demographic features (basic model), (2) six metabolic components (metabolic score model), and (3) conventional risk factors (enhanced model), incorporating priors, and emulating a clinician’s evaluation process, the model assumes normally distributed regression coefficients, accounts for uncertainty in clinical weights, and averages credible intervals for predicted risk estimates. The posterior distributions produced in Enhanced model showed that patient background significantly contributed to baseline risk estimation by integrating individual characteristics capturing ecological heterogeneity. The model applicability is limited by potential interactions between predictors and external cross-validation.</p>
-<p><strong>Bayesian multiple imputation with logistic regression, <span class="citation" data-cites="Austin">(<a href="#ref-Austin" role="doc-biblioref"><strong>Austin?</strong></a>)</span> 2021</strong>, addresses missing data in clinical research. Analyzing causes of missing values (i) patients refusing to answer specific questions, (ii) loss to follow-up, (iii) investigator or mechanical errors, or (iv) physicians choosing not to order certain investigations and understanding missingness: missing at random (MAR), missing not at random (MNAR), or missing completely at random (MCAR) is crucial. Multiple imputation (MI) using R, SAS, or Stata provide plausible values creating multiple completed datasets while simultaneously conducting identical statistical analyses across them, robustify estimates through pooled results in classifying patients health status and mortality rates.</p>
+<p><strong>Bayesian multiple imputation with logistic regression, <span class="citation" data-cites="Austin2021">Austin et al. (<a href="#ref-Austin2021" role="doc-biblioref">2021</a>)</span></strong>, addresses missing data in clinical research. Analyzing causes of missing values (i) patients refusing to answer specific questions, (ii) loss to follow-up, (iii) investigator or mechanical errors, or (iv) physicians choosing not to order certain investigations and understanding missingness: missing at random (MAR), missing not at random (MNAR), or missing completely at random (MCAR) is crucial. Multiple imputation (MI) using R, SAS, or Stata provide plausible values creating multiple completed datasets while simultaneously conducting identical statistical analyses across them, robustify estimates through pooled results in classifying patients health status and mortality rates.</p>
 <p><strong>Aims</strong></p>
 <p>The present study aims to apply Bayesian logistic regression to predict diabetes status and estimate the association between body mass index (BMI), age (&gt;20 years age group), gender, and race as predictors and diabetes as the response variable using a retrospective dataset (2013–2014 NHANES survey). NHANES is a complex survey, and is not sampled uniformly: It uses stratification, clustering, and oversampling of certain groups in the population. We use Bayesian analytic approach to evaluates the challenges of dataset anomalies (missingness, complete case analysis and separation) for which traditional logistic regression is not efficient in predicting health status.</p>
 </section>
@@ -4173,50 +4173,35 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;mjskay/tidybayes&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>matrixStats (1.4.1 -&gt; 1.5.0) [CRAN]
-checkmate   (2.3.2 -&gt; 2.3.3) [CRAN]
-quadprog    (NA    -&gt; 1.5-8) [CRAN]
-posterior   (1.6.0 -&gt; 1.6.1) [CRAN]
-ggdist      (NA    -&gt; 3.3.3) [CRAN]</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>── R CMD build ─────────────────────────────────────────────────────────────────
-* checking for file ‘/tmp/RtmphYp1wV/remotes221dfa514f2788/mjskay-tidybayes-fb49436/DESCRIPTION’ ... OK
-* preparing ‘tidybayes’:
-* checking DESCRIPTION meta-information ... OK
-* checking for LF line-endings in source and make files and shell scripts
-* checking for empty or unneeded directories
-Omitted ‘LazyData’ from DESCRIPTION
-* building ‘tidybayes_3.0.7.9000.tar.gz’
-Warning: invalid uid value replaced by that for user &#39;nobody&#39;
-Warning: invalid gid value replaced by that for user &#39;nobody&#39;</code></pre>
+<pre><code>Error in utils::download.file(url, path, method = method, quiet = quiet,  : 
+  download from &#39;https://api.github.com/repos/mjskay/tidybayes/tarball/HEAD&#39; failed</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># posterior draws from fitted model</span></span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(posterior)</span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert posterior draws to tibble</span></span>
-<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>posterior_draws <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(bayes_fit) <span class="sc">%&gt;%</span>   <span class="co"># from posterior package</span></span>
-<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(b_age_c, b_bmi_c) <span class="sc">%&gt;%</span></span>
-<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">draw =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(b_age_c, b_bmi_c),</span>
-<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;term&quot;</span>,</span>
-<span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;value&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb58-14"><a href="#cb58-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">&quot;Posterior&quot;</span>)</span>
-<span id="cb58-15"><a href="#cb58-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-16"><a href="#cb58-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-17"><a href="#cb58-17" aria-hidden="true" tabindex="-1"></a><span class="co"># prior draws (simulate)</span></span>
-<span id="cb58-18"><a href="#cb58-18" aria-hidden="true" tabindex="-1"></a>prior_draws <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb58-19"><a href="#cb58-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">term =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;b_age_c&quot;</span>, <span class="st">&quot;b_bmi_c&quot;</span>), <span class="at">each =</span> <span class="dv">4000</span>),</span>
-<span id="cb58-20"><a href="#cb58-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">4000</span>, <span class="dv">0</span>, <span class="fl">2.5</span>), <span class="fu">rnorm</span>(<span class="dv">4000</span>, <span class="dv">0</span>, <span class="fl">2.5</span>)),</span>
-<span id="cb58-21"><a href="#cb58-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;Prior&quot;</span></span>
-<span id="cb58-22"><a href="#cb58-22" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb58-23"><a href="#cb58-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-24"><a href="#cb58-24" aria-hidden="true" tabindex="-1"></a><span class="fu">prior_summary</span>(bayes_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># posterior draws from fitted model</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(posterior)</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert posterior draws to tibble</span></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>posterior_draws <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(bayes_fit) <span class="sc">%&gt;%</span>   <span class="co"># from posterior package</span></span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(b_age_c, b_bmi_c) <span class="sc">%&gt;%</span></span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">draw =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(b_age_c, b_bmi_c),</span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;term&quot;</span>,</span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;value&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">&quot;Posterior&quot;</span>)</span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a><span class="co"># prior draws (simulate)</span></span>
+<span id="cb57-18"><a href="#cb57-18" aria-hidden="true" tabindex="-1"></a>prior_draws <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb57-19"><a href="#cb57-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">term =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;b_age_c&quot;</span>, <span class="st">&quot;b_bmi_c&quot;</span>), <span class="at">each =</span> <span class="dv">4000</span>),</span>
+<span id="cb57-20"><a href="#cb57-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">4000</span>, <span class="dv">0</span>, <span class="fl">2.5</span>), <span class="fu">rnorm</span>(<span class="dv">4000</span>, <span class="dv">0</span>, <span class="fl">2.5</span>)),</span>
+<span id="cb57-21"><a href="#cb57-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;Prior&quot;</span></span>
+<span id="cb57-22"><a href="#cb57-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb57-23"><a href="#cb57-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-24"><a href="#cb57-24" aria-hidden="true" tabindex="-1"></a><span class="fu">prior_summary</span>(bayes_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>               prior     class                coef group resp dpar nlpar lb ub
@@ -4242,16 +4227,16 @@ Warning: invalid gid value replaced by that for user &#39;nobody&#39;</code></pr
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># combine</span></span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>combined <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(prior_draws, posterior_draws)</span>
-<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
-<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(combined, <span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
-<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>term, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="sc">+</span></span>
-<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Prior vs Posterior Distributions for Coefficients&quot;</span>,</span>
-<span id="cb60-10"><a href="#cb60-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Coefficient Value&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Density&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># combine</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>combined <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(prior_draws, posterior_draws)</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(combined, <span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>term, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="sc">+</span></span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Prior vs Posterior Distributions for Coefficients&quot;</span>,</span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Coefficient Value&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Density&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -4262,38 +4247,38 @@ Warning: invalid gid value replaced by that for user &#39;nobody&#39;</code></pr
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Diabetes vs BMI</span></span>
-<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the plot</span></span>
-<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(adult_imp1, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(diabetes_dx), <span class="at">y =</span> bmi, <span class="at">fill =</span> <span class="fu">factor</span>(diabetes_dx))) <span class="sc">+</span></span>
-<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;0&quot;</span> <span class="ot">=</span> <span class="st">&quot;No Diabetes&quot;</span>, <span class="st">&quot;1&quot;</span> <span class="ot">=</span> <span class="st">&quot;Diabetes&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Diabetes Diagnosis&quot;</span>,</span>
-<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;BMI&quot;</span>,</span>
-<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;BMI Distribution by Diabetes Status&quot;</span></span>
-<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb61-14"><a href="#cb61-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb61-15"><a href="#cb61-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span>
-<span id="cb61-16"><a href="#cb61-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-17"><a href="#cb61-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the plot as an image file (PNG)</span></span>
-<span id="cb61-18"><a href="#cb61-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;BMI_Distribution_by_Diabetes_Status.png&quot;</span>, <span class="at">plot =</span> p3, <span class="at">width =</span> <span class="dv">7</span>, <span class="at">height =</span> <span class="dv">5</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
-<span id="cb61-19"><a href="#cb61-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-20"><a href="#cb61-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-21"><a href="#cb61-21" aria-hidden="true" tabindex="-1"></a><span class="co"># logistic regression curve</span></span>
-<span id="cb61-22"><a href="#cb61-22" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(adult_imp1, <span class="fu">aes</span>(<span class="at">x =</span> bmi, <span class="at">y =</span> diabetes_dx)) <span class="sc">+</span></span>
-<span id="cb61-23"><a href="#cb61-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> diabetes_dx), <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">position =</span> <span class="fu">position_jitter</span>(<span class="at">height =</span> <span class="fl">0.02</span>)) <span class="sc">+</span></span>
-<span id="cb61-24"><a href="#cb61-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;glm&quot;</span>, <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>), <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
-<span id="cb61-25"><a href="#cb61-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb61-26"><a href="#cb61-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;BMI&quot;</span>,</span>
-<span id="cb61-27"><a href="#cb61-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Probability of Diabetes&quot;</span>,</span>
-<span id="cb61-28"><a href="#cb61-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Predicted Probability of Diabetes vs BMI&quot;</span></span>
-<span id="cb61-29"><a href="#cb61-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb61-30"><a href="#cb61-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb61-31"><a href="#cb61-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-32"><a href="#cb61-32" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;Predicted Probability of Diabetes vs BMI.png&quot;</span>, <span class="at">plot =</span> p4, <span class="at">width =</span> <span class="dv">7</span>, <span class="at">height =</span> <span class="dv">5</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Diabetes vs BMI</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the plot</span></span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(adult_imp1, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(diabetes_dx), <span class="at">y =</span> bmi, <span class="at">fill =</span> <span class="fu">factor</span>(diabetes_dx))) <span class="sc">+</span></span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;0&quot;</span> <span class="ot">=</span> <span class="st">&quot;No Diabetes&quot;</span>, <span class="st">&quot;1&quot;</span> <span class="ot">=</span> <span class="st">&quot;Diabetes&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb60-10"><a href="#cb60-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Diabetes Diagnosis&quot;</span>,</span>
+<span id="cb60-11"><a href="#cb60-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;BMI&quot;</span>,</span>
+<span id="cb60-12"><a href="#cb60-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;BMI Distribution by Diabetes Status&quot;</span></span>
+<span id="cb60-13"><a href="#cb60-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb60-14"><a href="#cb60-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb60-15"><a href="#cb60-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span>
+<span id="cb60-16"><a href="#cb60-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-17"><a href="#cb60-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the plot as an image file (PNG)</span></span>
+<span id="cb60-18"><a href="#cb60-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;BMI_Distribution_by_Diabetes_Status.png&quot;</span>, <span class="at">plot =</span> p3, <span class="at">width =</span> <span class="dv">7</span>, <span class="at">height =</span> <span class="dv">5</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
+<span id="cb60-19"><a href="#cb60-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-20"><a href="#cb60-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-21"><a href="#cb60-21" aria-hidden="true" tabindex="-1"></a><span class="co"># logistic regression curve</span></span>
+<span id="cb60-22"><a href="#cb60-22" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(adult_imp1, <span class="fu">aes</span>(<span class="at">x =</span> bmi, <span class="at">y =</span> diabetes_dx)) <span class="sc">+</span></span>
+<span id="cb60-23"><a href="#cb60-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> diabetes_dx), <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">position =</span> <span class="fu">position_jitter</span>(<span class="at">height =</span> <span class="fl">0.02</span>)) <span class="sc">+</span></span>
+<span id="cb60-24"><a href="#cb60-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;glm&quot;</span>, <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>), <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb60-25"><a href="#cb60-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb60-26"><a href="#cb60-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;BMI&quot;</span>,</span>
+<span id="cb60-27"><a href="#cb60-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Probability of Diabetes&quot;</span>,</span>
+<span id="cb60-28"><a href="#cb60-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Predicted Probability of Diabetes vs BMI&quot;</span></span>
+<span id="cb60-29"><a href="#cb60-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb60-30"><a href="#cb60-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb60-31"><a href="#cb60-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-32"><a href="#cb60-32" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;Predicted Probability of Diabetes vs BMI.png&quot;</span>, <span class="at">plot =</span> p4, <span class="at">width =</span> <span class="dv">7</span>, <span class="at">height =</span> <span class="dv">5</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Once we get posterior draws, we study Summary stats Mean, median, 95% credible intervals summary(bayes_fit) or posterior_summary(bayes_fit) - Visualization Distribution shape mcmc_hist(posterior, pars = c(“b_age”)) or mcmc_areas() - Pairwise plots Correlations between parameters mcmc_pairs(posterior) - Posterior predictive checks Compare model predictions vs observed data pp_check(bayes_fit) - Model comparison Using LOO or WAIC loo(bayes_fit) or waic(bayes_fit)</p>
@@ -4301,7 +4286,7 @@ Warning: invalid gid value replaced by that for user &#39;nobody&#39;</code></pr
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(bayes_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(bayes_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> Family: bernoulli 
@@ -4328,7 +4313,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>p5 <span class="ot">&lt;-</span> <span class="fu">plot</span>(bayes_fit)          <span class="co"># Posterior distributions</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>p5 <span class="ot">&lt;-</span> <span class="fu">plot</span>(bayes_fit)          <span class="co"># Posterior distributions</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -4346,8 +4331,8 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>p6 <span class="ot">&lt;-</span> <span class="fu">pp_check</span>(bayes_fit)      <span class="co"># Posterior predictive checks</span></span>
-<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mcmc_trace</span>(bayes_fit)    <span class="co"># Convergence (optional)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>p6 <span class="ot">&lt;-</span> <span class="fu">pp_check</span>(bayes_fit)      <span class="co"># Posterior predictive checks</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mcmc_trace</span>(bayes_fit)    <span class="co"># Convergence (optional)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -4358,7 +4343,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bayes_R2</span>(bayes_fit)      <span class="co"># Model fit</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bayes_R2</span>(bayes_fit)      <span class="co"># Model fit</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>    Estimate  Est.Error      Q2.5    Q97.5
@@ -4366,42 +4351,42 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Leave-one-out cross-validation</span></span>
-<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;bayes_fit_plot.png&quot;</span>, <span class="at">plot =</span> p5, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
-<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;pp_check.png&quot;</span>, <span class="at">plot =</span> p6, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Leave-one-out cross-validation</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;bayes_fit_plot.png&quot;</span>, <span class="at">plot =</span> p5, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;pp_check.png&quot;</span>, <span class="at">plot =</span> p6, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Below are reported odds ratio from the posterior predicted values and the Bayesian regression summary</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior ORs (drop intercept, clean labels)</span></span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>bayes_or <span class="ot">&lt;-</span> <span class="fu">posterior_summary</span>(bayes_fit, <span class="at">pars =</span> <span class="st">&quot;^b_&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(<span class="st">&quot;raw&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">gsub</span>(<span class="st">&quot;^b_&quot;</span>, <span class="st">&quot;&quot;</span>, raw),</span>
-<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">gsub</span>(<span class="st">&quot;race&quot;</span>, <span class="st">&quot;race:&quot;</span>, term),</span>
-<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">gsub</span>(<span class="st">&quot;sex&quot;</span>,  <span class="st">&quot;sex:&quot;</span>,  term),</span>
-<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">gsub</span>(<span class="st">&quot;OtherDMulti&quot;</span>, <span class="st">&quot;Other/Multi&quot;</span>, term),</span>
-<span id="cb69-11"><a href="#cb69-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">gsub</span>(<span class="st">&quot;OtherHispanic&quot;</span>, <span class="st">&quot;Other Hispanic&quot;</span>, term),</span>
-<span id="cb69-12"><a href="#cb69-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">OR   =</span> <span class="fu">exp</span>(Estimate),</span>
-<span id="cb69-13"><a href="#cb69-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">LCL  =</span> <span class="fu">exp</span>(Q2<span class="fl">.5</span>),</span>
-<span id="cb69-14"><a href="#cb69-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">UCL  =</span> <span class="fu">exp</span>(Q97<span class="fl">.5</span>)</span>
-<span id="cb69-15"><a href="#cb69-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb69-16"><a href="#cb69-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(term, OR, LCL, UCL) <span class="sc">%&gt;%</span></span>
-<span id="cb69-17"><a href="#cb69-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(term <span class="sc">!=</span> <span class="st">&quot;Intercept&quot;</span>)</span>
-<span id="cb69-18"><a href="#cb69-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-19"><a href="#cb69-19" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
-<span id="cb69-20"><a href="#cb69-20" aria-hidden="true" tabindex="-1"></a>  bayes_or <span class="sc">%&gt;%</span></span>
-<span id="cb69-21"><a href="#cb69-21" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(dplyr<span class="sc">::</span><span class="fu">across</span>(<span class="fu">c</span>(OR,LCL,UCL), <span class="sc">~</span><span class="fu">round</span>(.x, <span class="dv">2</span>))),</span>
-<span id="cb69-22"><a href="#cb69-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">2</span>,</span>
-<span id="cb69-23"><a href="#cb69-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">&quot;Bayesian posterior odds ratios (95% CrI) — reference: NH White (race), Male (sex)&quot;</span></span>
-<span id="cb69-24"><a href="#cb69-24" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior ORs (drop intercept, clean labels)</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>bayes_or <span class="ot">&lt;-</span> <span class="fu">posterior_summary</span>(bayes_fit, <span class="at">pars =</span> <span class="st">&quot;^b_&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(<span class="st">&quot;raw&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">gsub</span>(<span class="st">&quot;^b_&quot;</span>, <span class="st">&quot;&quot;</span>, raw),</span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">gsub</span>(<span class="st">&quot;race&quot;</span>, <span class="st">&quot;race:&quot;</span>, term),</span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">gsub</span>(<span class="st">&quot;sex&quot;</span>,  <span class="st">&quot;sex:&quot;</span>,  term),</span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">gsub</span>(<span class="st">&quot;OtherDMulti&quot;</span>, <span class="st">&quot;Other/Multi&quot;</span>, term),</span>
+<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">gsub</span>(<span class="st">&quot;OtherHispanic&quot;</span>, <span class="st">&quot;Other Hispanic&quot;</span>, term),</span>
+<span id="cb68-12"><a href="#cb68-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">OR   =</span> <span class="fu">exp</span>(Estimate),</span>
+<span id="cb68-13"><a href="#cb68-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">LCL  =</span> <span class="fu">exp</span>(Q2<span class="fl">.5</span>),</span>
+<span id="cb68-14"><a href="#cb68-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">UCL  =</span> <span class="fu">exp</span>(Q97<span class="fl">.5</span>)</span>
+<span id="cb68-15"><a href="#cb68-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb68-16"><a href="#cb68-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(term, OR, LCL, UCL) <span class="sc">%&gt;%</span></span>
+<span id="cb68-17"><a href="#cb68-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(term <span class="sc">!=</span> <span class="st">&quot;Intercept&quot;</span>)</span>
+<span id="cb68-18"><a href="#cb68-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-19"><a href="#cb68-19" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb68-20"><a href="#cb68-20" aria-hidden="true" tabindex="-1"></a>  bayes_or <span class="sc">%&gt;%</span></span>
+<span id="cb68-21"><a href="#cb68-21" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(dplyr<span class="sc">::</span><span class="fu">across</span>(<span class="fu">c</span>(OR,LCL,UCL), <span class="sc">~</span><span class="fu">round</span>(.x, <span class="dv">2</span>))),</span>
+<span id="cb68-22"><a href="#cb68-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">2</span>,</span>
+<span id="cb68-23"><a href="#cb68-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">&quot;Bayesian posterior odds ratios (95% CrI) — reference: NH White (race), Male (sex)&quot;</span></span>
+<span id="cb68-24"><a href="#cb68-24" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -4464,76 +4449,76 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combined table</span></span>
-<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;outputs&quot;</span>)) <span class="fu">dir.create</span>(<span class="st">&quot;outputs&quot;</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(svy_fit,   <span class="st">&quot;outputs/svy_fit.rds&quot;</span>)</span>
-<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(pool_mi,   <span class="st">&quot;outputs/pool_mi.rds&quot;</span>)</span>
-<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(bayes_fit, <span class="st">&quot;outputs/bayes_fit.rds&quot;</span>)</span>
-<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(svy_or,    <span class="st">&quot;outputs/survey_OR_table.rds&quot;</span>)</span>
-<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(mi_or,     <span class="st">&quot;outputs/mi_OR_table.rds&quot;</span>)</span>
-<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(bayes_or,  <span class="st">&quot;outputs/bayes_OR_table.rds&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combined table</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;outputs&quot;</span>)) <span class="fu">dir.create</span>(<span class="st">&quot;outputs&quot;</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(svy_fit,   <span class="st">&quot;outputs/svy_fit.rds&quot;</span>)</span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(pool_mi,   <span class="st">&quot;outputs/pool_mi.rds&quot;</span>)</span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(bayes_fit, <span class="st">&quot;outputs/bayes_fit.rds&quot;</span>)</span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(svy_or,    <span class="st">&quot;outputs/survey_OR_table.rds&quot;</span>)</span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(mi_or,     <span class="st">&quot;outputs/mi_OR_table.rds&quot;</span>)</span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(bayes_or,  <span class="st">&quot;outputs/bayes_OR_table.rds&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Results</span></span>
-<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Build compact results table (BMI &amp; Age only) ----</span></span>
-<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr); </span>
-<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr); </span>
-<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr); </span>
-<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
-<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a><span class="co"># pretty &quot;OR (LCL–UCL)&quot; string</span></span>
-<span id="cb71-10"><a href="#cb71-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-11"><a href="#cb71-11" aria-hidden="true" tabindex="-1"></a>fmt_or <span class="ot">&lt;-</span> <span class="cf">function</span>(or, lcl, ucl, <span class="at">digits =</span> <span class="dv">2</span>) {</span>
-<span id="cb71-12"><a href="#cb71-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(</span>
-<span id="cb71-13"><a href="#cb71-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">formatC</span>(or,  <span class="at">format =</span> <span class="st">&quot;f&quot;</span>, <span class="at">digits =</span> digits), <span class="st">&quot; (&quot;</span>,</span>
-<span id="cb71-14"><a href="#cb71-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">formatC</span>(lcl, <span class="at">format =</span> <span class="st">&quot;f&quot;</span>, <span class="at">digits =</span> digits), <span class="st">&quot;–&quot;</span>,</span>
-<span id="cb71-15"><a href="#cb71-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">formatC</span>(ucl, <span class="at">format =</span> <span class="st">&quot;f&quot;</span>, <span class="at">digits =</span> digits), <span class="st">&quot;)&quot;</span></span>
-<span id="cb71-16"><a href="#cb71-16" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb71-17"><a href="#cb71-17" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb71-18"><a href="#cb71-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-19"><a href="#cb71-19" aria-hidden="true" tabindex="-1"></a><span class="co"># guardrails: require these to exist from Modeling</span></span>
-<span id="cb71-20"><a href="#cb71-20" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">exists</span>(<span class="st">&quot;svy_or&quot;</span>), <span class="fu">exists</span>(<span class="st">&quot;mi_or&quot;</span>), <span class="fu">exists</span>(<span class="st">&quot;bayes_or&quot;</span>))</span>
-<span id="cb71-21"><a href="#cb71-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">c</span>(<span class="st">&quot;svy_or&quot;</span>,<span class="st">&quot;mi_or&quot;</span>,<span class="st">&quot;bayes_or&quot;</span>)) {</span>
-<span id="cb71-22"><a href="#cb71-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">all</span>(<span class="fu">c</span>(<span class="st">&quot;term&quot;</span>,<span class="st">&quot;OR&quot;</span>,<span class="st">&quot;LCL&quot;</span>,<span class="st">&quot;UCL&quot;</span>) <span class="sc">%in%</span> <span class="fu">names</span>(<span class="fu">get</span>(nm)))) {</span>
-<span id="cb71-23"><a href="#cb71-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(nm, <span class="st">&quot; must have columns: term, OR, LCL, UCL&quot;</span>)</span>
-<span id="cb71-24"><a href="#cb71-24" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb71-25"><a href="#cb71-25" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb71-26"><a href="#cb71-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-27"><a href="#cb71-27" aria-hidden="true" tabindex="-1"></a>svy_tbl   <span class="ot">&lt;-</span> svy_or   <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="st">&quot;Survey-weighted MLE&quot;</span>)</span>
-<span id="cb71-28"><a href="#cb71-28" aria-hidden="true" tabindex="-1"></a>mi_tbl    <span class="ot">&lt;-</span> mi_or    <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="st">&quot;MICE pooled&quot;</span>)</span>
-<span id="cb71-29"><a href="#cb71-29" aria-hidden="true" tabindex="-1"></a>bayes_tbl <span class="ot">&lt;-</span> bayes_or <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="st">&quot;Bayesian&quot;</span>)</span>
-<span id="cb71-30"><a href="#cb71-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-31"><a href="#cb71-31" aria-hidden="true" tabindex="-1"></a>all_tbl <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(svy_tbl, mi_tbl, bayes_tbl) <span class="sc">%&gt;%</span></span>
-<span id="cb71-32"><a href="#cb71-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">term =</span> <span class="fu">case_when</span>(</span>
-<span id="cb71-33"><a href="#cb71-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(term, <span class="st">&quot;bmi_c|</span><span class="sc">\\</span><span class="st">bBMI</span><span class="sc">\\</span><span class="st">b&quot;</span>) <span class="sc">~</span> <span class="st">&quot;BMI (per 1 SD)&quot;</span>,</span>
-<span id="cb71-34"><a href="#cb71-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(term, <span class="st">&quot;age_c|</span><span class="sc">\\</span><span class="st">bAge</span><span class="sc">\\</span><span class="st">b&quot;</span>) <span class="sc">~</span> <span class="st">&quot;Age (per 1 SD)&quot;</span>,</span>
-<span id="cb71-35"><a href="#cb71-35" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> term</span>
-<span id="cb71-36"><a href="#cb71-36" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
-<span id="cb71-37"><a href="#cb71-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;BMI (per 1 SD)&quot;</span>, <span class="st">&quot;Age (per 1 SD)&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb71-38"><a href="#cb71-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">OR_CI =</span> <span class="fu">fmt_or</span>(OR, LCL, UCL, <span class="at">digits =</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb71-39"><a href="#cb71-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Model, term, OR_CI) <span class="sc">%&gt;%</span></span>
-<span id="cb71-40"><a href="#cb71-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(</span>
-<span id="cb71-41"><a href="#cb71-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">factor</span>(Model, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Survey-weighted MLE&quot;</span>,<span class="st">&quot;MICE pooled&quot;</span>,<span class="st">&quot;Bayesian&quot;</span>)),</span>
-<span id="cb71-42"><a href="#cb71-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">factor</span>(term,  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;BMI (per 1 SD)&quot;</span>,<span class="st">&quot;Age (per 1 SD)&quot;</span>))</span>
-<span id="cb71-43"><a href="#cb71-43" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb71-44"><a href="#cb71-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-45"><a href="#cb71-45" aria-hidden="true" tabindex="-1"></a>res_wide <span class="ot">&lt;-</span> all_tbl <span class="sc">%&gt;%</span></span>
-<span id="cb71-46"><a href="#cb71-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> term, <span class="at">values_from =</span> OR_CI) <span class="sc">%&gt;%</span></span>
-<span id="cb71-47"><a href="#cb71-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
-<span id="cb71-48"><a href="#cb71-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">BMI (per 1 SD) OR (95% CI)</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">BMI (per 1 SD)</span><span class="st">`</span>,</span>
-<span id="cb71-49"><a href="#cb71-49" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Age (per 1 SD) OR (95% CI)</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Age (per 1 SD)</span><span class="st">`</span></span>
-<span id="cb71-50"><a href="#cb71-50" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb71-51"><a href="#cb71-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-52"><a href="#cb71-52" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
-<span id="cb71-53"><a href="#cb71-53" aria-hidden="true" tabindex="-1"></a>  res_wide,</span>
-<span id="cb71-54"><a href="#cb71-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">align =</span> <span class="fu">c</span>(<span class="st">&quot;l&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;c&quot;</span>),</span>
-<span id="cb71-55"><a href="#cb71-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">&quot;Odds ratios (per 1 SD) with 95% CIs across models&quot;</span></span>
-<span id="cb71-56"><a href="#cb71-56" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Results</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Build compact results table (BMI &amp; Age only) ----</span></span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr); </span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr); </span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr); </span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a><span class="co"># pretty &quot;OR (LCL–UCL)&quot; string</span></span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-11"><a href="#cb70-11" aria-hidden="true" tabindex="-1"></a>fmt_or <span class="ot">&lt;-</span> <span class="cf">function</span>(or, lcl, ucl, <span class="at">digits =</span> <span class="dv">2</span>) {</span>
+<span id="cb70-12"><a href="#cb70-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(</span>
+<span id="cb70-13"><a href="#cb70-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">formatC</span>(or,  <span class="at">format =</span> <span class="st">&quot;f&quot;</span>, <span class="at">digits =</span> digits), <span class="st">&quot; (&quot;</span>,</span>
+<span id="cb70-14"><a href="#cb70-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">formatC</span>(lcl, <span class="at">format =</span> <span class="st">&quot;f&quot;</span>, <span class="at">digits =</span> digits), <span class="st">&quot;–&quot;</span>,</span>
+<span id="cb70-15"><a href="#cb70-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">formatC</span>(ucl, <span class="at">format =</span> <span class="st">&quot;f&quot;</span>, <span class="at">digits =</span> digits), <span class="st">&quot;)&quot;</span></span>
+<span id="cb70-16"><a href="#cb70-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb70-17"><a href="#cb70-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb70-18"><a href="#cb70-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-19"><a href="#cb70-19" aria-hidden="true" tabindex="-1"></a><span class="co"># guardrails: require these to exist from Modeling</span></span>
+<span id="cb70-20"><a href="#cb70-20" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">exists</span>(<span class="st">&quot;svy_or&quot;</span>), <span class="fu">exists</span>(<span class="st">&quot;mi_or&quot;</span>), <span class="fu">exists</span>(<span class="st">&quot;bayes_or&quot;</span>))</span>
+<span id="cb70-21"><a href="#cb70-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">c</span>(<span class="st">&quot;svy_or&quot;</span>,<span class="st">&quot;mi_or&quot;</span>,<span class="st">&quot;bayes_or&quot;</span>)) {</span>
+<span id="cb70-22"><a href="#cb70-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">all</span>(<span class="fu">c</span>(<span class="st">&quot;term&quot;</span>,<span class="st">&quot;OR&quot;</span>,<span class="st">&quot;LCL&quot;</span>,<span class="st">&quot;UCL&quot;</span>) <span class="sc">%in%</span> <span class="fu">names</span>(<span class="fu">get</span>(nm)))) {</span>
+<span id="cb70-23"><a href="#cb70-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(nm, <span class="st">&quot; must have columns: term, OR, LCL, UCL&quot;</span>)</span>
+<span id="cb70-24"><a href="#cb70-24" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb70-25"><a href="#cb70-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb70-26"><a href="#cb70-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-27"><a href="#cb70-27" aria-hidden="true" tabindex="-1"></a>svy_tbl   <span class="ot">&lt;-</span> svy_or   <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="st">&quot;Survey-weighted MLE&quot;</span>)</span>
+<span id="cb70-28"><a href="#cb70-28" aria-hidden="true" tabindex="-1"></a>mi_tbl    <span class="ot">&lt;-</span> mi_or    <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="st">&quot;MICE pooled&quot;</span>)</span>
+<span id="cb70-29"><a href="#cb70-29" aria-hidden="true" tabindex="-1"></a>bayes_tbl <span class="ot">&lt;-</span> bayes_or <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="st">&quot;Bayesian&quot;</span>)</span>
+<span id="cb70-30"><a href="#cb70-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-31"><a href="#cb70-31" aria-hidden="true" tabindex="-1"></a>all_tbl <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(svy_tbl, mi_tbl, bayes_tbl) <span class="sc">%&gt;%</span></span>
+<span id="cb70-32"><a href="#cb70-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">term =</span> <span class="fu">case_when</span>(</span>
+<span id="cb70-33"><a href="#cb70-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(term, <span class="st">&quot;bmi_c|</span><span class="sc">\\</span><span class="st">bBMI</span><span class="sc">\\</span><span class="st">b&quot;</span>) <span class="sc">~</span> <span class="st">&quot;BMI (per 1 SD)&quot;</span>,</span>
+<span id="cb70-34"><a href="#cb70-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(term, <span class="st">&quot;age_c|</span><span class="sc">\\</span><span class="st">bAge</span><span class="sc">\\</span><span class="st">b&quot;</span>) <span class="sc">~</span> <span class="st">&quot;Age (per 1 SD)&quot;</span>,</span>
+<span id="cb70-35"><a href="#cb70-35" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> term</span>
+<span id="cb70-36"><a href="#cb70-36" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
+<span id="cb70-37"><a href="#cb70-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;BMI (per 1 SD)&quot;</span>, <span class="st">&quot;Age (per 1 SD)&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb70-38"><a href="#cb70-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">OR_CI =</span> <span class="fu">fmt_or</span>(OR, LCL, UCL, <span class="at">digits =</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb70-39"><a href="#cb70-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Model, term, OR_CI) <span class="sc">%&gt;%</span></span>
+<span id="cb70-40"><a href="#cb70-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(</span>
+<span id="cb70-41"><a href="#cb70-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">factor</span>(Model, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Survey-weighted MLE&quot;</span>,<span class="st">&quot;MICE pooled&quot;</span>,<span class="st">&quot;Bayesian&quot;</span>)),</span>
+<span id="cb70-42"><a href="#cb70-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">factor</span>(term,  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;BMI (per 1 SD)&quot;</span>,<span class="st">&quot;Age (per 1 SD)&quot;</span>))</span>
+<span id="cb70-43"><a href="#cb70-43" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb70-44"><a href="#cb70-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-45"><a href="#cb70-45" aria-hidden="true" tabindex="-1"></a>res_wide <span class="ot">&lt;-</span> all_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb70-46"><a href="#cb70-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> term, <span class="at">values_from =</span> OR_CI) <span class="sc">%&gt;%</span></span>
+<span id="cb70-47"><a href="#cb70-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb70-48"><a href="#cb70-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">BMI (per 1 SD) OR (95% CI)</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">BMI (per 1 SD)</span><span class="st">`</span>,</span>
+<span id="cb70-49"><a href="#cb70-49" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Age (per 1 SD) OR (95% CI)</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Age (per 1 SD)</span><span class="st">`</span></span>
+<span id="cb70-50"><a href="#cb70-50" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb70-51"><a href="#cb70-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-52"><a href="#cb70-52" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
+<span id="cb70-53"><a href="#cb70-53" aria-hidden="true" tabindex="-1"></a>  res_wide,</span>
+<span id="cb70-54"><a href="#cb70-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">align =</span> <span class="fu">c</span>(<span class="st">&quot;l&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;c&quot;</span>),</span>
+<span id="cb70-55"><a href="#cb70-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">&quot;Odds ratios (per 1 SD) with 95% CIs across models&quot;</span></span>
+<span id="cb70-56"><a href="#cb70-56" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -4573,23 +4558,23 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior predictive draws</span></span>
-<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Posterior predictive checks (binary outcome)</span></span>
-<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>pp_samples <span class="ot">&lt;-</span> <span class="fu">posterior_predict</span>(bayes_fit, <span class="at">ndraws =</span> <span class="dv">500</span>)  <span class="co"># 500 draws</span></span>
-<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Check dimensions</span></span>
-<span id="cb72-7"><a href="#cb72-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(pp_samples)  <span class="co"># rows = draws, cols = observations</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior predictive draws</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Posterior predictive checks (binary outcome)</span></span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>pp_samples <span class="ot">&lt;-</span> <span class="fu">posterior_predict</span>(bayes_fit, <span class="at">ndraws =</span> <span class="dv">500</span>)  <span class="co"># 500 draws</span></span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Check dimensions</span></span>
+<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(pp_samples)  <span class="co"># rows = draws, cols = observations</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  500 5592</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot overlay of observed vs predicted counts (duplicate image)</span></span>
-<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ppc_dens_overlay</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, ]) <span class="sc">+</span></span>
-<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Posterior Predictive Check: Density Overlay&quot;</span>) <span class="sc">+</span></span>
-<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot overlay of observed vs predicted counts (duplicate image)</span></span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ppc_dens_overlay</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, ]) <span class="sc">+</span></span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Posterior Predictive Check: Density Overlay&quot;</span>) <span class="sc">+</span></span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -4600,7 +4585,7 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ppc_bars</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, ])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ppc_bars</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, ])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -4611,61 +4596,61 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternative PP plots (histogram / barplot) for binary outcome (bar chart preferred being discrete outcome)</span></span>
-<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>p7 <span class="ot">&lt;-</span> <span class="fu">ppc_bars</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, ]) <span class="sc">+</span></span>
-<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Posterior Predictive Check: Barplot of Counts&quot;</span>) <span class="sc">+</span></span>
-<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;ppc_bars.png&quot;</span>, <span class="at">plot =</span> p7, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
-<span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb76-9"><a href="#cb76-9" aria-hidden="true" tabindex="-1"></a><span class="co">#PP check for proportions (useful for binary) # mean comparison</span></span>
-<span id="cb76-10"><a href="#cb76-10" aria-hidden="true" tabindex="-1"></a><span class="do">## to check if the simulated means match the observed mean</span></span>
-<span id="cb76-11"><a href="#cb76-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb76-12"><a href="#cb76-12" aria-hidden="true" tabindex="-1"></a><span class="do">## mean</span></span>
-<span id="cb76-13"><a href="#cb76-13" aria-hidden="true" tabindex="-1"></a>p8 <span class="ot">&lt;-</span> <span class="fu">ppc_stat</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ], <span class="at">stat =</span> <span class="st">&quot;mean&quot;</span>) <span class="sc">+</span></span>
-<span id="cb76-14"><a href="#cb76-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Posterior Predictive Check: Mean of Replicates&quot;</span>) <span class="sc">+</span></span>
-<span id="cb76-15"><a href="#cb76-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb76-16"><a href="#cb76-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;ppc_stat_mean.png&quot;</span>, <span class="at">plot =</span> p8, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
-<span id="cb76-17"><a href="#cb76-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb76-18"><a href="#cb76-18" aria-hidden="true" tabindex="-1"></a><span class="do">## sd</span></span>
-<span id="cb76-19"><a href="#cb76-19" aria-hidden="true" tabindex="-1"></a>p9 <span class="ot">&lt;-</span> <span class="fu">ppc_stat</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ], <span class="at">stat =</span> <span class="st">&quot;sd&quot;</span>) <span class="sc">+</span></span>
-<span id="cb76-20"><a href="#cb76-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;PPC: Standard Deviation of Replicates&quot;</span>) <span class="sc">+</span></span>
-<span id="cb76-21"><a href="#cb76-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb76-22"><a href="#cb76-22" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;ppc_stat_sd.png&quot;</span>, <span class="at">plot =</span> p9, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
-<span id="cb76-23"><a href="#cb76-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb76-24"><a href="#cb76-24" aria-hidden="true" tabindex="-1"></a><span class="co"># PP checks with bayesplot options</span></span>
-<span id="cb76-25"><a href="#cb76-25" aria-hidden="true" tabindex="-1"></a><span class="fu">color_scheme_set</span>(<span class="st">&quot;blue&quot;</span>)</span>
-<span id="cb76-26"><a href="#cb76-26" aria-hidden="true" tabindex="-1"></a>p10 <span class="ot">&lt;-</span> <span class="fu">ppc_scatter_avg</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ]) <span class="sc">+</span></span>
-<span id="cb76-27"><a href="#cb76-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Observed vs Predicted (Avg) Posterior Predictive&quot;</span>)</span>
-<span id="cb76-28"><a href="#cb76-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb76-29"><a href="#cb76-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb76-30"><a href="#cb76-30" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;ppc_scatter_avg.png&quot;</span>, <span class="at">plot =</span> p10, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternative PP plots (histogram / barplot) for binary outcome (bar chart preferred being discrete outcome)</span></span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>p7 <span class="ot">&lt;-</span> <span class="fu">ppc_bars</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, ]) <span class="sc">+</span></span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Posterior Predictive Check: Barplot of Counts&quot;</span>) <span class="sc">+</span></span>
+<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-7"><a href="#cb75-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;ppc_bars.png&quot;</span>, <span class="at">plot =</span> p7, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
+<span id="cb75-8"><a href="#cb75-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-9"><a href="#cb75-9" aria-hidden="true" tabindex="-1"></a><span class="co">#PP check for proportions (useful for binary) # mean comparison</span></span>
+<span id="cb75-10"><a href="#cb75-10" aria-hidden="true" tabindex="-1"></a><span class="do">## to check if the simulated means match the observed mean</span></span>
+<span id="cb75-11"><a href="#cb75-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-12"><a href="#cb75-12" aria-hidden="true" tabindex="-1"></a><span class="do">## mean</span></span>
+<span id="cb75-13"><a href="#cb75-13" aria-hidden="true" tabindex="-1"></a>p8 <span class="ot">&lt;-</span> <span class="fu">ppc_stat</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ], <span class="at">stat =</span> <span class="st">&quot;mean&quot;</span>) <span class="sc">+</span></span>
+<span id="cb75-14"><a href="#cb75-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Posterior Predictive Check: Mean of Replicates&quot;</span>) <span class="sc">+</span></span>
+<span id="cb75-15"><a href="#cb75-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb75-16"><a href="#cb75-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;ppc_stat_mean.png&quot;</span>, <span class="at">plot =</span> p8, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
+<span id="cb75-17"><a href="#cb75-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-18"><a href="#cb75-18" aria-hidden="true" tabindex="-1"></a><span class="do">## sd</span></span>
+<span id="cb75-19"><a href="#cb75-19" aria-hidden="true" tabindex="-1"></a>p9 <span class="ot">&lt;-</span> <span class="fu">ppc_stat</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ], <span class="at">stat =</span> <span class="st">&quot;sd&quot;</span>) <span class="sc">+</span></span>
+<span id="cb75-20"><a href="#cb75-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;PPC: Standard Deviation of Replicates&quot;</span>) <span class="sc">+</span></span>
+<span id="cb75-21"><a href="#cb75-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb75-22"><a href="#cb75-22" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;ppc_stat_sd.png&quot;</span>, <span class="at">plot =</span> p9, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
+<span id="cb75-23"><a href="#cb75-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-24"><a href="#cb75-24" aria-hidden="true" tabindex="-1"></a><span class="co"># PP checks with bayesplot options</span></span>
+<span id="cb75-25"><a href="#cb75-25" aria-hidden="true" tabindex="-1"></a><span class="fu">color_scheme_set</span>(<span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb75-26"><a href="#cb75-26" aria-hidden="true" tabindex="-1"></a>p10 <span class="ot">&lt;-</span> <span class="fu">ppc_scatter_avg</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ]) <span class="sc">+</span></span>
+<span id="cb75-27"><a href="#cb75-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Observed vs Predicted (Avg) Posterior Predictive&quot;</span>)</span>
+<span id="cb75-28"><a href="#cb75-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-29"><a href="#cb75-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-30"><a href="#cb75-30" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;ppc_scatter_avg.png&quot;</span>, <span class="at">plot =</span> p10, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
-<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior summary</span></span>
-<span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb77-6"><a href="#cb77-6" aria-hidden="true" tabindex="-1"></a>post_sum <span class="ot">&lt;-</span> <span class="fu">posterior_summary</span>(bayes_fit)</span>
-<span id="cb77-7"><a href="#cb77-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(post_sum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior summary</span></span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a>post_sum <span class="ot">&lt;-</span> <span class="fu">posterior_summary</span>(bayes_fit)</span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(post_sum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] &quot;Estimate&quot;  &quot;Est.Error&quot; &quot;Q2.5&quot;      &quot;Q97.5&quot;    </code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>post_logodds <span class="ot">&lt;-</span> <span class="fu">posterior_summary</span>(bayes_fit) <span class="sc">%&gt;%</span></span>
-<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">&quot;term&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">!=</span> <span class="st">&quot;Intercept&quot;</span>) <span class="sc">%&gt;%</span>  <span class="co"># drop intercept if desired</span></span>
-<span id="cb79-5"><a href="#cb79-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(term,<span class="st">&quot;Estimate&quot;</span>,<span class="st">&quot;Est.Error&quot;</span>,<span class="st">&quot;Q2.5&quot;</span>,<span class="st">&quot;Q97.5&quot;</span>)</span>
-<span id="cb79-6"><a href="#cb79-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb79-7"><a href="#cb79-7" aria-hidden="true" tabindex="-1"></a>post_logodds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>post_logodds <span class="ot">&lt;-</span> <span class="fu">posterior_summary</span>(bayes_fit) <span class="sc">%&gt;%</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">&quot;term&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">!=</span> <span class="st">&quot;Intercept&quot;</span>) <span class="sc">%&gt;%</span>  <span class="co"># drop intercept if desired</span></span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(term,<span class="st">&quot;Estimate&quot;</span>,<span class="st">&quot;Est.Error&quot;</span>,<span class="st">&quot;Q2.5&quot;</span>,<span class="st">&quot;Q97.5&quot;</span>)</span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a>post_logodds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>                    term      Estimate  Est.Error          Q2.5         Q97.5
@@ -4682,16 +4667,16 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># View table</span></span>
-<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(post_logodds, <span class="fu">aes</span>(<span class="at">x =</span> term, <span class="at">y =</span> Estimate)) <span class="sc">+</span></span>
-<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> Q2<span class="fl">.5</span>, <span class="at">ymax =</span> Q97<span class="fl">.5</span>), <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb81-7"><a href="#cb81-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb81-8"><a href="#cb81-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Posterior log-odds for predictors&quot;</span>,</span>
-<span id="cb81-9"><a href="#cb81-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Log-odds&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Predictor&quot;</span>) <span class="sc">+</span></span>
-<span id="cb81-10"><a href="#cb81-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co"># View table</span></span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(post_logodds, <span class="fu">aes</span>(<span class="at">x =</span> term, <span class="at">y =</span> Estimate)) <span class="sc">+</span></span>
+<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> Q2<span class="fl">.5</span>, <span class="at">ymax =</span> Q97<span class="fl">.5</span>), <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb80-7"><a href="#cb80-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb80-8"><a href="#cb80-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Posterior log-odds for predictors&quot;</span>,</span>
+<span id="cb80-9"><a href="#cb80-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Log-odds&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Predictor&quot;</span>) <span class="sc">+</span></span>
+<span id="cb80-10"><a href="#cb80-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -4702,14 +4687,14 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(posterior)</span>
-<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bayesplot)</span>
-<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract posterior draws as a draws_df # simulate posterior outcomes</span></span>
-<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(bayes_fit)</span>
-<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb82-7"><a href="#cb82-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check parameter names</span></span>
-<span id="cb82-8"><a href="#cb82-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(post)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(posterior)</span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bayesplot)</span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract posterior draws as a draws_df # simulate posterior outcomes</span></span>
+<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(bayes_fit)</span>
+<span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-7"><a href="#cb81-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check parameter names</span></span>
+<span id="cb81-8"><a href="#cb81-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(post)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] &quot;b_Intercept&quot;           &quot;b_age_c&quot;               &quot;b_bmi_c&quot;              
@@ -4720,67 +4705,53 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Density overlay for age and bmi</span></span>
-<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>p11 <span class="ot">&lt;-</span> <span class="fu">mcmc_areas</span>(post, <span class="at">pars =</span> <span class="fu">c</span>( <span class="st">&quot;b_age_c&quot;</span>,<span class="st">&quot;b_bmi_c&quot;</span>,<span class="st">&quot;b_sexFemale&quot;</span>,<span class="st">&quot;b_raceMexicanAmerican&quot;</span>, <span class="st">&quot;b_raceOtherHispanic&quot;</span>,<span class="st">&quot;b_raceNHBlack&quot;</span>,<span class="st">&quot;b_raceOtherDMulti&quot;</span> ))</span>
-<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;mcmc_areas.png&quot;</span>, <span class="at">plot =</span> p11, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
-<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to long format</span></span>
-<span id="cb84-8"><a href="#cb84-8" aria-hidden="true" tabindex="-1"></a>pp_long <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pp_samples) <span class="sc">%&gt;%</span></span>
-<span id="cb84-9"><a href="#cb84-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">draw =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb84-10"><a href="#cb84-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>draw, <span class="at">names_to =</span> <span class="st">&quot;obs&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;predicted&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb84-11"><a href="#cb84-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">obs =</span> <span class="fu">as.integer</span>(obs))</span>
-<span id="cb84-12"><a href="#cb84-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-13"><a href="#cb84-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Add BMI and observed outcome from original dataset</span></span>
-<span id="cb84-14"><a href="#cb84-14" aria-hidden="true" tabindex="-1"></a>pp_long <span class="ot">&lt;-</span> pp_long <span class="sc">%&gt;%</span></span>
-<span id="cb84-15"><a href="#cb84-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
-<span id="cb84-16"><a href="#cb84-16" aria-hidden="true" tabindex="-1"></a>    adult_imp1 <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">obs =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span> <span class="fu">select</span>(obs, bmi, diabetes_dx),</span>
-<span id="cb84-17"><a href="#cb84-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">&quot;obs&quot;</span></span>
-<span id="cb84-18"><a href="#cb84-18" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb84-19"><a href="#cb84-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-20"><a href="#cb84-20" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb84-21"><a href="#cb84-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-22"><a href="#cb84-22" aria-hidden="true" tabindex="-1"></a>predicted <span class="ot">&lt;-</span> <span class="fu">fitted</span>(bayes_fit, <span class="at">summary =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb84-23"><a href="#cb84-23" aria-hidden="true" tabindex="-1"></a>observed <span class="ot">&lt;-</span> adult_imp1[, <span class="fu">c</span>(<span class="st">&quot;bmi&quot;</span>, <span class="st">&quot;age&quot;</span>)]</span>
-<span id="cb84-24"><a href="#cb84-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-25"><a href="#cb84-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot for bmi (obs vs pred)</span></span>
-<span id="cb84-26"><a href="#cb84-26" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb84-27"><a href="#cb84-27" aria-hidden="true" tabindex="-1"></a>p12 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> <span class="cn">NULL</span>, <span class="fu">aes</span>(<span class="at">x =</span> observed<span class="sc">$</span>bmi, <span class="at">y =</span> predicted[, <span class="st">&quot;Estimate&quot;</span>])) <span class="sc">+</span></span>
-<span id="cb84-28"><a href="#cb84-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb84-29"><a href="#cb84-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> predicted[, <span class="st">&quot;Q2.5&quot;</span>], <span class="at">ymax =</span> predicted[, <span class="st">&quot;Q97.5&quot;</span>])) <span class="sc">+</span></span>
-<span id="cb84-30"><a href="#cb84-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
-<span id="cb84-31"><a href="#cb84-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Observed bmi&quot;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;Predicted bmi&quot;</span>)</span>
-<span id="cb84-32"><a href="#cb84-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-33"><a href="#cb84-33" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;plot_bmi_obs_pred.png&quot;</span>, <span class="at">plot =</span> p12, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
-<span id="cb84-34"><a href="#cb84-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-35"><a href="#cb84-35" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb84-36"><a href="#cb84-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-37"><a href="#cb84-37" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb84-38"><a href="#cb84-38" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb84-39"><a href="#cb84-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-40"><a href="#cb84-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine observed and predicted into one data frame</span></span>
-<span id="cb84-41"><a href="#cb84-41" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> adult_imp1 <span class="sc">%&gt;%</span></span>
-<span id="cb84-42"><a href="#cb84-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb84-43"><a href="#cb84-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">predicted_bmi =</span> predicted[, <span class="st">&quot;Estimate&quot;</span>],</span>
-<span id="cb84-44"><a href="#cb84-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">lower_ci =</span> predicted[, <span class="st">&quot;Q2.5&quot;</span>],</span>
-<span id="cb84-45"><a href="#cb84-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">upper_ci =</span> predicted[, <span class="st">&quot;Q97.5&quot;</span>],</span>
-<span id="cb84-46"><a href="#cb84-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">obs_index =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(adult_imp1)  <span class="co"># index for x-axis</span></span>
-<span id="cb84-47"><a href="#cb84-47" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb84-48"><a href="#cb84-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-49"><a href="#cb84-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Line plot</span></span>
-<span id="cb84-50"><a href="#cb84-50" aria-hidden="true" tabindex="-1"></a>p13 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> obs_index)) <span class="sc">+</span></span>
-<span id="cb84-51"><a href="#cb84-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> bmi, <span class="at">color =</span> <span class="st">&quot;Observed&quot;</span>)) <span class="sc">+</span>               <span class="co"># observed BMI</span></span>
-<span id="cb84-52"><a href="#cb84-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> predicted_bmi, <span class="at">color =</span> <span class="st">&quot;Predicted&quot;</span>)) <span class="sc">+</span>   <span class="co"># predicted BMI</span></span>
-<span id="cb84-53"><a href="#cb84-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> lower_ci, <span class="at">ymax =</span> upper_ci), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span>  <span class="co"># uncertainty</span></span>
-<span id="cb84-54"><a href="#cb84-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Observation&quot;</span>, <span class="at">y =</span> <span class="st">&quot;BMI&quot;</span>, <span class="at">color =</span> <span class="st">&quot;Legend&quot;</span>) <span class="sc">+</span></span>
-<span id="cb84-55"><a href="#cb84-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb84-56"><a href="#cb84-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-57"><a href="#cb84-57" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;Line plot_bmi_obs_pred.png&quot;</span>, <span class="at">plot =</span> p13, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
-<span id="cb84-58"><a href="#cb84-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-59"><a href="#cb84-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-60"><a href="#cb84-60" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
-<span id="cb84-61"><a href="#cb84-61" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(adult_imp1<span class="sc">$</span>bmi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Density overlay for age and bmi</span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>p11 <span class="ot">&lt;-</span> <span class="fu">mcmc_areas</span>(post, <span class="at">pars =</span> <span class="fu">c</span>( <span class="st">&quot;b_age_c&quot;</span>,<span class="st">&quot;b_bmi_c&quot;</span>,<span class="st">&quot;b_sexFemale&quot;</span>,<span class="st">&quot;b_raceMexicanAmerican&quot;</span>, <span class="st">&quot;b_raceOtherHispanic&quot;</span>,<span class="st">&quot;b_raceNHBlack&quot;</span>,<span class="st">&quot;b_raceOtherDMulti&quot;</span> ))</span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;mcmc_areas.png&quot;</span>, <span class="at">plot =</span> p11, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a>predicted <span class="ot">&lt;-</span> <span class="fu">fitted</span>(bayes_fit, <span class="at">summary =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb83-9"><a href="#cb83-9" aria-hidden="true" tabindex="-1"></a>observed <span class="ot">&lt;-</span> adult_imp1[, <span class="fu">c</span>(<span class="st">&quot;bmi&quot;</span>, <span class="st">&quot;age&quot;</span>)]</span>
+<span id="cb83-10"><a href="#cb83-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-11"><a href="#cb83-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot for bmi (obs vs pred)</span></span>
+<span id="cb83-12"><a href="#cb83-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb83-13"><a href="#cb83-13" aria-hidden="true" tabindex="-1"></a>p12 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> <span class="cn">NULL</span>, <span class="fu">aes</span>(<span class="at">x =</span> observed<span class="sc">$</span>bmi, <span class="at">y =</span> predicted[, <span class="st">&quot;Estimate&quot;</span>])) <span class="sc">+</span></span>
+<span id="cb83-14"><a href="#cb83-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb83-15"><a href="#cb83-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> predicted[, <span class="st">&quot;Q2.5&quot;</span>], <span class="at">ymax =</span> predicted[, <span class="st">&quot;Q97.5&quot;</span>])) <span class="sc">+</span></span>
+<span id="cb83-16"><a href="#cb83-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb83-17"><a href="#cb83-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Observed bmi&quot;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;Predicted bmi&quot;</span>)</span>
+<span id="cb83-18"><a href="#cb83-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-19"><a href="#cb83-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;plot_bmi_obs_pred.png&quot;</span>, <span class="at">plot =</span> p12, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
+<span id="cb83-20"><a href="#cb83-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-21"><a href="#cb83-21" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb83-22"><a href="#cb83-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-23"><a href="#cb83-23" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb83-24"><a href="#cb83-24" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb83-25"><a href="#cb83-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-26"><a href="#cb83-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine observed and predicted into one data frame</span></span>
+<span id="cb83-27"><a href="#cb83-27" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> adult_imp1 <span class="sc">%&gt;%</span></span>
+<span id="cb83-28"><a href="#cb83-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb83-29"><a href="#cb83-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">predicted_bmi =</span> predicted[, <span class="st">&quot;Estimate&quot;</span>],</span>
+<span id="cb83-30"><a href="#cb83-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">lower_ci =</span> predicted[, <span class="st">&quot;Q2.5&quot;</span>],</span>
+<span id="cb83-31"><a href="#cb83-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">upper_ci =</span> predicted[, <span class="st">&quot;Q97.5&quot;</span>],</span>
+<span id="cb83-32"><a href="#cb83-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">obs_index =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(adult_imp1)  <span class="co"># index for x-axis</span></span>
+<span id="cb83-33"><a href="#cb83-33" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb83-34"><a href="#cb83-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-35"><a href="#cb83-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Line plot</span></span>
+<span id="cb83-36"><a href="#cb83-36" aria-hidden="true" tabindex="-1"></a>p13 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> obs_index)) <span class="sc">+</span></span>
+<span id="cb83-37"><a href="#cb83-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> bmi, <span class="at">color =</span> <span class="st">&quot;Observed&quot;</span>)) <span class="sc">+</span>               <span class="co"># observed BMI</span></span>
+<span id="cb83-38"><a href="#cb83-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> predicted_bmi, <span class="at">color =</span> <span class="st">&quot;Predicted&quot;</span>)) <span class="sc">+</span>   <span class="co"># predicted BMI</span></span>
+<span id="cb83-39"><a href="#cb83-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> lower_ci, <span class="at">ymax =</span> upper_ci), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span>  <span class="co"># uncertainty</span></span>
+<span id="cb83-40"><a href="#cb83-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Observation&quot;</span>, <span class="at">y =</span> <span class="st">&quot;BMI&quot;</span>, <span class="at">color =</span> <span class="st">&quot;Legend&quot;</span>) <span class="sc">+</span></span>
+<span id="cb83-41"><a href="#cb83-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb83-42"><a href="#cb83-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-43"><a href="#cb83-43" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;Line plot_bmi_obs_pred.png&quot;</span>, <span class="at">plot =</span> p13, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
+<span id="cb83-44"><a href="#cb83-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-45"><a href="#cb83-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-46"><a href="#cb83-46" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb83-47"><a href="#cb83-47" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(adult_imp1<span class="sc">$</span>bmi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
@@ -4788,7 +4759,7 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(plot_data<span class="sc">$</span>bmi_c)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(plot_data<span class="sc">$</span>bmi_c)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
@@ -4878,7 +4849,7 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prior_summary</span>(bayes_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prior_summary</span>(bayes_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>               prior     class                coef group resp dpar nlpar lb ub
@@ -4904,14 +4875,14 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>prior_draws <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">term =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;BMI (per 1 SD)&quot;</span>, <span class="st">&quot;Age (per 1 SD)&quot;</span>), <span class="at">each =</span> <span class="dv">4000</span>),</span>
-<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimate =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">4000</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">rnorm</span>(<span class="dv">4000</span>, <span class="dv">0</span>, <span class="dv">1</span>)),</span>
-<span id="cb90-4"><a href="#cb90-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;Prior&quot;</span></span>
-<span id="cb90-5"><a href="#cb90-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb90-6"><a href="#cb90-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb90-7"><a href="#cb90-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb90-8"><a href="#cb90-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(prior_draws)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>prior_draws <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">term =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;BMI (per 1 SD)&quot;</span>, <span class="st">&quot;Age (per 1 SD)&quot;</span>), <span class="at">each =</span> <span class="dv">4000</span>),</span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimate =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">4000</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">rnorm</span>(<span class="dv">4000</span>, <span class="dv">0</span>, <span class="dv">1</span>)),</span>
+<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;Prior&quot;</span></span>
+<span id="cb89-5"><a href="#cb89-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb89-6"><a href="#cb89-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-7"><a href="#cb89-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-8"><a href="#cb89-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(prior_draws)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>     term              estimate            type          
@@ -4924,7 +4895,7 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>post</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>post</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A draws_df: 1000 iterations, 4 chains, and 11 variables
@@ -4955,7 +4926,7 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(post)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(post)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A draws_df: 6 iterations, 1 chains, and 11 variables
@@ -4978,56 +4949,56 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(prior_draws)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(prior_draws)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] &quot;term&quot;     &quot;estimate&quot; &quot;type&quot;    </code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(post_logodds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(post_logodds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] &quot;term&quot;      &quot;Estimate&quot;  &quot;Est.Error&quot; &quot;Q2.5&quot;      &quot;Q97.5&quot;    </code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
-<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb100-4"><a href="#cb100-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb100-5"><a href="#cb100-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract posterior draws</span></span>
-<span id="cb100-6"><a href="#cb100-6" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(bayes_fit) <span class="sc">%&gt;%</span>      <span class="co"># bayes_fit = your brms model</span></span>
-<span id="cb100-7"><a href="#cb100-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(b_bmi_c, b_age_c) <span class="sc">%&gt;%</span>               <span class="co"># select your coefficient columns</span></span>
-<span id="cb100-8"><a href="#cb100-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb100-9"><a href="#cb100-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">everything</span>(),</span>
-<span id="cb100-10"><a href="#cb100-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">&quot;term&quot;</span>,</span>
-<span id="cb100-11"><a href="#cb100-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">&quot;estimate&quot;</span></span>
-<span id="cb100-12"><a href="#cb100-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb100-13"><a href="#cb100-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb100-14"><a href="#cb100-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">case_when</span>(</span>
-<span id="cb100-15"><a href="#cb100-15" aria-hidden="true" tabindex="-1"></a>      term <span class="sc">==</span> <span class="st">&quot;b_bmi_c&quot;</span> <span class="sc">~</span> <span class="st">&quot;BMI (per 1 SD)&quot;</span>,</span>
-<span id="cb100-16"><a href="#cb100-16" aria-hidden="true" tabindex="-1"></a>      term <span class="sc">==</span> <span class="st">&quot;b_age_c&quot;</span> <span class="sc">~</span> <span class="st">&quot;Age (per 1 SD)&quot;</span></span>
-<span id="cb100-17"><a href="#cb100-17" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb100-18"><a href="#cb100-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">&quot;Posterior&quot;</span></span>
-<span id="cb100-19"><a href="#cb100-19" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb100-20"><a href="#cb100-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb100-21"><a href="#cb100-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb100-22"><a href="#cb100-22" aria-hidden="true" tabindex="-1"></a><span class="do">## visualization of prior and predicted draws</span></span>
-<span id="cb100-23"><a href="#cb100-23" aria-hidden="true" tabindex="-1"></a>combined_draws <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(prior_draws, post) </span>
-<span id="cb100-24"><a href="#cb100-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb100-25"><a href="#cb100-25" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb100-26"><a href="#cb100-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb100-27"><a href="#cb100-27" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(combined_draws, <span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
-<span id="cb100-28"><a href="#cb100-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb100-29"><a href="#cb100-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> term, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb100-30"><a href="#cb100-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
-<span id="cb100-31"><a href="#cb100-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb100-32"><a href="#cb100-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Prior vs Posterior Distributions&quot;</span>,</span>
-<span id="cb100-33"><a href="#cb100-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Coefficient estimate&quot;</span>,</span>
-<span id="cb100-34"><a href="#cb100-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Density&quot;</span>,</span>
-<span id="cb100-35"><a href="#cb100-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;&quot;</span></span>
-<span id="cb100-36"><a href="#cb100-36" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-5"><a href="#cb99-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract posterior draws</span></span>
+<span id="cb99-6"><a href="#cb99-6" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(bayes_fit) <span class="sc">%&gt;%</span>      <span class="co"># bayes_fit = your brms model</span></span>
+<span id="cb99-7"><a href="#cb99-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(b_bmi_c, b_age_c) <span class="sc">%&gt;%</span>               <span class="co"># select your coefficient columns</span></span>
+<span id="cb99-8"><a href="#cb99-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb99-9"><a href="#cb99-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">everything</span>(),</span>
+<span id="cb99-10"><a href="#cb99-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">&quot;term&quot;</span>,</span>
+<span id="cb99-11"><a href="#cb99-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">&quot;estimate&quot;</span></span>
+<span id="cb99-12"><a href="#cb99-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb99-13"><a href="#cb99-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb99-14"><a href="#cb99-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">case_when</span>(</span>
+<span id="cb99-15"><a href="#cb99-15" aria-hidden="true" tabindex="-1"></a>      term <span class="sc">==</span> <span class="st">&quot;b_bmi_c&quot;</span> <span class="sc">~</span> <span class="st">&quot;BMI (per 1 SD)&quot;</span>,</span>
+<span id="cb99-16"><a href="#cb99-16" aria-hidden="true" tabindex="-1"></a>      term <span class="sc">==</span> <span class="st">&quot;b_age_c&quot;</span> <span class="sc">~</span> <span class="st">&quot;Age (per 1 SD)&quot;</span></span>
+<span id="cb99-17"><a href="#cb99-17" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb99-18"><a href="#cb99-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">&quot;Posterior&quot;</span></span>
+<span id="cb99-19"><a href="#cb99-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb99-20"><a href="#cb99-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-21"><a href="#cb99-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-22"><a href="#cb99-22" aria-hidden="true" tabindex="-1"></a><span class="do">## visualization of prior and predicted draws</span></span>
+<span id="cb99-23"><a href="#cb99-23" aria-hidden="true" tabindex="-1"></a>combined_draws <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(prior_draws, post) </span>
+<span id="cb99-24"><a href="#cb99-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-25"><a href="#cb99-25" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb99-26"><a href="#cb99-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-27"><a href="#cb99-27" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(combined_draws, <span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
+<span id="cb99-28"><a href="#cb99-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb99-29"><a href="#cb99-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> term, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb99-30"><a href="#cb99-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb99-31"><a href="#cb99-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb99-32"><a href="#cb99-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Prior vs Posterior Distributions&quot;</span>,</span>
+<span id="cb99-33"><a href="#cb99-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Coefficient estimate&quot;</span>,</span>
+<span id="cb99-34"><a href="#cb99-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Density&quot;</span>,</span>
+<span id="cb99-35"><a href="#cb99-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb99-36"><a href="#cb99-36" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -5038,14 +5009,20 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="do">## till now we compared prior and posterior distribution and have posterior summaries calculated</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="do">## till now we compared prior and posterior distribution and have posterior summaries calculated</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
+<section id="references" class="level2 unnumbered">
+
 
 </section>
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Austin2021" class="csl-entry" role="listitem">
+Austin, Peter C., Ian R. White, Douglas S. Lee, and Stef van Buuren. 2021. <span>“<span class="nocase">Missing Data in Clinical Research: A Tutorial on Multiple Imputation</span>.”</span> <em>Canadian Journal of Cardiology</em> 37 (9): 1322–31. <a href="https://doi.org/10.1016/j.cjca.2020.11.010">https://doi.org/10.1016/j.cjca.2020.11.010</a>.
+</div>
 <div id="ref-JSSv045i03" class="csl-entry" role="listitem">
 Buuren, Stef van, and Karin Groothuis-Oudshoorn. 2011. <span>“<span class="nocase">mice: Multivariate Imputation by Chained Equations in R</span>.”</span> <em>Journal of Statistical Software</em> 45 (3): 1–67. <a href="https://doi.org/10.18637/jss.v045.i03">https://doi.org/10.18637/jss.v045.i03</a>.
 </div>
@@ -5055,14 +5032,23 @@ Center for Health Statistics, National. 1999. <span>“<span class="nocase">Vita
 <div id="ref-Chatzimichail2023" class="csl-entry" role="listitem">
 Chatzimichail, Theodora, and Aristides T. Hatjimihail. 2023. <span>“<span class="nocase">A Bayesian Inference Based Computational Tool for Parametric and Nonparametric Medical Diagnosis</span>.”</span> <em>Diagnostics</em> 13 (19). <a href="https://doi.org/10.3390/DIAGNOSTICS13193135,">https://doi.org/10.3390/DIAGNOSTICS13193135,</a>.
 </div>
+<div id="ref-DAngelo2025" class="csl-entry" role="listitem">
+D’Angelo, Gina, and Di Ran. 2025. <span>“<span class="nocase">Tutorial on Firth’s Logistic Regression Models for Biomarkers in Preclinical Space</span>.”</span> <em>Pharmaceutical Statistics</em> 24 (1): 1–8. <a href="https://doi.org/10.1002/pst.2422">https://doi.org/10.1002/pst.2422</a>.
+</div>
 <div id="ref-Klauenberg2015" class="csl-entry" role="listitem">
 Klauenberg, Katy, Gerd Wübbeler, Bodo Mickan, Peter Harris, and Clemens Elster. 2015. <span>“<span class="nocase">A tutorial on Bayesian Normal linear regression</span>.”</span> <em>Metrologia</em> 52 (6): 878–92. <a href="https://doi.org/10.1088/0026-1394/52/6/878">https://doi.org/10.1088/0026-1394/52/6/878</a>.
+</div>
+<div id="ref-DeLeeuw2012a" class="csl-entry" role="listitem">
+Leeuw, Christiaan de, and Irene Klugkist. 2012. <span>“<span class="nocase">Augmenting Data With Published Results in Bayesian Linear Regression</span>.”</span> <em>Multivariate Behavioral Research</em> 47 (3): 369–91. <a href="https://doi.org/10.1080/00273171.2012.673957">https://doi.org/10.1080/00273171.2012.673957</a>.
 </div>
 <div id="ref-VandeSchoot2021" class="csl-entry" role="listitem">
 Schoot, Rens van de, Sarah Depaoli, Ruth King, Bianca Kramer, Kaspar Märtens, Mahlet G. Tadesse, Marina Vannucci, et al. 2021. <span>“<span class="nocase">Bayesian statistics and modelling</span>.”</span> <em>Nature Reviews Methods Primers</em> 1 (1): 1. <a href="https://doi.org/10.1038/s43586-020-00001-2">https://doi.org/10.1038/s43586-020-00001-2</a>.
 </div>
 <div id="ref-van2012flexible" class="csl-entry" role="listitem">
 Van Buuren, Stef, and Stef Van Buuren. 2012. <em>Flexible Imputation of Missing Data</em>. Vol. 10. CRC press Boca Raton, FL.
+</div>
+<div id="ref-Zeger2020" class="csl-entry" role="listitem">
+Zeger, Scott L, Zhenke Wu, Yates Coley, Anthony Todd Fojo, Bal Carter, Katherine O’Brien, Peter Zandi, et al. 2020. <span>“<span class="nocase">Using a Bayesian Approach to Predict Patients’ Health and Response to Treatment</span>,”</span> no. 2020. <a href="http://ovidsp.ovid.com/ovidweb.cgi?T=JS&amp;PAGE=reference&amp;D=medp&amp;NEWS=N&amp;AN=37708307">http://ovidsp.ovid.com/ovidweb.cgi?T=JS&amp;PAGE=reference&amp;D=medp&amp;NEWS=N&amp;AN=37708307</a>.
 </div>
 </div></section></div></main>
 <!-- /main column -->
