@@ -25,9 +25,9 @@ to edit)
 
 ## Group Project Workflow and Contributions
 
-- Autumn Wilcox – Contributed to analytic coding, structured the project workflow, and collaborated actively via GitHub.
+- Autumn Wilcox – Contributed to analytic coding, content draft, structured the project workflow, and collaborated actively via GitHub.
 - Ecil Teodoro – Drafted and submitted sections of the Introduction.
-- Namita Mishra – Developed the project plan, performed analytic coding, and coordinated commits and collaboration with the group on GitHub.
+- Namita Mishra – Developed the project plan, content draft, analytic coding, and coordinated commits and collaboration with the group on GitHub.
 - Advisor: Dr. Ashraf Cohen – Provided expert guidance on statistical methods and workflow management across platforms.
 
 ## Introduction
