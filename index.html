@@ -3277,6 +3277,15 @@ window.Quarto = {
 
 <p>Slides: <a href="slides.html" target="_blank">slides.html</a> ( Go to <code>slides.qmd</code> to edit)</p>
 <hr>
+<section id="group-project-workflow-and-contributions" class="level2">
+<h2 class="anchored" data-anchor-id="group-project-workflow-and-contributions">Group Project Workflow and Contributions</h2>
+<ul>
+<li>Autumn Wilcox – Contributed to analytic coding, structured the project workflow, and collaborated actively via GitHub.</li>
+<li>Ecil Teodoro – Drafted and submitted sections of the Introduction.</li>
+<li>Namita Mishra – Developed the project plan, performed analytic coding, and coordinated commits and collaboration with the group on GitHub.</li>
+<li>Advisor: Dr. Ashraf Cohen – Provided expert guidance on statistical methods and workflow management across platforms.</li>
+</ul>
+</section>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>Diabetes mellitus (DM) is a major public health concern closely associated with factors such as obesity, age, race, and gender. Identifying these associated risk factors is essential for targeted interventions <span class="citation" data-cites="DAngelo2025">D’Angelo and Ran (<a href="#ref-DAngelo2025" role="doc-biblioref">2025</a>)</span>. <strong>Logistic Regression</strong> (traditional) that estimates the association between risk factors and outcomes is insufficient in analyzing the complex healthcare data (DNA sequences, imaging, patient-reported outcomes, electronic health records (EHRs), longitudinal health measurements, diagnoses, and treatments. <span class="citation" data-cites="Zeger2020">Zeger et al. (<a href="#ref-Zeger2020" role="doc-biblioref">2020</a>)</span>. Classical maximum likelihood estimation (MLE) yields unstable results in samples that are small, have missing data, or presents quasi- and complete separation.</p>
@@ -4945,40 +4954,32 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 <!-- -->
 <ol start="3" type="1">
 <li><p><strong>Bayesian Regression</strong></p>
-<p>Sampling<strong>:</strong> NUTS (4 chains, 2000 iterations each; 1000 warmup, 4000 post-warmup draws)</p>
-<p>Convergence &amp; Diagnostics</p>
-<ul>
-<li><p>Rhat = 1.00 for all parameters → excellent convergence</p></li>
-<li><p>Bulk_ESS / Tail_ESS: Large values (&gt;2000) → high effective sample sizes, reliable posterior estimates.</p>
-<p>Interpretation</p></li>
-<li><p>Strong predictors: Age and BMI are strongly positively associated with diabetes risk.</p></li>
-<li><p>Sex effect: Females have a lower probability of diabetes compared to males</p></li>
-<li><p>R² = 0.13 shows 13% of the variance in the outcome (diabetes_dx) is explained by your predictors (age, BMI, sex, race), 95% Credible Interval: 0.106–0.156, indicates that, given your model and data, the true proportion of variance explained is plausibly between 10.6% and 15.6% and shows uncertainty in the explained variance, which is natural for probabilistic models.</p></li>
-<li><p>Est.Error = 0.0127, reflects the standard error of the R² estimate across posterior samples. The small SE indicates that the R² estimate is fairly precise.</p></li>
-</ul>
-<!-- -->
-<ul>
-<li>Race/ethnicity: Mexican American, NH Black, and “Other/Diverse” groups have higher odds of diabetes. Other Hispanic group has a less certain effect.</li>
-</ul>
-<!-- -->
-<ul>
-<li><p>age_c-Each 1-unit increase in centered age increases the log-odds of diabetes by 1.09. Strong positive effect.</p></li>
-<li><p>bmi_c-Higher BMI is associated with higher diabetes risk. sexFemale-Females have lower odds of diabetes compared to males.</p></li>
-<li><p>raceMexicanAmerican-Higher odds of diabetes vs. reference race (likely NH White)</p></li>
-<li><p>raceOtherHispanic-Slightly higher odds vs reference, but interval crosses zero → uncertain effect.</p></li>
-<li><p>raceNHBlack-Significantly higher odds of diabetes compared to reference. raceOtherDMulti-Higher odds of diabetes vs reference group.</p></li>
-</ul></li>
+<p>Sampling<strong>:</strong> NUTS (4 chains, 2000 iterations each; 1000 warmup, 4000 post-warmup draws)</p></li>
 </ol>
+<p>Convergence &amp; Diagnostics - Rhat = 1.00 for all parameters → excellent convergence - Bulk_ESS / Tail_ESS: Large values (&gt;2000) → high effective sample sizes, reliable posterior estimates.</p>
+<p>Interpretation</p>
+<ul>
+<li>Strong predictors: Age and BMI are strongly positively associated with diabetes risk.</li>
+<li>Sex effect: Females have a lower probability of diabetes compared to males</li>
+<li>R² = 0.13 shows 13% of the variance in the outcome (diabetes_dx) is explained by your predictors (age, BMI, sex, race), 95% Credible Interval: 0.106–0.156, indicates that, given your model and data, the true proportion of variance explained is plausibly between 10.6% and 15.6% and shows uncertainty in the explained variance, which is natural for probabilistic models.</li>
+<li>Est.Error = 0.0127, reflects the standard error of the R² estimate across posterior samples. The small SE indicates that the R² estimate is fairly precise.</li>
+<li>Race/ethnicity: Mexican American, NH Black, and “Other/Diverse” groups have higher odds of diabetes. Other Hispanic group has a less certain effect.</li>
+<li>age_c-Each 1-unit increase in centered age increases the log-odds of diabetes by 1.09. Strong positive effect.</li>
+<li>bmi_c-Higher BMI is associated with higher diabetes risk. sexFemale-Females have lower odds of diabetes compared to males.</li>
+<li>raceMexicanAmerican-Higher odds of diabetes vs. reference race (likely NH White)</li>
+<li>raceOtherHispanic-Slightly higher odds vs reference, but interval crosses zero → uncertain effect.</li>
+<li>raceNHBlack-Significantly higher odds of diabetes compared to reference. raceOtherDMulti-Higher odds of diabetes vs reference group.</li>
+</ul>
 <p><strong>Posterior distribution</strong> of all parameters in the model. (1)Density plot of posterior samples each parameter (e.g., intercept, slope) into a smoothed density curve, showing most of the posterior probability mass lies for best estimates and uncertainty.</p>
 <p><strong>Posterior Predictive Distribution</strong> - generated from posterior predictive draws: 𝑦rep∼𝑝(𝑦new∣𝜃)yrep​∼p(ynew​∣θ) simulate the data given posterior parameter estimates.Posterior predictive checks (PPC) compare these simulations to real data to assess model fit.</p>
 <p><strong>Incorporating Uncertainty</strong> two sources of uncertainty: Parameter uncertainty: captured in the posterior distributions Predictive uncertainty: captured in posterior predictive draws</p>
 <p>Combining the two provide credible intervals for predictions, not just point predictions and specifies - Given the BMI, the probability of diabetes is likely between 40–55%.”</p>
 <p><strong>Comparing Models</strong></p>
 <ul>
-<li><p>All three models (survey-weighted MLE, multiple imputation, Bayesian) agree closely on the direction and magnitude of the effects of BMI and age.</p></li>
-<li><p>Age is a stronger predictor than BMI, nearly tripling the odds per 1 SD.</p></li>
-<li><p>BMI significantly increases diabetes risk (~1.7–1.9× per 1 SD).</p></li>
-<li><p>Differences between models are minor, indicating robust and reliable findings despite missing data or modeling approach.</p></li>
+<li>All three models (survey-weighted MLE, multiple imputation, Bayesian) agree closely on the direction and magnitude of the effects of BMI and age.</li>
+<li>Age is a stronger predictor than BMI, nearly tripling the odds per 1 SD.</li>
+<li>BMI significantly increases diabetes risk (~1.7–1.9× per 1 SD).</li>
+<li>Differences between models are minor, indicating robust and reliable findings despite missing data or modeling approach.</li>
 </ul>
 <section id="diabetes-predicted-proportion-vs-population-prevalence" class="level2">
 <h2 class="anchored" data-anchor-id="diabetes-predicted-proportion-vs-population-prevalence"><strong>Diabetes Predicted proportion vs population prevalence</strong></h2>
@@ -4997,10 +4998,8 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 </section>
 <section id="conclusion" class="level1">
 <h1>Conclusion</h1>
-<ul>
-<li><p>Across multiple modeling approaches—survey-weighted maximum likelihood, multiple imputation, and Bayesian regression—both age and BMI were consistently strong predictors of diabetes. Eachstandard deviation increase in age nearly tripled the odds of diabetes, while a similar increase in BMI elevated the odds by approximately 1.7–1.9 times. The consistency of these results across models highlights the robustness of the associations and underscores the importance of age and BMI as key risk factors for diabetes in this population.</p>
-<p>Effect stability: point estimates in rhe Bayesian model’s closely aligned with those from the frequentist, indicating that prior regularization stabilized the estimates in the presence of modest missingness.</p></li>
-</ul>
+<p>Across multiple modeling approaches—survey-weighted maximum likelihood, multiple imputation, and Bayesian regression—both age and BMI were consistently strong predictors of diabetes. Eachstandard deviation increase in age nearly tripled the odds of diabetes, while a similar increase in BMI elevated the odds by approximately 1.7–1.9 times. The consistency of these results across models highlights the robustness of the associations and underscores the importance of age and BMI as key risk factors for diabetes in this population.</p>
+<p>Effect stability: point estimates in rhe Bayesian model’s closely aligned with those from the frequentist, indicating that prior regularization stabilized the estimates in the presence of modest missingness.</p>
 <p>Uncertainty quantification: Bayesian credible intervals of odds ration were slightly narrower yet overlapped the frequentist confidence intervals, suggest comparable inferential precision while offering improved interpretability.</p>
 <p>Design considerations: # Survey-weighted MLE (Maximum Likelihood Estimator) - incorporates each observation weighted according to its survey weight. - provide estimates that reflect the population-level parameters, not just the sample- produces population-representative estimates. # Bayesian model with normalized weights- - instead of fully modeling the survey design, it used normalized sampling weights as importance weights - the scaled weights that sum to the sample size approximates the effect of survey weights, but does not fully account for: Stratification, clustering, design-based variance adjustments. - Bayesian inference treats the weighted likelihood as from a regular model, ignoring some survey design features.</p>
 <p>Autocorrelation Interpretation</p>
@@ -5015,9 +5014,6 @@ R2 0.1313342 0.01265055 0.1064607 0.156078</code></pre>
 <section id="limitations" class="level1">
 <h1>Limitations</h1>
 <p>Our study was a cross-sectional study design - precludes potential residual confounding from unmeasured factors such as diet, physical activity, and genetic predisposition.</p>
-<section id="section" class="level2">
-<h2 class="anchored" data-anchor-id="section"></h2>
-</section>
 <section id="question-for-targeted-therapy" class="level2">
 <h2 class="anchored" data-anchor-id="question-for-targeted-therapy">QUESTION for targeted therapy</h2>
 <p>Translational Perspective from the Bayesian Diabetes Prediction Project</p>
