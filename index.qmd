@@ -25,7 +25,7 @@ to edit)
 
 ------------------------------------------------------------------------
 
-## Group Project Workflow and Contributions
+# Group Project Workflow and Contributions
 
 - Autumn Wilcox – Contributed to analytic coding, content draft, structured the project workflow, and collaborated actively via GitHub.
 - Ecil Teodoro – Drafted and submitted sections of the Introduction.
@@ -33,7 +33,7 @@ to edit)
 
 Advisor: Dr. Ashraf Cohen – Provided expert guidance on statistical methods and workflow management across platforms.
 
-## Introduction
+# Introduction
 
 Diabetes mellitus (DM) is a major public health concern closely associated with factors such as obesity, age, race, and gender.
 Identifying these associated risk factors is essential for targeted interventions @DAngelo2025. **Logistic Regression** (traditional) that estimates the association between risk factors and outcomes is insufficient in analyzing the complex
@@ -56,7 +56,7 @@ Bayesian normal linear regression has been applied in metrology for instrument c
 **Bayesian multiple imputation with logistic regression** addresses
 missing data in clinical research @Austin2021 in clinical research by classifying missing values (e.g., patient refusal, loss to follow-up, mechanical errors) as MAR, MNAR, or MCAR. Multiple imputation generates plausible values across datasets and pools results for reliable classification of patient health status and mortality.
 
-**Aims**
+## Aims
 
 The study aims to apply Bayesian logistic regression to predict diabetes
 status and to evaluate the associations between body mass index (BMI),
@@ -69,14 +69,14 @@ dataset anomalies such as missing data, complete case analysis, and
 separation that limit the efficiency and reliability of traditional
 logistic regression in predicting health outcomes.
 
-## Method and Data Preparation
+# Method and Data Preparation
 
 In this study, Bayesian logistic regression is applied to predict diabetes status and estimate the association of key predictors including body mass index (BMI), age, gender, and race using the 2013–2014 NHANES dataset. The complex survey design of NHANES, includes stratification, clustering, and oversampling, was accounted for to ensure accurate estimation. Posterior predictive distributions are generated to quantify the probability of diabetes for each individual, providing a flexible and robust framework for uncertainty quantification. Model predictions are also compared against known population prevalence, enabling validation and assessment of model realism. By integrating prior information with observed data, this approach identifies individuals at high risk for diabetes and informs targeted public health interventions, demonstrating the utility of Bayesian methods in analyzing complex, multivariate health data.
 
-**Statistical Tool**: we use R, R packages and libraries to import data,
+##**Statistical Tool**: we use R, R packages and libraries to import data,
 perform data wrangling and analysis.
 
-**Data source:** NHANES 2-year data is a cross-sectional weighted data
+##**Data source:** NHANES 2-year data is a cross-sectional weighted data
 (2013-2014 year) @CenterforHealthStatistics1999. Three datasets
 (demographics, exam, questionnaire) imported (Haven package to coverted
 .XPT files in R to dataframe (df)) and after selecting variables of
@@ -492,15 +492,13 @@ ggplot(adult, aes(x = factor(bmi_cat), fill = factor(diabetes_dx))) +
 
 ```
 
-**Statistical Methods**
+# **Statistical Methods and Modeling**
 
-## Modeling
-
-**Multiple Logistic regression** on survey weighted dataset
+##**Multiple Logistic regression** on survey weighted dataset
 -We conducted frequentist method **Multiple Logistic regression** on a
 survey-weighted dataset, for complete case analysis and data exploration
 
-**Multivariate Imputation by Chained Equations (MICE)** - We then
+##**Multivariate Imputation by Chained Equations (MICE)** - We then
 conducted MICE to manage missiging data - Considering the small sample
 size, Multivariate Imputation by Chained Equations (MICE) was conducted
 as an alternative to the Bayesian Approach @JSSv045i03
@@ -519,7 +517,7 @@ as an alternative to the Bayesian Approach @JSSv045i03
     multiple times to create several complete datasets, each reflecting
     different possibilities for the missing data.
 
-**Bayesian Logistic Regression**
+##**Bayesian Logistic Regression**
 
 Bayesian statistics is about updating beliefs with evidence:
 Posterior ∝ Likelihood × Prior
@@ -990,6 +988,8 @@ kable(
 
 ```
 
+
+
 ```{r}
 #| label: post visualization
 # Posterior predictive draws
@@ -1403,7 +1403,7 @@ mcmc_acf(post_array, pars = c("b_age_c", "b_bmi_c"))
 
 # Results
 
-1.  **Multiple Linear Regression**
+##1.  **Multiple Linear Regression**
 
     Model**:**
     `svyglm(formula = form_cc, design = des_cc, family = quasibinomial())`
@@ -1415,7 +1415,7 @@ significant associations include **raceMexican American (p = 0.0008)**,
 **raceOther Hispanic (p = 0.0087)**, **raceNH Black (p = 0.0117)**, and
 **raceOther/Multi (p = 0.0014)**.
 
-2.  **MICE**
+##2.  **MICE**
 
     All predictors are statistically significant.
 
@@ -1426,7 +1426,7 @@ significant associations include **raceMexican American (p = 0.0008)**,
 
 <!-- -->
 
-3.  **Bayesian Regression**
+##3.  **Bayesian Regression**
 
     Sampling**:** NUTS (4 chains, 2000 iterations each; 1000 warmup,
     4000 post-warmup draws)
@@ -1436,7 +1436,7 @@ Convergence & Diagnostics
 -   Bulk_ESS / Tail_ESS: Large values (\>2000) → high effective
         sample sizes, reliable posterior estimates.
 
-Interpretation
+##Interpretation
 
 -   Strong predictors: Age and BMI are strongly positively
         associated with diabetes risk.
@@ -1466,7 +1466,7 @@ Interpretation
         reference. raceOtherDMulti-Higher odds of diabetes vs reference
         group.
 
-**Posterior distribution** of all parameters in the model. (1)Density
+##**Posterior distribution** of all parameters in the model. (1)Density
 plot of posterior samples each parameter (e.g., intercept, slope) into a
 smoothed density curve, showing most of the posterior probability mass
 lies for best estimates and uncertainty.
@@ -1484,7 +1484,7 @@ Combining the two provide credible intervals for predictions, not just
 point predictions and specifies - Given the BMI, the probability of
 diabetes is likely between 40–55%.”
 
-**Comparing Models**
+##**Comparing Models**
 
 -   All three models (survey-weighted MLE, multiple imputation,
     Bayesian) agree closely on the direction and magnitude of the
@@ -1554,7 +1554,6 @@ missing data, increasing power and reducing bias. Comparison of
 frequentist and Bayesian models demonstrated consistency in significant
 predictors, while Bayesian approaches provided the advantage of
 posterior distributions and probabilistic interpretation. The =
-
 Across all models, both age and BMI emerged as strong and consistent
 predictors of diabetes. The consistency across modeling approaches
 strengthens the validity of these findings Multiple imputation accounted
@@ -1565,7 +1564,6 @@ age and higher BMI are among the most important determinants of type 2
 diabetes risk.Cumulative exposure to metabolic and lifestyle risk
 factors over time, and the role of excess adiposity and insulin related
 effects account for diabetes.
-
 Survey weighted dataset strenghthens ensuring population
 representativeness, multiple imputation to handle missing data, and
 rigorous Bayesian estimation provided high effective sample sizes and R̂
@@ -1577,9 +1575,7 @@ could assess nonlinear effects of metabolic risk factors.
 
 # Limitations
 
-Limitations of the Diabetes Project
-
-1. The stuidy is based on cross-sectional/observational NHANES data, which limits the ability to make causal inferences. Associations observed between BMI, age, diabetes status cannot confirm causation.
+1. The study is based on cross-sectional/observational NHANES data, which limits the ability to make causal inferences. Associations observed between BMI, age, diabetes status cannot confirm causation.
 2. The project relies on multiple imputation for missing values, even though imputation reduces bias, it assumes missingness is at random (MAR); if data are missing not at random (MNAR), results may be biased.
 3. Potential Residual Confounding - Models included key predictors (age, BMI, sex, race), but unmeasured factors like diet, physical activity, socioeconomic status, or genetic predisposition could confound associations.
 4. Bayesian models depend on prior choices, which could influence posterior estimates if priors are informative or mis-specified.
@@ -1588,7 +1584,7 @@ Limitations of the Diabetes Project
 7. Interactions are not tested in the study (bmi × age) and so other potential synergistic effects might be missed.
 8. Predicted probabilities are model-based estimates, not validated for clinical decision-making. External validation in independent cohorts is needed before application.
 
-## QUESTION for targeted therapy
+# QUESTION for targeted therapy
 
 Translational Perspective from the Bayesian Diabetes Prediction Project
 
@@ -1764,9 +1760,6 @@ ggplot(pred_df, aes(x = bmi_c, y = prob_mean)) +
 
 ```
 
-
-
-
 # Implications
 
 -   age and BMI as robust and independent predictors of diabetes,
@@ -1776,4 +1769,4 @@ ggplot(pred_df, aes(x = bmi_c, y = prob_mean)) +
     methods with Bayesian can further enhance and provide better
     informed precision prevention strategies.
 
-## References
+# References
