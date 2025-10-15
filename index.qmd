@@ -3,10 +3,12 @@ title: "Bayesian Logistic Regression - Application in Probability Prediction of 
 subtitle: "CapStone Project_2025"
 author: "Namita Mishra, Autumn Wilcox, Ecil Teodoro (Advisor: Dr. Ashraf Cohen)"
 date: '`r Sys.Date()`'
+course: Capstone Projects in Data Science
 format:
   html:
     code-fold: true
-course: Capstone Projects in Data Science
+    toc: true
+
 bibliography: references.bib # file contains bibtex for references
 #always_allow_html: true # this allows to get PDF with HTML features
 self-contained: true
@@ -850,7 +852,10 @@ p4 <- ggplot(adult_imp1, aes(x = bmi, y = diabetes_dx)) +
 ggsave("Predicted Probability of Diabetes vs BMI.png", plot = p4, width = 7, height = 5, dpi = 300)
 
 
+
 ```
+
+![](images/BMI_Distribution_by_Diabetes_Status.png)
 
 Once we get posterior draws, we study Summary stats Mean, median, 95%
 credible intervals summary(bayes_fit) or posterior_summary(bayes_fit) -
@@ -1618,8 +1623,7 @@ Vary modifiable predictors (BMI) until the model predicts the desired probabilit
 
 ```{r}
 #| label: prediction for one patient
-#| eval: false
-#| include: false
+#| echo: true
 
 # Use the first participant 
 # using multiple covariates to select someone
@@ -1651,8 +1655,7 @@ ggplot(post_pred_df, aes(x = pred)) +
 
 ```{r}
 #| label: participant2
-#| eval: false
-#| include: false
+#| echo: true
 
 participant2_data  <- adult[2, ]
 
@@ -1682,9 +1685,9 @@ ggplot(post_pred_df2, aes(x = pred)) +
 
 ```{r}
 #| label: new participant
-#| eval: false
-#| include: false
+#| echo: true
 library(ggplot2)
+
 
 new_participant <- data.frame(
   age_c = 40,
@@ -1727,8 +1730,9 @@ ggplot(post_pred_df_new, aes(x = pred)) +
 
 ```{r}
 #| label: predict BMI_targeted therapy
-#| eval: false
-#| include: false
+#| echo: true
+
+
 
 # Grid of possible BMI values (centered if model used bmi_c)
 bmi_seq <- seq(18, 40, by = 0.5)
@@ -1739,6 +1743,7 @@ newdata_grid <- data.frame(
   sex   = "Female",
   race  = "Mexican American"
 )
+
 
 # Posterior mean predicted probabilities
 pred_probs <- posterior_linpred(bayes_fit, newdata = newdata_grid, transform = TRUE)
