@@ -10,6 +10,8 @@ library(posterior)
 library(knitr)
 
 # ---------------------- Import NHANES data ----------------------
+
+
 bmx_h  <- nhanes("BMX_H")
 demo_h <- nhanes("DEMO_H")
 diq_h  <- nhanes("DIQ_H")

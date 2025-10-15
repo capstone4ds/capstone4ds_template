@@ -28,7 +28,8 @@ to edit)
 - Autumn Wilcox – Contributed to analytic coding, content draft, structured the project workflow, and collaborated actively via GitHub.
 - Ecil Teodoro – Drafted and submitted sections of the Introduction.
 - Namita Mishra – Developed the project plan, content draft, analytic coding, and coordinated commits and collaboration with the group on GitHub.
-- Advisor: Dr. Ashraf Cohen – Provided expert guidance on statistical methods and workflow management across platforms.
+
+Advisor: Dr. Ashraf Cohen – Provided expert guidance on statistical methods and workflow management across platforms.
 
 ## Introduction
 
@@ -211,6 +212,7 @@ Merged dataset created and cleaned. Exploratory data analysis results and visual
 str(merged_data)
 plot_str(merged_data)
 introduce(merged_data)
+glimpse(merged_data)
 
 p1 <- plot_intro(merged_data, title="Figure 1 (Merged dataset). Structure of variables and missing observations.")
 
@@ -285,7 +287,7 @@ message("Saved: data/merged_2013_2014.rds")
 Exploratior data analysis
 -   Used library(survey) to get weighted means and sd of the variables.
     The BMI and age were standardized.
--   Age was recoded into different variabless, including only \>20 years
+-   Age was recoded into different variables, including only \>20 years
     in the analysis.
 -   BMI is recoded and categorized
     as-"18.5,18.5–\<25,25–\<30,30–\<35,35–\<40,≥40 years).
@@ -364,6 +366,8 @@ adult <- adult %>%
 # --- sanity checks ---
 cat("Adults n =", nrow(adult), "\n")
 
+glimpse(adult)
+
 ```
 Adult dataset and variables
 
@@ -425,6 +429,33 @@ deff  # design effect
 n_total <- sum(weights(nhanes_design_adult))
 ess <- n_total / deff
 cat("Effective sample size for diabetes_dx:", round(ess), "\n")
+
+
+```
+
+```{r}
+#| label: EDA visualization
+
+ggplot(adult, aes(factor(diabetes_dx))) +
+  geom_bar(fill = "steelblue") +
+  labs(title="Diabetes Outcome Distribution", x="Outcome (0=No, 1=Yes)", y="Count")
+
+
+ggplot(adult, aes(factor(bmi_cat))) +
+  geom_bar(fill = "steelblue") +
+  labs(title="Diabetes Outcome Distribution", x="bmi_cat")
+
+
+ggplot(adult, aes(x = factor(diabetes_dx), y = bmi)) +
+  geom_boxplot(fill = "skyblue") +
+  labs(
+    title = "BMI Distribution by Diabetes Diagnosis",
+    x = "Diabetes Diagnosis (0 = No, 1 = Yes)",
+    y = "BMI"
+  ) +
+  theme_minimal()
+
+
 
 ```
 
@@ -612,6 +643,10 @@ meth["race"] <- "polyreg"
 meth[c("WTMEC2YR","SDMVPSU","SDMVSTRA")] <- ""
 pred[, c("WTMEC2YR","SDMVPSU","SDMVSTRA")] <- 1
 
+
+glimpse(mi_dat)
+
+
 imp <- mice::mice(mi_dat, m = 5, method = meth, predictorMatrix = pred, seed = 123)
 
 
@@ -621,6 +656,8 @@ imp <- mice::mice(mi_dat, m = 5, method = meth, predictorMatrix = pred, seed = 1
 ```{r}
 #| label: fit mutated model
 #| echo: true
+
+
 fit_mi <- with(imp, {
   age_c <- as.numeric(scale(age))
   bmi_c <- as.numeric(scale(bmi))
@@ -642,30 +679,11 @@ knitr::kable(mi_or, caption = "MI pooled odds ratios (per 1 SD)")
 
 ```
 
-```{r}
-#| label: tables_adult_imp1
-#| eval: false
-#| include: false
-
-# Class distribution
-table(adult_imp1$diabetes_dx)
-prop.table(table(adult_imp1$diabetes_dx))
-
-# Summaries of numeric predictors
-numeric_vars <- sapply(adult_imp1, is.numeric)
-summary(adult_imp1[, numeric_vars])
-
-# Summaries of factor predictors
-factor_vars <- sapply(adult_imp1, is.factor)
-summary(adult_imp1[, factor_vars])
-
-
-```
 
 
 
 ```{r}
-#| label: Bayesian model and summary
+#| label: adult_imp1 - Bayesian model and summary
 library(gt)
 
 # 3) Bayesian Logistic Regression (formula weights) 
@@ -684,6 +702,10 @@ adult_imp1 <- complete(imp, 1) %>%
 
 stopifnot(all(is.finite(adult_imp1$wt_norm)))
 
+
+glimpse(adult_imp1)
+
+
 priors <- c(
   set_prior("normal(0, 2.5)", class = "b"),
   set_prior("student_t(3, 0, 10)", class = "Intercept")
@@ -699,10 +721,40 @@ bayes_fit <- brm(
   refresh = 0   # quiet Stan output
 )
 
-summary(bayes_fit)
+summary(bayes_fit)            # Bayesian model summary
 
 prior_summary(bayes_fit)
 
+
+
+```
+
+
+```{r}
+#| label: tables_adult_imp1
+#| eval: false
+#| include: false
+
+# Class distribution
+
+ggplot(adult_imp1, aes(x = factor(diabetes_dx))) +
+  geom_bar(fill = "steelblue") +
+  labs(
+    title = "Diabetes Diagnosis Distribution",
+    x = "Diabetes Diagnosis (0 = No, 1 = Yes)",
+    y = "Count"
+  ) +
+  theme_minimal()
+
+prop.table(table(adult_imp1$diabetes_dx))
+
+# Summaries of numeric predictors
+numeric_vars <- sapply(adult_imp1, is.numeric)
+summary(adult_imp1[, numeric_vars])
+
+# Summaries of factor predictors
+factor_vars <- sapply(adult_imp1, is.factor)
+summary(adult_imp1[, factor_vars])
 
 
 ```
@@ -714,7 +766,7 @@ prior_summary(bayes_fit)
 ###
 library(ggplot2)
 
-# Example: priors for two coefficients (age and bmi)
+# priors for two coefficients (age and bmi) prior = N(0,2.5)
 prior_draws <- tibble(
   term = rep(c("Age (per 1 SD)", "BMI (per 1 SD)"), each = 4000),
   value = c(rnorm(4000, 0, 2.5), rnorm(4000, 0, 2.5))
@@ -793,6 +845,7 @@ ggsave("pp_check.png", plot = p6, width = 8, height = 6, dpi = 300)
 
 ```
 
+Estimated R² = 0.13 (13.1%) - Predictors are relevant, most of the variability remains unexplained. Other factors (like genetics, lifestyle, environment, etc.) might be contributing.
 Below are reported odds ratio from the posterior predicted values and
 the Bayesian regression summary
 
