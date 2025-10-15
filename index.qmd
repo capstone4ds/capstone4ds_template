@@ -436,6 +436,15 @@ cat("Effective sample size for diabetes_dx:", round(ess), "\n")
 ```{r}
 #| label: EDA visualization
 
+ggplot(adult, aes(x = age)) +
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "white") +
+  labs(
+    title = "Distribution of Age",
+    x = "Age (years)",
+    y = "Count"
+  ) +
+  theme_minimal()
+
 ggplot(adult, aes(factor(diabetes_dx))) +
   geom_bar(fill = "steelblue") +
   labs(title="Diabetes Outcome Distribution", x="Outcome (0=No, 1=Yes)", y="Count")
@@ -454,6 +463,32 @@ ggplot(adult, aes(x = factor(diabetes_dx), y = bmi)) +
     y = "BMI"
   ) +
   theme_minimal()
+
+# plots for adult data bmi categories and race categories
+
+ggplot(adult, aes(x = factor(race), fill = factor(diabetes_dx))) +
+  geom_bar(position = "dodge") +
+  labs(
+    title = "Diabetes Diagnosis by Race",
+    x = "Race/Ethnicity",
+    y = "Count",
+    fill = "Diabetes Diagnosis\n(0 = No, 1 = Yes)"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+ggplot(adult, aes(x = factor(bmi_cat), fill = factor(diabetes_dx))) +
+  geom_bar(position = "dodge") +
+  labs(
+    title = "Diabetes Diagnosis by Race",
+    x = "Race/Ethnicity",
+    y = "Count",
+    fill = "Diabetes Diagnosis\n(0 = No, 1 = Yes)"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
 
@@ -612,6 +647,8 @@ svy_or <- broom::tidy(svy_fit, conf.int = TRUE) %>%
   dplyr::select(term, OR, LCL, UCL, p.value) %>%
   dplyr::filter(term != "(Intercept)")
 knitr::kable(svy_or, caption = "Survey-weighted odds ratios (per 1 SD)")
+
+
 
 ```
 
