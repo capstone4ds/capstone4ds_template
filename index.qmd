@@ -216,17 +216,12 @@ plot_str(merged_data)
 introduce(merged_data)
 glimpse(merged_data)
 
-p1 <- plot_intro(merged_data, title="Figure 1 (Merged dataset). Structure of variables and missing observations.")
+plot_intro(merged_data, title="Figure 1 (Merged dataset). Structure of variables and missing observations.")
 
 
-p2 <- plot_missing(merged_data, title="Figure 2(Merged dataset). Breakdown of missing observations.")
+plot_missing(merged_data, title="Figure 2(Merged dataset). Breakdown of missing observations.")
 
 
-# Save it as a PNG file
-ggsave("Figure1_MergedDataset.png", plot = p1, width = 8, height = 6, dpi = 300)
-
-
-ggsave("Figure2_MergedDataset.png", plot = p2, width = 8, height = 6, dpi = 300)
 
 ```
 
@@ -403,6 +398,7 @@ saveRDS(adult, "data/adult_cleaned_2013_2014.rds")
 
 ```{r}
 #| label: survey design
+#| include: false
 # survey design
 # ---------------- Survey Design ----------------
 # Use exam weights because BMI (BMXBMI) is an MEC variable
@@ -823,7 +819,7 @@ ggplot(prior_draws, aes(x = value, fill = term)) +
 library(ggplot2)
 
 # Create the plot
-p3 <- ggplot(adult_imp1, aes(x = factor(diabetes_dx), y = bmi, fill = factor(diabetes_dx))) +
+ggplot(adult_imp1, aes(x = factor(diabetes_dx), y = bmi, fill = factor(diabetes_dx))) +
   geom_boxplot(alpha = 0.7) +
   scale_x_discrete(labels = c("0" = "No Diabetes", "1" = "Diabetes")) +
   labs(
@@ -834,12 +830,11 @@ p3 <- ggplot(adult_imp1, aes(x = factor(diabetes_dx), y = bmi, fill = factor(dia
   theme_minimal() +
   theme(legend.position = "none")
 
-# Save the plot as an image file (PNG)
-ggsave("BMI_Distribution_by_Diabetes_Status.png", plot = p3, width = 7, height = 5, dpi = 300)
+
 
 
 # logistic regression curve
-p4 <- ggplot(adult_imp1, aes(x = bmi, y = diabetes_dx)) +
+ggplot(adult_imp1, aes(x = bmi, y = diabetes_dx)) +
   geom_point(aes(y = diabetes_dx), alpha = 0.2, position = position_jitter(height = 0.02)) +
   geom_smooth(method = "glm", method.args = list(family = "binomial"), se = TRUE, color = "blue") +
   labs(
@@ -848,8 +843,6 @@ p4 <- ggplot(adult_imp1, aes(x = bmi, y = diabetes_dx)) +
     title = "Predicted Probability of Diabetes vs BMI"
   ) +
   theme_minimal()
-
-ggsave("Predicted Probability of Diabetes vs BMI.png", plot = p4, width = 7, height = 5, dpi = 300)
 
 
 
@@ -873,16 +866,13 @@ fit
 #| label: Assumptions (Bayesian)
 
 summary(bayes_fit)
-p5 <- plot(bayes_fit)   # Posterior distributions
+plot(bayes_fit)   # Posterior distributions
              
 
-p6 <- pp_check(bayes_fit)      # Posterior predictive checks
+pp_check(bayes_fit)      # Posterior predictive checks
 mcmc_trace(bayes_fit)    # Convergence (optional)
 bayes_R2(bayes_fit)      # Model fit
     # Leave-one-out cross-validation
-
-ggsave("bayes_fit_plot.png", plot = p5, width = 8, height = 6, dpi = 300)
-ggsave("pp_check.png", plot = p6, width = 8, height = 6, dpi = 300)
 
 
 ```
@@ -1020,35 +1010,33 @@ ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:50, ])
 
 # Alternative PP plots (histogram / barplot) for binary outcome (bar chart preferred being discrete outcome)
 
-p7 <- ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:50, ]) +
+ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:50, ]) +
   labs(title = "Posterior Predictive Check: Barplot of Counts") +
   theme_minimal()
-ggsave("ppc_bars.png", plot = p7, width = 8, height = 6, dpi = 300)
 
 
 #PP check for proportions (useful for binary) # mean comparison
 ## to check if the simulated means match the observed mean
 
 ## mean
-p8 <- ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "mean") +
+ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "mean") +
   labs(title = "Posterior Predictive Check: Mean of Replicates") +
   theme_minimal()
-ggsave("ppc_stat_mean.png", plot = p8, width = 8, height = 6, dpi = 300)
+
 
 
 ## sd
-p9 <- ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "sd") +
+ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "sd") +
   labs(title = "PPC: Standard Deviation of Replicates") +
   theme_minimal()
-ggsave("ppc_stat_sd.png", plot = p9, width = 8, height = 6, dpi = 300)
 
 
 # PP checks with bayesplot options
 color_scheme_set("blue")
-p10 <- ppc_scatter_avg(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ]) +
+ppc_scatter_avg(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ]) +
   labs(title = "Observed vs Predicted (Avg) Posterior Predictive")
 
-ggsave("ppc_scatter_avg.png", plot = p10, width = 8, height = 6, dpi = 300)
+
 
 
 ```
@@ -1077,9 +1065,9 @@ colnames(post)
 
 
 # Density overlay for age and bmi
-p11 <- mcmc_areas(post, pars = c( "b_age_c","b_bmi_c","b_sexFemale","b_raceMexicanAmerican", "b_raceOtherHispanic","b_raceNHBlack","b_raceOtherDMulti" ))
+mcmc_areas(post, pars = c( "b_age_c","b_bmi_c","b_sexFemale","b_raceMexicanAmerican", "b_raceOtherHispanic","b_raceNHBlack","b_raceOtherDMulti" ))
 
-ggsave("mcmc_areas.png", plot = p11, width = 8, height = 6, dpi = 300)
+
 
 ###
 
@@ -1089,13 +1077,13 @@ observed <- adult_imp1[, c("bmi", "age")]
 # Plot for **bmi** (obs vs pred)
 
 library(ggplot2)
-p12 <- ggplot(data = NULL, aes(x = observed$bmi, y = predicted[, "Estimate"])) +
+ggplot(data = NULL, aes(x = observed$bmi, y = predicted[, "Estimate"])) +
   geom_point() +
   geom_errorbar(aes(ymin = predicted[, "Q2.5"], ymax = predicted[, "Q97.5"])) +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red") +
   xlab("Observed bmi") + ylab("Predicted bmi")
 
-ggsave("plot_bmi_obs_pred.png", plot = p12, width = 8, height = 6, dpi = 300)
+
 
 
 ```
@@ -1112,13 +1100,12 @@ plot_data <- adult_imp1 %>%
   )
 
 # Line plot
-p13 <- ggplot(plot_data, aes(x = obs_index)) +
+ggplot(plot_data, aes(x = obs_index)) +
   geom_line(aes(y = bmi, color = "Observed")) +               # observed BMI
   geom_line(aes(y = predicted_bmi, color = "Predicted")) +   # predicted BMI
   geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2) +  # uncertainty
   labs(x = "Observation", y = "BMI", color = "Legend") +
   theme_minimal()
-ggsave("Line plot_bmi_obs_pred.png", plot = p13, width = 8, height = 6, dpi = 300)
 
 
 ###
@@ -1171,7 +1158,7 @@ combined_draws <- bind_rows(prior_draws, post)
 
 library(ggplot2)
 
-p14 <- ggplot(combined_draws, aes(x = estimate, fill = type)) +
+ggplot(combined_draws, aes(x = estimate, fill = type)) +
   geom_density(alpha = 0.4) +
   facet_wrap(~ term, scales = "free", ncol = 2) +
   theme_minimal(base_size = 13) +
@@ -1182,7 +1169,7 @@ p14 <- ggplot(combined_draws, aes(x = estimate, fill = type)) +
     fill = ""
   )
 
-ggsave("Prior vs Posterior Distributions_bmi_age.png", plot = p14, width = 8, height = 6, dpi = 300)
+
 
 #### Compute proportion of diabetes=1 for each draw
 pp_proportion <- rowMeans(pp_samples)  # proportion of 1's in each posterior draw
@@ -1194,7 +1181,7 @@ summary(pp_proportion)
 # Optional: visualize the posterior probability distribution
 pp_proportion_df <- tibble(proportion = pp_proportion)
 
-p15 <- ggplot(pp_proportion_df, aes(x = proportion)) +
+ggplot(pp_proportion_df, aes(x = proportion)) +
   geom_histogram(binwidth = 0.01, fill = "skyblue", color = "black") +
   labs(
     title = "Posterior Distribution of Proportion of Diabetes = 1",
@@ -1203,7 +1190,6 @@ p15 <- ggplot(pp_proportion_df, aes(x = proportion)) +
   ) +
   theme_minimal()
 
-ggsave("Posterior Distribution of Proportion of Diabetes = 1.png", plot = p15, width = 8, height = 6, dpi = 300)
 
 
 ```
@@ -1231,7 +1217,7 @@ posterior_ci <- quantile(pp_proportion, c(0.025, 0.975))  # 95% credible interva
 pp_df <- tibble(proportion = pp_proportion)
 
 # Plot
-p16 <- ggplot(pp_df, aes(x = proportion)) +
+ggplot(pp_df, aes(x = proportion)) +
   geom_histogram(binwidth = 0.005, fill = "skyblue", color = "black") +
   geom_vline(xintercept = known_prev, color = "red", linetype = "dashed", size = 1) +
   geom_vline(xintercept = posterior_mean, color = "blue", linetype = "solid", size = 1) +
@@ -1246,7 +1232,6 @@ p16 <- ggplot(pp_df, aes(x = proportion)) +
   ) +
   theme_minimal()
 
-ggsave("Posterior Distribution of Proportion of Diabetes = 1.png", plot = p16, width = 8, height = 6, dpi = 300)
 
 
 ```
@@ -1293,7 +1278,7 @@ ci_df <- data.frame(
 )
 
 # Plot
-p17 <- ggplot(ci_df, aes(x = Type, y = Mean, color = Type)) +
+ggplot(ci_df, aes(x = Type, y = Mean, color = Type)) +
   geom_point(size = 4) +
   geom_errorbar(aes(ymin = Lower_95, ymax = Upper_95), width = 0.2) +
   ylim(0, max(ci_df$Upper_95) + 0.02) +
@@ -1305,8 +1290,6 @@ p17 <- ggplot(ci_df, aes(x = Type, y = Mean, color = Type)) +
   theme_minimal(base_size = 14) +
   theme(legend.position = "none")
 
-ggsave("Population Prevalence vs Proportion of Diabetes = 1.png", plot = p17, width = 8, height = 6, dpi = 300)
-p17
 
 ```
 
@@ -1594,10 +1577,16 @@ could assess nonlinear effects of metabolic risk factors.
 
 # Limitations
 
-Our study was a cross-sectional study design - precludes potential
-residual confounding from unmeasured factors such as diet, physical
-activity, and genetic predisposition.
+Limitations of the Diabetes Project
 
+1. The stuidy is based on cross-sectional/observational NHANES data, which limits the ability to make causal inferences. Associations observed between BMI, age, diabetes status cannot confirm causation.
+2. The project relies on multiple imputation for missing values, even though imputation reduces bias, it assumes missingness is at random (MAR); if data are missing not at random (MNAR), results may be biased.
+3. Potential Residual Confounding - Models included key predictors (age, BMI, sex, race), but unmeasured factors like diet, physical activity, socioeconomic status, or genetic predisposition could confound associations.
+4. Bayesian models depend on prior choices, which could influence posterior estimates if priors are informative or mis-specified.
+5. Variable Measurement - BMI is measured at a single time point, which may not reflect long-term exposure or risk.
+6. Self-reported variables - are subjective to recall or reporting bias.
+7. Interactions are not tested in the study (bmi × age) and so other potential synergistic effects might be missed.
+8. Predicted probabilities are model-based estimates, not validated for clinical decision-making. External validation in independent cohorts is needed before application.
 
 ## QUESTION for targeted therapy
 
