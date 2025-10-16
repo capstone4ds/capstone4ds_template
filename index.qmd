@@ -8,6 +8,7 @@ format:
   html:
     code-fold: true
     toc: true
+  
 
 bibliography: references.bib # file contains bibtex for references
 #always_allow_html: true # this allows to get PDF with HTML features
@@ -32,6 +33,21 @@ to edit)
 - Namita Mishra – Developed the project plan, content draft, analytic coding, and coordinated commits and collaboration with the group on GitHub.
 
 Advisor: Dr. Ashraf Cohen – Provided expert guidance on statistical methods and workflow management across platforms.
+
+Methods Summary
+
+Data Source: NHANES adults dataset
+Handling Missing Data: Multiple Imputation by Chained Equations (MICE)
+Survey Weighting: Accounted for population representativeness
+
+Modeling Approaches:
+
+Survey-weighted logistic regression (MLE)
+Multiple Imputation logistic model
+Bayesian logistic regression using NUTS sampling (4 chains, 2000 iterations)
+
+Model Diagnostics: R̂ ≈ 1.00; High ESS → Excellent convergence
+Posterior Predictive Checks: Compared model predictions to observed prevalence
 
 # Introduction
 
@@ -115,9 +131,9 @@ library(logistf)
 
 ```
 
-**Data pre-processing and cleaning** Subsets are created from the
+**Data pre-processing and cleaning** Subsets created from the
 original weighted datasets (demographics, exam, questionnaire) with
-selected variables are merged using ID to create a single dataframe.
+selected variables merged using ID to create a single dataframe.
 
 1.  Response Variable: Binary, **type 2 / diagnosed diabetes**
     (excluding gestational diabetes) -“Doctor told you have diabetes?”
@@ -199,9 +215,11 @@ names(merged_data)
 saveRDS(merged_data, "data/nhanes2013_2014_prepared.rds")
 
 
+
 ```
 
-Merged dataset created and cleaned. Exploratory data analysis results and visualization presented.
+Merged dataset cleaned and exploratory data analysis results and visualizations are presented.
+
 
 
 ```{r}
@@ -211,14 +229,15 @@ Merged dataset created and cleaned. Exploratory data analysis results and visual
 # weighted means of each variable                       
 str(merged_data)
 plot_str(merged_data)
-introduce(merged_data)
+head(merged_data)
 glimpse(merged_data)
+summary(merged_data)
+library(dplyr)
+library(knitr)
 
 plot_intro(merged_data, title="Figure 1 (Merged dataset). Structure of variables and missing observations.")
 
-
 plot_missing(merged_data, title="Figure 2(Merged dataset). Breakdown of missing observations.")
-
 
 
 ```
@@ -363,6 +382,7 @@ cat("Adults n =", nrow(adult), "\n")
 
 glimpse(adult)
 
+
 ```
 Adult dataset and variables
 
@@ -373,6 +393,12 @@ Covariates: bmi, age, sex, race, DIQ050
 Centered covariates: age_c, bmi_c
 BMI categories: bmi_cat
 
+NHANES is a national surveys based on complex sampling designs (oversampling certain groups (e.g., minorities, older adults) to ensure representation. They use multistage sampling to represent the U.S. population, so  we apply sampling weights, strata, and PSU (primary sampling units) for valid estimates.
+
+We use survey design in regression anlaysis to avoid - 
+- bias prevalence estimates (e.g., mean BMI or diabetes %)
+- underestimation of standard errors
+- incorrect inference for population-level parameters.
 
 ```{r}
 #| label: Data exploration
