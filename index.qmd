@@ -1503,23 +1503,23 @@ significant associations include **raceMexican American (p = 0.0008)**,
         reference. raceOtherDMulti-Higher odds of diabetes vs reference
         group.
 
-## Posterior distribution of all parameters in the model. (1)Density
-plot of posterior samples each parameter (e.g., intercept, slope) into a
+# Posterior distribution of all parameters in the model. 
+Density - plot of posterior samples each parameter (e.g., intercept, slope) into a
 smoothed density curve, showing most of the posterior probability mass
 lies for best estimates and uncertainty.
 
-## Posterior Predictive Distribution - generated from posterior
-predictive draws: 𝑦rep∼𝑝(𝑦new∣𝜃)yrep​∼p(ynew​∣θ) simulate the data given
-posterior parameter estimates.Posterior predictive checks (PPC) compare
-these simulations to real data to assess model fit.
+# Posterior Predictive Distribution - generated from posterior
+- predictive draws: 𝑦rep∼𝑝(𝑦new∣𝜃)yrep​∼p(ynew​∣θ) simulate the data given
+posterior parameter estimates.
+- Posterior predictive checks (PPC) compare these simulations to real data to assess model fit.
 
-##Incorporating Uncertainty two sources of uncertainty: Parameter
-uncertainty: captured in the posterior distributions Predictive
-uncertainty: captured in posterior predictive draws
+# Incorporating Uncertainty two sources of uncertainty: 
+Parameter uncertainty: captured in the posterior distributions 
+Predictive uncertainty: captured in posterior predictive draws
 
 Combining the two provide credible intervals for predictions, not just
 point predictions and specifies - Given the BMI, the probability of
-diabetes is likely between 40–55%.”
+diabetes is likely between 40–55%.
 
 ## Comparing Models
 
@@ -1533,19 +1533,16 @@ diabetes is likely between 40–55%.”
     findings despite missing data or modeling approach.
     
 ## Diabetes Predicted proportion vs population prevalence
-    
- - The posterior predicted proportion is slightly higher than the observed NHANES prevalence (10.97% vs 8.9%).
+ - Posterior predicted proportion is slightly higher than the observed NHANES prevalence (10.97% vs 8.9%).
  - Intervals overlap slightly, but the posterior tends to overestimate diabetes compared to NHANES.
 
 The difference could be due to:
-
 - Model assumptions (logistic link, priors)
 - Predictor effects (BMI, age, sex, race)
 - Sample characteristics vs population weighting in NHANES
 
-The results find our model is reasonable but slightly conservative (predicting higher risk) relative to the observed population prevalence.
-
 # Conclusion
+The results find our model is reasonable but slightly conservative (predicting higher risk) relative to the observed population prevalence.
 
 Across multiple modeling approaches—survey-weighted maximum
     likelihood, multiple imputation, and Bayesian regression—both age
