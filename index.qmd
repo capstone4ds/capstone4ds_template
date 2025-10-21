@@ -29,30 +29,7 @@ to edit)
 # Group Project Workflow and Contributions
 
 - Autumn Wilcox – Contributed to analytic coding, content draft, structured the project workflow, and collaborated actively via GitHub.
-- Ecil Teodoro – Drafted and submitted sections of the Introduction.
 - Namita Mishra – Developed the project plan, content draft, analytic coding, and coordinated commits and collaboration with the group on GitHub.
-
-# Logical Flow for Analysis
-
-(1)**Data Preparation**
-Preparation and analysis of the observed or imputed dataset (e.g., adult_imp1.csv) to handle missing values and ensure completeness.
-(2)**Train-Test Split**
-Splitting the dataset into training (to fit the model) and testing (to evaluate model performance) sets to ensures the model is generalizable and avoids overfitting.
-(3)**Frequentist Approach**
-Fit classical regression or machine learning models on the training set.
-Obtain point estimates (e.g., coefficients, odds ratios) and confidence intervals.
-(4)**Bayesian Approach**
-Fit a Bayesian model using the same training set.
-Obtain posterior distributions (posterior draws) for parameters to quantify uncertainty.
-Use posterior draws to generate posterior predictive distributions on the complete data set.
-(5)**Targeted Intervention Analysis**
-Use both frequentist and Bayesian models to simulate or assess interventions
-Identifying modifiable risk factors (e.g., BMI, lifestyle factors).
-Predicting how changing a factor affects outcomes (e.g., diabetes risk).
-In Bayesian analysis, quantifying uncertainty in intervention effects using posterior predictive distributions.
-(6)**Inference & Decision-Making**
-Combining insights from both approaches to guide data-driven decisions or public health recommendations.
-Frequentist results provide point estimates, while Bayesian results provide full uncertainty quantification.
 
 # Introduction
 
@@ -89,6 +66,28 @@ Bayesian analytical approach is used to address challenges posed by
 dataset anomalies such as missing data, complete case analysis, and
 separation that limit the efficiency and reliability of traditional
 logistic regression in predicting health outcomes.
+
+# Logical Flow for Analysis
+
+(1)**Data Preparation**
+Preparation and analysis of the observed or imputed dataset (e.g., adult_imp1.csv) to handle missing values and ensure completeness.
+(2)**Train-Test Split**
+Splitting the dataset into training (to fit the model) and testing (to evaluate model performance) sets to ensures the model is generalizable and avoids overfitting.
+(3)**Frequentist Approach**
+Fit classical regression or machine learning models on the training set.
+Obtain point estimates (e.g., coefficients, odds ratios) and confidence intervals.
+(4)**Bayesian Approach**
+Fit a Bayesian model using the same training set.
+Obtain posterior distributions (posterior draws) for parameters to quantify uncertainty.
+Use posterior draws to generate posterior predictive distributions on the complete data set.
+(5)**Targeted Intervention Analysis**
+Use both frequentist and Bayesian models to simulate or assess interventions
+Identifying modifiable risk factors (e.g., BMI, lifestyle factors).
+Predicting how changing a factor affects outcomes (e.g., diabetes risk).
+In Bayesian analysis, quantifying uncertainty in intervention effects using posterior predictive distributions.
+(6)**Inference & Decision-Making**
+Combining insights from both approaches to guide data-driven decisions or public health recommendations.
+Frequentist results provide point estimates, while Bayesian results provide full uncertainty quantification.
 
 # Method and Data Preparation
 
