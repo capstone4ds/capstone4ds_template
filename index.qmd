@@ -218,8 +218,7 @@ saveRDS(merged_data, "data/nhanes2013_2014_prepared.rds")
 
 ```
 
-Merged dataset cleaned and exploratory data analysis results and visualizations are presented.
-
+Merged dataset cleaned and exploratory data analysis results and visualizations are presented for 10175 observations and 10 variables with race categorized in 5 levels, age range (0-80 years), gender (male and female), Diabetes grouped from (DIQ010 and DIQ050) BMI as continuous.
 
 
 ```{r}
@@ -230,10 +229,12 @@ Merged dataset cleaned and exploratory data analysis results and visualizations 
 str(merged_data)
 plot_str(merged_data)
 head(merged_data)
-glimpse(merged_data)
+
 summary(merged_data)
 library(dplyr)
 library(knitr)
+
+
 
 plot_intro(merged_data, title="Figure 1 (Merged dataset). Structure of variables and missing observations.")
 
@@ -461,7 +462,7 @@ cat("Effective sample size for diabetes_dx:", round(ess), "\n")
 ggplot(adult, aes(x = age)) +
   geom_histogram(binwidth = 5, fill = "skyblue", color = "white") +
   labs(
-    title = "Distribution of Age",
+    title = "Distribution of Age >20 years",
     x = "Age (years)",
     y = "Count"
   ) +
@@ -469,18 +470,18 @@ ggplot(adult, aes(x = age)) +
 
 ggplot(adult, aes(factor(diabetes_dx))) +
   geom_bar(fill = "steelblue") +
-  labs(title="Diabetes Outcome Distribution", x="Outcome (0=No, 1=Yes)", y="Count")
+  labs(title="Diabetes Outcome Distribution in >20 years age group", x="diabetes_dx (0=No, 1=Yes)", y="Count")
 
 
 ggplot(adult, aes(factor(bmi_cat))) +
   geom_bar(fill = "steelblue") +
-  labs(title="Diabetes Outcome Distribution", x="bmi_cat")
+  labs(title="Diabetes Outcome Distribution by BMI in >20 years age group", x="bmi_cat")
 
 
 ggplot(adult, aes(x = factor(diabetes_dx), y = bmi)) +
   geom_boxplot(fill = "skyblue") +
   labs(
-    title = "BMI Distribution by Diabetes Diagnosis",
+    title = "BMI Distribution by Diabetes Diagnosis in >20 years age group",
     x = "Diabetes Diagnosis (0 = No, 1 = Yes)",
     y = "BMI"
   ) +
@@ -491,7 +492,7 @@ ggplot(adult, aes(x = factor(diabetes_dx), y = bmi)) +
 ggplot(adult, aes(x = factor(race), fill = factor(diabetes_dx))) +
   geom_bar(position = "dodge") +
   labs(
-    title = "Diabetes Diagnosis by Race",
+    title = "Diabetes Diagnosis by Race in >20 years age group",
     x = "Race/Ethnicity",
     y = "Count",
     fill = "Diabetes Diagnosis\n(0 = No, 1 = Yes)"
@@ -504,8 +505,8 @@ ggplot(adult, aes(x = factor(race), fill = factor(diabetes_dx))) +
 ggplot(adult, aes(x = factor(bmi_cat), fill = factor(diabetes_dx))) +
   geom_bar(position = "dodge") +
   labs(
-    title = "Diabetes Diagnosis by Race",
-    x = "Race/Ethnicity",
+    title = "Diabetes Diagnosis by BMI in >20 years age group",
+    x = "BMI",
     y = "Count",
     fill = "Diabetes Diagnosis\n(0 = No, 1 = Yes)"
   ) +
@@ -740,8 +741,22 @@ knitr::kable(mi_or, caption = "MI pooled odds ratios (per 1 SD)")
 
 
 ```
+Prior 
+- We used student_t(3, 0, 10) prior @VanDeSchoot2013 
+- student_t(ν,μ,σ)
 
-
+Student’s t-distribution with:
+	ν=3: degrees of freedom (controls tail heaviness)
+	μ=0: location (center, like the mean)
+	σ=10: scale (spread, like standard deviation)
+student_t(3, 0, 10) means:
+	It’s centered at 0
+	It allows large values (± several times 10)
+	It has heavy tails, since ν=3, allows for outliers or unexpected large parameter values
+Helps the model remain stable, especially with:
+# Small datasets
+# High correlation between predictors
+# Potential outliers in the data
 
 
 ```{r}
@@ -770,7 +785,7 @@ glimpse(adult_imp1)
 
 priors <- c(
   set_prior("normal(0, 2.5)", class = "b"),
-  set_prior("student_t(3, 0, 10)", class = "Intercept")
+  set_prior("student_t(3, 0, 10)", class = "Intercept") 
 )
 
 bayes_fit <- brm(
@@ -1448,8 +1463,6 @@ significant associations include **raceMexican American (p = 0.0008)**,
 
     Negative association: being female (p \< 0.001)
 
-<!-- -->
-
 ## Bayesian Logistic Regression
 
     Sampling**:** NUTS (4 chains, 2000 iterations each; 1000 warmup,
@@ -1490,17 +1503,17 @@ significant associations include **raceMexican American (p = 0.0008)**,
         reference. raceOtherDMulti-Higher odds of diabetes vs reference
         group.
 
-## Posterior distribution** of all parameters in the model. (1)Density
+## Posterior distribution of all parameters in the model. (1)Density
 plot of posterior samples each parameter (e.g., intercept, slope) into a
 smoothed density curve, showing most of the posterior probability mass
 lies for best estimates and uncertainty.
 
-**Posterior Predictive Distribution** - generated from posterior
+## Posterior Predictive Distribution - generated from posterior
 predictive draws: 𝑦rep∼𝑝(𝑦new∣𝜃)yrep​∼p(ynew​∣θ) simulate the data given
 posterior parameter estimates.Posterior predictive checks (PPC) compare
 these simulations to real data to assess model fit.
 
-**Incorporating Uncertainty** two sources of uncertainty: Parameter
+##Incorporating Uncertainty two sources of uncertainty: Parameter
 uncertainty: captured in the posterior distributions Predictive
 uncertainty: captured in posterior predictive draws
 
@@ -1614,12 +1627,12 @@ By using patient-level predictors such as age, BMI, sex, and race to estimate th
 The translational move lies in converting these probabilistic outputs into actionable thresholds—such as identifying the BMI or age at which the predicted risk of diabetes exceeds a clinically meaningful level (e.g., 30%).
 Such insights can guide early screening, personalized lifestyle interventions, and targeted prevention programs for populations at higher risk. This approach embodies precision public health—bridging data science and medical decision-making to deliver tailored, evidence-based strategies that can ultimately improve diabetes prevention and management outcomes.
 
-“What changes in modifiable predictors would lower diabetes risk?”
+What changes in modifiable predictors would lower diabetes risk?
 
 ##  Translational Research Implications:
 - We now use the model to guide prevention or intervention.
 - Only BMI is a modifiable risk factor here
-- “What must change in BMI, behavior, or lifestyle to achieve a lower risk threshold?”
+- What must change in BMI, behavior, or lifestyle to achieve a lower risk threshold?
 In practice, we hold non modifiable predictors as constant (sex, race).
 Vary modifiable predictors (BMI) until the model predicts the desired probability.
 
@@ -1632,7 +1645,7 @@ Vary modifiable predictors (BMI) until the model predicts the desired probabilit
 participant1_data  <- adult[1, ]
 
 
-# Example: predicted probabilities for patient 1
+# predicted probabilities for patient 1
 phat1 <- posterior_linpred(bayes_fit, newdata = participant1_data, transform = TRUE)
 # 'transform = TRUE' gives probabilities for logistic regression
 
@@ -1662,7 +1675,7 @@ ggplot(post_pred_df, aes(x = pred)) +
 participant2_data  <- adult[2, ]
 
 
-# Example: predicted probabilities for patient 1
+# predicted probabilities for patient 1
 phat2 <- posterior_linpred(bayes_fit, newdata = participant2_data, transform = TRUE)
 # 'transform = TRUE' gives probabilities for logistic regression
 
