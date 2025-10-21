@@ -1339,11 +1339,19 @@ write.csv(adult_imp1, "adult_imp1.csv", row.names = FALSE)
 
 ```
 
+We performed splitting the data into training and testing sets to evaluate how well the model learned patterns, and how reliably it will perform on new data in real-world scenarios.
+
+## Testing set to evaluate model performance on unseen data. 
+  - Model Accuracy / Performance
+  - Generalizability - Helps check for overfitting or underfitting
+  - Reliability of Predictions - Confidence on model predictions for new individuals
+  - Distribution and Bias Check - to ensure the training and testing sets are representative of the same population
+
+Results from training and test data- Training (n=4473) & Testing (n=1119) sets: Age ~48 yrs, BMI ~28, bmi_c ~0, wt_norm ~1; ranges similar across sets.
 
 ```{python}
 #| label: test-train
-#| eval: false
-#| include: false
+#| echo: true
 #Code here
 
 import pandas as pd
@@ -1355,7 +1363,7 @@ adult_data_py = pd.read_csv("adult_imp1.csv")  # your R dataset saved as CSV
 df = adult_data_py  # just create a new variable pointing to the same DataFrame
 
 # Check the data
-df.head(adult_data_py)
+df.head()
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -1418,7 +1426,7 @@ print("Training set numeric summary:\n", X_train.describe())
 print("\nTesting set numeric summary:\n", X_test.describe())
 
 ```
-
+Training (n=4473) & Testing (n=1119) sets: Age ~48 yrs, BMI ~28, bmi_c ~0, wt_norm ~1; ranges similar across sets.
 
 ```{r}
 #| label: autocorrelation_mcmc
@@ -1513,7 +1521,7 @@ lies for best estimates and uncertainty.
 posterior parameter estimates.
 - Posterior predictive checks (PPC) compare these simulations to real data to assess model fit.
 
-# Incorporating Uncertainty two sources of uncertainty: 
+# Incorporating two sources of uncertainty: 
 Parameter uncertainty: captured in the posterior distributions 
 Predictive uncertainty: captured in posterior predictive draws
 
@@ -1633,6 +1641,18 @@ What changes in modifiable predictors would lower diabetes risk?
 In practice, we hold non modifiable predictors as constant (sex, race).
 Vary modifiable predictors (BMI) until the model predicts the desired probability.
 
+## Below we used the data of first two particiants from the same dataset (Internal validation
+- as the data is from the same dataset)
+## Next we used fake data of a new participant (not in the dataset)
+- For model validation (External validation as the data is out-of-sample)
+- It means - applying the trained model to a specific individual’s data (new participanst) — using posterior draws to estimate predictive uncertainty (credible interval). 
+- It is to test generalizability — how well the model performs on new, independent data. 
+
+- this approach bridges individual-level predictions with population-level evidence.
+- predicted probabilities of diabetes for an individual participant obtained using the fitted Bayesian logistic regression model, accounted for model uncertainty and a 95% credible interval represents the range within which the true probability of diabetes for the participant is expected to lie.
+- using this approach researchers can better understand the uncertainty and variability in clinical risk predictions, allowing for more personalized and data-informed decision-making, helping translate statistical models into clinically actionable insights.
+- such probabilistic predictions can help identify individuals at higher risk and can guide targeted screening, preventive interventions, and policy decisions, ultimately supporting precision medicine and improving patient outcomes.
+
 ```{r}
 #| label: prediction for one patient
 #| echo: true
@@ -1735,7 +1755,12 @@ ggplot(post_pred_df_new, aes(x = pred)) +
 
 
 ```
-
+# Below is the targeted bmi that we calculated 
+In this analysis, a grid of body mass index (BMI) values is generated to examine the relationship between BMI and the predicted probability of diabetes while holding other covariates (age, sex, and race) constant. 
+- Using the fitted Bayesian logistic regression model, posterior predictive probabilities computed for each BMI value and the mean of posterior draws estimated the average predicted probability of diabetes across the BMI range. 
+- We then tried to identify the BMI value whose predicted probability was closest to a predefined target probability (here, 0.3). 
+- This enabled interpretation of the model in a clinically meaningful way—specifically, by determining the BMI level associated with a 30% predicted probability of diabetes for a given demographic profile. 
+- We were able to link statistical inference to practical health thresholds relevant for risk communication and prevention strategies in translational research.
 
 ```{r}
 #| label: predict BMI_targeted therapy
