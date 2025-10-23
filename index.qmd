@@ -12,7 +12,6 @@ format:
     code-fold: true
     toc: true
    
-  
 
 bibliography: references.bib # file contains bibtex for references
 #always_allow_html: true # this allows to get PDF with HTML features
