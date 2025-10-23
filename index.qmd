@@ -942,24 +942,17 @@ ggplot(adult_imp1, aes(x = bmi, y = diabetes_dx)) +
 
 ```
 
-## **Posterior Draws**
+# **Posterior Draws**
 Once we get posterior draws, we calculated summary stats Mean, median, 95%
-credible intervals summary(bayes_fit) or posterior_summary(bayes_fit) -
+credible intervals summary(bayes_fit), odds ratio and posterior_summary(bayes_fit) -
 
-## **Visualization** 
-
-- Distribution shape mcmc_hist(posterior, pars = c("b_age"))
-or mcmc_areas() 
-- Pairwise plots Correlations between parameters
-mcmc_pairs(posterior) 
-- Posterior predictive checks Compare model
-predictions vs observed data pp_check(bayes_fit) 
-
-
-## **Assumptions for Bayesian logistic regression**
-- posterior check  to check for linearity 
-- mcmc trace plots for convergence 
+# **Visualization** 
+- mcmc_hist(posterior, pars = c("b_age"))or mcmc_areas() 
+- Pairwise plots Correlations between parameters mcmc_pairs(posterior) 
+- Posterior predictive checks (ppc) for linearity 
+- Compare model predictions vs observed data pp_check(bayes_fit)
 - bayes_R2 for model fit
+- ppc dens plots, ppc (mean and SD) and ppc bars 
 
 ```{r}
 #| label: Assumptions (Bayesian)
@@ -973,13 +966,12 @@ bayes_R2(bayes_fit)      # Model fit
 
 ```
 
-## **Estimated R² 
+# **Estimated R² 
 - Estimated R² = 0.13 (13.1%) -suggests predictors are relevant, most of the variability remains unexplained. 
 - Other factors (like genetics, lifestyle, environment, etc.) might be contributing.
 
 Below are the reported odds ratio from the posterior predicted values and
 the Bayesian regression
-
 
 ```{r}
 library(ggplot2)
@@ -997,7 +989,6 @@ ggplot(correlation_melted, aes(Var1, Var2, fill = value)) +
   labs(title = "Correlation Heatmap", x = "Features", y = "Features")
 
 ```
-
 
 
 
@@ -1110,9 +1101,6 @@ kable(
 
 
 
-To check posterior draws, we present plot through plots as below 
-- pp check, ppc dens plots, ppc (mean and SD) and ppc bars 
-
 ```{r}
 #| label: post visualization
 # Posterior predictive draws
@@ -1149,7 +1137,6 @@ ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "sd") +
 
 
 
-
 ```{r}
 #| include: false
 
@@ -1159,8 +1146,6 @@ ppc_scatter_avg(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ]) +
   labs(title = "Observed vs Predicted (Avg) Posterior Predictive")
 
 ```
-
-
 
 ## Comparative Visualizations 
 - Predicted vs observed - to check how well the model’s predictions align with reality where 
