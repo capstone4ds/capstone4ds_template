@@ -108,6 +108,8 @@ Frequentist results provide point estimates, while Bayesian results provide full
 
 # loading packages 
 options(repos = c(CRAN = "https://cloud.r-project.org"))
+install.packages("nhanesA", dependencies = TRUE)
+
 install.packages("nhanesA")
 library ("nhanesA")    
 library(tidyverse)
@@ -557,7 +559,7 @@ Student’s t-distribution with: ν=3: degrees of freedom (controls tail heavine
     coefficient, mean, or variance) is treated as a random variable with
     a probability distribution that reflects uncertainty.
 
-**Summary of Bayesian regression** presented under following headings 
+##Summary of Bayesian regression presented under following headings 
 - Posterior Predictive Probabilities
 - Posterior Mean, Median, credible Intervals
 - Posterior Probability (Outcome=1)
@@ -567,13 +569,13 @@ Student’s t-distribution with: ν=3: degrees of freedom (controls tail heavine
 - Posterior Predictive Checks
 - Uncertainty Quantification 
 
-**Bayesian Logistic Regression model**
+##Bayesian Logistic Regression model Equation
 
 $$ \text{logit}(P(Y_i=1)) = \beta_0 + \beta_1 \cdot Age_i + \beta_2 \cdot BMI_i + \beta_3 \cdot Race_i + \beta_4 \cdot Gender_i $$
 **Linear Regression equation:**
 
 $$ y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i $$
-  **Diagnostics for Bayesian Logictic Regression is presented under headings**
+##Diagnostics for Bayesian Logictic Regression 
 
 - Trace Plots for Markov Chain Monte Carlo Convergence
 - Autocorrelation Plots
@@ -708,6 +710,8 @@ knitr::kable(mi_or, caption = "MI pooled odds ratios (per 1 SD)")
 
 ```
 
+# Bayesian Logistic Regression procedure  
+Bayesian Logistic Regression is performed on the imputed dataset from the pooled imputed adult dataset (adult_imp1) and provided the Bayesian model summary statistics, visualization, summary tables. 
 
 ```{r}
 #| label: adult_imp1 - Bayesian model and summary
@@ -752,8 +756,6 @@ summary(bayes_fit)            # Bayesian model summary
 
 ```
 
-## **Bayesian Logistic Regression**  
-Bayesian Logistic Regression is performed on the imputed dataset from the pooled imputed adult dataset (adult_imp1) and provided the Bayesian model summary statistics, visualization, summary tables. 
 
 ```{r}
 #| label: tables_adult_imp1
