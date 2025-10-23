@@ -942,11 +942,11 @@ ggplot(adult_imp1, aes(x = bmi, y = diabetes_dx)) +
 
 ```
 
-### **Posterior Draws**
+## **Posterior Draws**
 Once we get posterior draws, we calculated summary stats Mean, median, 95%
 credible intervals summary(bayes_fit) or posterior_summary(bayes_fit) -
 
-### **Visualization** 
+## **Visualization** 
 
 - Distribution shape mcmc_hist(posterior, pars = c("b_age"))
 or mcmc_areas() 
@@ -956,7 +956,7 @@ mcmc_pairs(posterior)
 predictions vs observed data pp_check(bayes_fit) 
 
 
-### **Assumptions for Bayesian logistic regression**
+## **Assumptions for Bayesian logistic regression**
 - posterior check  to check for linearity 
 - mcmc trace plots for convergence 
 - bayes_R2 for model fit
@@ -970,11 +970,10 @@ plot(bayes_fit)   # Posterior distributions
 pp_check(bayes_fit)      # Posterior predictive checks
 mcmc_trace(bayes_fit)    # Convergence (optional)
 bayes_R2(bayes_fit)      # Model fit
-  
-
 
 ```
-### **Estimated R² 
+
+## **Estimated R² 
 - Estimated R² = 0.13 (13.1%) -suggests predictors are relevant, most of the variability remains unexplained. 
 - Other factors (like genetics, lifestyle, environment, etc.) might be contributing.
 
@@ -1109,7 +1108,8 @@ kable(
 
 ```
 
-## **Visualization** 
+
+
 To check posterior draws, we present plot through plots as below 
 - pp check, ppc dens plots, ppc (mean and SD) and ppc bars 
 
@@ -1146,6 +1146,10 @@ ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "sd") +
 
 
 ```
+
+
+
+
 ```{r}
 #| include: false
 
@@ -1155,6 +1159,8 @@ ppc_scatter_avg(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ]) +
   labs(title = "Observed vs Predicted (Avg) Posterior Predictive")
 
 ```
+
+
 
 ## Comparative Visualizations 
 - Predicted vs observed - to check how well the model’s predictions align with reality where 
@@ -1200,6 +1206,9 @@ ggplot(data = NULL, aes(x = observed$bmi, y = predicted[, "Estimate"])) +
 
 
 ```
+
+
+
 ```{r}
 #| label: pred vs obs
 
@@ -1283,9 +1292,8 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
     fill = ""
   )
 
-#### Compute proportion of diabetes=1 for each draw
+# Compute proportion of diabetes=1 for each draw
 pp_proportion <- rowMeans(pp_samples)  # proportion of 1's in each posterior draw
-
 
 # Summary of posterior proportions
 summary(pp_proportion)
@@ -1339,7 +1347,6 @@ ggplot(pp_df, aes(x = proportion)) +
     y = "Frequency"
   ) +
   theme_minimal()
-
 
 ```
 
@@ -1415,6 +1422,7 @@ post_array <- as_draws_array(bayes_fit)  # draws x chains x parameters
 mcmc_acf(post_array, pars = c("b_age_c", "b_bmi_c"))
 
 ```
+
 # Results
 
 ### Multiple Linear Regression Equation
