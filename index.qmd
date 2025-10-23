@@ -4,6 +4,16 @@ subtitle: "CapStone Project_2025"
 author: "Namita Mishra, Autumn Wilcox (Advisor: Dr. Ashraf Cohen)"
 date: '`r Sys.Date()`'
 course: Capstone Projects in Data Science
+
+navbar:
+    left:
+      - text: "Research"
+        href: index.qmd
+      - text: "Slides"
+        href: slides.qmd
+      - text: "About Us"
+        href: about.qmd
+        
 format:
   html:
     code-fold: true
@@ -56,52 +66,49 @@ missing data in clinical research @Austin2021 in clinical research by classifyin
 
 ## Aims
 
-The study aims to apply Bayesian logistic regression to predict diabetes
-status and to evaluate the associations between body mass index (BMI),
-age (≥20 years), gender, and race as predictors, using a retrospective
-dataset from the 2013–2014 NHANES survey. NHANES employs a complex
-sampling design, including stratification, clustering, and oversampling
-of specific population subgroups, rather than uniform random sampling. A
-Bayesian analytical approach is used to address challenges posed by
+The present study aims performs Bayesian logistic regression to predict diabetes
+status and evaluate the associations between diabetes and predictors (body mass index (BMI),
+age (≥20 years), gender, and race). The study anakyzes a retrospective
+dataset (2013–2014 NHANES survey data). It is based on a complex
+sampling design, characterized by stratification, clustering, and oversampling
+of specific population subgroups, rather than uniform random sampling. 
+A Bayesian analytical approach addresses challenges posed by
 dataset anomalies such as missing data, complete case analysis, and
 separation that limit the efficiency and reliability of traditional
 logistic regression in predicting health outcomes.
 
-# Logical Flow for Analysis
+## Logical Flow for Analysis
 
-(1)**Data Preparation**
+(1) **Data Preparation**
 Preparation and analysis of the observed or imputed dataset (e.g., adult_imp1.csv) to handle missing values and ensure completeness.
 (2)**Train-Test Split**
 Splitting the dataset into training (to fit the model) and testing (to evaluate model performance) sets to ensures the model is generalizable and avoids overfitting.
-(3)**Frequentist Approach**
-Fit classical regression or machine learning models on the training set.
-Obtain point estimates (e.g., coefficients, odds ratios) and confidence intervals.
-(4)**Bayesian Approach**
-Fit a Bayesian model using the same training set.
-Obtain posterior distributions (posterior draws) for parameters to quantify uncertainty.
+(3) **Frequentist Approach**
+Fit classical regression or machine learning models on complete dataset to obtain point estimates (e.g., coefficients, odds ratios) and confidence intervals.
+(4) **Bayesian Approach**
+Fit a Bayesian model using on the imputed dataset to obtain posterior distributions (posterior draws) for parameters to quantify uncertainty.
 Use posterior draws to generate posterior predictive distributions on the complete data set.
-(5)**Targeted Intervention Analysis**
-Use both frequentist and Bayesian models to simulate or assess interventions
-Identifying modifiable risk factors (e.g., BMI, lifestyle factors).
-Predicting how changing a factor affects outcomes (e.g., diabetes risk).
-In Bayesian analysis, quantifying uncertainty in intervention effects using posterior predictive distributions.
-(6)**Inference & Decision-Making**
+(5) **Targeted Intervention Analysis**
+Compare the two models
+Use of Bayesian models to simulate or assess interventions
+Identify modifiable risk factors (e.g., BMI, lifestyle factors).
+Predict how change in a risk factor affects outcomes (e.g., diabetes risk).
+Bayesian analysis to quantify uncertainty in intervention effects using posterior predictive distributions.
+(6) **Inference & Decision-Making**
 Combining insights from both approaches to guide data-driven decisions or public health recommendations.
 Frequentist results provide point estimates, while Bayesian results provide full uncertainty quantification.
 
 # Method and Data Preparation
-
-In this study, Bayesian logistic regression is applied to predict diabetes status and estimate the association of key predictors including body mass index (BMI), age, gender, and race using the 2013–2014 NHANES dataset. The complex survey design of NHANES, includes stratification, clustering, and oversampling, was accounted for to ensure accurate estimation. Posterior predictive distributions are generated to quantify the probability of diabetes for each individual, providing a flexible and robust framework for uncertainty quantification. Model predictions are also compared against known population prevalence, enabling validation and assessment of model realism. By integrating prior information with observed data, this approach identifies individuals at high risk for diabetes and informs targeted public health interventions, demonstrating the utility of Bayesian methods in analyzing complex, multivariate health data.
+- The study performs Bayesian logistic regression to predict diabetes status and estimate the association of key predictors (body mass index (BMI), age, gender, and race) using the 2013–2014 NHANES dataset. 
+- The complex survey design of NHANES, with stratification, clustering, and oversampling was accounted for to ensure accurate estimation. 
+- Posterior predictive distributions generated quantify the probability of diabetes for each individual, providing a flexible and robust framework for uncertainty quantification. 
+- Model predictions are also compared against known population prevalence, enabling validation and assessment of model realism. 
+- By integrating prior information with the observed data, identifies individuals at high risk for diabetes and informs targeted public health interventions, demonstrating the utility of Bayesian methods in analyzing complex, multivariate health data.
 
 ## Statistical Tool 
-- R, R packages and libraries to import data, perform data wrangling and analysis.
+- R, R packages and libraries are used to import data, perform data wrangling and analysis.
 ## Data source
-- NHANES 2-year data is a cross-sectional weighted data
-(2013-2014 year) @CenterforHealthStatistics1999. 
-- Three datasets
-(demographics, exam, questionnaire) imported (Haven package to coverted
-.XPT files in R to dataframe (df)) and after selecting variables of
-interest a merged dataset was created.
+- NHANES 2-year data (2013-2014) - a cross-sectional weighted data @CenterforHealthStatistics1999. 
 
 ```{r}
 #| label: Libraries
@@ -134,15 +141,16 @@ library(logistf)
 
 ```
 
-**Data pre-processing and cleaning** Subsets created from the
-original weighted datasets (demographics, exam, questionnaire) with
-selected variables merged using ID to create a single dataframe.
+**Data pre-processing and cleaning** 
+- Three datasets: demographics, exam, questionnaire in.XPT format files are imported (Haven package) in R. 
+After selecting variables of interest, a merged dataset is created from the original weighted datasets (demographics, exam, questionnaire) and merged using ID to create a single merged dataframe.
 
-1.  Response Variable: Binary, **type 2 / diagnosed diabetes**
-    (excluding gestational diabetes) -“Doctor told you have diabetes?”
-    DIQ010 combined with `DIQ050` a **secondary variable** describing
-    **treatment status (insulin use) to exclude those cases**
-2.  Predictor Variables (Body Mass Index, factor, 4 levels are analyzed
+1.  **Response Variable: Binary**
+- Type 2 / diagnosed diabetes(excluding gestational diabetes) -“Doctor told you have diabetes?”
+    DIQ010 combined with `DIQ050` a secondary variable describing
+    treatment status (insulin use) to exclude those cases
+2.  **Predictor Variables**
+- Body Mass Index, factor, 4 levels are analyzed
     after standardization).\
     o Underweight (\<5th percentile)\
     o Normal (5th–\<85th)\
@@ -160,16 +168,13 @@ selected variables merged using ID to create a single dataframe.
 #| label: nhanes tables and merged data
 #| include: false
 
-            
-
 library ("nhanesA")     
  # imported datasets 
                        nhanesTables('EXAM', 2013)
                        nhanesTables('QUESTIONNAIRE', 2013)
                        nhanesTables('DEMOGRAPHICS', 2013)
          
-                                     
- # codebook for variable details
+# codebook for variable details
 
 nhanesCodebook("DEMO_H",'RIDRETH1')
 nhanesCodebook("DEMO_H",'RIAGENDR')
@@ -218,10 +223,13 @@ names(merged_data)
 saveRDS(merged_data, "data/nhanes2013_2014_prepared.rds")
 
 
-
 ```
 
-Merged dataset cleaned and exploratory data analysis results and visualizations are presented for 10175 observations and 10 variables with race categorized in 5 levels, age range (0-80 years), gender (male and female), Diabetes grouped from (DIQ010 and DIQ050) BMI as continuous.
+Merged dataset is cleaned and exploratory data analysis conducted to report results and visualizations for 10175 observations and 10 variables where -
+- race categorized in 5 levels
+- age range (0-80 years)
+- gender (male and female)
+- Diabetes grouped from (DIQ010 and DIQ050) BMI as continuous.
 
 
 ```{r}
@@ -237,8 +245,6 @@ summary(merged_data)
 library(dplyr)
 library(knitr)
 
-
-
 plot_intro(merged_data, title="Figure 1 (Merged dataset). Structure of variables and missing observations.")
 
 plot_missing(merged_data, title="Figure 2(Merged dataset). Breakdown of missing observations.")
@@ -248,7 +254,6 @@ plot_missing(merged_data, title="Figure 2(Merged dataset). Breakdown of missing 
 ```{r message=FALSE, warning=FALSE}
 #| label: merged dataframe and character handling
 #| echo: true
-
 
 # print(glimpse(merged_data))
 print(table(merged_data$BMDBMIC, useNA = "ifany"))
@@ -298,23 +303,25 @@ dir.create("data", showWarnings = FALSE, recursive = TRUE)
 saveRDS(merged_data, "data/merged_2013_2014.rds")
 message("Saved: data/merged_2013_2014.rds")
 
-
 ```
 ## Exploratory data analysis
--   Used library(survey) to get weighted means and sd of the variables.
+-   Using library(survey) we calculated weighted means and sd of all the variables.
     The BMI and age were standardized.
--   Age was recoded into different variables, including only \>20 years
-    in the analysis.
+-   Age categorized was recoded into different variables, to create age range (20-80 years) \>20 years
 -   BMI is recoded and categorized
     as-"18.5,18.5–\<25,25–\<30,30–\<35,35–\<40,≥40 years).
 -   Ethnicity is recoded as "Mexican American" = "1", "Other Hispanic" =
     "2", "NH White" = "3", "NH Black" = "4", "Other/Multi" = "5"
 -   Since special codes are not random, cannot be dropped; the
     informative missingness if ignored (MAR or MNAR) could introduce
-    bias. We transformed special codes (3,7,) to NA and included all NAs
-    in the analysis. Visulaization of missing data presented below.
--   A final analytic dataset was created ('adult') with "NH White" and
-    "Male" as the reference group
+    bias. 
+
+We transformed special codes (3,7,) to NA and included all NAs
+    in the analysis. 
+Visulaization of missing data is presented below.
+
+A final analytic dataset created ('adult') with "NH White" and
+    "Male" as the reference group for analysis
 
 ```{r}
 #| label: Basic Exploration (adults)
@@ -386,7 +393,7 @@ glimpse(adult)
 
 
 ```
-## Description and Visualzation of Adult (> 20 years) dataset and variables
+## Description and Visualzation of Adult dataset (> 20 years) dataset and variables
 
 Observations - 5769 observations 
 Survey design: SDMVPSU, SDMVSTRA, WTMEC2YR
@@ -516,7 +523,7 @@ ggplot(adult, aes(x = factor(bmi_cat), fill = factor(diabetes_dx))) +
 # Statistical Methods and Modeling
 
 ## Multiple Logistic regression on survey weighted dataset
-We conducted frequentist method **Multiple Logistic regression** on a
+We conducted frequentist method Multiple Logistic regression on a
 survey-weighted dataset, for complete case analysis and data exploration
 
 ## Multivariate Imputation by Chained Equations (MICE) 
@@ -568,15 +575,15 @@ Student’s t-distribution with: ν=3: degrees of freedom (controls tail heavine
     coefficient, mean, or variance) is treated as a random variable with
     a probability distribution that reflects uncertainty.
 
-## Summary of Bayesian regression under following headins - 
--Posterior Predictive Probabilities
--Posterior Mean, Median, credible Intervals
--Posterior Probability (Outcome=1)
--Comparison with External Prevalence (population prevalence)
--Posterior Model Fit Metrics
--Prior versus Posterior Coefficient Distributions
--Posterior Predictive Checks
--Uncertainty Quantification 
+## Summary of Bayesian regression is presented under the following headings 
+- Posterior Predictive Probabilities
+- Posterior Mean, Median, credible Intervals
+- Posterior Probability (Outcome=1)
+- Comparison with External Prevalence (population prevalence)
+- Posterior Model Fit Metrics
+- Prior versus Posterior Coefficient Distributions
+- Posterior Predictive Checks
+- Uncertainty Quantification 
 
 ## Model Equation
 
@@ -587,20 +594,17 @@ $$ \text{logit}(P(Y_i=1)) = \beta_0 + \beta_1 \cdot Age_i + \beta_2 \cdot BMI_i 
 **Linear Regression equation:**
 
 $$ y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i $$
+## Diagnostics for Bayesian Logictic Regression is presented under the following headings
 
-## Diagnostics for Bayesian Logictic Regression
-
-Trace Plots for Markov Chain Monte Carlo Convergence
-Autocorrelation Plots
-Potential Scale Reduction Factor Assessment
-Posterior Predictive Checks
-Residual Analysis
-Bayes Factor Comparison
-Prior Sensitivity Analysis
-Model Fit Assessment
-Posterior Predictive Probability Plots
-Posterior Interval Coverage Evaluation
-Convergence Diagnostics across Chains
+- Trace Plots for Markov Chain Monte Carlo Convergence
+- Autocorrelation Plots
+- Posterior Predictive Checks
+- Residual Analysis
+- Prior Sensitivity Analysis
+- Model Fit Assessment
+- Posterior Predictive Probability Plots
+- Posterior Interval Coverage Evaluation
+- Convergence Diagnostics across Chains
 
 ```{r}
 #| label: modeling-Survey-weighted complete-case 
@@ -655,8 +659,6 @@ summary(svy_fit)
 
 plot(residuals(svy_fit, type='deviance'))
 
-
-
 # Survey-weighted OR table (no intercept)
 svy_or <- broom::tidy(svy_fit, conf.int = TRUE) %>%
   dplyr::mutate(OR = exp(estimate), LCL = exp(conf.low), UCL = exp(conf.high)) %>%
@@ -664,17 +666,17 @@ svy_or <- broom::tidy(svy_fit, conf.int = TRUE) %>%
   dplyr::filter(term != "(Intercept)")
 knitr::kable(svy_or, caption = "Survey-weighted odds ratios (per 1 SD)")
 
-
-
 ```
 
 The Survey-weighted odds ratios (per 1 SD) are presented. The residual plot looks okay and does not show any pattern.
+
+MICE is performed on on the imputed dataset. The model summary of the pooled imputed dataset presents odds ratio.
 
 ```{r}
 #| label: MICE
 #| echo: true
  
-# ------------------------- 2) Multiple Imputation (predictors only) 
+# ----- 2) Multiple Imputation (predictors only) 
 mi_dat <- adult %>%
   dplyr::select(diabetes_dx, age, bmi, sex, race, WTMEC2YR, SDMVPSU, SDMVSTRA)
 
@@ -702,7 +704,7 @@ imp <- mice::mice(mi_dat, m = 5, method = meth, predictorMatrix = pred, seed = 1
 
 ```
 
-MICE was performed and below is the model fit on the imputed dataset. The summary of the odds ratio of the pooled imputed dataset is presented
+
 
 ```{r}
 #| label: fit mutated model
@@ -728,8 +730,6 @@ knitr::kable(mi_or, caption = "MI pooled odds ratios (per 1 SD)")
 
 ```
 
-## Bayesian Logistic Regression 
-Below we perform Bayesian Logistic Regression on one of the pooled imputed adult dataset (adult_imp1)  and provide the Bayesian model and summary statistics
 
 ```{r}
 #| label: adult_imp1 - Bayesian model and summary
@@ -774,7 +774,8 @@ summary(bayes_fit)            # Bayesian model summary
 
 ```
 
-Visualization, summary and tables of the imputed adult dataset is presented here
+## Bayesian Logistic Regression 
+Bayesian Logistic Regression is performed on the imputed dataset from the pooled imputed adult dataset (adult_imp1) and provided the Bayesian model summary statistics, visualization, summary tables. 
 
 ```{r}
 #| label: tables_adult_imp1
@@ -802,6 +803,7 @@ factor_vars <- sapply(adult_imp1, is.factor)
 summary(adult_imp1[, factor_vars])
 
 ```
+
 
 ```{r}
 # Save your dataset as CSV
@@ -889,17 +891,16 @@ plt.xlabel('Diabetes Status')
 plt.ylim(0,1)
 plt.show()
 
-###
-
 # Numeric summaries for predictors
 print("Training set numeric summary:\n", X_train.describe())
 print("\nTesting set numeric summary:\n", X_test.describe())
 
 ```
 
-Training (n=4473) & Testing (n=1119) sets: Age ~48 yrs, BMI ~28, bmi_c ~0, wt_norm ~1; ranges similar across sets.
+**Training (n=4473) & Testing (n=1119) sets**:
+Age ~48 yrs, BMI ~28, bmi_c ~0, wt_norm ~1; ranges similar across sets.
 
-Bayesian Logistic Regression and Prior 
+**Prior** 
 - We used student_t(3, 0, 10) prior @VanDeSchoot2013 
 - student_t(ν,μ,σ)
 
@@ -916,8 +917,8 @@ Helps the model remain stable, especially with:
 # High correlation between predictors
 # Potential outliers in the data
 
+# **Bayesian Logistic Regression Analysis** 
 
-# Bayesian Logistic Regression Analysis 
 ```{r}
 #| label: Visualization prior, bmi, age
 ###
@@ -952,7 +953,6 @@ ggplot(adult_imp1, aes(x = factor(diabetes_dx), y = bmi, fill = factor(diabetes_
   theme_minimal() +
   theme(legend.position = "none")
 
-
 # logistic regression curve
 ggplot(adult_imp1, aes(x = bmi, y = diabetes_dx)) +
   geom_point(aes(y = diabetes_dx), alpha = 0.2, position = position_jitter(height = 0.02)) +
@@ -964,7 +964,6 @@ ggplot(adult_imp1, aes(x = bmi, y = diabetes_dx)) +
   ) +
   theme_minimal()
 
-
 ```
 
 ## Posterior Draws
@@ -973,35 +972,38 @@ credible intervals summary(bayes_fit) or posterior_summary(bayes_fit) -
 
 ## Visualization 
 
-Distribution shape mcmc_hist(posterior, pars = c("b_age"))
-or mcmc_areas() - Pairwise plots Correlations between parameters
-mcmc_pairs(posterior) - Posterior predictive checks Compare model
-predictions vs observed data pp_check(bayes_fit) - Model comparison
-Using LOO or WAIC loo(bayes_fit) or waic(bayes_fit)
+- Distribution shape mcmc_hist(posterior, pars = c("b_age"))
+or mcmc_areas() 
+- Pairwise plots Correlations between parameters
+mcmc_pairs(posterior) 
+- Posterior predictive checks Compare model
+predictions vs observed data pp_check(bayes_fit) 
 
-## Assumptions for Bayesian logistic regression - posterior check - plots
-for linearity - mcmc trace plots for convergence - bayes_R2 for model
-fit
+
+## Assumptions for Bayesian logistic regression
+- posterior check  to check for linearity 
+- mcmc trace plots for convergence 
+- bayes_R2 for model fit
 
 ```{r}
 #| label: Assumptions (Bayesian)
 
 summary(bayes_fit)
 plot(bayes_fit)   # Posterior distributions
-             
 
 pp_check(bayes_fit)      # Posterior predictive checks
 mcmc_trace(bayes_fit)    # Convergence (optional)
 bayes_R2(bayes_fit)      # Model fit
-    # Leave-one-out cross-validation
+  
 
 
 ```
-
 ## Estimated R² 
-Estimated R² = 0.13 (13.1%) - Predictors are relevant, most of the variability remains unexplained. Other factors (like genetics, lifestyle, environment, etc.) might be contributing.
-Below are reported odds ratio from the posterior predicted values and
-the Bayesian regression summary
+- Estimated R² = 0.13 (13.1%) -suggests predictors are relevant, most of the variability remains unexplained. 
+- Other factors (like genetics, lifestyle, environment, etc.) might be contributing.
+
+Below are the reported odds ratio from the posterior predicted values and
+the Bayesian regression
 
 ```{r}
 #| label: Posterior ORs and tables
@@ -1109,7 +1111,9 @@ kable(
 
 ```
 
-Visualization of the posterior draws (pp check, ppc dens plots, ppc (mean and SD) and ppc bars )
+Visualization 
+To check posterior draws, we present plot through plots as below 
+- pp check, ppc dens plots, ppc (mean and SD) and ppc bars 
 
 ```{r}
 #| label: post visualization
@@ -1150,13 +1154,13 @@ ppc_scatter_avg(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ]) +
 
 ```
 
-Visualization 
+Comparative Visualizations 
 - Predicted vs observed - to check how well the model’s predictions align with reality where 
 mean(y_rep) = average predicted probability of diabetes for each individual, across all posterior draws of the parameters.
 y = the actual observed diabetes status (0 = non-diabetic, 1 = diabetic).
 - mcmc plot (dens plots) comparing observed and posterior parameter values (estimates) for bmi_c, age_c, sex_female, and by race categories
-- Visualization of (fitted) Predicted vs observed for bmi using point and error bars
-- Visualization of (fitted) Predicted vs observed for bmi using line plot
+- Fitted (Predicted) vs observed for bmi using point and error bars
+- Fitted (Predicted) vs observed for bmi using line plot
 
 ```{r}
 #| label: mcmc, post vs obs
@@ -1213,18 +1217,16 @@ ggplot(plot_data, aes(x = obs_index)) +
   labs(x = "Observation", y = "BMI", color = "Legend") +
   theme_minimal()
 
-
-###
 summary(adult_imp1$bmi)
 summary(plot_data$bmi_c)
 
 ```
 
-Summary of original bmi (observed data) and centered version of BMI.
--Centering doesn’t change the distribution shape, only shifts it so the mean is zero.
+Centering for bmi
+- Summary of original bmi (observed data) and centered version of BMI.
+- Centering doesn’t change the distribution shape, only shifts it so the mean is zero.
 - Centering is useful in regression/Bayesian models to improve numerical stability and interpretability of intercepts
-
-Plots showing predicted values of bmi and age (prior vs predicted) and the proportion of diabetes=1 for each draw
+- Plots showing predicted values of bmi and age (prior vs predicted) and the proportion of diabetes=1 for each draw
 
 ```{r}
 #| label: Pred vs prior draws (age and bmi)
@@ -1261,7 +1263,6 @@ post <- as_draws_df(bayes_fit) %>%      # bayes_fit = your brms model
     ),
     type = "Posterior"
   )
-
 
 ## visualization of prior and predicted draws
 combined_draws <- bind_rows(prior_draws, post) 
@@ -1300,8 +1301,9 @@ ggplot(pp_proportion_df, aes(x = proportion)) +
 
 ```
 
-
-Plot - Posterior predicted proportion of Diabetes vs NHANES prevalence of Diabetes in the population
+Visualization 
+- Prior and predicted draws
+- Posterior predicted proportion of Diabetes vs NHANES prevalence of Diabetes in the population
 
 ```{r}
 #| label: DM prediction vs prevalence
@@ -1621,7 +1623,7 @@ Vary modifiable predictors (BMI) until the model predicts the desired probabilit
 - such probabilistic predictions can help identify individuals at higher risk and can guide targeted screening, preventive interventions, and policy decisions, ultimately supporting precision medicine and improving patient outcomes.
 
 ```{r}
-#| label: prediction for one patient
+#| label: prediction for participant1
 #| echo: true
 
 # Use the first participant 
