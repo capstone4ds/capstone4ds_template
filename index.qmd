@@ -5,21 +5,13 @@ author: "Namita Mishra, Autumn Wilcox (Advisor: Dr. Ashraf Cohen)"
 date: '`r Sys.Date()`'
 course: Capstone Projects in Data Science
 
-navbar:
-    left:
-      - text: "Research"
-        href: index.qmd
-      - text: "Slides"
-        href: slides.qmd
-      - text: "About Us"
-        href: about.qmd
-        
+
 format:
   html:
     theme: flatly
     code-fold: true
     toc: true
-    page-layout: full
+   
   
 
 bibliography: references.bib # file contains bibtex for references
