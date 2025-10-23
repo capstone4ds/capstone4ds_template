@@ -1,11 +1,11 @@
+
 project:
   type: website
-  output-dir: docs  # folder where HTML files will be saved
+  output-dir: docs
 
 website:
-  title: "Bayesian Logistic Regression - Application in Probability Prediction of Disease (Diabetes)"
-subtitle: "CapStone Project 2025"
-navbar:
+  title: "Bayesian Logistic Regression Capstone"
+  navbar:
     left:
       - text: "Research"
         href: index.qmd
@@ -20,4 +20,3 @@ format:
     toc: true
     code-fold: true
     page-layout: full
-    self-contained: true
