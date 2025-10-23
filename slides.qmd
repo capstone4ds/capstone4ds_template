@@ -1,19 +1,23 @@
-
 ---
-title: "Bayesian Logistic Regression Application in Diabetes Probability Prediction"
-subtitle: "Capstone Project Presentation"
-author: "Namita Mishra (Advisor: Dr. Ashraf Cohen)"
+title: "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)"
+subtitle: "Capstone Presentation"
+author:
+  - "Namita Mishra"
+  - "Autumn Wilcox"
+
+advisor: "Dr. Ashraf Cohen"
 date: '`r Sys.Date()`'
-format: revealjs
-course: Capstone Projects in Data Science
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    transition: slide
+    css: slides.css
 bibliography: references.bib
-self-contained: true
-execute: 
+execute:
   warning: false
   message: false
-editor: 
-  markdown: 
-    wrap: 72
+  echo: false
 ---
 
 

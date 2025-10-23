@@ -229,5 +229,75 @@
     "title": "Bayesian Logistic Regression - Application in Probability Prediction of disease (Diabetes)",
     "section": "Implications",
     "text": "Implications\n\nage and BMI as robust and independent predictors of diabetes, underscore the importance of early targeted interventions in mitigating diabetes risk.\nLongitudinal studies and combining other statistical analytical methods with Bayesian can further enhance and provide better informed precision prevention strategies."
+  },
+  {
+    "objectID": "slides.html#type-2-diabetes-t2d-a-public-health-concern-worldwide",
+    "href": "slides.html#type-2-diabetes-t2d-a-public-health-concern-worldwide",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Type 2 Diabetes (T2D), a public health concern worldwide",
+    "text": "Type 2 Diabetes (T2D), a public health concern worldwide\n\nBody doesn’t make enough insulin or is not used properly → rise in blood sugar\nAffects organs and can lead to multi-organ failure\nUnderstanding risk factors (age, BMI, genetics) allows early intervention"
+  },
+  {
+    "objectID": "slides.html#statistical-problem",
+    "href": "slides.html#statistical-problem",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Statistical Problem",
+    "text": "Statistical Problem\n\nTraditional statistical approaches fail to analyze complex relationships or uncertainty present in healthcare data\nMissing data in survey-collected datasets reduces sample size and may bias estimates"
+  },
+  {
+    "objectID": "slides.html#study-goal",
+    "href": "slides.html#study-goal",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Study Goal",
+    "text": "Study Goal\n\nAddress statistical challenges where traditional methods fail\nCompare Frequentist and Bayesian methods on NHANES 2013–2014\nIdentify associations between risk factors and diabetes (dichotomous outcome)\nDemonstrate model performance and insights for healthcare data analysis"
+  },
+  {
+    "objectID": "slides.html#methods",
+    "href": "slides.html#methods",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Methods",
+    "text": "Methods\n\nExploratory Data Analysis (EDA) of weighted NHANES dataset revealed missing values\nMultivariate linear regression on complete cases resulted in reduced sample size\nMultiple Imputation by Chained Equations (MICE) was applied to handle missing data\nBayesian regression was conducted on imputed data after normalizing age and BMI"
+  },
+  {
+    "objectID": "slides.html#bayesian-regression-principles",
+    "href": "slides.html#bayesian-regression-principles",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Bayesian Regression Principles",
+    "text": "Bayesian Regression Principles\n\nPriors stabilize estimates and reduce extreme values\nHandles uncertainty fully through posterior distributions\nIncorporates prior knowledge for robust inference\nWorks effectively with imputed datasets"
+  },
+  {
+    "objectID": "slides.html#data-source",
+    "href": "slides.html#data-source",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Data Source",
+    "text": "Data Source\n\nNHANES 2013–2014 (CDC)\n\nFiles merged: demographics (DEMO_H), exam (BMX_H), questionnaire (DIQ_H)\n\nCleaned dataset: n = 10,175 observations, 10 variables\n\n\n\n\nDataset\nKey variables\nDimensions\n\n\n\n\ndemo1\nage, race, gender\n10175 × 47\n\n\nexam1\nBMI\n9813 × 224\n\n\nquest1\nDiabetes\n9813 × 953"
+  },
+  {
+    "objectID": "slides.html#data-exploration",
+    "href": "slides.html#data-exploration",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Data Exploration",
+    "text": "Data Exploration\n\nSmall sample for certain BMI subgroups (pre-diabetic n=132/9813)\nOnly 14 complete cases across all variables → imbalance\nSurvey-weighted proportions approximate US population (Male:Female ~48.9%:51%)\nPredictor correlations are hierarchical and complex → suitable for Bayesian modeling"
+  },
+  {
+    "objectID": "slides.html#our-question",
+    "href": "slides.html#our-question",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Our Question",
+    "text": "Our Question\n\nCan Bayesian logistic regression provide more stable and transparent inference than classical MLE for diabetes outcomes in NHANES 2013–2014?"
+  },
+  {
+    "objectID": "slides.html#data-pipeline-reproducible",
+    "href": "slides.html#data-pipeline-reproducible",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Data Pipeline (Reproducible)",
+    "text": "Data Pipeline (Reproducible)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSEQN\nRIDAGEYR\nRIAGENDR\nRIDRETH1\nSDMVPSU\nSDMVSTRA\nWTMEC2YR\nBMXBMI\nDIQ010\nDIQ050\n\n\n\n\n73557\n69\n1\n4\n1\n112\n13481.04\n26.7\n1\n1\n\n\n73558\n54\n1\n3\n1\n108\n24471.77\n28.6\n1\n1\n\n\n73559\n72\n1\n3\n1\n109\n57193.29\n28.9\n1\n1\n\n\n73560\n9\n1\n3\n2\n109\n55766.51\n17.1\n2\n2\n\n\n73561\n73\n2\n3\n2\n116\n65541.87\n19.7\n2\n2\n\n\n73562\n56\n1\n1\n1\n111\n25344.99\n41.7\n2\n2\n\n\n\n\n\n\nAdults &gt;20 years filtered: n = 5,769\nStandardized predictors: age_c, bmi_c\nOutcome adjusted for pregnancy when female\nNH White set as reference level for race\n\n```"
+  },
+  {
+    "objectID": "slides.html#references",
+    "href": "slides.html#references",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "References",
+    "text": "References"
   }
 ]
