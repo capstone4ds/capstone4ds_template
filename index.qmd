@@ -69,7 +69,7 @@ dataset anomalies such as missing data, complete case analysis, and
 separation that limit the efficiency and reliability of traditional
 logistic regression in predicting health outcomes.
 
-##Logical Flow for Analysis
+## Logical Flow for Analysis
 
 (1) **Data Preparation**
 Preparation and analysis of the observed or imputed dataset (e.g., adult_imp1.csv) to handle missing values and ensure completeness.
@@ -1392,7 +1392,7 @@ post_array <- as_draws_array(bayes_fit)  # draws x chains x parameters
 mcmc_acf(post_array, pars = c("b_age_c", "b_bmi_c"))
 
 ```
-## Results
+# Results
 
 ### Multiple Linear Regression Equation
 
@@ -1499,7 +1499,7 @@ The difference could be due to:
 - Predictor effects (BMI, age, sex, race)
 - Sample characteristics vs population weighting in NHANES
 
-## Conclusion
+# Conclusion
 The results find our model is reasonable but slightly conservative (predicting higher risk) relative to the observed population prevalence.
 
 Across multiple modeling approaches—survey-weighted maximum
@@ -1535,7 +1535,7 @@ for: Stratification, clustering, design-based variance adjustments. -
 Bayesian inference treats the weighted likelihood as from a regular
 model, ignoring some survey design features.
 
-## Discussions
+# Discussions
 
 The use of multiple imputation allowed for robust analysis despite
 missing data, increasing power and reducing bias. Comparison of
@@ -1561,7 +1561,7 @@ interpretable achieving the aim of this study. In future research
 hierarchical model using NHANES cycles or adding variables (lab tests)
 could assess nonlinear effects of metabolic risk factors.
 
-## Limitations
+# Limitations
 
 1. The study is based on cross-sectional/observational NHANES data, which limits the ability to make causal inferences. Associations observed between BMI, age, diabetes status cannot confirm causation.
 2. The project relies on multiple imputation for missing values, even though imputation reduces bias, it assumes missingness is at random (MAR); if data are missing not at random (MNAR), results may be biased.
@@ -1572,7 +1572,7 @@ could assess nonlinear effects of metabolic risk factors.
 7. Interactions are not tested in the study (bmi × age) and so other potential synergistic effects might be missed.
 8. Predicted probabilities are model-based estimates, not validated for clinical decision-making. External validation in independent cohorts is needed before application.
 
-## QUESTION for targeted therapy
+# QUESTION for targeted therapy
 
 Translational Perspective from the Bayesian Diabetes Prediction Project. This project further demonstrates the translational potential of Bayesian modeling in clinical decision-making and public health strategy. 
 By using patient-level predictors such as age, BMI, sex, and race to estimate the probability of diabetes, the model moves beyond descriptive statistics toward individualized risk prediction. 
@@ -1702,7 +1702,7 @@ ggplot(post_pred_df_new, aes(x = pred)) +
 
 
 ```
-# Targeted bmi 
+## Targeted bmi 
 In this analysis, a grid of body mass index (BMI) values is generated to examine the relationship between BMI and the predicted probability of diabetes while holding other covariates (age, sex, and race) constant. 
 - Using the fitted Bayesian logistic regression model, posterior predictive probabilities computed for each BMI value and the mean of posterior draws estimated the average predicted probability of diabetes across the BMI range. 
 - We then tried to identify the BMI value whose predicted probability was closest to a predefined target probability (here, 0.3). 
@@ -1711,7 +1711,7 @@ In this analysis, a grid of body mass index (BMI) values is generated to examine
 
 ```{r}
 #| label: predict BMI_targeted therapy
-#| echo: true
+#| include: false
 
 # Grid of possible BMI values (centered if model used bmi_c)
 bmi_seq <- seq(18, 40, by = 0.5)
