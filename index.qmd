@@ -971,6 +971,8 @@ pp_check(bayes_fit)      # Posterior predictive checks
 mcmc_trace(bayes_fit)    # Convergence (optional)
 bayes_R2(bayes_fit)      # Model fit
   
+
+
 ```
 ### **Estimated R² 
 - Estimated R² = 0.13 (13.1%) -suggests predictors are relevant, most of the variability remains unexplained. 
@@ -978,6 +980,27 @@ bayes_R2(bayes_fit)      # Model fit
 
 Below are the reported odds ratio from the posterior predicted values and
 the Bayesian regression
+
+
+```{r}
+library(ggplot2)
+library(reshape2)
+
+correlation_matrix <- cor(adult_imp1[, c("diabetes_dx", "age", "bmi")], use = "complete.obs", method = "pearson")
+correlation_melted <- melt(correlation_matrix)
+
+ggplot(correlation_melted, aes(Var1, Var2, fill = value)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0,
+                       limit = c(-1, 1), space = "Lab", name = "Correlation") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Correlation Heatmap", x = "Features", y = "Features")
+
+```
+
+
+
 
 ```{r}
 #| label: Posterior ORs and tables
@@ -1751,6 +1774,7 @@ ggplot(pred_df, aes(x = bmi_c, y = prob_mean)) +
   theme_bw()
 
 ```
+
 
 ## Implications
 
