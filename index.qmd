@@ -1342,6 +1342,9 @@ ggplot(pp_df, aes(x = proportion)) +
 library(dplyr)
 
 # Posterior predicted proportion
+
+
+
 posterior_mean <- mean(pp_proportion)
 posterior_ci <- quantile(pp_proportion, c(0.025, 0.975))  # 95% credible interval
 
@@ -1357,6 +1360,7 @@ known_ci <- c(
   known_prev + 1.96 * known_se
 )
 
+
 # Print results
 data.frame(
   Type = c("Posterior Prediction", "NHANES Prevalence"),
@@ -1364,6 +1368,7 @@ data.frame(
   Lower_95 = c(posterior_ci[1], known_ci[1]),
   Upper_95 = c(posterior_ci[2], known_ci[2])
 )
+
 
 library(ggplot2)
 library(dplyr)
@@ -1388,6 +1393,53 @@ ggplot(ci_df, aes(x = Type, y = Mean, color = Type)) +
   ) +
   theme_minimal(base_size = 14) +
   theme(legend.position = "none")
+
+
+
+###
+# --- Load libraries ---
+library(survey)
+library(tibble)
+library(ggplot2)
+
+# --- 1. Survey-weighted (Population) prevalence ---
+pop_est <- svymean(~diabetes_dx, nhanes_design_adult, na.rm = TRUE)
+pop_prev <- as.numeric(pop_est)
+pop_se <- as.numeric(SE(pop_est))
+pop_ci <- c(pop_prev - 1.96 * pop_se, pop_prev + 1.96 * pop_se)
+
+# --- 2. Bayesian posterior prevalence ---
+# bayes_pred = matrix of posterior draws (iterations × individuals)
+pp_proportion <- rowMeans(pp_samples)             # prevalence per posterior draw
+post_prev <- mean(pp_proportion)                  # posterior mean prevalence
+post_ci <- quantile(pp_proportion, c(0.025, 0.975))  # 95% credible interval
+
+# --- 3. Combine into one data frame ---
+bar_df <- tibble(
+  Source     = c("Survey-weighted (Population)", "Bayesian Posterior"),
+  Prevalence = c(pop_prev, post_prev),
+  CI_low     = c(pop_ci[1], post_ci[1]),
+  CI_high    = c(pop_ci[2], post_ci[2])
+)
+
+# --- 4. Plot ---
+ggplot(bar_df, aes(x = Source, y = Prevalence, fill = Source)) +
+  geom_col(alpha = 0.85, width = 0.6) +
+  geom_errorbar(
+    aes(ymin = CI_low, ymax = CI_high),
+    width = 0.15,
+    color = "black",
+    linewidth = 0.8
+  ) +
+  guides(fill = "none") +
+  labs(
+    title = "Population vs Posterior Diabetes Prevalence",
+    subtitle = "Survey-weighted estimate (design-based) vs Bayesian (model-based)",
+    y = "Prevalence (Proportion with Diabetes)",
+    x = NULL
+  ) +
+  theme_minimal(base_size = 13)
+
 
 ```
 
