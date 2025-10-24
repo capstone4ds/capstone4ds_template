@@ -12,7 +12,7 @@ website:
       - text: "Slides"
         href: slides.qmd
       - text: "About Us"
-        href: about.qmd
+        href: About.qmd
 
 format:
   html:
