@@ -14,7 +14,7 @@ Outside work she explores - gardening, cooking, singing, and sewing.
 
 📧 Contact: nmishra@uwf.edu
 
-<img src="images/autumn.jpeg" alt="Autumn Wilcox" style="width:200px; border-radius:50%; margin-bottom:10px;">
+<p><img src="images/namita.png" alt="Dr. Namita Mishra MPH, MBBS (MD)" style="width:200px; border-radius:50%; margin-bottom:10px;"></p>
 
 Autumn S. Wilcox is a U.S. Navy veteran and Data Science graduate student at the University of West Florida, specializing in Analytics and Modeling. She has over nine years of experience in Network Operations and Technical Writing, including her current role at Navy Federal Credit Union, where she supports enterprise technology and process documentation initiatives. Autumn also holds certification in Clinical Research Quality Management (CRQM) and has contributed to quality oversight and compliance efforts in clinical research settings.
 

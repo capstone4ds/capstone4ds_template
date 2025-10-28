@@ -173,13 +173,14 @@ outcomes.
 ## Statistical Tool
 
 -   R, R packages and libraries are used to import data, perform data
-    wrangling and analysis. \## Data source
--   NHANES 2-year data (2013-2014) - a cross-sectional weighted data
-    @CenterforHealthStatistics1999.
+    wrangling and analysis. 
+    
+## Data source
+-   NHANES 2-year data (2013-2014) - a cross-sectional weighted data @CenterforHealthStatistics1999.
 
 ```{r}
 #| label: Libraries
-#| echo: true
+#| include: false
 
 # loading packages 
 options(repos = c(CRAN = "https://cloud.r-project.org"))
@@ -255,7 +256,7 @@ nhanesCodebook("DEMO_H",'RIDRETH1')
 nhanesCodebook("DEMO_H",'RIAGENDR')
 nhanesCodebook("DEMO_H",'RIDAGEYR')
 nhanesCodebook("DIQ_H","DIQ010, DIQ050")
-nhanesCodebook("BMX_H",'BMDBMIC')
+nhanesCodebook("BMX_H",'BMXBMI')
 
   #  .xpt files read ( 2013–2014)                      
                       bmx_h <- nhanes("BMX_H")         #Exam
@@ -267,10 +268,10 @@ nhanesCodebook("BMX_H",'BMDBMIC')
 library(dplyr)
 
 exam_sub <- bmx_h %>% 
-  select(SEQN, BMDBMIC) %>%
+  select(SEQN, BMXBMI) %>%
   rename(
     ID = SEQN,
-    BMI = BMDBMIC
+    BMI = BMXBMI
   )
 
 
@@ -295,7 +296,9 @@ merged_data <- demo_sub %>%
 names(merged_data)
 saveRDS(merged_data, "data/nhanes2013_2014_prepared.rds")
 
+
 ```
+
 
 Merged dataset is cleaned and exploratory data analysis conducted to
 report results and visualizations for 10175 observations and 10
@@ -322,12 +325,49 @@ plot_missing(merged_data, title="Figure 2(Merged dataset). Breakdown of missing 
 
 ```
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ```{r message=FALSE, warning=FALSE}
 #| label: merged dataframe and character handling
 #| echo: true
 
 # print(glimpse(merged_data))
-print(table(merged_data$BMDBMIC, useNA = "ifany"))
+print(table(merged_data$BMXBMI, useNA = "ifany"))
 print(table(merged_data$DIQ010,  useNA = "ifany"))
 
  #  ---- Coercion helpers (handle labelled/character) ----
@@ -377,6 +417,8 @@ message("Saved: data/merged_2013_2014.rds")
 ```
 
 ## Exploratory data analysis
+
+
 
 -   Using library(survey) we calculated weighted means and sd of all the
     variables. The BMI and age were standardized.
@@ -466,8 +508,7 @@ glimpse(adult)
 
 ```
 
-## Exploratory Description and Visualization of Adult dataset (\> 20
-years)\*\*
+## Exploratory Analysis of Adult dataset (> 20 years)
 
 Observations - 5769 observations Survey design: SDMVPSU, SDMVSTRA,
 WTMEC2YR Outcome: diabetes_dx (numeric 0/1) Covariates: bmi, age, sex,
@@ -539,6 +580,7 @@ cat("Effective sample size for diabetes_dx:", round(ess), "\n")
 
 
 ```
+
 
 ```{r}
 #| label: EDA visualization
@@ -687,12 +729,13 @@ Intervals
 - Posterior Predictive Checks - for Uncertainty Quantification
 
 ## Bayesian Logistic Regression model Equation
+
 $$ \text{logit}(P(Y_i=1)) = \beta_0 + \beta_1 \cdot Age_i + \beta_2 \cdot BMI_i + \beta_3 \cdot Race_i + \beta_4 \cdot Gender_i $$
 **Linear Regression equation:**
+
 $$ y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i $$ 
 
 ## Diagnostics for Bayesian Logictic Regression Visualization  
-
 -   Trace Plots for Markov Chain Monte Carlo Convergence
 -   Posterior Predictive Checks
 -   Residual Analysis
@@ -1640,7 +1683,7 @@ ggplot(bar_df, aes(x = Source, y = Prevalence, fill = Source)) +
 
 ```
 
-###Survey-Weighted Prevalence (8.9%)
+### Survey-Weighted Prevalence (8.9%)
 - M representative estimate of diabetes prevalence in the population, as it adjusts for NHANES’ complex sampling design. It’s slightly lower because survey weights give less influence to overrepresented groups (e.g., those with higher diabetes prevalence).
 
 ### Imputed (Unweighted) Prevalence (11.1%)
@@ -1674,7 +1717,7 @@ predicted prevalence is higher than observed.
 validate disease models before applying them to regions without survey
 data.
 
-
+### Autocorrelation (mcmc)
 
 ```{r}
 #| label: autocorrelation_mcmc
@@ -1693,14 +1736,13 @@ post_array <- as_draws_array(bayes_fit)  # draws x chains x parameters
 mcmc_acf(post_array, pars = c("b_age_c", "b_bmi_c"))
 
 ```
+- bayes_fit is the fitted Bayesian model (brms or rstanarm).
+- as_draws_array() converts the posterior samples into a 3-dimensional array (iterations × chains × parameters). If we ran 4 chains with 2000 iterations each, and your model has 5 parameters, the array shape will be (2000, 4, 5).
 
+- mcmc_acf() - produces autocorrelation plots for the posterior samples of specified parameters (b_age_c and b_bmi). Autocorrelation measures how correlated a sample is with previous samples in the Markov Chain and checks the quality of MCMC sampling:
+    - High autocorrelation → the chain moves slowly and is not exploring the posterior efficiently.
+    - Low autocorrelation → the chain is mixing well (as in the model).
 
-
-
-```{r} 
-
-svyglm(formula = form_cc, design = des_cc, family = quasibinomial())
-```
 ### Multiple Linear Regression Equation
 Shows all predictors are significant: 
 **age (p \< 0.001)** and **BMI (p \<0.001)** show strong positive associations with the outcome
