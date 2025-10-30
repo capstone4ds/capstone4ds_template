@@ -1247,39 +1247,29 @@ and BMI (per 1 SD) demonstrate symmetric bell-shaped distributions,
 indicating no strong bias toward positive or negative effects before
 observing data.
 
-# Predictive checking and validation (Bayesian model)
+## Predictive checking and validation (Bayesian model)
 1.  Posterior Summaries 
 -   Provides posterior mean, median, 95% credible intervals
 -   Convergence diagnostics (R-hat, effective sample size)
 -   plots to visualizes posterior distributions with high uncertainty, narrow distributions
     indicating precise estimates.
-
 2.  Posterior Odds Ratios - provides interpretation of the model
     coefficients on a multiplicative scale.
 -   odds ratios (OR = exp(Estimate)) with reference categories: NH White (race), Male
     (sex).
--   ORs with 95% credible intervals (CrI) allow direct
-    interpretation of associations between predictors and outcome.
-
 3.  Posterior Predictive Checks (PPC)
 -   pp_check to assesses how the model reproduces observed data
     and validate model fit.
-Visualizations of generated simulated datasets compared with the observed data.
-show density overlays for both  mea and SD   
-There was no large discrepancies indicating potential misfit; there was
-good alignment suggesting reliable predictions.
-
+-   Visualizations of generated simulated datasets compared with the observed data show density overlays for both  mean and SD. There was no large discrepancies indicating potential misfit; there was good alignment suggesting reliable predictions.
 4.  MCMC Convergence endures reliable posterior estimates.
 -   MCMC Trace plots show chains for each parameter over iterations.
 -   Well-mixed chains without trends indicate convergence and stable
     posterior estimates.
-
 5.  Model Fit -provided details to quantify predictive performance.
 -   The proportion of variance explained by the
     model: R² = 0.13 (13%) shows predictors are relevant but other factors (e.g.,
     genetics, lifestyle, environment) also contribute to outcome
     variability.
-
 6.  Correlation and Parameter Relationships (Optional)
 -   Pairwise plots (mcmc_pairs, posterior) – explore correlations between
     parameters.
@@ -2216,7 +2206,6 @@ ggplot(post_pred_df, aes(x = pred)) +
   xlab('Probability of being diabetic (Outcome=1)') +
   ggtitle('Posterior Predictive Distribution 95% Credible Interval') +
   theme_bw()
-
 
 ```
 
