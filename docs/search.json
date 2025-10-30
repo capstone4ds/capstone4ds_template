@@ -149,16 +149,16 @@
   {
     "objectID": "slides.html",
     "href": "slides.html",
-    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "title": "Bayesian Logistic Regression Capstone",
     "section": "",
-    "text": "Body doesn’t make enough insulin or is not used properly → rise in blood sugar\nAffects organs and can lead to multi-organ failure\nUnderstanding risk factors (age, BMI, genetics) allows early intervention"
+    "text": "title: “Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)” subtitle: “Capstone Presentation” author: “Namita Mishra” “Autumn Wilcox” advisor: “Dr. Ashraf Cohen” date: “2025-10-30” format: revealjs: theme: simple slidenumber: true transition: slide css: slides.css bibliography: references.bib execute: warning: false message: false echo: false"
   },
   {
     "objectID": "slides.html#type-2-diabetes-t2d-a-public-health-concern-worldwide",
     "href": "slides.html#type-2-diabetes-t2d-a-public-health-concern-worldwide",
     "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
-    "section": "",
-    "text": "Body doesn’t make enough insulin or is not used properly → rise in blood sugar\nAffects organs and can lead to multi-organ failure\nUnderstanding risk factors (age, BMI, genetics) allows early intervention"
+    "section": "Type 2 Diabetes (T2D), a public health concern worldwide",
+    "text": "Type 2 Diabetes (T2D), a public health concern worldwide\n\nBody doesn’t make enough insulin or is not used properly → rise in blood sugar\nAffects organs and can lead to multi-organ failure\nUnderstanding risk factors (age, BMI, genetics) allows early intervention"
   },
   {
     "objectID": "slides.html#statistical-problem",
@@ -460,5 +460,467 @@
     "title": "Bayesian Logistic Regression - Application in Probability Prediction of disease (Diabetes)",
     "section": "Multiple Logistic Regression model (Survey weighted Modeling for complete-case Analysis)",
     "text": "Multiple Logistic Regression model (Survey weighted Modeling for complete-case Analysis)\n\nStrongest predictors: Age and BMI show the largest ORs among continuous variables—both strongly linked to diabetes risk.\nProtective factor: Being female reduces the odds of diabetes.\nRace disparities: All racial/ethnic minority groups show significantly higher odds compared to Non-Hispanic Whites, consistent with known health disparities in diabetes prevalence.\nSignificance: All p-values &lt; 0.05, so all predictors are statistically significant.\n\n\nHandling Missing Data: Multivariate Imputation by Chained Equations (MICE)\n\nVariables with missing data are imputed conditionally on all others through iterative regression models.\nMultiple (m = 5–10) imputed datasets generated (MICE) are analyzed separately, and combined using Rubin’s rules to obtain pooled parameter estimates and standard errors.\n\n\n\nBayesian Logistic Regression\n\nBayesian logistic regression model applied to the imputed datasets, with prior distributions incorporated and direct estimation of posterior distributions, credible intervals, and posterior predictive checks. Bayesian inference provided a probabilistic interpretation of parameter uncertainty, complementing the frequentist findings.\n\n\n\nModel Validation and Interpretation\n\nDiagnostic checks performed below evaluate model convergence, goodness-of-fit, and predictive accuracy.\n\n\n\nModel Comparison\n\nThe results from both frameworks (frequentist and Bayesian) are compared to ensure robustness of conclusions regarding predictors of diabetes.\n\n\n\n\nSurvey-weighted odds ratios (per 1 SD)\n\n\nterm\nOR\nLCL\nUCL\np.value\n\n\n\n\nage_c\n3.0292807\n2.6967690\n3.4027912\n0.0000000\n\n\nbmi_c\n1.8853571\n1.6526296\n2.1508579\n0.0000039\n\n\nsexFemale\n0.5281132\n0.4104905\n0.6794397\n0.0003857\n\n\nraceMexican American\n2.0358434\n1.4850041\n2.7910081\n0.0008262\n\n\nraceOther Hispanic\n1.5915182\n1.1664529\n2.1714810\n0.0087119\n\n\nraceNH Black\n1.6689718\n1.1605895\n2.4000450\n0.0116773\n\n\nraceOther/Multi\n2.3270527\n1.5451752\n3.5045697\n0.0014331"
+  },
+  {
+    "objectID": "slides.html#method-bayesian-logistic-regression",
+    "href": "slides.html#method-bayesian-logistic-regression",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Method: Bayesian Logistic Regression",
+    "text": "Method: Bayesian Logistic Regression\n\nOverview\nGoal: Estimate associations between predictors and binary outcomes.\nFramework: Bayesian inference combines prior knowledge with observed data.\nProduces posterior distributions → enables direct probabilistic interpretation.\nCaptures full parameter uncertainty and supports credible intervals for inference.\nCompared to frequentist methods, Bayesian models allow richer inference using posterior probabilities."
+  },
+  {
+    "objectID": "slides.html#model-structure",
+    "href": "slides.html#model-structure",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Model Structure",
+    "text": "Model Structure\n\nLogistic Model\n[ (P(Y = 1)) = 0 + {j=1}^{p} _j X_j ]\n( P(Y = 1) ): Probability of event (e.g., diabetes).\n( _0 ): Intercept (logodds when predictors = 0).\n( _j ): Effect of predictor ( X_j ) on logodds.\nCombines predictors linearly → transformed through the logit link.\n\n\nBayesian Extension\nTreats coefficients ( ) as random variables.\nUpdates prior beliefs → posterior distributions via Bayes’ theorem:\n[ ] Naturally incorporates uncertainty in all parameters."
+  },
+  {
+    "objectID": "slides.html#prior-specification",
+    "href": "slides.html#prior-specification",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Prior Specification",
+    "text": "Prior Specification\nCoefficients: Normal(0, 2.5) → weakly informative, mild regularization.\nIntercept: Studentt(3, 0, 10) →\nHeavy tails (df = 3) allow large effects.\nCentered at 0 (no directional bias).\nScale = 10 (broad range).\nPriors improve stability with small samples or multicollinearity.\n(R. van de Schoot et al., 2021; van de Schoot et al., 2013)"
+  },
+  {
+    "objectID": "slides.html#advantages",
+    "href": "slides.html#advantages",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Advantages",
+    "text": "Advantages\nUncertainty quantification: Posterior distributions capture full variability.\nCredible intervals: Direct probability statements (e.g., 95% credible interval).\nFlexible priors: Integrate expert or historical knowledge.\nProbabilistic predictions: Posterior predictive distributions yield probabilities for new data.\nModel checking: Posterior predictive checks (PPCs) compare simulated and observed data."
+  },
+  {
+    "objectID": "slides.html#posterior-predictions",
+    "href": "slides.html#posterior-predictions",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Posterior Predictions",
+    "text": "Posterior Predictions\nPosterior distributions used to estimate ( P(Y=1) ) for given predictors.\nEnable statements such as:\n&gt; “Given predictors, the probability of the outcome lies between X% and Y%.”\nIncorporate:\nParameter uncertainty (coefficients).\nPredictive uncertainty (future outcomes)."
+  },
+  {
+    "objectID": "slides.html#model-evaluation-diagnostics",
+    "href": "slides.html#model-evaluation-diagnostics",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Model Evaluation & Diagnostics",
+    "text": "Model Evaluation & Diagnostics\nInference: Markov Chain Monte Carlo (MCMC) using NoUTurn Sampler (NUTS).\nChains: 4 chains with adequate warmup for convergence.\nDiagnostics:\n( ) (Rhat) &lt; 1.01 → convergence check.\nEffective Sample Size (ESS) → chain efficiency.\nAutocorrelation plots → independence between draws.\nPosterior Predictive Checks (PPC) → model fit.\nBayesian ( R^2 ) → variance explained (accounts for uncertainty).\n(Austin et al., 2021)"
+  },
+  {
+    "objectID": "slides.html#summary",
+    "href": "slides.html#summary",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Summary",
+    "text": "Summary\nBayesian logistic regression provides a flexible, uncertaintyaware framework.\nCombines data and prior knowledge → robust inference and interpretability.\nProduces credible intervals, posterior probabilities, and probabilistic predictions."
+  },
+  {
+    "objectID": "slides.html#analysis-and-results",
+    "href": "slides.html#analysis-and-results",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Analysis and Results",
+    "text": "Analysis and Results\n\nStatistical Tool\nSoftware: R\nPackages: tidyverse, survey, haven, brms Computation: Probabilistic modeling via brms interface to Stan\nEnables full Bayesian inference using MCMC (NoUTurn Sampler)"
+  },
+  {
+    "objectID": "slides.html#data-preprocessing",
+    "href": "slides.html#data-preprocessing",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Data PreProcessing",
+    "text": "Data PreProcessing\n\nDataset Creation\nMerged 3 NHANES files:\nDEMO_H (Demographics)\nBMX_H (Body Measures)\nDIQ_H (Diabetes Questionnaire)\nImported .XPT files using haven package\nJoined by respondent ID to form a single adult analytic dataset\nEnsured consistent data types: numeric or factor → suitable for survey analysis"
+  },
+  {
+    "objectID": "slides.html#data-variables",
+    "href": "slides.html#data-variables",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Data Variables",
+    "text": "Data Variables\nVariable | Description | Type |\n|||| | diabetes_dx | Diabetes diagnosis (1 = Yes, 0 = No) | Binary | | age | Age in years (20–80) | Continuous | | bmi | Body Mass Index (kg/m²) | Continuous | | sex | Male / Female | Categorical | | race | Race/Ethnicity (5 levels) | Categorical | | WTMEC2YR | Exam weight | Weight | | SDMVPSU | Primary Sampling Unit | Design | | SDMVSTRA | Stratum | Design | | age_c, bmi_c | Standardized (zscores) | Continuous | | wt_norm | Normalized weight | Weight |"
+  },
+  {
+    "objectID": "slides.html#study-design-surveyweighted-analysis",
+    "href": "slides.html#study-design-surveyweighted-analysis",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Study Design: SurveyWeighted Analysis",
+    "text": "Study Design: SurveyWeighted Analysis\nNHANES uses complex, multistage sampling with oversampling for minorities and older adults.\nSurvey design variables retained:\nPSU → SDMVPSU\nStrata → SDMVSTRA\nWeights → WTMEC2YR\n\nWeighted Logistic Regression\nOutcome: Diabetes diagnosis (diabetes_dx)\nPredictors: BMI, Age, Sex, Race/Ethnicity\nWeights, strata, and PSU applied to:\nAdjust for unequal selection probabilities\nEnsure nationally representative estimates\nProduce valid standard errors and confidence intervals"
+  },
+  {
+    "objectID": "slides.html#covariates-included",
+    "href": "slides.html#covariates-included",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Covariates Included",
+    "text": "Covariates Included\nAge: Continuous (centered, standardized) and categorized (20–80 years)\nBMI: Continuous (centered, standardized) and categorized (&lt;18.5, 18.5–&lt;25, 25–&lt;30, 30–&lt;35, 35–&lt;40, ≥40)\nSex: Male / Female\nRace/Ethnicity: 5 groups\n1 = Mexican American\n2 = Other Hispanic\n3 = NonHispanic White (reference) 4 = NonHispanic Black\n5 = Other/Multi"
+  },
+  {
+    "objectID": "slides.html#data-processing-steps",
+    "href": "slides.html#data-processing-steps",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Data Processing Steps",
+    "text": "Data Processing Steps\nStep | Description |\n||| | Weighting | Used survey package to compute weighted means/SDs | | Standardization | Centered and scaled bmi and age | | Recoding | Transformed categorical codes (3, 7 → NA) | | Age Categorization | 20–&lt;30, 30–&lt;40, 40–&lt;50, 50–&lt;60, 60–&lt;70, 70–80 years | | BMI Categorization | Underweight, Normal, Overweight, Obesity I–III | | Ethnicity Recoding | Reclassified into 5 NHANES categories | | Missing Data | Retained for visualization and pattern assessment (MAR/MNAR considered) | | Final Dataset | Cleaned analytic dataset with Male and NonHispanic White as reference groups |"
+  },
+  {
+    "objectID": "slides.html#summary-1",
+    "href": "slides.html#summary-1",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Summary",
+    "text": "Summary\nIntegrated multiple NHANES files → single analytic dataset.\nApplied survey weights to achieve populationrepresentative inference.\nStandardized and categorized variables for clarity and comparability.\nEstablished reference groups for regression modeling:\nMale, NonHispanic White\nDataset prepared for Bayesian logistic regression in brms."
+  },
+  {
+    "objectID": "slides.html#exploratory-data-analysis",
+    "href": "slides.html#exploratory-data-analysis",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Exploratory Data Analysis",
+    "text": "Exploratory Data Analysis\n\nAdult Dataset (Ages 20–80 years)\nSample size: n = 5,769\nGoal: Examine variable structure, completeness, and key trends\nTools: R (tidyverse, survey, brms, ggplot2)"
+  },
+  {
+    "objectID": "slides.html#dataset-overview",
+    "href": "slides.html#dataset-overview",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Dataset Overview",
+    "text": "Dataset Overview\nSummary Metric | Value |\n||| | Mean Age | 47.5 ± 0.38 years | | Mean Diabetes Prevalence | 8.9% ± 0.48% | | Variance (Diabetes) | 4759.9 | | Effective Sample Size | 48,142 |"
+  },
+  {
+    "objectID": "slides.html#data-structure",
+    "href": "slides.html#data-structure",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Data Structure",
+    "text": "Data Structure\n12 variables: 9 analytic, 3 design (weights, PSU, strata)\n25% categorical, 75% continuous\n92.7% of rows complete → minimal missingness\nKey variables: age, bmi, sex, race, diabetes_dx\nExample entries:\nID | Age | BMI | Sex | Race | Diabetes |\n||||||| | 1 | 69 | 26.7 | Male | NH Black | 1 | | 2 | 54 | 28.6 | Male | NH White | 1 | | 3 | 73 | 19.7 | Female | NH White | 0 |"
+  },
+  {
+    "objectID": "slides.html#variable-distributions",
+    "href": "slides.html#variable-distributions",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Variable Distributions",
+    "text": "Variable Distributions\nAge: Fairly uniform across groups (20–80 years).\nSex: Slightly higher proportion of females.\nBMI: Concentrated in normal to overweight range; tail in obesity.\nDiabetes: Overall prevalence ≈ 9%."
+  },
+  {
+    "objectID": "slides.html#relationships-and-patterns",
+    "href": "slides.html#relationships-and-patterns",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Relationships and Patterns",
+    "text": "Relationships and Patterns\nDiabetes × BMI: Higher BMI → higher diabetes prevalence.\nDiabetes × Age: Increases steadily with advancing age.\nDiabetes × Race/Ethnicity:\nNotable differences across racial groups.\nSome minority groups show higher prevalence.\nDiabetes × Sex (by Race):\nBar plots show sex differences within racial subgroups.\nCounts displayed on each bar for clarity."
+  },
+  {
+    "objectID": "slides.html#abnormalities-detected-in-adult-dataset",
+    "href": "slides.html#abnormalities-detected-in-adult-dataset",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Abnormalities Detected in Adult Dataset",
+    "text": "Abnormalities Detected in Adult Dataset\n\nMissingness Summary\nOverall Missingness: ~4% (low but notable given few variables)\nVariable completeness: No variable entirely missing (0% missing).\nImplication: Missingness may be Missing at Random (MAR) — e.g., older adults missing BMI due to illness.\nActionable Insight:\nPerform MICE imputation to reduce bias before Bayesian modeling.\nTest logistic regression of missingness indicators to confirm MAR/MNAR.\nRationale:\nEven small missingness in key predictors (BMI, diabetes) can bias estimates.\nSufficient auxiliary variables (age, sex, race, WTMEC2YR) available for imputation.\nBayesian models (e.g., brms, rstanarm) require complete data → imputation necessary."
+  },
+  {
+    "objectID": "slides.html#statistical-modeling-overview",
+    "href": "slides.html#statistical-modeling-overview",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Statistical Modeling Overview",
+    "text": "Statistical Modeling Overview\n\n1. Multiple Logistic Regression\nModel type: Surveyweighted, completecase analysis\nKey Predictors:\nAge and BMI → strongest positive association with diabetes risk.\nSex (Female) → protective factor.\nRace: All minority groups had higher odds vs. NonHispanic Whites.\nSignificance: All predictors statistically significant (p &lt; 0.05).\nTerm | OR | LCL | UCL | p.value |\n|||||| | age_c | 3.03 | 2.70 | 3.40 | &lt;0.001 | | bmi_c | 1.89 | 1.65 | 2.15 | &lt;0.001 | | sexFemale | 0.53 | 0.41 | 0.68 | &lt;0.001 | | raceMexican American | 2.04 | 1.49 | 2.79 | &lt;0.001 | | raceOther Hispanic | 1.59 | 1.17 | 2.17 | 0.009 | | raceNH Black | 1.67 | 1.16 | 2.40 | 0.012 | | raceOther/Multi | 2.33 | 1.55 | 3.50 | 0.001 |"
+  },
+  {
+    "objectID": "slides.html#handling-missing-data-mice-imputation",
+    "href": "slides.html#handling-missing-data-mice-imputation",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Handling Missing Data: MICE Imputation",
+    "text": "Handling Missing Data: MICE Imputation\nMethod: Multivariate Imputation by Chained Equations (MICE)\nProcess:\nGenerate m = 5–10 imputed datasets.\nEach imputed using iterative regression models.\nCombine estimates using Rubin’s Rules for pooled parameters.\nPurpose: Preserve sample size, reduce bias, and retain uncertainty in estimates."
+  },
+  {
+    "objectID": "slides.html#bayesian-logistic-regression",
+    "href": "slides.html#bayesian-logistic-regression",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Bayesian Logistic Regression",
+    "text": "Bayesian Logistic Regression\nApplied to: Imputed datasets.\nFeatures:\nIncorporates priors and provides posterior distributions.\nEnables probabilistic interpretation (credible intervals, posterior predictive checks).\nComplements frequentist findings and tests model robustness."
+  },
+  {
+    "objectID": "slides.html#model-validation-comparison",
+    "href": "slides.html#model-validation-comparison",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Model Validation & Comparison",
+    "text": "Model Validation & Comparison\nDiagnostics: Checked model convergence, goodnessoffit, and predictive accuracy.\nComparison:\nFrequentist (surveyweighted logistic) vs. Bayesian (posteriorbased inference).\nConsistent findings reinforce the reliability of predictors (Age, BMI, Sex, Race)."
+  },
+  {
+    "objectID": "slides.html#model-overview",
+    "href": "slides.html#model-overview",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Model Overview",
+    "text": "Model Overview\nBayesian logistic regression fitted on first imputed dataset (adult_imp1)\nOutcome: diabetes_dx (binary)\nPredictors: age_c, bmi_c, sex, race\nSurvey weights included: normalized MEC exam weights (wt_norm)\nMean = 1.00, SD = 0.79\nNo missing values, continuous variables standardized, categorical variables properly leveled"
+  },
+  {
+    "objectID": "slides.html#prior-specification-1",
+    "href": "slides.html#prior-specification-1",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Prior Specification",
+    "text": "Prior Specification\nIntercept: student_t(3, 0, 10)\nAllows heavy tails for flexibility (R. V. D. Schoot et al., 2013)\nRegression coefficients: normal(0, 2.5)\nWeakly informative priors to constrain extreme values without overpowering data"
+  },
+  {
+    "objectID": "slides.html#model-estimation",
+    "href": "slides.html#model-estimation",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Model Estimation",
+    "text": "Model Estimation\nMCMC: 4 chains × 2000 iterations (50% warmup)\nAdaptive delta = 0.95 to reduce divergent transitions\nPosterior summaries provide credible intervals (CrI) for parameter uncertainty\nFamily: bernoulli\nLink: logit\nFormula: diabetes_dx | weights(wt_norm) ~ age_c + bmi_c + sex + race\nTotal observations: 5,592"
+  },
+  {
+    "objectID": "slides.html#posterior-convergence-diagnostics",
+    "href": "slides.html#posterior-convergence-diagnostics",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Posterior Convergence & Diagnostics",
+    "text": "Posterior Convergence & Diagnostics\nEffective sample sizes: Bulk_ESS and Tail_ESS\nPotential scale reduction: Rhat (~1 at convergence)\nEnsures reliable estimation of parameters"
+  },
+  {
+    "objectID": "slides.html#model-formula-convergence",
+    "href": "slides.html#model-formula-convergence",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Model Formula & Convergence",
+    "text": "Model Formula & Convergence\nFormula: diabetes_dx | weights(wt_norm) ~ age_c + bmi_c + sex + race\nRhat ≈ 1.0 → excellent convergence\nESS &gt; 1000 → stable posterior sampling"
+  },
+  {
+    "objectID": "slides.html#baseline-risk-agebmi-effects",
+    "href": "slides.html#baseline-risk-agebmi-effects",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Baseline Risk & Age/BMI Effects",
+    "text": "Baseline Risk & Age/BMI Effects\nBaseline probability for male, NH White with mean BMI & age ≈ 7%\nAge (per 1 SD): 3× higher odds of diabetes, CrI well above 0 → strong effect\nBMI (per 1 SD): 88% higher odds, highly significant"
+  },
+  {
+    "objectID": "slides.html#sex-race-effects",
+    "href": "slides.html#sex-race-effects",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Sex & Race Effects",
+    "text": "Sex & Race Effects\nFemale: 48% lower odds than males, strong evidence\nMexican American: ~2× higher odds vs NH White, significant\nOther Hispanic: ~1.5× higher odds, CrI overlaps 0 → uncertain\nNH Black: ~1.7× higher odds, significant\nOther/Multiracial: &gt;2× higher odds, strong evidence"
+  },
+  {
+    "objectID": "slides.html#distributions-of-predictors",
+    "href": "slides.html#distributions-of-predictors",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Distributions of Predictors",
+    "text": "Distributions of Predictors\nAge and BMI: standardized, roughly normal distributions (zscores)\nProper centering ensures numerical stability for Bayesian modeling"
+  },
+  {
+    "objectID": "slides.html#posterior-distributions",
+    "href": "slides.html#posterior-distributions",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Posterior Distributions",
+    "text": "Posterior Distributions\nAll coefficient posteriors: smooth, unimodal → stable estimates\nRace effects:\nOther Hispanic: modest positive, some uncertainty (CrI overlaps 0)\nNH Black: consistent positive effect, low uncertainty\nOther/Multiracial: strong positive, CrI entirely above 0\nConfirms reliable posterior sampling"
+  },
+  {
+    "objectID": "slides.html#trace-plots-convergence",
+    "href": "slides.html#trace-plots-convergence",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Trace Plots & Convergence",
+    "text": "Trace Plots & Convergence\n4 MCMC chains mix well, overlap substantially\nNo visible trends or drifts → stationarity achieved\nRhat ≈ 1, high ESS → excellent convergence and independence of samples"
+  },
+  {
+    "objectID": "slides.html#model-fit",
+    "href": "slides.html#model-fit",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Model Fit",
+    "text": "Model Fit\nBayesian (R^2 ) → explains modest proportion of variance in diabetes status\nCredible bounds suggest reasonable fit"
+  },
+  {
+    "objectID": "slides.html#posterior-odds-ratios-95-cri",
+    "href": "slides.html#posterior-odds-ratios-95-cri",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Posterior Odds Ratios (95% CrI)",
+    "text": "Posterior Odds Ratios (95% CrI)\nPredictor | OR | 95% CrI |\n|||| | Age (per 1 SD) | 2.99 | 2.64 – 3.37 | | BMI (per 1 SD) | 1.87 | 1.71 – 2.05 | | Female | 0.52 | 0.42 – 0.63 | | Mexican American | 2.00 | 1.41 – 2.84 | | Other Hispanic | 1.54 | 0.93 – 2.43 | | NH Black | 1.71 | 1.28 – 2.27 | | Other / Multiracial | 2.27 | 1.56 – 3.28 |"
+  },
+  {
+    "objectID": "slides.html#posterior-distributions-1",
+    "href": "slides.html#posterior-distributions-1",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Posterior Distributions",
+    "text": "Posterior Distributions\nCoefficients smooth, unimodal → stable posteriors\nRace effects:\nOther Hispanic: modest, uncertain\nNH Black: positive, consistent\nOther/Multiracial: strong, credible"
+  },
+  {
+    "objectID": "slides.html#convergence-fit",
+    "href": "slides.html#convergence-fit",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Convergence & Fit",
+    "text": "Convergence & Fit\n4 MCMC chains mix well, Rhat ≈ 1, high ESS → excellent convergence\nBayesian (R^2 ) → modest explanatory power"
+  },
+  {
+    "objectID": "slides.html#posterior-odds-ratios-95-cri-1",
+    "href": "slides.html#posterior-odds-ratios-95-cri-1",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Posterior Odds Ratios (95% CrI)",
+    "text": "Posterior Odds Ratios (95% CrI)\nPredictor | OR | 95% CrI |\n|||| | Age | 2.99 | 2.64–3.37 | | BMI | 1.87 | 1.71–2.05 | | Female | 0.52 | 0.42–0.63 | | Mexican American | 2.00 | 1.41–2.84 | | Other Hispanic | 1.54 | 0.93–2.43 | | NH Black | 1.71 | 1.28–2.27 | | Other/Multi | 2.27 | 1.56–3.28 |\n#PP check for proportions (useful for binary) mean comparison to check if the simulated means match the observed mean"
+  },
+  {
+    "objectID": "slides.html#posterior-estimates-bmi",
+    "href": "slides.html#posterior-estimates-bmi",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Posterior Estimates: BMI",
+    "text": "Posterior Estimates: BMI\nStandardized BMI (per 1 SD)\nPosterior estimates: ~0.61 – 0.70\nInterpretation: Higher BMI associated with lower odds of outcome in this analysis\nReflects both central tendency and variability → important predictor"
+  },
+  {
+    "objectID": "slides.html#posterior-estimates-age",
+    "href": "slides.html#posterior-estimates-age",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Posterior Estimates: Age",
+    "text": "Posterior Estimates: Age\nStandardized Age (per 1 SD)\nPosterior estimates: ~1.00 – 1.14\nInterpretation: Higher age associated with higher odds of outcome\nHighlights age as a strong predictor in the model"
+  },
+  {
+    "objectID": "slides.html#posterior-summary-metrics",
+    "href": "slides.html#posterior-summary-metrics",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Posterior Summary Metrics",
+    "text": "Posterior Summary Metrics\nEstimate: posterior mean → central tendency of coefficient\nEst.Error: posterior standard deviation → uncertainty around estimate\nQ2.5: 2.5th percentile → lower bound of 95% CrI\nQ97.5: 97.5th percentile → upper bound of 95% CrI\nTogether, these summarize effect size and credible uncertainty for BMI and Age"
+  },
+  {
+    "objectID": "slides.html#prior-vs-posterior-distributions",
+    "href": "slides.html#prior-vs-posterior-distributions",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Prior vs Posterior Distributions",
+    "text": "Prior vs Posterior Distributions\nPriors for BMI and Age: centered at 0 → weak prior beliefs\nPosteriors shifted away from 0 → strong evidence from data\nPosterior distributions narrower → data updated beliefs\nFaceted density plots allow comparison for each predictor"
+  },
+  {
+    "objectID": "slides.html#prevalence-estimates-across-methods",
+    "href": "slides.html#prevalence-estimates-across-methods",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Prevalence Estimates Across Methods",
+    "text": "Prevalence Estimates Across Methods\nSurveyweighted (NHANES): 8.9% (SE = 0.0048)\nImputed dataset (MICE): 11.1%\nBayesian posterior predictive mean: 10.95%"
+  },
+  {
+    "objectID": "slides.html#posterior-vs-observed-prevalence",
+    "href": "slides.html#posterior-vs-observed-prevalence",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Posterior vs Observed Prevalence",
+    "text": "Posterior vs Observed Prevalence\nPosterior predicted mean: 10.9% (95% CrI: 9.7% – 12.1%)\nNHANES surveyweighted mean: 8.9% (95% CI: 7.96% – 9.84%)\nPosterior slightly higher than NHANES, but credible interval overlaps → good calibration\nMost posterior predictions cluster 10–11%\nCaptures model uncertainty while aligning with observed data"
+  },
+  {
+    "objectID": "slides.html#model-performance",
+    "href": "slides.html#model-performance",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Model Performance",
+    "text": "Model Performance\nConsistent results across surveyweighted MLE, MICE, and Bayesian logistic regression\nBayesian model: Rhat ≈ 1.00, Bulk/Tail ESS &gt; 2000, Posterior R² ≈ 0.13 (95% CrI: 0.106–0.156)\nPosterior predictive checks → good calibration & uncertainty capture"
+  },
+  {
+    "objectID": "slides.html#key-predictors",
+    "href": "slides.html#key-predictors",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Key Predictors",
+    "text": "Key Predictors\nAge & BMI: strongest, consistent predictors\n1 SD ↑ Age → ~3× higher odds\n1 SD ↑ BMI → ~1.7–1.9× higher odds\nSex: females lower odds\nRace/Ethnicity: Mexican American, NH Black, Other/Multi → higher odds; Other Hispanic → less certain"
+  },
+  {
+    "objectID": "slides.html#robustness-interpretation",
+    "href": "slides.html#robustness-interpretation",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Robustness & Interpretation",
+    "text": "Robustness & Interpretation\nBayesian credible intervals slightly narrower but overlapping frequentist CIs → stable inference\nPosterior predictions consistent with surveyweighted & imputed data\nMultiple imputation handled missingness; Bayesian priors stabilized estimates"
+  },
+  {
+    "objectID": "slides.html#design-considerations",
+    "href": "slides.html#design-considerations",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Design Considerations",
+    "text": "Design Considerations\nSurveyweighted MLE → populationrepresentative estimates\nBayesian model with normalized weights approximates survey weighting\nBoth methods complement each other for interpretable, uncertaintyquantified results"
+  },
+  {
+    "objectID": "slides.html#practical-implications",
+    "href": "slides.html#practical-implications",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Practical Implications",
+    "text": "Practical Implications\nStrong, consistent risk factors: Age & BMI\nModel aids public health planning & targeted screening\nFuture research: hierarchical models, additional metabolic/lab variables, nonlinear effects"
+  },
+  {
+    "objectID": "slides.html#limitations",
+    "href": "slides.html#limitations",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Limitations",
+    "text": "Limitations\nCrosssectional NHANES → no causal inference\nMissing data assumed MAR → potential bias if MNAR\nResidual confounding possible (diet, activity, SES, genetics)\nSingletime BMI measurement, selfreported data, interactions not tested\nPredicted probabilities need external validation before clinical use"
+  },
+  {
+    "objectID": "slides.html#individualized-risk-prediction",
+    "href": "slides.html#individualized-risk-prediction",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Individualized Risk Prediction",
+    "text": "Individualized Risk Prediction\nBayesian model uses age, BMI, sex, race to estimate diabetes probability\nMoves from populationlevel to personalized risk assessment\nProbabilistic outputs → actionable thresholds (e.g., risk &gt;30%)"
+  },
+  {
+    "objectID": "slides.html#modifiable-vs-nonmodifiable-predictors",
+    "href": "slides.html#modifiable-vs-nonmodifiable-predictors",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Modifiable vs Nonmodifiable Predictors",
+    "text": "Modifiable vs Nonmodifiable Predictors\nModifiable: BMI → lifestyle interventions can reduce risk\nNonmodifiable: Age, sex, race → held constant\nAdjust BMI to achieve desired risk threshold"
+  },
+  {
+    "objectID": "slides.html#internal-validation-example",
+    "href": "slides.html#internal-validation-example",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Internal Validation Example",
+    "text": "Internal Validation Example\nSelected one representative participant\nComputed posterior predicted probability of diabetes\nDensity plot shows uncertainty → 95% CrI for individual risk\nSupports personalized prevention & monitoring"
+  },
+  {
+    "objectID": "slides.html#translational-implications",
+    "href": "slides.html#translational-implications",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Translational Implications",
+    "text": "Translational Implications\nGuides early screening & targeted interventions\nEnables precision public health: tailored, evidencebased strategies\nProbabilistic predictions inform decisionmaking beyond population averages"
+  },
+  {
+    "objectID": "slides.html#predicting-risk-for-a-new-participant",
+    "href": "slides.html#predicting-risk-for-a-new-participant",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Predicting Risk for a New Participant",
+    "text": "Predicting Risk for a New Participant\nApplied Bayesian model to a new participant (not in original dataset)\nCovariates: age, BMI, sex, race\nUsed posterior_linpred to compute predicted probabilities"
+  },
+  {
+    "objectID": "slides.html#posterior-predictive-distribution",
+    "href": "slides.html#posterior-predictive-distribution",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Posterior Predictive Distribution",
+    "text": "Posterior Predictive Distribution\nGenerated posterior draws to capture uncertainty\nDensity plot shows distribution of predicted diabetes risk\n95% credible interval (red dashed lines) summarizes range of likely outcomes"
+  },
+  {
+    "objectID": "slides.html#translational-implications-1",
+    "href": "slides.html#translational-implications-1",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Translational Implications",
+    "text": "Translational Implications\nProvides individualized risk estimate with uncertainty\nSupports personalized interventions: lifestyle changes, monitoring, prevention\nBayesian posterior draws enable probabilistic, actionable decisionmaking"
+  },
+  {
+    "objectID": "slides.html#targeted-bmi-analysis",
+    "href": "slides.html#targeted-bmi-analysis",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Targeted BMI Analysis",
+    "text": "Targeted BMI Analysis\nObjective: Identify BMI associated with a target diabetes risk (e.g., 30%)\nProfile: Age 40, Female, Mexican American\nGenerated BMI grid (18–40 kg/m²) and computed posterior predicted probabilities"
+  },
+  {
+    "objectID": "slides.html#visualization",
+    "href": "slides.html#visualization",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Visualization",
+    "text": "Visualization\nLine plot: Predicted probability vs BMI\nRed dashed line: Target probability (0.3)\nRed dotted line: BMI threshold corresponding to target risk\nHighlights actionable BMI for precision prevention"
+  },
+  {
+    "objectID": "slides.html#practical-implications-1",
+    "href": "slides.html#practical-implications-1",
+    "title": "Bayesian Logistic Regression Capstone",
+    "section": "Practical Implications",
+    "text": "Practical Implications\nSupports personalized interventions targeting modifiable risk factors (BMI)\nDemonstrates Bayesian posterior predictions for individualized risk assessment\nGuides early prevention strategies and risk communication"
+  },
+  {
+    "objectID": "slides.html#introduction",
+    "href": "slides.html#introduction",
+    "title": "Present a great story for data science projects",
+    "section": "Introduction",
+    "text": "Introduction\n\nDevelop a storyline that captures attention and maintains interest.\nYour audience is your peers\nClearly state the problem or question you’re addressing.\nIntroduce why it is relevant needs.\nProvide an overview of your approach.\n\nIn kernel estimator, weight function is known as kernel function (efr2008?). Cite this paper (bro2014principal?). The GEE (wang2014?). The PCA (daffertshofer2004pca?)*"
+  },
+  {
+    "objectID": "slides.html#data-exploration-and-visualization",
+    "href": "slides.html#data-exploration-and-visualization",
+    "title": "Present a great story for data science projects",
+    "section": "Data Exploration and Visualization",
+    "text": "Data Exploration and Visualization\n\nDescribe your data sources and collection process.\nPresent initial findings and insights through visualizations.\nHighlight unexpected patterns or anomalies."
+  },
+  {
+    "objectID": "slides.html#data-exploration-and-visualization-1",
+    "href": "slides.html#data-exploration-and-visualization-1",
+    "title": "Present a great story for data science projects",
+    "section": "Data Exploration and Visualization",
+    "text": "Data Exploration and Visualization\nA study was conducted to determine how…"
+  },
+  {
+    "objectID": "slides.html#modeling-and-results",
+    "href": "slides.html#modeling-and-results",
+    "title": "Present a great story for data science projects",
+    "section": "Modeling and Results",
+    "text": "Modeling and Results\n\nExplain your data preprocessing and cleaning steps.\nPresent your key findings in a clear and concise manner.\nUse visuals to support your claims.\nTell a story about what the data reveals."
+  },
+  {
+    "objectID": "slides.html#conclusion",
+    "href": "slides.html#conclusion",
+    "title": "Present a great story for data science projects",
+    "section": "Conclusion",
+    "text": "Conclusion\n\nSummarize your key findings.\nDiscuss the implications of your results."
   }
 ]
