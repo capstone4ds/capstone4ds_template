@@ -1601,9 +1601,10 @@ model updates prior beliefs in a data-informed way.
 predictive proportions closely match observed prevalence, supporting
 model reliability for inference and prediction.
 
-```{r}
-#| label: Prior vs pred draws (age and bmi)
 
+```{r}
+#| label: Prior and post draws
+#| include: false
 
 prior_summary(bayes_fit)
 prior_draws <- tibble(
@@ -1637,6 +1638,10 @@ post <- as_draws_df(bayes_fit) %>%           # bayes_fit = your brms model
 
 ## visualization of prior and predicted draws
 combined_draws <- bind_rows(prior_draws, post) 
+```
+
+```{r}
+#| label: Prior vs pred draws (age and bmi)
 
 library(ggplot2)
 
