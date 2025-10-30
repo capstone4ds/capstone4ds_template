@@ -798,9 +798,7 @@ ggplot(adult1, aes(x = diabetes_dx, y = count, fill = sex)) +
     models (e.g., brms, rstanarm) cannot directly handle NAs — you must
     impute or model missingness.
 
-# Statistical Modeling
-
-Modeling Approach Flow
+# Statistical Modeling Approach
 
 ### Data Preparation and Survey Design Specification
 -Survey design variables — primary sampling unit (SDMVPSU), strata (SDMVSTRA), and examination weights (WTMEC2YR) — were retained to account for the complex, multistage sampling of NHANES.
@@ -823,7 +821,6 @@ Modeling Approach Flow
 ### Model Comparison
 - The results from both frameworks (frequentist and Bayesian) were compared to ensure robustness of conclusions regarding predictors of diabetes.
 
-### Summary results from Multiple Logistic Regression model using survey weights
 
 ```{r}
 #| label: Modeling-Survey-weighted complete-case
@@ -890,8 +887,8 @@ svy_or <- broom::tidy(svy_fit, conf.int = TRUE) %>%
   dplyr::filter(term != "(Intercept)")
 knitr::kable(svy_or, caption = "Survey-weighted odds ratios (per 1 SD)")
 ```
-
-Survey-Weighted Multiple Logistic Regression 
+### Summary 
+Multiple Logistic Regression model (Survey weighted)
 -   Identified several significant predictors of diabetes diagnosis after adjusting for
 demographic and anthropometric factors.
 -   Age (OR = 2.90, 95% CI: 2.60–3.24, p \< 0.001): Older adults had
@@ -910,7 +907,7 @@ demographic and anthropometric factors.
     minority racial/ethnic groups had significantly higher odds of
     diabetes compared with the reference group (Non-Hispanic Whites).
 
-## Multivariate Imputation by Chained Equations (Pooled Logistic Regression)
+Multivariate Imputation by Chained Equations (Pooled Logistic Regression)
 
 -   We conducted MICE to manage missiging data as an alternative to the
     Bayesian Approach @JSSv045i03
@@ -958,7 +955,7 @@ imp <- mice::mice(mi_dat, m = 5, method = meth, predictorMatrix = pred, seed = 1
 
 ```
 
-### Results from MICE (pooled imputed dataset): 
+Results: MICE (pooled imputed dataset): 
 -  In the final analytic
 dataset consisting of 5,769 participants with 8 variables, with missing
 values were addressed using Multivariate Imputation by Chained Equations
@@ -993,8 +990,6 @@ mi_or <- summary(pool_mi, conf.int = TRUE, exponentiate = TRUE) %>%
 knitr::kable(mi_or, caption = "MI pooled odds ratios (per 1 SD)")
 
 ```
-
-Multivariate Imputation by Chained Equations (MICE) results from the pooled estimates using a survey-weighted multiple logistic regression model.
 
 -   Age remained the strongest predictor of diabetes (OR = 2.90, 95% CI:
     2.60–3.24, p \< 0.001).
@@ -1063,9 +1058,9 @@ ggplot(correlation_melted, aes(Var1, Var2, fill = value)) +
 ```
 
 ### Visualization of imputed dataset
-Pairwise correlations - A heatmap visualizing variables: diabetes_dx, age, and bmi show the
+Pairwise correlations heatmap: show the
 strength and direction of correlations (Pearson correlation) which
-measures linear association between variables.
+measures linear association between diabetes_dx, age, and bmi 
 
 ```{r}
 #| label: tables_adult_imp1
@@ -1120,18 +1115,20 @@ write.csv(adult_imp1, "adult_imp1.csv", row.names = FALSE)
 
 ```
 
-Below are the rows and column numbers from the three datasets created 
+After MICE, below are the number of rows and column of the three datasets created 
 
 - Rows: 10175 and Columns: 10 (survey-weighted, merged data) 
 - Rows: 5,769 and Columns: 12 (filtered data, adult)
 - Rows: 5,592 and Columns: 11 (imputed data, adult_imp1)
 
-Data readiness for Bayesian logistic regression: 
-
-  - Survey weights-Normalized MEC exam weights (wt_norm) with mean 1.00 (SD
+# Bayesian Logistic Regression analysis on imputed dataset (adult_imp1)
+1.  Model Overview 
+    - A Bayesian logistic regression model was fitted on
+    the first imputed dataset (adult_imp1) to assess predictors of
+    diabetes diagnosis.
+    - Survey weights-Normalized MEC exam weights (wt_norm) with mean 1.00 (SD
 0.79) 
-  - No missing
-values remain in selected predictors or outcome. 
+  - No missing values remain in selected predictors or outcome. 
   - Continuous variables
 are standardized, which facilitates prior specification. 
   - Categorical
@@ -1140,36 +1137,23 @@ variables are correctly re-leveled for reference categories.
 are available for inclusion in the likelihood to account for survey
 design.
 
-# Bayesian Logistic Regression analysis on imputed dataset (adult_imp1)
-
-1.  Model Overview - A Bayesian logistic regression model was fitted on
-    the first imputed dataset (adult_imp1) to assess predictors of
-    diabetes diagnosis.
-
--   Continuous predictors—age and BMI—were standardized (per 1 SD), and
-    survey weights were normalized (wt_norm) to maintain
-    representativeness under the NHANES complex sampling design.
--   Categorical variables (sex and race) were factor-leveled using Male
-    and Non-Hispanic White as reference groups.
-
-2.  Prior Specification - to stabilize estimation in the
+2.  Prior Specification 
+    - to stabilize estimation in the
     presence of correlated predictors or outliers while retaining
     interpretability of model parameters.
-
--   Intercept prior: student_t(3, 0, 10) — allowing heavy tails for
+    - Intercept prior: student_t(3, 0, 10) — allowing heavy tails for
     flexibility in the intercept estimate. @VanDeSchoot2013
--   Regression coefficients prior: normal(0, 2.5) — providing weakly
+    - Regression coefficients prior: normal(0, 2.5) — providing weakly
     informative regularization provide gentle regularization,
     constraining extreme values without overpowering the data
     @VandeSchoot2021
 
 3.  Model Estimation
-
-- The model estimates using four Markov Chain Monte Carlo (MCMC)
+  - The model estimates using four Markov Chain Monte Carlo (MCMC)
 chains, each with 2000 iterations (50% warm-up), and an adaptive delta
 of 0.95 ensure good chain convergence and reduce divergent
 transitions. 
-- Posterior summaries represent the central tendency and
+  - Posterior summaries represent the central tendency and
 uncertainty around the model parameters through credible intervals
 (CrI).
 
@@ -1195,10 +1179,9 @@ bayes_fit <- brm(
 prior_summary(bayes_fit)
 summary(bayes_fit)            # Bayesian model summary
 
-
 ```
 
-Bayesian results: 
+Results and Visualization 
   - Age and BMI both were positively associated with
 diabetes risk. 
   - Higher standardized values corresponded to higher
@@ -1228,7 +1211,6 @@ ggplot(adult_long, aes(x = Value, fill = Coefficient)) +
   labs(title = "Distributions for Coefficients from adult_imp1 data",
        x = "Coefficient Value", y = "Density") +
   scale_fill_manual(values = c("bmi_c" = "skyblue", "age_c" = "orange"))
-
 
 ## prior draws 
 
@@ -1268,76 +1250,51 @@ and BMI (per 1 SD) demonstrate symmetric bell-shaped distributions,
 indicating no strong bias toward positive or negative effects before
 observing data.
 
-Interpretation
-
 Visualizations validate the standardization of continuous predictors
 (ensuring interpretability per 1 SD increase), and the reasonableness of
 priors, which are broad enough to allow data-driven inference yet
 prevent overfitting.
 
-# Visualization from Posterior Draw for predictive checking in Bayesian statistics
+# Predictive checking  to validate Bayesian models
 
-Workflow presented here combines posterior summaries, visualization of
-distributions, odds ratio interpretation, predictive checking, and
-convergence diagnostics to validate Bayesian models
-
-1.  Posterior Summaries and Distributions to understand parameter
-    estimates, uncertainty, and credible intervals. summary(bayes_fit)
-
+1.  Posterior Summaries 
 -   Provides posterior mean, median, 95% credible intervals
 -   Convergence diagnostics (R-hat, effective sample size)
--   plot(bayes_fit) – Visualizes posterior distributions- shows wide
-    distributions indicate high uncertainty, narrow distributions
-    indicate precise estimates.
+-   plots to visualizes posterior distributions with high uncertainty, narrow distributions
+    indicating precise estimates.
 
 2.  Posterior Odds Ratios - provides interpretation of the model
     coefficients on a multiplicative scale.
-
--   Extracted posterior summaries for regression coefficients, then
-    transformed estimates and credible intervals to odds ratios (OR =
-    exp(Estimate)) with reference categories: NH White (race), Male
+-   odds ratios (OR = exp(Estimate)) with reference categories: NH White (race), Male
     (sex).
--   Reported ORs with 95% credible intervals (CrI) allow direct
+-   ORs with 95% credible intervals (CrI) allow direct
     interpretation of associations between predictors and outcome.
 
 3.  Posterior Predictive Checks (PPC)
-
--   pp_check(bayes_fit)- assesses how the model reproduces observed data
+-   pp_check to assesses how the model reproduces observed data
     and validate model fit.
--   Generates simulated datasets from the posterior and compares them to
-    the observed data.
--   Visualizations include
--   density overlays
--   histograms
--   mean/SD comparison
--   bar plots
-
-There was no lLarge discrepancies indicating potential misfit; there was
+-   Visualizations of generated simulated datasets compared with the observed data.
+    -   density overlays
+    -   mean/SD comparison
+There was no large discrepancies indicating potential misfit; there was
 good alignment suggesting reliable predictions.
 
-4.  MCMC Convergence - endure reliable posterior estimates.
-
--   mcmc_trace(bayes_fit) -
--   Trace plots show chains for each parameter over iterations.
+4.  MCMC Convergence endures reliable posterior estimates.
+-   MCMC Trace plots show chains for each parameter over iterations.
 -   Well-mixed chains without trends indicate convergence and stable
     posterior estimates.
 
 5.  Model Fit -provided details to quantify predictive performance.
-
--   bayes_R2(bayes_fit)
--   Bayesian R² indicates the proportion of variance explained by the
-    model.
--   R² = 0.13 (13%) → predictors are relevant but other factors (e.g.,
+-   The proportion of variance explained by the
+    model: R² = 0.13 (13%) shows predictors are relevant but other factors (e.g.,
     genetics, lifestyle, environment) also contribute to outcome
     variability.
 
 6.  Correlation and Parameter Relationships (Optional)
-
--   mcmc_pairs(posterior) – Pairwise plots explore correlations between
+-   Pairwise plots (mcmc_pairs, posterior) – explore correlations between
     parameters.
--   mcmc_hist() or mcmc_areas() – Histograms or density plots of
-    specific parameters.
--   detect no collinearity or dependencies among predictors
+-   Histograms or density plots mcmc_hist() or mcmc_areas() of
+    specific parameters detects no collinearity or dependencies among predictors
 
 ```{r}
 #| label: Assumptions (Bayesian)
@@ -1397,10 +1354,9 @@ saveRDS(mi_or,     "outputs/mi_OR_table.rds")
 saveRDS(bayes_or,  "outputs/bayes_OR_table.rds")
 ```
 
-Below is the compact table comparing odds ratios (ORs) and 95%
-confidence/credible intervals (CIs) for BMI and Age across three
-modeling approaches:
-
+Compact table compare odds ratios (ORs) and 95%
+confidence/credible intervals (CIs) across three
+models for BMI and Age 
 -   Survey-weighted maximum likelihood estimation (MLE)
 -   Multiple imputation pooled estimates (mice)
 -   Bayesian Logistic Regression
@@ -1516,7 +1472,7 @@ ppc_scatter_avg(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ]) +
     of diabetes for each individual, across all posterior draws of the
     parameters. y = the actual observed diabetes status (0 =
     non-diabetic, 1 = diabetic).
--   mcmc plot (dens plots) comparing observed and posterior parameter
+-   mcmc dens plots - compare observed and posterior parameter
     values (estimates) for bmi_c, age_c, sex_female, and by race
     categories
 -   Fitted (Predicted) vs observed for bmi using point and error bars
@@ -1560,15 +1516,11 @@ ggplot(data = NULL, aes(x = observed$bmi, y = predicted[, "Estimate"])) +
 ```
 
 ### Comparative Visualizations for Model Assessment
-
-To evaluate how well the Bayesian model predicts diabetes-related
-outcomes, we conducted several visual comparisons between observed and
-posterior-predicted values:
+Visualization shows comparative plots of observed and posterior-predicted values to evaluate the Bayesian model predicts of diabetes-related outcomes:
 
 1.  Posterior Parameter Distributions to assess uncertainty and effect
     sizes of predictors, we extracted posterior draws using
     as_draws_df(bayes_fit).
-
 -   Plotted density overlays (mcmc_areas) for key predictors: age, BMI,
     sex, and race categories: shows density plots with distribution of
     posterior estimates to visualize uncertainty and parameter
@@ -1577,7 +1529,6 @@ posterior-predicted values:
 2.  Predicted vs Observed Values to evaluate model fit by comparing
     predicted outcomes to actual data using fitted(bayes_fit, summary =
     TRUE).
-
 -   Compared with the observed values for continuous predictors (e.g.,
     BMI and age).
 -   Visualization in Scatter plots with point estimates and 95% credible
@@ -1592,12 +1543,10 @@ posterior-predicted values:
     predictive checks, supporting model validation and interpretation.
 
 ### Predicted vs Observed BMI
-
 To evaluate model fit at the individual level, we compared observed BMI
 values to posterior-predicted BMI estimates from the Bayesian model:
 
 1.  Data Preparation
-
 A combined comaprative results from observed BMI (bmi) and predicted
 posterior estimates (predicted_bmi) into a single dataset with 95%
 credible intervals (lower_ci, upper_ci) from the posterior draws in a
@@ -1609,7 +1558,6 @@ Line plot of BMI over observations:
     visualize uncertainty.
 
 3.  Interpretation
-
 -   Close alignment of predicted lines with observed BMI indicates good
     model fit.
 -   Wider ribbons highlight greater posterior uncertainty for individual
@@ -1642,33 +1590,32 @@ summary(plot_data$bmi_c)
 
 ```
 
-Centering for bmi - Summary of original bmi (observed data) and centered
-version of BMI. - Centering doesn’t change the distribution shape, only
-shifts it so the mean is zero. - Centering is useful in
+Summary of original bmi (observed data) and centered
+version of BMI. 
+  - Centering doesn’t change the distribution shape, only
+shifts it so the mean is zero. 
+  - Centering is useful in
 regression/Bayesian models to improve numerical stability and
-interpretability of intercepts - Plots showing predicted values of bmi
+interpretability of intercepts 
+  - Plots showing predicted values of bmi
 and age (prior vs predicted) and the proportion of diabetes=1 for each
 draw
 
 ### Visualization on Prior vs Posterior Distributions
-
 -   To assess how the Bayesian model updates beliefs from prior
     information to posterior estimates, we compared prior vs posterior
     coefficient distributions for key predictors: BMI and age.
 
 1.  Prior Draws
-
 -   Simulated from a standard normal distribution (mean = 0, SD = 1) for
     both BMI and age coefficients. Represent initial beliefs about
     coefficient values before seeing the data.
 
 2.  Posterior Draws
-
 -   Extracted from the fitted model (bayes_fit) for b_bmi_c and b_age_c.
 -   Pivoted to long format and labeled as "Posterior".
 
 3.  Visualization Combined prior and posterior draws
-
 -   Plotted density overlays with facets for BMI and age.
 -   Posterior distributions are narrower and often shifted from prior,
     reflecting information gained from the data.
@@ -1678,16 +1625,10 @@ draw
 -   Computed the proportion of diabetes cases (diabetes = 1) for each
     posterior draw (pp_samples).
 
-Summary statistics: - mean(pp_proportion) – average predicted
-prevalence. - Compared to observed prevalence: Survey-weighted mean:
-svymean(\~diabetes_dx, nhanes_design_adult) - Observed sample mean:
-mean(adult_imp1\$diabetes_dx) - Visualization (Histogram) of posterior
-proportions shows variability and uncertainty in predicted diabetes
-prevalence. - Alignment of posterior mean with observed prevalence
-indicates good predictive performance.
-
-Interpretaion: - Prior vs posterior plots demonstrate that the Bayesian
-model updates prior beliefs in a data-informed way. - Posterior
+Interpretaion: 
+  - Prior vs posterior plots demonstrate that the Bayesian
+model updates prior beliefs in a data-informed way. 
+  - Posterior
 predictive proportions closely match observed prevalence, supporting
 model reliability for inference and prediction.
 
@@ -1792,8 +1733,6 @@ kable(summary_table, digits = 4, caption = "Comparison of Diabetes Prevalence Ac
 
 ```
 
-Each value comes from a posterior predictive draw
-
 ## Comaprison of Prior and Predicted draws for both Age and BMI
 
 -   Plot shows the posterior distributions are much more concentrated
@@ -1804,33 +1743,34 @@ Each value comes from a posterior predictive draw
 
 ## Propotion of diabetes in the posterior draws
 
--   Represents the predicted probability of diabetes = 1 in the
-    population according to Bayesian model.
--   Min = 0.085 → In some posterior draws, only \~8.5% of the population
-    is predicted to have diabetes. 1st Quartile = 0.105 → 25% of
-    posterior draws predict diabetes prevalence below 10.5%.
--   Median = 0.109 → Half of the simulated draws predict a prevalence
+-   States from the predicted probability of diabetes = 1 in the
+    population (Bayesian model).
+      -Min = 0.085 → In some posterior draws, only \~8.5% of the population
+    is predicted to have diabetes. 
+      -1st Quartile = 0.105 → 25% of posterior draws predict diabetes prevalence below 10.5%.
+      -Median = 0.109 → Half of the simulated draws predict a prevalence
     below \~10.9%, half above.
--   Mean = 0.109 → The average predicted prevalence is \~10.9%, very
-    close to the median → roughly symmetric distribution. 3rd Quartile =
-    0.113 → 75% of draws predict prevalence below \~11.3%.
--   Max = 0.128 → The highest predicted prevalence across all draws is
+      -Mean = 0.109 → The average predicted prevalence is \~10.9%, very
+    close to the median → roughly symmetric distribution. 
+      -3rd Quartile = 0.113 → 75% of draws predict prevalence below \~11.3%.
+      -Max = 0.128 → The highest predicted prevalence across all draws is
     \~12.8%.
 
-Bayesian model predicts - that about 10–11% of this population has
+  - Bayesian model predicts that about 10–11% of this population has
 diabetes, with a relatively narrow range across posterior draws,
-reflects uncertainty in the estimate - while most predictions cluster
-around 10–11%, the model allows for values as low as 8.5% and as high as
-12.8%. - On comparing this with the raw imputed data proportion show
+reflects uncertainty in the estimate 
+  - While most predictions cluster around 10–11%, the model allows for values as low as 8.5% and as high as
+12.8%. 
+  - On comparing this with the raw imputed data proportion show
 that the the model predictions align with the observed/imputed data.
 
-Its clinical relevance: - predicted proportion can be interpreted as the
-expected prevalence of diabetes in the target population, accounting for
-uncertainty in the model and imputed data. - Policy makers or clinicians
+Clinical relevance of predicted proportion 
+  - it accounts for
+uncertainty in the model and imputed data. 
+  - Policy makers or clinicians
 could plan interventions accordingly anticipating \~1 in 10 adults in
 this population might have diabetes.
 
-## Posterior predicted proportion of Diabetes vs NHANES prevalence of Diabetes in the population
 
 ```{r}
 #| label: DM prediction vs prevalence
@@ -1867,16 +1807,13 @@ ggplot(pp_df, aes(x = proportion)) +
 
 ```
 
-Posterior Predicted Diabetes Proportion vs Observed Prevalence
-
+## Comparing proportion of Diabetes between Posterior predicted vs NHANES prevalence of Diabetes 
 To evaluate the Bayesian model’s predictive accuracy for diabetes
 prevalence, we compared the posterior predicted proportion of diabetes
 cases to the known NHANES prevalence:
-
 1.  Posterior Predictions - Calculated the proportion of diabetes = 1
     for each posterior draw (pp_proportion). Derived posterior mean and
     95% credible interval to summarize predictive uncertainty.
-
 2.  Visualization - Histogram of posterior predicted proportions
     illustrates the variability in model predictions.
 
@@ -1884,9 +1821,11 @@ Red dashed line: NHANES observed prevalence (0.089). Blue solid line:
 Posterior mean predicted prevalence. Shaded blue region: 95% credible
 interval around the posterior mean.
 
-Interpretation - Close alignment of the posterior mean and credible
+Interpretation 
+  - Close alignment of the posterior mean and credible
 interval with the observed NHANES prevalence indicates that the model
-accurately captures the population-level prevalence of diabetes. - This
+accurately captures the population-level prevalence of diabetes. 
+  - This
 visualization complements prior vs posterior and predicted vs observed
 checks, supporting overall model validity.
 
@@ -1990,81 +1929,48 @@ ggplot(bar_df, aes(x = Source, y = Prevalence, fill = Source)) +
 
 ```
 
-Comparison of Posterior Predicted Diabetes Prevalence vs Population
-Estimates
 
-To assess the Bayesian model’s accuracy at the population level, we
-compared the posterior predicted diabetes prevalence to the
-survey-weighted NHANES prevalence.
-
-1.  Survey-Weighted (Population) Prevalence
-
--   Calculated using svymean(\~diabetes_dx, nhanes_design_adult).
--   Provided a mean prevalence and 95% confidence interval accounting
-    for survey design.
+1.  Survey-Weighted Prevalence (8.9%) - using svymean(\~diabetes_dx, nhanes_design_adult).
+-   The mean prevalence and 95% confidence interval:
 -   Mean = 0.089, SE = 0.0048 → 95% CI = 0.080–0.098.
-
-2.  Bayesian Posterior Predicted Prevalence
-
--   Computed from posterior draws (pp_samples) as the proportion of
-    diabetes cases per draw.
--   Summarized by posterior mean and 95% credible interval.
--   Posterior mean = 0.110, 95% CrI = 0.098–0.121.
-
-3.  Visualization
-
--   Bar plot comparing population vs posterior prevalence.
--   Error bars: 95% CI (survey) or 95% credible interval (Bayesian).
--   Subplots/alternative plots show points and intervals for direct
-    comparison.
-
-Interpretation - Posterior mean slightly higher than survey-weighted
-prevalence but largely overlaps with the population 95% CI. - Indicates
-that the Bayesian model reliably reproduces population-level diabetes
-prevalence, supporting both predictive accuracy and model validity.
-
-### Survey-Weighted Prevalence (8.9%)
-
--   Representative estimate of diabetes prevalence in the population, as
+-   - Representative estimate of diabetes prevalence in the population, as
     it adjusts for NHANES’ complex sampling design. It’s slightly lower
     because survey weights give less influence to overrepresented groups
     (e.g., those with higher diabetes prevalence).
-
-### Imputed (Unweighted) Prevalence (11.1%)
-
--   Reflects the diabetes proportion from the imputed dataset. It’s
+    
+2. Imputed (Unweighted) Prevalence (11.1%) - Reflects the diabetes proportion from the imputed dataset. It’s
     unweighted, it doesn’t correct for sampling bias, so it might
     overrepresent some subgroups (e.g., older or overweight
     participants).
 
-### Posterior Predictive Mean (10.9%)
-
+2.  Posterior Predictive Mean (10.9%)
 -   Bayesian model replicates the imputed data mean, suggesting good
     model calibration.
 -   The model “learned” the sample pattern correctly — no over- or
     underestimation relative to the data.
--   it’s close to the imputed value but slightly below it shows the
+-   It’s close to the imputed value but slightly below it shows the
     posterior distribution pulled toward the population-level mean,
     consistent with Bayesian shrinkage.
+-   Summarized by posterior mean and 95% credible interval.
+-   Posterior mean = 0.110, 95% CrI = 0.098–0.121.
+
+Visualization 
+-   Bar plots to compare population vs posterior prevalence with Error bars: 95% CI (survey) or 95% credible interval (Bayesian) 
+-  Posterior mean slightly higher than survey-weighted
+prevalence but largely overlaps with the population 95% CI. 
+-  Indicates
+that the Bayesian model reliably reproduces population-level diabetes
+prevalence, supporting both predictive accuracy and model validity.
+
 
 ### Summarizing
-
-Imputed (11.1%) ≈ Posterior Predictive (10.9%) \> Survey-Weighted
-(8.9%). The posterior predictive estimate sits between the two —
-balancing sample data and uncertainty.
-
-Comparison result - Survey-weighted (NHANES) 0.089 (0.0796, 0.0984) -
-Bayesian Posterior 0.110 (0.098, 0.121) - The Bayesian estimate
-isslightly higher than the survey-based one. - This could indicate that
-the Bayesian model (after adjusting for predictors) predicts more
-undiagnosed or latent diabetes risk than captured by self-reports or
-current screening. It suggests potential under-detection in the survey
-population — prompting more active screening in certain subgroups
-
-Implications - Health departments can estimate diabetes burden at the
-state or county level using Bayesian small-area estimation. - Clinicians
+Implications 
+  - Health departments can estimate diabetes burden at the
+state or county level using Bayesian small-area estimation. 
+  - Clinicians
 and public health researchers can plan targeted screening where
-predicted prevalence is higher than observed. - Epidemiologists can
+predicted prevalence is higher than observed. 
+  - Epidemiologists can
 validate disease models before applying them to regions without survey
 data.
 
@@ -2087,44 +1993,21 @@ mcmc_acf(post_array, pars = c("b_age_c", "b_bmi_c"))
 ```
 
 ## MCMC Autocorrelation for Key Parameters
-
--   To evaluate the independence of posterior samples and ensure
-    reliable Bayesian inference, we examined autocorrelation of MCMC
-    chains for key predictors: age and BMI.
--   Extracted MCMC draws from the fitted model (bayes_fit) as a draws
-    array (as_draws_array).
+-   We examined autocorrelation of MCMC chains for key predictors: age and BMI to evaluate the independence of posterior samples and ensure reliable Bayesian inference 
 -   Plotted autocorrelation functions (mcmc_acf) for b_age_c and
-    b_bmi_c.
-
-Interpretation - Autocorrelation plots show how each MCMC sample is
-related to previous iterations. - Low autocorrelation (quick decay to
-zero) indicates good chain mixing and independent samples. - High
+    b_bmi_c show how each MCMC sample is
+related to previous iterations. 
+  - Low autocorrelation (quick decay to
+zero) indicates good chain mixing and independent samples. 
+  - High
 autocorrelation suggests slower mixing and may require more iterations
 or tuning.
-
-3.  Outcome
-
 -   Visual inspection of autocorrelation for age and BMI confirms
     adequate independence of posterior draws, supporting the reliability
     of parameter estimates and subsequent inference.
-
--   bayes_fit is the fitted Bayesian model (brms or rstanarm).
-
--   as_draws_array() converts the posterior samples into a 3-dimensional
-    array (iterations × chains × parameters). If we ran 4 chains with
-    2000 iterations each, and your model has 5 parameters, the array
-    shape will be (2000, 4, 5).
-
 -   mcmc_acf() - produces autocorrelation plots for the posterior
-    samples of specified parameters (b_age_c and b_bmi). Autocorrelation
-    measures how correlated a sample is with previous samples in the
-    Markov Chain and checks the quality of MCMC sampling:
-
-    -   High autocorrelation → the chain moves slowly and is not
-        exploring the posterior efficiently.
-    -   Low autocorrelation → the chain is mixing well (as in the
-        model).
-
+    samples of specified parameters (b_age_c and b_bmi). 
+    
 # Model Overview and Significant Predictors
 
 ### a.  Multiple Linear Regression (Survey-weighted MLE)
@@ -2139,9 +2022,8 @@ Other Hispanic (p = 0.0087) NH Black (p = 0.0117) Other/Multi (p =
 
 ### b.  Multiple Imputation (MICE)
 - All predictors remain statistically significant. 
-- Positive associations:
-age, BMI, race categories. 
-- Negative association: female sex.
+  - Positive associations:age, BMI, race categories. 
+  - Negative association: female sex.
 
 ### c.  Bayesian Logistic Regression
 - Sampling via NUTS: 4 chains × 2000 iterations (1000 warmup, 4000
@@ -2151,87 +2033,92 @@ convergence Bulk/Tail ESS \> 2000 → reliable posterior estimates
 - Posterior R² = 0.13 (95% CrI: 0.106–0.156) → 13% of variance in diabetes
 explained by predictors.
 
-### Key Predictor Effects Predictor Effect Age (per 1 SD) 
-- Log-odds of diabetes ↑1.09 per unit increase; strongest positive predictor BMI
-    (per 1 SD) 
-- Higher BMI increases diabetes risk (\~1.7–1.9× odds per
+### Key Predictor Effects                                       
+- predictor Effect Age (per 1 SD) Log-odds of diabetes ↑1.09 per unit increase; 
+- strongest positive predictor BMI  (per 1 SD) - Higher BMI increases diabetes risk (\~1.7–1.9× odds per
     SD)
 - Sex (female) Lower odds of diabetes compared to males
 - Race/Ethnicity Mexican American, NH Black, Other/Multi:
     significantly higher odds; Other Hispanic: uncertain effect
 
-### Posterior density plots illustrate parameter uncertainty 
-- Posterior
-predictive checks (PPC) simulate new datasets from posterior draws to
+### Posterior density plots to illustrate parameter uncertainty 
+- Posterior predictive checks (PPC) simulate new datasets from posterior draws to
 assess model fit. 
 - Combining parameter uncertainty and predictive
 uncertainty provides credible intervals for predictions (e.g., given
 BMI, diabetes probability \~40–55%).
 
 # Conclusion
-
-The results find our model is reasonable but slightly conservative
+  - Our model is reasonable but slightly conservative
 (predicting higher risk) relative to the observed population prevalence.
-
-Across multiple modeling approaches—survey-weighted maximum likelihood,
-multiple imputation, and Bayesian regression—both age and BMI were
-consistently strong predictors of diabetes. Eachstandard deviation
-increase in age nearly tripled the odds of diabetes, while a similar
+  - Across multiple modeling approaches (survey-weighted maximum likelihood,
+multiple imputation, and Bayesian regression) — both age and BMI were
+consistently strong predictors of diabetes. 
+  - Each standard deviation increase in age nearly tripled the odds of diabetes, while a similar
 increase in BMI elevated the odds by approximately 1.7–1.9 times. The
 consistency of these results across models highlights the robustness of
 the associations and underscores the importance of age and BMI as key
 risk factors for diabetes in this population.
-
-Effect stability: point estimates in rhe Bayesian model’s closely
+  - Effect stability: point estimates in the Bayesian model’s closely
 aligned with those from the frequentist, indicating that prior
 regularization stabilized the estimates in the presence of modest
 missingness.
-
-Uncertainty quantification: Bayesian credible intervals of odds ration
+  - Uncertainty quantification: Bayesian credible intervals of odds ration
 were slightly narrower yet overlapped the frequentist confidence
 intervals, suggest comparable inferential precision while offering
 improved interpretability.
 
-Design considerations: \# Survey-weighted MLE (Maximum Likelihood
-Estimator) - incorporates each observation weighted according to its
-survey weight. - provide estimates that reflect the population-level
+Design considerations: 
+Survey-weighted Maximum Likelihood Estimator 
+- incorporates each observation weighted according to its
+survey weight. 
+- provide estimates that reflect the population-level
 parameters, not just the sample- produces population-representative
-estimates. \# Bayesian model with normalized weights- - instead of fully
+estimates. 
+
+Bayesian model with normalized weights
+ - instead of fully
 modeling the survey design, it used normalized sampling weights as
-importance weights - the scaled weights that sum to the sample size
+importance weights 
+ - the scaled weights that sum to the sample size
 approximates the effect of survey weights, but does not fully account
-for: Stratification, clustering, design-based variance adjustments. -
+for: Stratification, clustering, design-based variance adjustments.  
+ -
 Bayesian inference treats the weighted likelihood as from a regular
 model, ignoring some survey design features.
 
 # Discussions
-
-The use of multiple imputation allowed for robust analysis despite
-missing data, increasing power and reducing bias. Comparison of
+-  The use of multiple imputation allowed for robust analysis despite
+missing data, increasing power and reducing bias.
+-  Comparison of
 frequentist and Bayesian models demonstrated consistency in significant
 predictors, while Bayesian approaches provided the advantage of
-posterior distributions and probabilistic interpretation. The = Across
+posterior distributions and probabilistic interpretation. 
+ -  Across
 all models, both age and BMI emerged as strong and consistent predictors
-of diabetes. The consistency across modeling approaches strengthens the
+of diabetes. 
+-  The consistency across modeling approaches strengthens the
 validity of these findings Multiple imputation accounted for potential
 biases due to missing data, and Bayesian modeling provided robust
-credible intervals that closely matched frequentist estimates. align
+credible intervals that closely matched frequentist estimates align
 with previous epidemiological research indicating that increasing age
 and higher BMI are among the most important determinants of type 2
-diabetes risk.Cumulative exposure to metabolic and lifestyle risk
+diabetes risk.
+-  Cumulative exposure to metabolic and lifestyle risk
 factors over time, and the role of excess adiposity and insulin related
-effects account for diabetes. Survey weighted dataset strenghthens
+effects account for diabetes. 
+-  Survey weighted dataset strenghthens
 ensuring population representativeness, multiple imputation to handle
 missing data, and rigorous Bayesian estimation provided high effective
 sample sizes and R̂ ≈ 1.00 across parameters confirmed excellent model
-convergence. Bayesian logistic regression provided inference
+convergence. 
+-  Bayesian logistic regression provided inference
 statistically consistent and interpretable achieving the aim of this
 study. In future research hierarchical model using NHANES cycles or
 adding variables (lab tests) could assess nonlinear effects of metabolic
 risk factors.
 
 # Limitations
-
 1.  The study is based on cross-sectional/observational NHANES data,
     which limits the ability to make causal inferences. Associations
     observed between BMI, age, diabetes status cannot confirm causation.
@@ -2255,65 +2142,60 @@ risk factors.
     clinical decision-making. External validation in independent cohorts
     is needed before application.
 
-# QUESTION for targeted therapy
-
-Translational Perspective from the Bayesian Diabetes Prediction Project.
+#### Targeted therapy
+-  Translational Perspective from the Bayesian Diabetes Prediction Project.
 This project further demonstrates the translational potential of
 Bayesian modeling in clinical decision-making and public health
-strategy. By using patient-level predictors such as age, BMI, sex, and
+strategy. 
+-  By using patient-level predictors such as age, BMI, sex, and
 race to estimate the probability of diabetes, the model moves beyond
-descriptive statistics toward individualized risk prediction. The
+descriptive statistics toward individualized risk prediction. 
+-  The
 translational move lies in converting these probabilistic outputs into
 actionable thresholds—such as identifying the BMI or age at which the
 predicted risk of diabetes exceeds a clinically meaningful level (e.g.,
-30%). Such insights can guide early screening, personalized lifestyle
+30%). 
+-  Such insights can guide early screening, personalized lifestyle
 interventions, and targeted prevention programs for populations at
-higher risk. This approach embodies precision public health—bridging
+higher risk. 
+-  This approach embodies precision public health—bridging
 data science and medical decision-making to deliver tailored,
 evidence-based strategies that can ultimately improve diabetes
 prevention and management outcomes.
 
 What changes in modifiable predictors would lower diabetes risk?
 
-## Translational Research Implications: - We now use the model to guide
-
-prevention or intervention. - Only BMI is a modifiable risk factor
-here - What must change in BMI, behavior, or lifestyle to achieve a
-lower risk threshold? In practice, we hold non modifiable predictors as
-constant (sex, race). Vary modifiable predictors (BMI) until the model
+### Translational Research Implications: 
+  - We can use the model to guide prevention or intervention.
+  - Only BMI is a modifiable risk factor 
+  - We can make changes in BMI (behavior or lifestyle) to achieve a
+lower risk threshold 
+  - we hold non modifiable predictors as
+constant (sex, race). 
+  - Vary modifiable predictors (BMI) until the model
 predicts the desired probability.
 
-## Internal validation
-
+### Internal validation
 -   To illustrate personalized risk estimation using the Bayesian model,
     we computed the posterior predicted probability of diabetes for a
     representative participant.
-
-1.  Data and Prediction
-
--   Selected one participant from the dataset (adult\[1, \]) including
+-   We selected one participant from the dataset (adult\[1, \]) including
     all relevant covariates (age, BMI, sex, race).
 -   Used posterior_linpred with transform = TRUE to obtain predicted
     probabilities for logistic regression.
-
-2.  Posterior Predictive Distribution
-
--   Extracted posterior draws for the individual’s predicted
-    probability.
--   Computed 95% credible interval from the posterior draws.
+-   Extracted posterior draws computed 95% credible interval from the posterior draws.
 -   Density plot shows the distribution of plausible probabilities given
     the participant’s covariates.
-
-Interpretation for Targeted Implementation - The density highlights
-uncertainty around the individual’s predicted diabetes risk. - 95%
+  - The density highlights
+uncertainty around the individual’s predicted diabetes risk. 
+  - 95%
 credible interval provides a range of probable outcomes, not just a
-point estimate. - This approach allows personalized risk assessment,
-enabling clinicians or public health practitioners to:
-
-Clinical implementation - Identify high-risk individuals - Tailor
-preventive interventions (e.g., lifestyle modification, monitoring) -
-Quantify uncertainty in predictions for decision-making - Posterior
-predictive distributions enable probabilistic, individualized
+point estimate. 
+  - This approach allows personalized risk assessment,
+enabling clinicians or public health practitioners to identify high-risk individuals 
+  - Tailor preventive interventions (e.g., lifestyle modification, monitoring) 
+  - Quantify uncertainty in predictions for decision-making 
+  - Posterior predictive distributions enable probabilistic, individualized
 predictions, supporting targeted intervention strategies beyond
 population-level summaries.
 
@@ -2378,31 +2260,28 @@ ggplot(post_pred_df2, aes(x = pred)) +
 
 ```
 
-Predicting Diabetes Risk for a New Participant - To demonstrate the
+### External validation
+- Predicting Diabetes Risk for a New Participant to demonstrate the
 application of the Bayesian model for personalized prediction, we
 applied the trained model to a new participant not included in the
 original dataset.
-
-1.  Method
 
 -   Selected a new participant with specific covariates (age, BMI, sex,
     race).
 -   Used posterior_linpred with transform = TRUE to compute posterior
     predicted probabilities of diabetes. Generated posterior draws to
     capture predictive uncertainty.
-
-2.  Posterior Predictive Distribution
-
 -   Created a density plot of predicted probabilities. Computed 95%
     credible interval to summarize the range of likely outcomes.
 -   Red dashed lines indicate the lower and upper bounds of the
     interval.
-
-Interpretation for Targeted Implementation - The distribution shows not
-only the most probable risk but also the uncertainty around it. -
-Credible intervals help quantify confidence in individual-level
-predictions. - Supports personalized decision-making, such as targeted
-lifestyle interventions, early monitoring, or preventive care. -
+-  The distribution shows not
+only the most probable risk but also the uncertainty around it. 
+  - Credible intervals help quantify confidence in individual-level
+predictions. 
+  - Supports personalized decision-making, such as targeted
+lifestyle interventions, early monitoring, or preventive care. 
+  -
 Bayesian posterior predictive draws allow probabilistic, individualized
 predictions for new participants, providing both point estimates and
 uncertainty measures for actionable risk assessment.
@@ -2411,7 +2290,6 @@ uncertainty measures for actionable risk assessment.
 #| label: new participant
 #| echo: true
 library(ggplot2)
-
 
 new_participant <- data.frame(
   age_c = 40,
@@ -2445,41 +2323,44 @@ ggplot(post_pred_df_new, aes(x = pred)) +
   ggtitle('Posterior Predictive Distribution (95% Credible Interval)') +
   theme_bw()
 
-
 ```
 
-## Targeted BMI Analysis for Predicted Diabetes Risk
-
-This analysis examines the relationship between BMI and the predicted
+### To estimate Targeted BMI for Predicted Diabetes Risk
+-   To analyze the relationship between BMI and the predicted
 probability of diabetes, holding other covariates (age, sex, race)
-constant, using the fitted Bayesian logistic regression model.
-
--   Generated a grid of BMI values (e.g., 18–40 kg/m²) for a specific
-    demographic profile:
-
-Age = 40 Sex = Female Race = Mexican American Computed posterior
-predicted probabilities of diabetes for each BMI value. Averaged across
+constant, via fitted Bayesian logistic regression model, we generated a grid of BMI values (e.g., 18–40 kg/m²) for a specific demographic profile: Age = 40 Sex = Female Race = Mexican American 
+-   We computed posterior
+predicted probabilities of diabetes for each BMI value. 
+-   Averaged across
 posterior draws to obtain the mean predicted probability per BMI.
-
 -   Target Probability Approach Defined a target probability of diabetes
     (e.g., 0.3). Identified the BMI value whose predicted probability is
     closest to the target. This enables inverse prediction, linking
     statistical inference to clinically meaningful thresholds.
-
--   Visualization Line plot of predicted probability vs BMI. Red dashed
-    horizontal line: target probability (0.3). Red dotted vertical line:
-    BMI corresponding to the target probability (\~closest BMI).
-    Annotated to highlight the BMI threshold.
-
--   Interpretation Provides a practical guideline: the BMI at which an
-    individual with a given profile reaches a predefined diabetes risk.
-    Supports personalized risk communication and preventive
-    interventions. Translates model output into actionable, clinically
+-   Visualization Line plot of predicted probability vs BMI shows 
+    - Red dashed
+    horizontal line: target probability (0.3). 
+    - Red dotted vertical line:
+    BMI corresponding to the target probability (\~closest BMI).Annotated to highlight the BMI threshold.
+-   Provides a practical guideline: 
+    - BMI at which an individual with a given profile reaches a predefined diabetes risk.
+    - Supports personalized risk communication and preventive
+    interventions. 
+    - Translates model output into actionable, clinically
     relevant thresholds, bridging research findings with public health
-    application. This approach demonstrates how Bayesian posterior
+    application. 
+    - This approach demonstrates how Bayesian posterior
     predictions can be used for targeted, individualized risk
     assessment, informing precision prevention strategies based on
     modifiable risk factors like BMI.
+    
+### Clinical Implications
+-   age and BMI as robust and independent predictors of diabetes,
+    underscore the importance of early targeted interventions in
+    mitigating diabetes risk.
+-   Longitudinal studies and combining other statistical analytical
+    methods with Bayesian can further enhance and provide better
+    informed precision prevention strategies.
 
 ```{r}
 #| label: predict BMI_targeted therapy
@@ -2524,13 +2405,5 @@ ggplot(pred_df, aes(x = bmi_c, y = prob_mean)) +
 
 ```
 
-## Implications
-
--   age and BMI as robust and independent predictors of diabetes,
-    underscore the importance of early targeted interventions in
-    mitigating diabetes risk.
--   Longitudinal studies and combining other statistical analytical
-    methods with Bayesian can further enhance and provide better
-    informed precision prevention strategies.
 
 ## References
