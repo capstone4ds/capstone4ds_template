@@ -1248,17 +1248,14 @@ indicating no strong bias toward positive or negative effects before
 observing data.
 
 ## Predictive checking and validation (Bayesian model)
-1.  Posterior Summaries 
--   Provides posterior mean, median, 95% credible intervals
--   Convergence diagnostics (R-hat, effective sample size)
+1.  Posterior Summaries (mean, median, 95% credible intervals)
+2.  Convergence diagnostics (R-hat, effective sample size)
 -   plots to visualizes posterior distributions with high uncertainty, narrow distributions
     indicating precise estimates.
-2.  Posterior Odds Ratios - provides interpretation of the model
-    coefficients on a multiplicative scale.
--   odds ratios (OR = exp(Estimate)) with reference categories: NH White (race), Male
+3.  Posterior Odds Ratios provides interpretation of the model
+    coefficients on a multiplicative scale with reference categories: NH White (race), Male
     (sex).
-3.  Posterior Predictive Checks (PPC)
--   pp_check to assesses how the model reproduces observed data
+4.  Posterior Predictive Checks (PPC) assesses how the model reproduces observed data
     and validate model fit.
 -   Visualizations of generated simulated datasets compared with the observed data show density overlays for both  mean and SD. There was no large discrepancies indicating potential misfit; there was good alignment suggesting reliable predictions.
 4.  MCMC Convergence endures reliable posterior estimates.
@@ -1282,7 +1279,6 @@ observing data.
 library(brms)
 summary(bayes_fit)
 plot(bayes_fit)   # Posterior distributions
-pp_check(bayes_fit)      # Posterior predictive checks
 mcmc_trace(bayes_fit)    # Convergence (optional)
 bayes_R2(bayes_fit)      # Model fit
 
@@ -1495,18 +1491,18 @@ ggplot(data = NULL, aes(x = observed$bmi, y = predicted[, "Estimate"])) +
 ```
 
 ### Comparative Visualizations for Model Assessment
-Visualization shows comparative plots of observed and posterior-predicted values to evaluate the Bayesian model predicts of diabetes-related outcomes:
+Visualization to evaluate the Bayesian model predicts of diabetes-related outcomes: shows comparative plots of observed and posterior-predicted values 
 
-1.  Posterior Parameter Distributions to assess uncertainty and effect
+1.  Posterior Parameter Distributions assess uncertainty and effect
     sizes of predictors, we extracted posterior draws using
     as_draws_df(bayes_fit).
 -   Plotted density overlays (mcmc_areas) for key predictors: age, BMI,
-    sex, and race categories: shows density plots with distribution of
+    sex, and race categories showing distribution of
     posterior estimates to visualize uncertainty and parameter
     magnitude.
 
 2.  Predicted vs Observed Values to evaluate model fit by comparing
-    predicted outcomes to actual data using fitted(bayes_fit, summary =
+    predicted outcomes to actual data using fitted (bayes_fit, summary =
     TRUE).
 -   Compared with the observed values for continuous predictors (e.g.,
     BMI and age).
@@ -1524,19 +1520,14 @@ Visualization shows comparative plots of observed and posterior-predicted values
 ### Predicted vs Observed BMI
 To evaluate model fit at the individual level, we compared observed BMI
 values to posterior-predicted BMI estimates from the Bayesian model:
-
-1.  Data Preparation
-A combined comaprative results from observed BMI (bmi) and predicted
-posterior estimates (predicted_bmi) into a single dataset with 95%
+- A comaprative results from observed BMI (bmi) and predicted
+posterior estimates (predicted_bmi) with 95%
 credible intervals (lower_ci, upper_ci) from the posterior draws in a
 Line plot of BMI over observations:
-
 -   Observed BMI: solid line.
 -   Predicted BMI: solid line of posterior means.
 -   Shaded ribbon: 95% credible interval around predicted values to
     visualize uncertainty.
-
-3.  Interpretation
 -   Close alignment of predicted lines with observed BMI indicates good
     model fit.
 -   Wider ribbons highlight greater posterior uncertainty for individual
@@ -1569,8 +1560,7 @@ summary(plot_data$bmi_c)
 
 ```
 
-Summary of original bmi (observed data) and centered
-version of BMI. 
+Summary of observed data and centered BMI 
   - Centering doesn’t change the distribution shape, only
 shifts it so the mean is zero. 
   - Centering is useful in
