@@ -6,6 +6,11 @@ format: html
 
 <img src="images/namita.png" alt="Dr. Namita Mishra MPH, MBBS (MD)" style="width:200px; border-radius:50%; margin-bottom:10px;">
 
+# Contributions
+
+-   Autumn Wilcox – analytic coding, content draft, structured project workflow, collaborated via  GitHub.
+-   Namita Mishra – analytic coding, content draft, developed project plan, collaborated via GitHub.
+
 Dr. Namita Mishra is a physician, a Head and Neck surgeon and a public health researcher with a strong foundation in medicine, epidemiology, and data science. She is a graduate student in Data Science (Health Analytics).
 
 Her work focuses on  early detection and prevention of non-communicable diseases (cancer, obesity) and on health disparities at community level. She has researched salivary gland tumors, cardiac implants and community based research on healthy food access. Leveraging skills from Data Science, she integrates statistical modeling and Bayesian methods into her analyses. Her Bioinformatics expertise utilizes geodata visualization tools (3D Maps and GIS) for presentations.Passionate about bridging clinical insight with data-driven approaches, dedicated to advancing sustainable, evidence-based solutions in epidemiology and community health.  
