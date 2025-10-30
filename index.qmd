@@ -237,17 +237,17 @@ collinearity, or potential outliers.
 
 ## **Model Evaluation and Diagnostics**
 
-Model quality and convergence are assessed using standard Bayesian
+  - Model quality and convergence are assessed using standard Bayesian
 diagnostics:
-  -   **Posterior inference** performed using Markov Chain Monte Carlo (MCMC) sampling via the No-U-Turn Sampler (NUTS), a variant of Hamiltonian Monte Carlo (HMC). Four chains run with sufficient warm-up iterations to ensure convergence. @Austin2021
-  -   **Convergence diagnostics:** Markov Chain Monte Carlo (MCMC)
+  - **Posterior inference** performed using Markov Chain Monte Carlo (MCMC) sampling via the No-U-Turn Sampler (NUTS), a variant of Hamiltonian Monte Carlo (HMC). Four chains run with sufficient warm-up iterations to ensure convergence. @Austin2021
+  - **Convergence diagnostics:** Markov Chain Monte Carlo (MCMC)
     performance was evaluated using ( \hat{R} ) (R-hat) and effective
     sample size (ESS).
-  -   **Autocorrelation checks:** Ensure independence between successive
+  - **Autocorrelation checks:** Ensure independence between successive
     MCMC draws.
-  -   **Posterior predictive checks (PPC):** Compare simulated data from
+  - **Posterior predictive checks (PPC):** Compare simulated data from
     posterior distributions to observed outcomes.
-  -   **Bayesian R²:** Quantified the proportion of variance explained by
+  - **Bayesian R²:** Quantified the proportion of variance explained by
     the predictors, incorporating uncertainty.
 
 ```{r}
