@@ -1181,7 +1181,7 @@ summary(bayes_fit)            # Bayesian model summary
 
 ```
 
-Results and Visualization 
+# Results and Visualization 
   - Age and BMI both were positively associated with
 diabetes risk. 
   - Higher standardized values corresponded to higher
@@ -1232,31 +1232,22 @@ ggplot(prior_draws, aes(x = value, fill = term)) +
 ```
 
 ### Visualization of Priors and Data Distributions
-
 a.  Data-Derived Coefficient Distributions
-
-The density plots of standardized BMI and Age from the imputed dataset
+- The density plots of standardized BMI and Age from the imputed dataset
 (adult_imp1) show approximately normal distributions centered near zero,
 consistent with z-score standardization confirming that both predictors
 were properly centered and scaled prior to Bayesian modeling, ensuring
 comparability and numerical stability during estimation.
 
 b.  Prior Distributions
-
-Priors for regression coefficients were drawn from a Normal(0, 2.5)
+- Priors for regression coefficients were drawn from a Normal(0, 2.5)
 distribution, representing weakly informative assumptions centered at
 zero with moderate spread. The prior density plots for Age (per 1 SD)
 and BMI (per 1 SD) demonstrate symmetric bell-shaped distributions,
 indicating no strong bias toward positive or negative effects before
 observing data.
 
-Visualizations validate the standardization of continuous predictors
-(ensuring interpretability per 1 SD increase), and the reasonableness of
-priors, which are broad enough to allow data-driven inference yet
-prevent overfitting.
-
-# Predictive checking  to validate Bayesian models
-
+# Predictive checking and validation (Bayesian model)
 1.  Posterior Summaries 
 -   Provides posterior mean, median, 95% credible intervals
 -   Convergence diagnostics (R-hat, effective sample size)
@@ -1273,9 +1264,8 @@ prevent overfitting.
 3.  Posterior Predictive Checks (PPC)
 -   pp_check to assesses how the model reproduces observed data
     and validate model fit.
--   Visualizations of generated simulated datasets compared with the observed data.
-    -   density overlays
-    -   mean/SD comparison
+Visualizations of generated simulated datasets compared with the observed data.
+show density overlays for both  mea and SD   
 There was no large discrepancies indicating potential misfit; there was
 good alignment suggesting reliable predictions.
 
@@ -1308,7 +1298,7 @@ bayes_R2(bayes_fit)      # Model fit
 
 ```
 
-Below are tabulted odds ratio from the posterior predicted values
+
 
 ```{r}
 #| label: Posterior ORs and tables
@@ -1354,8 +1344,7 @@ saveRDS(mi_or,     "outputs/mi_OR_table.rds")
 saveRDS(bayes_or,  "outputs/bayes_OR_table.rds")
 ```
 
-Compact table compare odds ratios (ORs) and 95%
-confidence/credible intervals (CIs) across three
+Compact table compare odds ratios (ORs) and 95% confidence/credible intervals (CIs) across three
 models for BMI and Age 
 -   Survey-weighted maximum likelihood estimation (MLE)
 -   Multiple imputation pooled estimates (mice)
