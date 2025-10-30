@@ -315,7 +315,7 @@ levels) - Age (continuous 20-80years)
 
 ```{r message=FALSE, warning=FALSE}
 #| label: nhanes tables and merged data
-#| echo: true
+#| include: false
 
 library ("nhanesA")     
  # imported datasets 
@@ -575,6 +575,8 @@ cat("Adults n =", nrow(adult), "\n")
 ```
 
 ```{r}
+#| label: survey data results
+#| include: false
 
 #| label: survey design
 #| echo: false
@@ -635,10 +637,13 @@ plot_missing(adult, title="Figure 2(Adult dataset). Breakdown of missing observa
 
 -   Number of participants in Adult dataset (n = 5769) after cleaning
     and analysis Variables
--   Mean, SE and vairance for age, diabetes_dx mean SE age 47.496 0.3805
-    diabetes_dx 0.089016 0.0048 variance SE diabetes_dx 4759.9 0.0039
-
-Effective sample size = diabetes_dx: 48142
+     mean     SE
+age 47.496 0.3805
+                mean     SE
+diabetes_dx 0.089016 0.0048
+            variance     SE
+diabetes_dx   4759.9 0.0039
+Effective sample size for diabetes_dx: 48142 
 
 ### Population characterisitcs
 
@@ -768,9 +773,9 @@ ggplot(adult1, aes(x = diabetes_dx, y = count, fill = sex)) +
 
 ```
 
-## Abnormalities detected in Adult analytic dataset
+## Abnormalities detected in Adult dataset
 
-### Missingness and MICE
+### Missingness
 
 -   Only 1.3% of individual data points are missing across the dataset,
     reflecting minimal missingness.
@@ -795,25 +800,28 @@ ggplot(adult1, aes(x = diabetes_dx, y = count, fill = sex)) +
 
 # Statistical Modeling
 
-Modeling Approach
+Modeling Approach Flow
 
-1.  **Modeling-Survey-weighted complete-case** - To explore associations
-    between predictors and diabetes status, we applied a
-    **frequentist** - Multiple Logistic Regression model using survey
-    weights to account for the complex sampling design of the dataset.
-    This ensured population-representative estimates and valid standard
-    errors.
+### Data Preparation and Survey Design Specification
+-Survey design variables — primary sampling unit (SDMVPSU), strata (SDMVSTRA), and examination weights (WTMEC2YR) — were retained to account for the complex, multistage sampling of NHANES.
+- A survey design object ensures a population-representative estimates and valid variance estimation.
+- Frequentist Survey-Weighted Logistic Regression (Complete-Case Analysis) - fitted using only complete cases to assess the associations between diabetes status (binary outcome) and predictors such as BMI, age, sex, and race/ethnicity.
+- Survey weights were applied to correct for unequal probabilities of selection and nonresponse, ensuring generalizability to the U.S. adult population.
 
-2.  **Multivariate Imputation by Chained Equations (MICE)** - Missing
-    data were addressed using MICE, an iterative regression-based
-    approach that imputes each incomplete variable conditionally on the
-    others. Multiple imputed datasets were generated and analyzed to
-    reduce bias and increase statistical efficiency.
+### Handling Missing Data: Multivariate Imputation by Chained Equations (MICE)
+- Performed to address missing values in BMI and other covariates. 
+- Variable with missing data imputed conditionally on all others through iterative regression models.
+- Multiple (m = 5–10) imputed datasets generated, were analyzed separately, and combined using Rubin’s rules to obtain pooled parameter estimates and standard errors.
 
-3.  **Bayesian analysis** - Following imputation, we conducted a
-    Bayesian analysis to complement the frequentist findings, allowing
-    incorporation of uncertainty and prior information in estimating
-    model parameters and posterior predictive distributions.
+### Bayesian Logistic Regression (Post-Imputation Analysis)
+- Bayesian logistic regression model applied to the imputed datasets, incorporated prior distributions for regression coefficients and allowed direct estimation of posterior distributions, credible intervals, and posterior predictive checks.
+- Bayesian inference provided a probabilistic interpretation of parameter uncertainty, complementing the frequentist findings.
+
+### Model Validation and Interpretation
+- Diagnostic checks performed below evaluate model convergence, goodness-of-fit, and predictive accuracy.
+
+### Model Comparison
+- The results from both frameworks (frequentist and Bayesian) were compared to ensure robustness of conclusions regarding predictors of diabetes.
 
 ### Summary results from Multiple Logistic Regression model using survey weights
 
@@ -871,6 +879,7 @@ summary(svy_fit)
 
 ```
 
+
 ```{r}
 #| label: Survey weighted data results
 #| echo: false
@@ -901,8 +910,7 @@ demographic and anthropometric factors.
     minority racial/ethnic groups had significantly higher odds of
     diabetes compared with the reference group (Non-Hispanic Whites).
 
-## Multivariate Imputation by Chained Equations
-Multiple Imputation Pooled Logistic Regression
+## Multivariate Imputation by Chained Equations (Pooled Logistic Regression)
 
 -   We conducted MICE to manage missiging data as an alternative to the
     Bayesian Approach @JSSv045i03
@@ -917,12 +925,6 @@ Multiple Imputation Pooled Logistic Regression
     the subsequent imputation, and the entire process is repeated
     multiple times to create several complete datasets, each reflecting
     different possibilities for the missing data.
-
-Below are the rows and cloumn numbers from the three datasets created 
-
-- Rows: 10175 and Columns: 10 (survey-weighted, merged data) 
-- Rows: 5,769 and Columns: 12 (filtered data, adult)
-- Rows: 5,592 and Columns: 11 (imputed data, adult_imp1)
 
 ```{r}
 #| label: Imputation 
@@ -992,10 +994,7 @@ knitr::kable(mi_or, caption = "MI pooled odds ratios (per 1 SD)")
 
 ```
 
-
-After addressing missing BMI values using Multivariate Imputation by
-Chained Equations (MICE), pooled estimates from five imputations were
-analyzed using a survey-weighted multiple logistic regression model.
+Multivariate Imputation by Chained Equations (MICE) results from the pooled estimates using a survey-weighted multiple logistic regression model.
 
 -   Age remained the strongest predictor of diabetes (OR = 2.90, 95% CI:
     2.60–3.24, p \< 0.001).
@@ -1040,9 +1039,8 @@ vars <- c("age", "bmi", "age_c", "bmi_c", "wt_norm", "sex", "race", "diabetes_dx
 table1 <- CreateTableOne(vars = vars, data = adult_imp1, factorVars = c("sex", "race", "diabetes_dx"))
 print(table1, showAllLevels = TRUE)
 
-
 ```
-### Summary of Imputed Adult Dataset (N = 5,592)
+
 
 ```{r}
 #| label: Visulaiztion imputed dataset 
@@ -1065,9 +1063,7 @@ ggplot(correlation_melted, aes(Var1, Var2, fill = value)) +
 ```
 
 ### Visualization of imputed dataset
-Pairwise correlations
-
-A heatmap visualizing variables: diabetes_dx, age, and bmi show the
+Pairwise correlations - A heatmap visualizing variables: diabetes_dx, age, and bmi show the
 strength and direction of correlations (Pearson correlation) which
 measures linear association between variables.
 
@@ -1124,16 +1120,23 @@ write.csv(adult_imp1, "adult_imp1.csv", row.names = FALSE)
 
 ```
 
-- Survey weights-Normalized MEC exam weights (wt_norm) with mean 1.00 (SD
+Below are the rows and column numbers from the three datasets created 
+
+- Rows: 10175 and Columns: 10 (survey-weighted, merged data) 
+- Rows: 5,769 and Columns: 12 (filtered data, adult)
+- Rows: 5,592 and Columns: 11 (imputed data, adult_imp1)
+
+Data readiness for Bayesian logistic regression: 
+
+  - Survey weights-Normalized MEC exam weights (wt_norm) with mean 1.00 (SD
 0.79) 
-- Data readiness for Bayesian logistic regression: 
-    - No missing
+  - No missing
 values remain in selected predictors or outcome. 
-    - Continuous variables
+  - Continuous variables
 are standardized, which facilitates prior specification. 
-    - Categorical
+  - Categorical
 variables are correctly re-leveled for reference categories. 
-    - Weights
+  - Weights
 are available for inclusion in the likelihood to account for survey
 design.
 
@@ -2124,37 +2127,44 @@ or tuning.
 
 # Model Overview and Significant Predictors
 
-a.  Multiple Linear Regression (Survey-weighted MLE)
-
-Significant predictors: Age: strong positive association (p \< 0.001)
-BMI: strong positive association (p \< 0.001) Sex (female): negative
-association (p = 0.0004) Race/Ethnicity: Mexican American (p = 0.0008)
+### a.  Multiple Linear Regression (Survey-weighted MLE)
+Significant predictors: 
+- Age: strong positive association (p \< 0.001)
+- BMI: strong positive association (p \< 0.001) 
+- Sex (female): negative
+association (p = 0.0004) 
+- Race/Ethnicity: Mexican American (p = 0.0008)
 Other Hispanic (p = 0.0087) NH Black (p = 0.0117) Other/Multi (p =
 0.0014)
 
-b.  Multiple Imputation (MICE)
+### b.  Multiple Imputation (MICE)
+- All predictors remain statistically significant. 
+- Positive associations:
+age, BMI, race categories. 
+- Negative association: female sex.
 
-All predictors remain statistically significant. Positive associations:
-age, BMI, race categories. Negative association: female sex.
-
-c.  Bayesian Logistic Regression
-
-Sampling via NUTS: 4 chains × 2000 iterations (1000 warmup, 4000
-post-warmup draws). Convergence diagnostics: Rhat = 1.00 → excellent
+### c.  Bayesian Logistic Regression
+- Sampling via NUTS: 4 chains × 2000 iterations (1000 warmup, 4000
+post-warmup draws). 
+- Convergence diagnostics: Rhat = 1.00 → excellent
 convergence Bulk/Tail ESS \> 2000 → reliable posterior estimates
-Posterior R² = 0.13 (95% CrI: 0.106–0.156) → 13% of variance in diabetes
+- Posterior R² = 0.13 (95% CrI: 0.106–0.156) → 13% of variance in diabetes
 explained by predictors.
 
-2.  Key Predictor Effects Predictor Effect Age (per 1 SD) Log-odds of
-    diabetes ↑1.09 per unit increase; strongest positive predictor BMI
-    (per 1 SD) Higher BMI increases diabetes risk (\~1.7–1.9× odds per
-    SD) Sex (female) Lower odds of diabetes compared to males
-    Race/Ethnicity Mexican American, NH Black, Other/Multi:
+### Key Predictor Effects Predictor Effect Age (per 1 SD) 
+- Log-odds of diabetes ↑1.09 per unit increase; strongest positive predictor BMI
+    (per 1 SD) 
+- Higher BMI increases diabetes risk (\~1.7–1.9× odds per
+    SD)
+- Sex (female) Lower odds of diabetes compared to males
+- Race/Ethnicity Mexican American, NH Black, Other/Multi:
     significantly higher odds; Other Hispanic: uncertain effect
 
-Posterior density plots illustrate parameter uncertainty. Posterior
+### Posterior density plots illustrate parameter uncertainty 
+- Posterior
 predictive checks (PPC) simulate new datasets from posterior draws to
-assess model fit. Combining parameter uncertainty and predictive
+assess model fit. 
+- Combining parameter uncertainty and predictive
 uncertainty provides credible intervals for predictions (e.g., given
 BMI, diabetes probability \~40–55%).
 
