@@ -1116,7 +1116,7 @@ write.csv(adult_imp1, "adult_imp1.csv", row.names = FALSE)
 -   Rows: 5,769 and Columns: 12 (filtered data, adult)
 -   Rows: 5,592 and Columns: 11 (imputed data, adult_imp1)
 
-# Bayesian Logistic Regression analysis 
+# Bayesian Logistic Regression Analysis 
 
 1.  Model Overview
     -   A Bayesian logistic regression model fitted on the first
@@ -1277,7 +1277,6 @@ bayes_R2(bayes_fit)      # Model fit
 ```
 
 ### Posterior Distributions (Left Panels)
-
   -   All distributions look smooth and unimodal → no multimodality, confirming stable posteriors.
   -   Each histogram represents the distribution of sampled coefficient values after convergence across all MCMC draws:
   -   b_raceOtherHispanic: The posterior peaks around 0.4–0.5, with some spread below 0 and above 1.
@@ -1293,10 +1292,9 @@ bayes_R2(bayes_fit)      # Model fit
   -   The parameter values oscillate around stable means with no systematic pattern → confirms stationarity.
   -   Combined with Rhat ≈ 1 and high ESS from your summary, the trace plots visually validate posterior convergence and independence.
 
-### Bayesian 𝑅^2 (model fit statistic: 
+### Bayesian 𝑅^2 (model fit statics): 
   -  explains about 13% of the variability in diabetes status, with credible uncertainty bounds suggesting reasonable but modest explanatory power.
   -  Explains the expected proportion of variance explained, averaged over the posterior distribution of parameters.
-
 
 ### Results from Posterior
   - Below is the tabulated format for Bayesian posterior odds ratios (95% CrI) — reference: NH White (race), Male (sex)
@@ -1724,7 +1722,7 @@ summary_table <- tibble(
 kable(summary_table, digits = 4, caption = "Comparison of Diabetes Prevalence Across Methods")
 
 ```
-Comparison of Diabetes Prevalence Across Methods
+### Comparison of Diabetes Prevalence Across Methods
 
 -  The estimated prevalence of diabetes was consistent across different analytical approaches:
 -   Survey-weighted mean (NHANES): 8.9% (SE = 0.0048)
@@ -1782,7 +1780,7 @@ ggplot(pp_df, aes(x = proportion)) +
 
 ```
 
-Posterior Predicted Diabetes Proportion vs. NHANES Prevalence
+### Posterior Predicted Diabetes Proportion vs. NHANES Prevalence
 
 -   We compared the posterior predicted proportion of diabetes from the Bayesian model with the observed NHANES prevalence (8.9%).
 -   The blue solid line represents the posterior mean, while the shaded blue area indicates the 95% credible interval of predicted proportions.
@@ -1871,7 +1869,7 @@ ggplot(bar_df, aes(x = Source, y = Prevalence, fill = Source)) +
 ```
 
 
-Comparison of Diabetes Prevalence Across Methods
+### Comparison of Diabetes Prevalence Across Methods
 
 -   The bar plot compares survey-weighted, imputed, and Bayesian posterior estimates of diabetes prevalence:
 -   Survey-weighted prevalence: 8.9% (95% CI: 0.080–0.098), reflecting the NHANES population after accounting for complex sampling.
@@ -1999,7 +1997,7 @@ Overall:
     clinical decision-making. External validation in independent cohorts
     is needed before application.
 
-#### Targeted therapy
+### Targeted Therapy
 
 -   Translational Perspective from the Bayesian Diabetes Prediction
     Project. This project further demonstrates the translational
@@ -2226,7 +2224,6 @@ ggplot(post_pred_df_new, aes(x = pred)) +
         risk factors like BMI.
 
 ### Practical Implications
-
 -   age and BMI as robust and independent predictors of diabetes,
     underscore the importance of early targeted interventions in
     mitigating diabetes risk.
