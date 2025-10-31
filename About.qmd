@@ -5,8 +5,8 @@ format: html
 
 # Contributors
 
--   Autumn Wilcox – analytic coding, content draft, structured project workflow, collaborated via GitHub.
 -   Namita Mishra – analytic coding, content draft, developed project plan, collaborated via GitHub.
+-   Autumn Wilcox – analytic coding, content draft, structured project workflow, collaborated via GitHub.
 
 ![](images/clipboard-3361740677.png){width="212"}
 
