@@ -7,14 +7,15 @@ website:
   title: "Bayesian Logistic Regression Capstone"
   navbar:
     left:
+      - text: "Introduction"
+        href: Introduction.qmd
       - text: "Research"
         href: index.qmd
       - text: "Slides"
         href: slides.qmd
       - text: "About Us"
         href: About.qmd
-      - text: "Introduction"
-        href: Introduction.qmd
+      
 format:
   html:
     theme: flatly
