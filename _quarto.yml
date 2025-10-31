@@ -13,7 +13,8 @@ website:
         href: slides.qmd
       - text: "About Us"
         href: About.qmd
-
+      - text: "Introduction"
+        href: Introduction.qmd
 format:
   html:
     theme: flatly
