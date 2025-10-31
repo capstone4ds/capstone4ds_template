@@ -18,9 +18,12 @@ execute:
   warning: false
   message: false
   echo: false
+  
 ---
 
+```{r}
 
+```
 
 ## Type 2 Diabetes (T2D), a public health concern worldwide
 
@@ -116,7 +119,7 @@ knitr::kable(head(merged_data))
 * Outcome adjusted for pregnancy when female
 * NH White set as reference level for race
 
-```
+
 
 ---
 ## References

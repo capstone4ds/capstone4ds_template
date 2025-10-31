@@ -172,10 +172,8 @@ decision-making and interpretation.
 -   In the Bayesian framework, the coefficients (\beta ) are assigned
     prior distributions, which are updated in light of the observed data
     to yield posterior distributions.
-
 -   The Bayesian approach naturally incorporates **uncertainty** in all
     model parameters.\
-
 -   It combines prior beliefs with observed data to produce posterior
     distributions according to Bayes’ theorem: \[\text{Posterior}
     \propto \text{Likelihood} \times \text{Prior}\]
@@ -196,11 +194,11 @@ extreme values without overpowering the data R. van de Schoot et al.
 A weakly informative intercept prior: **Student’s t-distribution
 prior**, `student_t(3, 0, 10)` (van de Schoot et al., 2013).\
 This prior:\
-- Has **3 degrees of freedom** (( \nu = 3 )), producing heavy tails that
+-   Has **3 degrees of freedom** (( \nu = 3 )), producing heavy tails that
 allow for occasional large effects.\
-- Is **centered at 0** (( \mu = 0 )), reflecting no initial bias toward
+-   Is **centered at 0** (( \mu = 0 )), reflecting no initial bias toward
 positive or negative associations.\
-- Has a **scale parameter of 10** (( \sigma = 10 )), allowing broad
+-   Has a **scale parameter of 10** (( \sigma = 10 )), allowing broad
 variation in possible coefficient values.\
 Such priors improve stability in models with small sample sizes, high
 collinearity, or potential outliers.
@@ -252,7 +250,7 @@ diagnostics:
 
 ```{r}
 #| label: Libraries
-#| include: false
+#| echo: true
 
 # loading packages 
 options(repos = c(CRAN = "https://cloud.r-project.org"))
@@ -307,7 +305,7 @@ levels) - Age (continuous 20-80 years)
 
 ```{r message=FALSE, warning=FALSE}
 #| label: nhanes tables and merged data
-#| include: false
+#| echo: true
 
 library ("nhanesA")     
  # imported datasets 
@@ -365,7 +363,7 @@ saveRDS(merged_data, "data/nhanes2013_2014_prepared.rds")
 
 ```{r message=FALSE, warning=FALSE}
 #| label: merged dataframe and character handling
-#| include: false
+#| echo: true
 
 # print(glimpse(merged_data))
 print(table(merged_data$BMXBMI, useNA = "ifany"))
@@ -420,7 +418,7 @@ message("Saved: data/merged_2013_2014.rds")
 
 ```{r}
 #| label: Varaibles table
-#| echo: false
+#| echo: true
 library(knitr)
 library(kableExtra)
 
@@ -506,7 +504,7 @@ sampling design.
 
 ```{r}
 #| label: Adults Dataset preparation
-#| include: false
+#| echo: true
 ## 
 # ---------------- Basic Exploration (adults) ----------------
 
@@ -582,7 +580,7 @@ cat("Adults n =", nrow(adult), "\n")
 
 ```{r}
 #| label: survey data results
-#| echo: false
+#| echo: true
 
 #| label: survey design
 #| echo: false
@@ -666,7 +664,7 @@ plot_missing(adult, title="Figure 2(Adult dataset). Breakdown of missing observa
 
 ```{r}
 #| label: Data exploration
-#| include: false
+#| echo: true
 # data exploration
 
 if (sum(!is.na(adult$diabetes_dx)) == 0) {
@@ -684,6 +682,7 @@ saveRDS(adult, "data/adult_cleaned_2013_2014.rds")
 
 ```{r}
 #| label: EDA visualization (adult dataset)
+#| echo: true
 
 ggplot(adult, aes(x = age)) +
   geom_histogram(binwidth = 5, fill = "skyblue", color = "white") +
@@ -739,6 +738,7 @@ ggplot(adult, aes(x = factor(bmi_cat), fill = factor(diabetes_dx))) +
 ```
 
 ```{r}
+#| echo: true
 
 # Example: create your dataset
 adult1 <- data.frame(
@@ -801,7 +801,7 @@ ggplot(adult1, aes(x = diabetes_dx, y = count, fill = sex)) +
 
 ```{r}
 #| label: Modeling-Survey-weighted complete-case
-#| include: false
+#| echo: true
 
 # Modeling
 
@@ -892,7 +892,7 @@ summary(svy_fit)
 
 ```{r}
 #| label: Survey weighted data results
-#| echo: false
+#| echo: true
 
 svy_or <- broom::tidy(svy_fit, conf.int = TRUE) %>%
   dplyr::mutate(OR = exp(estimate), LCL = exp(conf.low), UCL = exp(conf.high)) %>%
@@ -917,7 +917,7 @@ entire process is repeated multiple times to create several complete
 datasets, each reflecting different possibilities for the missing data.
 
 ```{r}
-#| label: Imputation 
+#| label: Imputation
 #| echo: true
  
 # ----- Multiple Imputation (predictors only) 
@@ -1043,7 +1043,8 @@ print(table1, showAllLevels = TRUE)
 ```
 
 ```{r}
-#| label: Visulaiztion imputed dataset 
+#| label: Visulaiztion imputed dataset
+#| echo: true
 
 ## correlation matrix
 library(ggplot2)
@@ -1119,6 +1120,7 @@ ggplot(adult_imp1, aes(x = bmi, y = diabetes_dx)) +
 
 ```{r}
 #| label: saved data in csv
+#| echo: true
 # Save your dataset as CSV
 write.csv(adult_imp1, "adult_imp1.csv", row.names = FALSE)
 
@@ -1172,6 +1174,7 @@ Rhat = 1).
 
 ```{r}
 #| label: adult_imp1 - Prior, Bayesian model and summary
+#| echo: true
 library(gt)
 
 priors <- c(
@@ -1243,6 +1246,7 @@ Below plots shows Distributions for Coefficients
 
 ```{r}
 #| label: Visualization of prior and adult_imp1 (bmi, age)
+#| echo: true
 
 library(ggplot2)
 
@@ -1320,6 +1324,7 @@ ggplot(prior_draws, aes(x = value, fill = term)) +
 
 ```{r}
 #| label: Assumptions (Bayesian)
+#| echo: true
 
 library(brms)
 
@@ -1417,7 +1422,7 @@ knitr::kable(
 ```
 
 ```{r}
-#| include: false
+#| echo: true
 # Combined table
 
 if (!dir.exists("outputs")) dir.create("outputs", recursive = TRUE)
@@ -1444,6 +1449,7 @@ saveRDS(bayes_or,  "outputs/bayes_OR_table.rds")
 
 ```{r}
 #| label: Model results OR
+#| echo: true
 # Results
 
  #Build compact results table (BMI & Age only) 
@@ -1505,6 +1511,7 @@ kable(
 
 ```{r}
 #| label: Posterior predictive draws
+#| echo: true
 # Posterior predictive draws
 
 #Posterior predictive checks (binary outcome)
@@ -1525,6 +1532,7 @@ data pattern.
 
 ```{r}
 #| label: overlay of observed vs predicted
+#| echo: true
 
 # Plot overlay of observed vs predicted counts (duplicate image)
 ppc_dens_overlay(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:50, ]) +
@@ -1545,6 +1553,7 @@ ppc_dens_overlay(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:50, ]) +
     bars (2) Fitted (Predicted) vs observed for bmi using line plot
 
 ```{r}
+#| echo: true
 ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:50, ])
 
 ```
@@ -1557,6 +1566,7 @@ ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:50, ])
 
 ```{r}
 #| label: PP check for proportions (useful for binary) mean
+#| echo: true
 #PP check for proportions (useful for binary) mean comparison to check if the simulated means match the observed mean
 
 ## mean
@@ -1573,7 +1583,8 @@ ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "mean") 
 ```
 
 ```{r}
-#| label: PP check for proportions sd 
+#| label: PP check for proportions sd
+#| echo: true
 
 #PP check for proportions (useful for binary) mean and sd comparison to check if the simulated means match the observed mean
 
@@ -1592,7 +1603,7 @@ ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "sd") +
 ```
 
 ```{r}
-#| include: false
+#| echo: true
 
 # PP checks with bayesplot options
 color_scheme_set("blue")
@@ -1603,7 +1614,7 @@ ppc_scatter_avg(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ]) +
 
 ```{r}
 #| label: Posterior summary
-#| echo: false
+#| echo: true
 library(brms)
 library(dplyr)
 library(posterior)
@@ -1685,6 +1696,7 @@ mcmc_areas(post, pars = c( "b_age_c","b_bmi_c","b_sexFemale","b_raceMexicanAmeri
 
 ```{r}
 #| label: ggplot bmi (obs vs pred)
+#| echo: true
 
 predicted <- fitted(bayes_fit, summary = TRUE)
 observed <- adult_imp1[, c("bmi", "age")]
@@ -1714,6 +1726,7 @@ ggplot(data = NULL, aes(x = observed$bmi, y = predicted[, "Estimate"])) +
 
 ```{r}
 #| label: Prior and Post draws
+#| echo: true
 library(posterior)
 library(dplyr)
 library(tidyr)
@@ -1768,6 +1781,7 @@ model reliability for inference and prediction.
 
 ```{r}
 #| label: Prior vs pred draws (age and bmi)
+#| echo: true
 
 library(ggplot2)
 
@@ -1797,7 +1811,7 @@ posterior distributions.
 
 ```{r}
 #| label: proportion of diabetes for each draw
-#| echo: false
+#| echo: true
 # Compute proportion of diabetes=1 for each draw
 pp_proportion <- rowMeans(pp_samples)  # proportion of 1's in each posterior draw
 
@@ -1828,7 +1842,7 @@ ggplot(pp_proportion_df, aes(x = proportion)) +
     model captures the underlying population pattern.
 
 ```{r}
-#| echo: false
+#| echo: true
 library(dplyr)
 library(knitr)
 svy_mean <- svymean(~diabetes_dx, nhanes_design_adult, na.rm = TRUE)
@@ -1889,6 +1903,7 @@ plan and prioritize targeted interventions effectively.
 
 ```{r}
 #| label: DM prediction vs prevalence
+#| echo: true
 
 library(tidyverse)
 
@@ -1940,6 +1955,7 @@ ggplot(pp_df, aes(x = proportion)) +
 
 ```{r}
 #| label: posterior DM prediction vs population prevalence
+#| echo: true
 library(dplyr)
 
 # Posterior predicted proportion
@@ -2273,7 +2289,7 @@ ggplot(post_pred_df, aes(x = pred)) +
 
 ```{r}
 #| label: participant2
-#| include: false
+#| echo: true
 
 participant2_data  <- adult[2, ]
 
@@ -2306,29 +2322,21 @@ ggplot(post_pred_df2, aes(x = pred)) +
     application of the Bayesian model for personalized prediction, we
     applied the trained model to a new participant not included in the
     original dataset.
-
 -   Selected a new participant with specific covariates (age, BMI, sex,
     race).
-
 -   Used posterior_linpred with transform = TRUE to compute posterior
     predicted probabilities of diabetes. Generated posterior draws to
     capture predictive uncertainty.
-
 -   Created a density plot of predicted probabilities. Computed 95%
     credible interval to summarize the range of likely outcomes.
-
 -   Red dashed lines indicate the lower and upper bounds of the
     interval.
-
 -   The distribution shows not only the most probable risk but also the
     uncertainty around it.
-
 -   Credible intervals help quantify confidence in individual-level
     predictions.
-
 -   Supports personalized decision-making, such as targeted lifestyle
     interventions, early monitoring, or preventive care.
-
 -   Bayesian posterior predictive draws allow probabilistic,
     individualized predictions for new participants, providing both
     point estimates and uncertainty measures for actionable risk
@@ -2389,7 +2397,10 @@ ggplot(post_pred_df_new, aes(x = pred)) +
     closest to the target. This enables inverse prediction, linking
     statistical inference to clinically meaningful thresholds.
 -   Visualization Line plot of predicted probability vs BMI shows
-    -   Red dashed horizontal line: target probability (0.3).
+    - The blue curve shows how likely different probability values are according to your posterior predictive distribution.-   
+    - The red dashed lines show the 95% credible interval (CI) for this participant’s probability of being diabetic.
+    - Limits x-axis between 0 and 1 (valid range for probabilities).
+    - Red dashed horizontal line: target probability (0.3).
     -   Red dotted vertical line: BMI corresponding to the target
         probability (\~closest BMI).Annotated to highlight the BMI
         threshold.
@@ -2417,7 +2428,7 @@ ggplot(post_pred_df_new, aes(x = pred)) +
 
 ```{r}
 #| label: predict BMI_targeted therapy
-#| include: false
+#| echo: true
 
 # Grid of possible BMI values (centered if model used bmi_c)
 bmi_seq <- seq(18, 40, by = 0.5)
