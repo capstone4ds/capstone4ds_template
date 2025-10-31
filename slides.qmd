@@ -6,13 +6,13 @@ author:
   - "Autumn Wilcox"
 
 advisor: "Dr. Ashraf Cohen"
-date: '`r Sys.Date()`'
 format:
   revealjs:
     theme: simple
     slide-number: true
     transition: slide
     css: slides.css
+    fontSize: 20px 
 bibliography: references.bib
 execute:
   warning: false
