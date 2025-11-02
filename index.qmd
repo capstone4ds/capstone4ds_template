@@ -104,13 +104,12 @@ plausible values across datasets and pools results for reliable
 classification of patient health status and mortality.
 
 ## Aims
-
 This study aims to apply Bayesian logistic regression to predict diabetes status and examine its association with body mass index (BMI), age (≥20 years), gender, and race using data from the 2013–2014 NHANES survey. The NHANES dataset employs a complex sampling design involving stratification, clustering, and oversampling of specific population subgroups. By adopting a Bayesian analytical framework, this study seeks to overcome challenges commonly encountered in traditional logistic regression—such as missing data, separation, and biases introduced by complete case analysis—thereby improving the efficiency, robustness, and interpretability of model estimates in predicting population-level health outcomes.
 
+------------------------------------------------------------------------
 # Method
 
 ## **Bayesian Logistic Regression**
-
 To estimate the associations between predictors and outcome probabilities.
 **Bayesian framework** integrates prior information with observed
 data to generate posterior distributions, allowing direct probabilistic
@@ -121,8 +120,6 @@ reflect uncertainty in the estimates.\
 Unlike traditional frequentist methods, the Bayesian method enables
 inference through **posterior probabilities**, supporting more nuanced
 decision-making and interpretation.
-
-------------------------------------------------------------------------
 
 ### **Model Structure**
 -   Bayesian logistic regression is a probabilistic modeling framework
@@ -229,6 +226,7 @@ collinearity, or potential outliers.
     posterior distributions to observed outcomes.
   -   **Bayesian R²:** Quantified the proportion of variance explained by
     the predictors, incorporating uncertainty.
+    
 
 ```{r}
 #| label: Libraries
@@ -260,10 +258,11 @@ library(logistf)
 
 ```
 
+------------------------------------------------------------------------
+
 # Analysis and Results
 
 Bayesian logistic regression analysis is performed to estimate the risk of doctor-diagnosed diabetes among adults in the National Health and Nutrition Examination Survey (NHANES, 2013-2014), a 2-year data cross-sectional weighted data from the CDC’s National Center for Health Statistics (National Center for Health Statistics (NCHS) 2014 @CenterforHealthStatistics1999.
-
 
 ### Data pre-processing
 
@@ -272,7 +271,6 @@ Data is imported using R packages and libraries for data wrangling and analysis.
 Three NHANES component files—Demographics (DEMO_H), Body Measures (BMX_H), and the Diabetes Questionnaire (DIQ_H) imported in .xpt format are merged using the unique participant identifier (SEQN) to create a single analytic dataset. Prior to merge, all variables of interest were harmonized and recoded to ensure consistent numeric and factor data types, resulting in a clean, atomic structure suitable for survey-weighted analyses and Bayesian modeling.
 
 The merged dataset with 10,175 participants was filtered to include only adults (age ≥ 20) for subsequent analyses including demographic and anthropometric measures to provide a representative sample for assessing diabetes risk across the U.S. adult population reflecting the complex, multistage sampling design of NHANES. 
-
 
 ```{r message=FALSE, warning=FALSE}
 #| label: nhanes tables and merged data
@@ -441,7 +439,7 @@ kable(var_descriptions, caption = "Variable Descriptions: Adult Dataset") %>%
 
 
 
-**Variables of Interest** 
+  - **Variables of Interest** 
   -  **Response Variable** - Binary Type 2 / diagnosed diabetes(excluding
 gestational diabetes) diabetes_dx created combning - `DIQ010` - Doctor
 told you have diabetes - `DIQ050`- excluded (a secondary variable
