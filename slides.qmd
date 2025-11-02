@@ -12,7 +12,7 @@ format:
     slide-number: true
     transition: slide
     css: slides.css
-    fontSize: 20px 
+    
 bibliography: references.bib
 execute:
   warning: false
