@@ -107,8 +107,8 @@ classification of patient health status and mortality.
 This study aims to apply Bayesian logistic regression to predict diabetes status and examine its association with body mass index (BMI), age (≥20 years), gender, and race using data from the 2013–2014 NHANES survey. The NHANES dataset employs a complex sampling design involving stratification, clustering, and oversampling of specific population subgroups. By adopting a Bayesian analytical framework, this study seeks to overcome challenges commonly encountered in traditional logistic regression—such as missing data, separation, and biases introduced by complete case analysis—thereby improving the efficiency, robustness, and interpretability of model estimates in predicting population-level health outcomes.
 
 ------------------------------------------------------------------------
-# Method
 
+# Method
 ## **Bayesian Logistic Regression**
 To estimate the associations between predictors and outcome probabilities.
 **Bayesian framework** integrates prior information with observed
@@ -439,6 +439,8 @@ kable(var_descriptions, caption = "Variable Descriptions: Adult Dataset") %>%
 
 
 
+ 
+ 
   - **Variables of Interest** 
   -  **Response Variable** - Binary Type 2 / diagnosed diabetes(excluding
 gestational diabetes) diabetes_dx created combning - `DIQ010` - Doctor
@@ -579,6 +581,7 @@ cat("Effective sample size for diabetes_dx:", round(ess), "\n")
 
 ```
 
+
 ### Exploratory Data Analysis (Adult, 20 - 80 years)
   
 ```{r}
@@ -600,6 +603,7 @@ plot_missing(adult, title="Figure 2(Adult dataset). Breakdown of missing observa
 ```
 
 
+
 **Missingness** 
 
   - 25% of columns are discrete (categorical), 75% are continuous (age and BMI).
@@ -612,7 +616,8 @@ plot_missing(adult, title="Figure 2(Adult dataset). Breakdown of missing observa
     number of variables involved.
 
 **Study Cohort**
-- The adult cohort includes standardized variables for age and BMI (age_c, bmi_c), categorical indicators for sex and race/ethnicity, and a binary doctor-diagnosed diabetes.
+
+  - The adult cohort includes standardized variables for age and BMI (age_c, bmi_c), categorical indicators for sex and race/ethnicity, and a binary doctor-diagnosed diabetes.
   - The adult cohort included 5,769 adults aged 20–80 years with the mean age of participants was 49.1 years (SD = 17.6), and participants are fairly evenly distributed across adult age groups, with no sharp skewness.
   - The mean BMI was 29.1 kg/m² (SD = 7.15), with values ranging from 14.1 to 82.9 kg/m².A small proportion of missing values in variables (BMI and diabetes status). BMI data were available for 5,520 participants, with 249 missing values. BMI: Most participants have BMI values within the normal to overweight range, with fewer in the obese category.
   - Sex: Sample includes a higher proportion of females than males.
@@ -694,11 +699,12 @@ ggplot(adult, aes(x = factor(bmi_cat), fill = factor(diabetes_dx))) +
 ```
 
 **Prevalence of diabetes in adult population**
-    (1) Diabetes by BMI categories: Individuals diagnosed with diabetes
+
+  - (1) Diabetes by BMI categories: Individuals diagnosed with diabetes
         tend to have higher BMI values compared to non-diabetics.
-    (2) Diabetesby Age Group: The proportion of diabetes increases with
+  - (2) Diabetesby Age Group: The proportion of diabetes increases with
         advancing age, highlighting age as a strong risk factor.
-    (3) Diabetes by Race/Ethnicity: Differences are observed across
+  - (3) Diabetes by Race/Ethnicity: Differences are observed across
         racial/ethnic groups, with some showing higher prevalence rates
         than others.
     (4) Diabetes diagnosis by sex across different racial groups. Bars
@@ -741,8 +747,9 @@ ggplot(adult1, aes(x = diabetes_dx, y = count, fill = sex)) +
 # Statistical Modeling
 
 Analytic workflow: Three modeling frameworks were compared using identical predictors (standardized age, BMI, sex, and race4) and the binary outcome diabetes_dx: 
-  (1) survey-weighted logistic regression to incorporate the NHANES complex sampling design,   (2) multiple imputation (MICE) to address missing BMI values, and 
-  (3) Bayesian logistic regression with weakly informative priors to quantify uncertainty.
+  -   (1) survey-weighted logistic regression to incorporate the NHANES complex sampling design,   
+  -   (2) multiple imputation (MICE) to address missing BMI values, and - 
+  -   (3) Bayesian logistic regression with weakly informative priors to quantify uncertainty.
 
 
 ```{r}
