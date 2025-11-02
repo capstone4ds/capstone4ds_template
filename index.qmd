@@ -619,16 +619,7 @@ The merged dataset contains 10,175 participants. We restricted the sample to adu
   - The mean BMI was 29.1 kg/m² (SD = 7.15), with values ranging from 14.1 to 82.9 kg/m².A small proportion of missing values in variables (BMI and diabetes status). BMI data were available for 5,520 participants, with 249 missing values. BMI: Most participants have BMI values within the normal to overweight range, with fewer in the obese category.
   - Sex: Sample includes a higher proportion of females than males.
 
-### Visualization on prevalence of diabetes
-    (1) Diabetes by BMI categories: Individuals diagnosed with diabetes
-        tend to have higher BMI values compared to non-diabetics.
-    (2) Diabetesby Age Group: The proportion of diabetes increases with
-        advancing age, highlighting age as a strong risk factor.
-    (3) Diabetes by Race/Ethnicity: Differences are observed across
-        racial/ethnic groups, with some showing higher prevalence rates
-        than others.
-    (4) Diabetes diagnosis by sex across different racial groups. Bars
-        are side by side for each sex, with counts displayed on top
+
 
 ```{r}
 #| label: Data exploration
@@ -704,6 +695,19 @@ ggplot(adult, aes(x = factor(bmi_cat), fill = factor(diabetes_dx))) +
 
 ```
 
+
+**Visualization on prevalence of diabetes**
+    (1) Diabetes by BMI categories: Individuals diagnosed with diabetes
+        tend to have higher BMI values compared to non-diabetics.
+    (2) Diabetesby Age Group: The proportion of diabetes increases with
+        advancing age, highlighting age as a strong risk factor.
+    (3) Diabetes by Race/Ethnicity: Differences are observed across
+        racial/ethnic groups, with some showing higher prevalence rates
+        than others.
+    (4) Diabetes diagnosis by sex across different racial groups. Bars
+        are side by side for each sex, with counts displayed on top
+        
+        
 ```{r}
 #| echo: true
 
@@ -1320,82 +1324,6 @@ saveRDS(mi_or,     "outputs/mi_OR_table.rds")
 saveRDS(bayes_or,  "outputs/bayes_OR_table.rds")
 ```
 
-### Model Comparison
--   Across all analytic methods—survey-weighted maximum likelihood
-    estimation (MLE), multiple imputation with pooled estimates (MICE),
-    and Bayesian regression—the associations between BMI, age, and
-    diabetes diagnosis were consistent in direction and magnitude.
-
--   For BMI, the odds ratios ranged from 1.73 (95% CI: 1.58–1.89) in the
-    MICE-pooled model to 1.89 (95% CI: 1.65–2.15) in the survey-weighted
-    MLE model, and 1.87 (95% CrI: 1.71–2.05) in the Bayesian model.
-
--   For age, the estimated odds ratios were 2.90 (95% CI: 2.60–3.24)
-    using MICE, 3.03 (95% CI: 2.70–3.40) from the survey-weighted MLE
-    model, and 2.99 (95% CrI: 2.64–3.37) in the Bayesian analysis.
-
-```{r}
-#| label: Model results OR
-#| echo: true
-# Results
-
- #Build compact results table (BMI & Age only) 
-library(dplyr); 
-library(tidyr); 
-library(knitr); 
-library(stringr)
-
-# pretty "OR (LCL–UCL)" string
-
-  fmt_or <- function(or, lcl, ucl, digits = 2) {
-  paste0(
-    formatC(or,  format = "f", digits = digits), " (",
-    formatC(lcl, format = "f", digits = digits), "–",
-    formatC(ucl, format = "f", digits = digits), ")"
-  )
-}
-
-# guardrails: require these to exist from Modeling
-stopifnot(exists("svy_or"), exists("mi_or"), exists("bayes_or"))
-for (nm in c("svy_or","mi_or","bayes_or")) {
-  if (!all(c("term","OR","LCL","UCL") %in% names(get(nm)))) {
-    stop(nm, " must have columns: term, OR, LCL, UCL")
-  }
-}
-
-svy_tbl   <- svy_or   %>% mutate(Model = "Survey-weighted MLE")
-mi_tbl    <- mi_or    %>% mutate(Model = "mice pooled")
-bayes_tbl <- bayes_or %>% mutate(Model = "Bayesian")
-
-all_tbl <- bind_rows(svy_tbl, mi_tbl, bayes_tbl) %>%
-  mutate(term = case_when(
-    str_detect(term, "bmi_c|\\bBMI\\b") ~ "BMI (per 1 SD)",
-    str_detect(term, "age_c|\\bAge\\b") ~ "Age (per 1 SD)",
-    TRUE ~ term
-  )) %>%
-  filter(term %in% c("BMI (per 1 SD)", "Age (per 1 SD)")) %>%
-  mutate(OR_CI = fmt_or(OR, LCL, UCL, digits = 2)) %>%
-  select(Model, term, OR_CI) %>%
-  arrange(
-    factor(Model, levels = c("Survey-weighted MLE","mice pooled","Bayesian")),
-    factor(term,  levels = c("BMI (per 1 SD)","Age (per 1 SD)"))
-  )
-
-res_wide <- all_tbl %>%
-  pivot_wider(names_from = term, values_from = OR_CI) %>%
-  rename(
-    `BMI (per 1 SD) OR (95% CI)` = `BMI (per 1 SD)`,
-    `Age (per 1 SD) OR (95% CI)` = `Age (per 1 SD)`
-  )
-
-kable(
-  res_wide,
-  align = c("l","c","c"),
-  caption = "Odds ratios (per 1 SD) with 95% CIs across models"
-)
-
-```
-
 
 
 ```{r}
@@ -1689,6 +1617,84 @@ of the estimated effects, with posterior distributions narrower than the
 priors, demonstrating that the data meaningfully updated our beliefs. -
 Faceting by term allows comparison of each predictor’s prior and
 posterior distributions.
+
+
+### Model Comparison
+-   Across all analytic methods—survey-weighted maximum likelihood
+    estimation (MLE), multiple imputation with pooled estimates (MICE),
+    and Bayesian regression—the associations between BMI, age, and
+    diabetes diagnosis were consistent in direction and magnitude.
+
+-   For BMI, the odds ratios ranged from 1.73 (95% CI: 1.58–1.89) in the
+    MICE-pooled model to 1.89 (95% CI: 1.65–2.15) in the survey-weighted
+    MLE model, and 1.87 (95% CrI: 1.71–2.05) in the Bayesian model.
+
+-   For age, the estimated odds ratios were 2.90 (95% CI: 2.60–3.24)
+    using MICE, 3.03 (95% CI: 2.70–3.40) from the survey-weighted MLE
+    model, and 2.99 (95% CrI: 2.64–3.37) in the Bayesian analysis.
+
+```{r}
+#| label: Model results OR
+#| echo: true
+# Results
+
+ #Build compact results table (BMI & Age only) 
+library(dplyr); 
+library(tidyr); 
+library(knitr); 
+library(stringr)
+
+# pretty "OR (LCL–UCL)" string
+
+  fmt_or <- function(or, lcl, ucl, digits = 2) {
+  paste0(
+    formatC(or,  format = "f", digits = digits), " (",
+    formatC(lcl, format = "f", digits = digits), "–",
+    formatC(ucl, format = "f", digits = digits), ")"
+  )
+}
+
+# guardrails: require these to exist from Modeling
+stopifnot(exists("svy_or"), exists("mi_or"), exists("bayes_or"))
+for (nm in c("svy_or","mi_or","bayes_or")) {
+  if (!all(c("term","OR","LCL","UCL") %in% names(get(nm)))) {
+    stop(nm, " must have columns: term, OR, LCL, UCL")
+  }
+}
+
+svy_tbl   <- svy_or   %>% mutate(Model = "Survey-weighted MLE")
+mi_tbl    <- mi_or    %>% mutate(Model = "mice pooled")
+bayes_tbl <- bayes_or %>% mutate(Model = "Bayesian")
+
+all_tbl <- bind_rows(svy_tbl, mi_tbl, bayes_tbl) %>%
+  mutate(term = case_when(
+    str_detect(term, "bmi_c|\\bBMI\\b") ~ "BMI (per 1 SD)",
+    str_detect(term, "age_c|\\bAge\\b") ~ "Age (per 1 SD)",
+    TRUE ~ term
+  )) %>%
+  filter(term %in% c("BMI (per 1 SD)", "Age (per 1 SD)")) %>%
+  mutate(OR_CI = fmt_or(OR, LCL, UCL, digits = 2)) %>%
+  select(Model, term, OR_CI) %>%
+  arrange(
+    factor(Model, levels = c("Survey-weighted MLE","mice pooled","Bayesian")),
+    factor(term,  levels = c("BMI (per 1 SD)","Age (per 1 SD)"))
+  )
+
+res_wide <- all_tbl %>%
+  pivot_wider(names_from = term, values_from = OR_CI) %>%
+  rename(
+    `BMI (per 1 SD) OR (95% CI)` = `BMI (per 1 SD)`,
+    `Age (per 1 SD) OR (95% CI)` = `Age (per 1 SD)`
+  )
+
+kable(
+  res_wide,
+  align = c("l","c","c"),
+  caption = "Odds ratios (per 1 SD) with 95% CIs across models"
+)
+
+```
+
 
 ```{r}
 #| label: proportion of diabetes for each draw
