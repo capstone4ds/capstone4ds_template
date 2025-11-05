@@ -21,9 +21,21 @@ execute:
   echo: false
 ---
 
+```{=html}
+<style>
+.reveal {
+  font-size: 30px; /* change all slide text */
+}
+
+.reveal h1 {
+  font-size: 44px; /* title font */
+}
+</style>
+```
+
 ------------------------------------------------------------------------
 
-## Slide 1: Introduction
+## Introduction
 
 -   Diabetes is a chronic disease with rising global prevalence.
 
@@ -37,7 +49,7 @@ execute:
 
 ------------------------------------------------------------------------
 
-## Slide 2: Data Source
+## Data Source
 
 -   Data: *National Health and Nutrition Examination Survey (NHANES)*
 
