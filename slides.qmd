@@ -24,16 +24,17 @@ execute:
 ```{=html}
 <style>
 .reveal {
-  font-size: 32px; /* change all slide text */
-}
 
+  font-size: 32px; /* change all slide text */
+  }
 .reveal h1 {
   font-size: 48px; /* title font */
+  
 }
+
 </style>
 ```
 
-------------------------------------------------------------------------
 
 ## Introduction
 
