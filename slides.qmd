@@ -12,6 +12,7 @@ format:
     slide-number: true
     transition: slide
     css: slides.css
+    incremental: true   
     
     
 bibliography: references.bib
@@ -25,7 +26,7 @@ execute:
 <style>
 .reveal {
 
-  font-size: 32px; /* change all slide text */
+  font-size: 34px; /* change all slide text */
   }
 .reveal h1 {
   font-size: 48px; /* title font */
@@ -35,71 +36,15 @@ execute:
 </style>
 ```
 
+## Aim: Early identification of risk factors is key to Diabetes diagnosis and prevention
 
-## Introduction
+Predict diabetes using Bayesian logistic regression
 
--   Diabetes is a chronic disease with rising global prevalence.
+**Challenges Frequentists** - maximum likelihood estimation is unstable in missing data, quasi-separation, or small samples
 
--   Early identification of risk factors is key to prevention and control.
+**Bayesian Method** - flexible, regularize estimates, quantify uncertainty under missingness or imputation ( Baldwin and Larson 2017; Kruschke and Liddell 2017) - incorporate prior, provide credible intervals via Markov Chain Monte Carlo (MCMC) to predict patient health status across diseases - Support model checking, variable selection, and uncertainty quantification
 
--   Bayesian methods allow flexible modeling with uncertainty quantification.
-
--   **Aim:** Predict diabetes diagnosis using Bayesian logistic regression with imputed data .
-
-    ![](Population%20Prevalence%20vs%20Proportion%20of%20Diabetes%20=%201.png){width="437"}
-
-------------------------------------------------------------------------
-
-## Data Source
-
--   Data: *National Health and Nutrition Examination Survey (NHANES)*
-
--   Adult dataset (\>20 years).
-
--   Variables included:
-
-    -   **Demographics:** age, sex, race
-
-    -   **Clinical:** BMI
-
-    -   **Outcome:** `diabetes_dx` (diagnosis: 0 = No, 1 = Yes)
-
-        ``` r
-        head(adult)
-        ```
-
-        ![](images/clipboard-126412730.png)
-
-------------------------------------------------------------------------
-
-## Missing Data Assessment
-
--   Overall missingness: \~4%, No variable completely missing, Missingness is not uniform![](images/clipboard-1235247978.png){width="537"}
--   Missingness pattern: likely *MAR* (Missing At Random).
--   Clustered mainly in bmi and diabetes_dx.
--   Decision: Apply **Multiple Imputation by Chained Equations (MICE)**.
-
-------------------------------------------------------------------------
-
-## Multivariate Imputation by Chained Equations (MICE)
-
--   **Method:** Predictive mean matching (PMM) for continuous vars; logistic regression for binary.
-
--   **Iterations:** 5 imputations, 10 iterations each, combined imputed datasets using Rubin’s rules.
-
--   Distribution plots confirmed consistency with the original data.
-
-------------------------------------------------------------------------
-
-## MICE (Pooled Logistic Regression)
-
-``` r
-  glm(diabetes_dx ~ age_c + bmi_c + sex + race, family = binomial()) }) pool_mi <- pool(fit_mi) 
-```
-
--   n=5,769 participants
-
--   Model significance: All predictors are statistically significant (p \< 0.01), suggesting a robust association across demographic and health variables.
+![](images/clipboard-2249834790.png){fig-align="center" width="361"}
 
 ------------------------------------------------------------------------
 
@@ -113,13 +58,19 @@ Predictors: `age_c`, `bmi_c`, `sex`, `race`.
 
 -   Regression coefficients prior: normal(0, 2.5) — providing weakly informative regularization, constraining extreme values without overpowering the data. @VandeSchoot2021
 
--   Implemented in `brms` (Stan backend), Posterior draws = 4000 (4 chains × 1000 iterations). Logistic link function![](images/clipboard-87871382.png){width="258" height="41"}
+-   Implemented in `brms` (Stan backend), Posterior draws = 4000 (4 chains × 1000 iterations).
+
+    ![](images/clipboard-87871382.png){width="371" height="86"}
+
+-   Logistic link function
 
 ------------------------------------------------------------------------
 
 ## Bayesian Model Equation
 
-``` r
+```{undefined}
+#| eval: false
+#| include: false
 library(gt)
 priors <- c(
   set_prior("normal(0, 2.5)", class = "b"),
@@ -140,8 +91,54 @@ $$
 \text{logit}(P(Y=1)) = \beta_0 + \beta_1 \text{age}_c + \beta_2 \text{bmi}_c + \beta_3 \text{sex} + \beta_4 \text{race}
 $$
 
--    P(Y=1) : Probability of being diabetic
+-   P(Y=1) : Probability of being diabetic
 -   Coefficients estimated with posterior means and 95% credible intervals.
+
+------------------------------------------------------------------------
+
+
+## Data: Survey weighted: National Health and Nutrition Examination Survey dataset (2013-2014) (NHANES)
+
+\- Study population: Adults (\>20 years)(n=5769): - `Age`: evenly distributed across adult age groups - `BMI`: concentrated in the overweight and obese ranges - `Female` \> `Male` participants - **most participants are non-diabetic**, a **minority are diabetic**: a relatively lower prevalence of diabetes in the sample - Predictors: age, sex, race, BMI - Response variable: `diabetes_dx` (diagnosis: 0 = No, 1 = Yes) `r head(adult)`
+
+![](images/clipboard-126412730.png)
+
+------------------------------------------------------------------------
+
+## Missing Assessment (Overall missingness: \~4%)
+::::: columns
+::: {.column width="40%"}
+![](images/clipboard-1235247978.png){width="339"}
+:::
+
+::: {.column width="60%"}
+
+No variable is completely missing. Missingness is likely *MAR* (Missing At Random) and is clustered mainly in bmi (4.3%) and diabetes_dx (3.1%).
+
+:::
+:::::
+Apply **Multiple Imputation by Chained Equations (MICE)**.
+
+------------------------------------------------------------------------
+
+## Multiple Imputation by Chained Equations (MICE): Handles missing data
+
+*(van Buuren & Groothuis-Oudshoorn, 2011; van Buuren, 2012)*
+
+``` r
+  glm(diabetes_dx ~ age_c + bmi_c + sex + race, family = binomial()) }) pool_mi <- pool(fit_mi) 
+```
+
+-   It iteratively imputes incomplete variables using regression models\
+-   **PMM** for continuous variables; **logistic regression** for binary variables\
+-   **5 imputations × 10 iterations** for stability and convergence\
+-   Estimates **pooled using Rubin’s rules** to account for uncertainty\
+-   **Trace plots** confirm convergence and consistency with original data
+
+
+-   Model significance: All predictors are statistically significant (p \< 0.01), suggesting a robust association across demographic and health variables.
+
+------------------------------------------------------------------------
 
 ## Bayesian Model Diagnostics (MCMC)
 
@@ -171,6 +168,7 @@ $$
 ## Posterior Predictive Distribution
 
 ``` r
+#| echo: true
 library(ggplot2)
 
 ggplot(combined_draws, aes(x = estimate, fill = type)) +
@@ -185,18 +183,14 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
   )
 ```
 
-![](Prior%20vs%20Posterior%20Distributions_bmi_age.png){width="426"}
-
-------------------------------------------------------------------------
-
-**Interpretation:** The **blue curve**: estimated distribution of predicted diabetes probabilities. - **Red dashed lines**: lower and upper bounds of the **95% credible interval**, showing model uncertainty.
+![](Prior%20vs%20Posterior%20Distributions_bmi_age.png){width="296"}
 
 ------------------------------------------------------------------------
 
 ## Model Interpretation
 
 -   Strong positive relationship between **age**, **BMI**, and diabetes probability.
--   Posterior predictive checks confirm the model captures data patterns well.
+-   Posterior predictive checks: model captures data patterns well.
 -   Imputation reduced bias and improved model robustness.
 
 ------------------------------------------------------------------------

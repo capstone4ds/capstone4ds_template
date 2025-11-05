@@ -150,8 +150,8 @@
     "objectID": "slides.html#data-source",
     "href": "slides.html#data-source",
     "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
-    "section": "Data Source",
-    "text": "Data Source\n\nData: National Health and Nutrition Examination Survey (NHANES)\nAdult dataset (&gt;20 years).\nVariables included:\n\nDemographics: age, sex, race\nClinical: BMI\nOutcome: diabetes_dx (diagnosis: 0 = No, 1 = Yes)\nhead(adult)"
+    "section": "Data Source:",
+    "text": "Data Source:\nNational Health and Nutrition Examination Survey (Survey weighted dataset) (2013-2014) (NHANES)\n\nStudy population: Adults (&gt;20 years)(n=5769):\n\nAge: evenly distributed across adult age groups\nBMI: concentrated in the overweight and obese ranges\nFemale &gt; Male participants\nmost participants are non-diabetic, a minority are diabetic: a relatively lower prevalence of diabetes in the sample\n\nPredictors: age, sex, race, BMI\nResponse variable: diabetes_dx (diagnosis: 0 = No, 1 = Yes)\n\n  head(adult)"
   },
   {
     "objectID": "slides.html#data-exploration",
@@ -361,7 +361,7 @@
     "href": "slides.html#introduction",
     "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
     "section": "Introduction",
-    "text": "Introduction\n\nDiabetes is a chronic disease with rising global prevalence.\nEarly identification of risk factors is key to prevention and control.\nBayesian methods allow flexible modeling with uncertainty quantification.\nAim: Predict diabetes diagnosis using Bayesian logistic regression with imputed data ."
+    "text": "Introduction\n\nStudy Aim: Predict diabetes status using Bayesian logistic regression on imputed data. Early identification of risk factors is key to Diabetes diagnosis and prevention\nChallenges Frequentists - maximum likelihood estimation (MLE) with unstable estimates in the presence of missing data, quasi-separation, or small samples\nBayesian analysis - flexible, regularize estimates, quantify uncertainty under missingness or imputation ( Baldwin and Larson 2017; Kruschke and Liddell 2017) and incorporate prior, provide credible intervals.\nMarkov Chain Monte Carlo (MCMC) predicts patient health status across diseases\nSupport model checking, variable selection, and uncertainty quantification"
   },
   {
     "objectID": "slides.html#missing-data-assessment",
@@ -389,14 +389,14 @@
     "href": "slides.html#bayesian-logistic-regression",
     "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
     "section": "Bayesian Logistic Regression",
-    "text": "Bayesian Logistic Regression\nOutcome: diabetes_dx (0 = non-diabetic, 1 = diabetic)\nPredictors: age_c, bmi_c, sex, race.\n\nIntercept prior: student_t(3, 0, 10) — allows heavy tails for flexibility in the intercept estimate. R. V. D. Schoot et al. (2013)\nRegression coefficients prior: normal(0, 2.5) — providing weakly informative regularization, constraining extreme values without overpowering the data. R. van de Schoot et al. (2021)\nImplemented in brms (Stan backend), Posterior draws = 4000 (4 chains × 1000 iterations). Logistic link function"
+    "text": "Bayesian Logistic Regression\nOutcome: diabetes_dx (0 = non-diabetic, 1 = diabetic)\nPredictors: age_c, bmi_c, sex, race.\n\nIntercept prior: student_t(3, 0, 10) — allows heavy tails for flexibility in the intercept estimate. R. V. D. Schoot et al. (2013)\nRegression coefficients prior: normal(0, 2.5) — providing weakly informative regularization, constraining extreme values without overpowering the data. R. van de Schoot et al. (2021)\nImplemented in brms (Stan backend), Posterior draws = 4000 (4 chains × 1000 iterations).\n\nLogistic link function"
   },
   {
     "objectID": "slides.html#bayesian-model-equation",
     "href": "slides.html#bayesian-model-equation",
     "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
     "section": "Bayesian Model Equation",
-    "text": "Bayesian Model Equation\nlibrary(gt)\npriors &lt;- c(\n  set_prior(\"normal(0, 2.5)\", class = \"b\"),\n  set_prior(\"student_t(3, 0, 10)\", class = \"Intercept\") \n)\nbayes_fit &lt;- brm(\n  formula = diabetes_dx | weights(wt_norm) ~ age_c + bmi_c + sex + race,\n  data    = adult_imp1,\n  family  = bernoulli(link = \"logit\"),\n  prior   = priors,\n  chains  = 4, iter = 2000, seed = 123,\n  control = list(adapt_delta = 0.95),\n  refresh = 0   # quiet Stan output\n)\n\\[\n\\text{logit}(P(Y=1)) = \\beta_0 + \\beta_1 \\text{age}_c + \\beta_2 \\text{bmi}_c + \\beta_3 \\text{sex} + \\beta_4 \\text{race}\n\\]\n\nP(Y=1) : Probability of being diabetic\nCoefficients estimated with posterior means and 95% credible intervals."
+    "text": "Bayesian Model Equation\n#| eval: false\n#| include: false\nlibrary(gt)\npriors &lt;- c(\n  set_prior(\"normal(0, 2.5)\", class = \"b\"),\n  set_prior(\"student_t(3, 0, 10)\", class = \"Intercept\") \n)\nbayes_fit &lt;- brm(\n  formula = diabetes_dx | weights(wt_norm) ~ age_c + bmi_c + sex + race,\n  data    = adult_imp1,\n  family  = bernoulli(link = \"logit\"),\n  prior   = priors,\n  chains  = 4, iter = 2000, seed = 123,\n  control = list(adapt_delta = 0.95),\n  refresh = 0   # quiet Stan output\n)\n\\[\n\\text{logit}(P(Y=1)) = \\beta_0 + \\beta_1 \\text{age}_c + \\beta_2 \\text{bmi}_c + \\beta_3 \\text{sex} + \\beta_4 \\text{race}\n\\]\n\nP(Y=1) : Probability of being diabetic\nCoefficients estimated with posterior means and 95% credible intervals."
   },
   {
     "objectID": "slides.html#bayesian-model-diagnostics-mcmc",
@@ -417,14 +417,14 @@
     "href": "slides.html#posterior-predictive-distribution",
     "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
     "section": "Posterior Predictive Distribution",
-    "text": "Posterior Predictive Distribution\nlibrary(ggplot2)\n\nggplot(combined_draws, aes(x = estimate, fill = type)) +\n  geom_density(alpha = 0.4) +\n  facet_wrap(~ term, scales = \"free\", ncol = 2) +\n  theme_minimal(base_size = 13) +\n  labs(\n    title = \"Prior vs Posterior Distributions\",\n    x = \"Coefficient estimate\",\n    y = \"Density\",\n    fill = \"\"\n  )"
+    "text": "Posterior Predictive Distribution\n#| echo: true\nlibrary(ggplot2)\n\nggplot(combined_draws, aes(x = estimate, fill = type)) +\n  geom_density(alpha = 0.4) +\n  facet_wrap(~ term, scales = \"free\", ncol = 2) +\n  theme_minimal(base_size = 13) +\n  labs(\n    title = \"Prior vs Posterior Distributions\",\n    x = \"Coefficient estimate\",\n    y = \"Density\",\n    fill = \"\"\n  )"
   },
   {
     "objectID": "slides.html#model-interpretation",
     "href": "slides.html#model-interpretation",
     "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
     "section": "Model Interpretation",
-    "text": "Model Interpretation\n\nStrong positive relationship between age, BMI, and diabetes probability.\nPosterior predictive checks confirm the model captures data patterns well.\nImputation reduced bias and improved model robustness."
+    "text": "Model Interpretation\n\nStrong positive relationship between age, BMI, and diabetes probability.\nPosterior predictive checks: model captures data patterns well.\nImputation reduced bias and improved model robustness."
   },
   {
     "objectID": "slides.html#limitations",
@@ -453,5 +453,75 @@
     "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
     "section": "References",
     "text": "References\n\n\n\n\n\n\n\n\nSchoot, Rens van de, Sarah Depaoli, Ruth King, Bianca Kramer, Kaspar Märtens, Mahlet G. Tadesse, Marina Vannucci, et al. 2021. “Bayesian statistics and modelling.” Nature Reviews Methods Primers 1 (1): 1. https://doi.org/10.1038/s43586-020-00001-2.\n\n\nSchoot, Rens Van De, David Kaplan, Jaap Denissen, Jens B Asendorpf, and Marcel A G Van Aken. 2013. “A Gentle Introduction to Bayesian Analysis: Applications to Developmental Research.” https://doi.org/10.1111/cdev.12169."
+  },
+  {
+    "objectID": "slides.html#data",
+    "href": "slides.html#data",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Data",
+    "text": "Data\nSurvey weighted: National Health and Nutrition Examination Survey dataset (2013-2014) (NHANES).\n\nStudy population: Adults (&gt;20 years).\nPredictors: age, sex, race, BMI\nResponse variable: diabetes_dx (diagnosis: 0 = No, 1 = Yes)\n\n  head(adult)"
+  },
+  {
+    "objectID": "slides.html#early-identification-of-risk-factors-is-key-to-diabetes-diagnosis-and-prevention",
+    "href": "slides.html#early-identification-of-risk-factors-is-key-to-diabetes-diagnosis-and-prevention",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Early identification of risk factors is key to Diabetes diagnosis and prevention",
+    "text": "Early identification of risk factors is key to Diabetes diagnosis and prevention\nPredict diabetes using Bayesian logistic regression\nChallenges Frequentists - maximum likelihood estimation is unstable in missing data, quasi-separation, or small samples\nBayesian Method - flexible, regularize estimates, quantify uncertainty under missingness or imputation ( Baldwin and Larson 2017; Kruschke and Liddell 2017) - incorporate prior, provide credible intervals via Markov Chain Monte Carlo (MCMC) to predict patient health status across diseases - Support model checking, variable selection, and uncertainty quantification"
+  },
+  {
+    "objectID": "slides.html#data-survey-weighted-national-health-and-nutrition-examination-survey-dataset-2013-2014-nhanes",
+    "href": "slides.html#data-survey-weighted-national-health-and-nutrition-examination-survey-dataset-2013-2014-nhanes",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Data: Survey weighted: National Health and Nutrition Examination Survey dataset (2013-2014) (NHANES)",
+    "text": "Data: Survey weighted: National Health and Nutrition Examination Survey dataset (2013-2014) (NHANES)\n- Study population: Adults (&gt;20 years)(n=5769): - Age: evenly distributed across adult age groups - BMI: concentrated in the overweight and obese ranges - Female &gt; Male participants - most participants are non-diabetic, a minority are diabetic: a relatively lower prevalence of diabetes in the sample - Predictors: age, sex, race, BMI - Response variable: diabetes_dx (diagnosis: 0 = No, 1 = Yes) r head(adult)"
+  },
+  {
+    "objectID": "slides.html#missing-assessment-overall-missingness-4",
+    "href": "slides.html#missing-assessment-overall-missingness-4",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Missing Assessment (Overall missingness: ~4%)",
+    "text": "Missing Assessment (Overall missingness: ~4%)\n\n\n\n\nNo variable is completely missing. Missingness is likely MAR (Missing At Random) and is clustered mainly in bmi (4.3%) and diabetes_dx (3.1%).\n\nApply Multiple Imputation by Chained Equations (MICE)."
+  },
+  {
+    "objectID": "slides.html#section",
+    "href": "slides.html#section",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "",
+    "text": "No variable is completely missing. Missingness is likely MAR (Missing At Random) and is clustered mainly in bmi and diabetes_dx.\nDecision: Apply Multiple Imputation by Chained Equations (MICE)."
+  },
+  {
+    "objectID": "slides.html#multiple-imputation-by-chained-equations-mice",
+    "href": "slides.html#multiple-imputation-by-chained-equations-mice",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Multiple Imputation by Chained Equations (MICE)",
+    "text": "Multiple Imputation by Chained Equations (MICE)\n\nHandles missing data (van Buuren & Groothuis-Oudshoorn, 2011; van Buuren, 2012)\nIt iteratively imputes incomplete variables using regression models\n\nPMM for continuous variables; logistic regression for binary variables\n\n5 imputations × 10 iterations for stability and convergence\n\nEstimates pooled using Rubin’s rules to account for uncertainty\n\nTrace plots confirm convergence and consistency with original data\n\n  glm(diabetes_dx ~ age_c + bmi_c + sex + race, family = binomial()) }) pool_mi &lt;- pool(fit_mi) \n\nModel significance: All predictors are statistically significant (p &lt; 0.01), suggesting a robust association across demographic and health variables."
+  },
+  {
+    "objectID": "slides.html#aim-early-identification-of-risk-factors-is-key-to-diabetes-diagnosis-and-prevention",
+    "href": "slides.html#aim-early-identification-of-risk-factors-is-key-to-diabetes-diagnosis-and-prevention",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Aim: Early identification of risk factors is key to Diabetes diagnosis and prevention",
+    "text": "Aim: Early identification of risk factors is key to Diabetes diagnosis and prevention\nPredict diabetes using Bayesian logistic regression\nChallenges Frequentists - maximum likelihood estimation is unstable in missing data, quasi-separation, or small samples\nBayesian Method - flexible, regularize estimates, quantify uncertainty under missingness or imputation ( Baldwin and Larson 2017; Kruschke and Liddell 2017) - incorporate prior, provide credible intervals via Markov Chain Monte Carlo (MCMC) to predict patient health status across diseases - Support model checking, variable selection, and uncertainty quantification"
+  },
+  {
+    "objectID": "slides.html#model-equation",
+    "href": "slides.html#model-equation",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Model Equation",
+    "text": "Model Equation\nlibrary(gt)\npriors &lt;- c(\n  set_prior(\"normal(0, 2.5)\", class = \"b\"),\n  set_prior(\"student_t(3, 0, 10)\", class = \"Intercept\") \n)\nbayes_fit &lt;- brm(\n  formula = diabetes_dx | weights(wt_norm) ~ age_c + bmi_c + sex + race,\n  data    = adult_imp1,\n  family  = bernoulli(link = \"logit\"),\n  prior   = priors,\n  chains  = 4, iter = 2000, seed = 123,\n  control = list(adapt_delta = 0.95),\n  refresh = 0   # quiet Stan output\n)\n\\[\n\\text{logit}(P(Y=1)) = \\beta_0 + \\beta_1 \\text{age}_c + \\beta_2 \\text{bmi}_c + \\beta_3 \\text{sex} + \\beta_4 \\text{race}\n\\]\n\nP(Y=1) : Probability of being diabetic\nCoefficients estimated with posterior means and 95% credible intervals."
+  },
+  {
+    "objectID": "slides.html#data-source-and-data-exploration",
+    "href": "slides.html#data-source-and-data-exploration",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Data Source and Data Exploration:",
+    "text": "Data Source and Data Exploration:\nNational Health and Nutrition Examination Survey (Survey weighted dataset) (2013-2014) (NHANES)\n\nStudy population: Adults (&gt;20 years)(n=5769):\n\nAge: evenly distributed across adult age groups\nBMI: concentrated in the overweight and obese ranges\nFemale &gt; Male participants\nmost participants are non-diabetic, a minority are diabetic: a relatively lower prevalence of diabetes in the sample\n\nPredictors: age, sex, race, BMI\nResponse variable: diabetes_dx (diagnosis: 0 = No, 1 = Yes)\n\n  head(adult)"
+  },
+  {
+    "objectID": "slides.html#multiple-imputation-by-chained-equations-mice-handles-missing-data",
+    "href": "slides.html#multiple-imputation-by-chained-equations-mice-handles-missing-data",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Multiple Imputation by Chained Equations (MICE): Handles missing data",
+    "text": "Multiple Imputation by Chained Equations (MICE): Handles missing data\n(van Buuren & Groothuis-Oudshoorn, 2011; van Buuren, 2012)\n  glm(diabetes_dx ~ age_c + bmi_c + sex + race, family = binomial()) }) pool_mi &lt;- pool(fit_mi) \n\nIt iteratively imputes incomplete variables using regression models\n\nPMM for continuous variables; logistic regression for binary variables\n\n5 imputations × 10 iterations for stability and convergence\n\nEstimates pooled using Rubin’s rules to account for uncertainty\n\nTrace plots confirm convergence and consistency with original data\nModel significance: All predictors are statistically significant (p &lt; 0.01), suggesting a robust association across demographic and health variables."
   }
 ]
