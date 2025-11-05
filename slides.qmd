@@ -197,7 +197,7 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
 
 ### Plot
 
-![](images/clipboard-1978292710.png)
+![](images/clipboard-1978292710.png){width="368"}
 
 ### Interpretation
 
