@@ -403,21 +403,21 @@
     "href": "slides.html#bayesian-model-diagnostics-mcmc",
     "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
     "section": "Bayesian Model Diagnostics (MCMC)",
-    "text": "Bayesian Model Diagnostics (MCMC)\n\nRhat ≈ 1.00 → convergence achieved.\nBulk ESS &gt; 3000 for all parameters → good mixing.\nTrace plots showed stable sampling across chains.\nPosterior distributions were unimodal and well-centered."
+    "text": "Bayesian Model Diagnostics (MCMC)\n\nTab ATab B"
   },
   {
     "objectID": "slides.html#posterior-estimates",
     "href": "slides.html#posterior-estimates",
     "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
     "section": "Posterior Estimates",
-    "text": "Posterior Estimates\n\n\n\n\n\n\n\n\n\nPredictor\nEstimate\n95% CI\nInterpretation\n\n\n\n\nIntercept\n-2.66\n[-2.84, -2.50]\nBaseline log-odds\n\n\nAge_c\n1.09\n[0.97, 1.22]\n↑ age increases diabetes risk\n\n\nBMI_c\n0.88\n[0.76, 1.01]\nHigher BMI linked with higher risk\n\n\nHTN\n0.65\n[0.50, 0.81]\nHypertension predicts diabetes"
+    "text": "Posterior Estimates\n\n\n\n\n\n\n\n\n\nPredictor\nEstimate\n95% CI\nInterpretation\n\n\n\n\nIntercept\n-2.66\n[-2.84, -2.50]\nBaseline log-odds\n\n\nAge_c\n1.09\n[0.97, 1.22]\n↑ age increases diabetes risk\n\n\nBMI_c\n0.88\n[0.76, 1.01]\nHigher BMI linked with higher risk\n\n\nHTN\n0.65\n[0.50, 0.81]\nHypertension predicts diabetes\n\n\n\n\nAll predictors show positive associations with diabetes risk — age, BMI, and hypertension are key independent predictors.\nThe narrow confidence intervals suggest precise estimates, and since the CIs do not include zero, the effects are statistically significant."
   },
   {
     "objectID": "slides.html#posterior-predictive-distribution",
     "href": "slides.html#posterior-predictive-distribution",
     "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
     "section": "Posterior Predictive Distribution",
-    "text": "Posterior Predictive Distribution\n#| echo: true\nlibrary(ggplot2)\n\nggplot(combined_draws, aes(x = estimate, fill = type)) +\n  geom_density(alpha = 0.4) +\n  facet_wrap(~ term, scales = \"free\", ncol = 2) +\n  theme_minimal(base_size = 13) +\n  labs(\n    title = \"Prior vs Posterior Distributions\",\n    x = \"Coefficient estimate\",\n    y = \"Density\",\n    fill = \"\"\n  )"
+    "text": "Posterior Predictive Distribution\n#| echo: true\n#| output-location: slide\nlibrary(ggplot2)\n\nggplot(combined_draws, aes(x = estimate, fill = type)) +\n  geom_density(alpha = 0.4) +\n  facet_wrap(~ term, scales = \"free\", ncol = 2) +\n  theme_minimal(base_size = 13) +\n  labs(\n    title = \"Prior vs Posterior Distributions\",\n    x = \"Coefficient estimate\",\n    y = \"Density\",\n    fill = \"\"\n  )"
   },
   {
     "objectID": "slides.html#model-interpretation",
@@ -521,7 +521,21 @@
     "objectID": "slides.html#multiple-imputation-by-chained-equations-mice-handles-missing-data",
     "href": "slides.html#multiple-imputation-by-chained-equations-mice-handles-missing-data",
     "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
-    "section": "Multiple Imputation by Chained Equations (MICE): Handles missing data",
-    "text": "Multiple Imputation by Chained Equations (MICE): Handles missing data\n(van Buuren & Groothuis-Oudshoorn, 2011; van Buuren, 2012)\n  glm(diabetes_dx ~ age_c + bmi_c + sex + race, family = binomial()) }) pool_mi &lt;- pool(fit_mi) \n\nIt iteratively imputes incomplete variables using regression models\n\nPMM for continuous variables; logistic regression for binary variables\n\n5 imputations × 10 iterations for stability and convergence\n\nEstimates pooled using Rubin’s rules to account for uncertainty\n\nTrace plots confirm convergence and consistency with original data\nModel significance: All predictors are statistically significant (p &lt; 0.01), suggesting a robust association across demographic and health variables."
+    "section": "Multiple Imputation by Chained Equations (MICE): Handles Missing Data",
+    "text": "Multiple Imputation by Chained Equations (MICE): Handles Missing Data\n(van Buuren & Groothuis-Oudshoorn, 2011; van Buuren, 2012)\n\nTab ATab B\n\n\nFit logistic regression model on imputed dataset and Pool estimates f\nfit_mi \\&lt;- with(data = imp, exp = glm(diabetes_dx \\~ age_c + bmi_c + sex + race, family = binomial())) pool_mi \\&lt;- pool(fit_mi)\\`\n\n\n\nIteratively imputes incomplete variables using regression models\nPMM for continuous variables; logistic regression for binary variables\n5 imputations × 10 iterations ensure stability and convergence\nEstimates pooled using Rubin’s rules to account for uncertainty\nTrace plots confirm convergence and consistency with original data"
+  },
+  {
+    "objectID": "slides.html#all-predictors-show-positive-associations-with-diabetes-risk-age-bmi-and-hypertension-are-key-independent-predictors.-the-narrow-confidence-intervals-suggest-precise-estimates-and-since-the-cis-do-not-include-zero-the-effects-are-statistically-significant.",
+    "href": "slides.html#all-predictors-show-positive-associations-with-diabetes-risk-age-bmi-and-hypertension-are-key-independent-predictors.-the-narrow-confidence-intervals-suggest-precise-estimates-and-since-the-cis-do-not-include-zero-the-effects-are-statistically-significant.",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "All predictors show positive associations with diabetes risk — age, BMI, and hypertension are key independent predictors. The narrow confidence intervals suggest precise estimates, and since the CIs do not include zero, the effects are statistically significant.",
+    "text": "All predictors show positive associations with diabetes risk — age, BMI, and hypertension are key independent predictors. The narrow confidence intervals suggest precise estimates, and since the CIs do not include zero, the effects are statistically significant."
+  },
+  {
+    "objectID": "slides.html#posterior-predictive-distribution-visualization",
+    "href": "slides.html#posterior-predictive-distribution-visualization",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Posterior Predictive Distribution (Visualization)",
+    "text": "Posterior Predictive Distribution (Visualization)\n\nTab ATab B\n\n\n#| echo: true\n#| output-location: slide\nlibrary(ggplot2)\n\nggplot(combined_draws, aes(x = estimate, fill = type)) +\n  geom_density(alpha = 0.4) +\n  facet_wrap(~ term, scales = \"free\", ncol = 2) +\n  theme_minimal(base_size = 13) +\n  labs(\n    title = \"Prior vs Posterior Distributions\",\n    x = \"Coefficient estimate\",\n    y = \"Density\",\n    fill = \"\"\n  )"
   }
 ]

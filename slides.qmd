@@ -96,7 +96,6 @@ $$
 
 ------------------------------------------------------------------------
 
-
 ## Data: Survey weighted: National Health and Nutrition Examination Survey dataset (2013-2014) (NHANES)
 
 \- Study population: Adults (\>20 years)(n=5769): - `Age`: evenly distributed across adult age groups - `BMI`: concentrated in the overweight and obese ranges - `Female` \> `Male` participants - **most participants are non-diabetic**, a **minority are diabetic**: a relatively lower prevalence of diabetes in the sample - Predictors: age, sex, race, BMI - Response variable: `diabetes_dx` (diagnosis: 0 = No, 1 = Yes) `r head(adult)`
@@ -106,51 +105,59 @@ $$
 ------------------------------------------------------------------------
 
 ## Missing Assessment (Overall missingness: \~4%)
+
 ::::: columns
 ::: {.column width="40%"}
 ![](images/clipboard-1235247978.png){width="339"}
 :::
 
 ::: {.column width="60%"}
-
 No variable is completely missing. Missingness is likely *MAR* (Missing At Random) and is clustered mainly in bmi (4.3%) and diabetes_dx (3.1%).
-
 :::
 :::::
+
 Apply **Multiple Imputation by Chained Equations (MICE)**.
 
 ------------------------------------------------------------------------
 
-## Multiple Imputation by Chained Equations (MICE): Handles missing data
+## Multiple Imputation by Chained Equations (MICE): Handles Missing Data
 
 *(van Buuren & Groothuis-Oudshoorn, 2011; van Buuren, 2012)*
 
-``` r
-  glm(diabetes_dx ~ age_c + bmi_c + sex + race, family = binomial()) }) pool_mi <- pool(fit_mi) 
+::: panel-tabset
+### Tab A
+
+Fit logistic regression model on imputed dataset and Pool estimates f
+```r
+fit_mi \<- with(data = imp, exp = glm(diabetes_dx \~ age_c + bmi_c + sex + race, family = binomial())) pool_mi \<- pool(fit_mi)\`
 ```
+### Tab B
 
--   It iteratively imputes incomplete variables using regression models\
--   **PMM** for continuous variables; **logistic regression** for binary variables\
--   **5 imputations × 10 iterations** for stability and convergence\
--   Estimates **pooled using Rubin’s rules** to account for uncertainty\
--   **Trace plots** confirm convergence and consistency with original data
+-   Iteratively imputes incomplete variables using regression models
 
+-   PMM for continuous variables; logistic regression for binary variables
 
--   Model significance: All predictors are statistically significant (p \< 0.01), suggesting a robust association across demographic and health variables.
+-   5 imputations × 10 iterations ensure stability and convergence
+
+-   Estimates pooled using Rubin’s rules to account for uncertainty
+
+-   Trace plots confirm convergence and consistency with original data
+:::
 
 ------------------------------------------------------------------------
 
 ## Bayesian Model Diagnostics (MCMC)
 
--   Rhat ≈ 1.00 → convergence achieved.
+::: panel-tabset
 
--   Bulk ESS \> 3000 for all parameters → good mixing.
+### Tab A
 
--   Trace plots showed stable sampling across chains.
 
--   Posterior distributions were unimodal and well-centered.
 
-    ![](images/clipboard-353929734.png){width="366"}
+### Tab B
+
+
+:::
 
 ------------------------------------------------------------------------
 
@@ -163,12 +170,19 @@ Apply **Multiple Imputation by Chained Equations (MICE)**.
 | BMI_c     | 0.88     | \[0.76, 1.01\]   | Higher BMI linked with higher risk |
 | HTN       | 0.65     | \[0.50, 0.81\]   | Hypertension predicts diabetes     |
 
+-   **All predictors show positive associations with diabetes risk — age, BMI, and hypertension are key independent predictors.**
+-   **The narrow confidence intervals suggest precise estimates, and since the CIs do not include zero, the effects are statistically significant**.
+
 ------------------------------------------------------------------------
 
-## Posterior Predictive Distribution
+## Posterior Predictive Distribution (Visualization)
+
+::: panel-tabset
+### Tab A
 
 ``` r
 #| echo: true
+#| output-location: slide
 library(ggplot2)
 
 ggplot(combined_draws, aes(x = estimate, fill = type)) +
@@ -183,7 +197,10 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
   )
 ```
 
+### Tab B
+
 ![](Prior%20vs%20Posterior%20Distributions_bmi_age.png){width="296"}
+:::
 
 ------------------------------------------------------------------------
 

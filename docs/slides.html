@@ -505,31 +505,40 @@ Autumn Wilcox
 <p>Apply <strong>Multiple Imputation by Chained Equations (MICE)</strong>.</p>
 </section>
 <section id="multiple-imputation-by-chained-equations-mice-handles-missing-data" class="slide level2">
-<h2>Multiple Imputation by Chained Equations (MICE): Handles missing data</h2>
+<h2>Multiple Imputation by Chained Equations (MICE): Handles Missing Data</h2>
 <p><em>(van Buuren &amp; Groothuis-Oudshoorn, 2011; van Buuren, 2012)</em></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>  <span class="fu">glm</span>(diabetes_dx <span class="sc">~</span> age_c <span class="sc">+</span> bmi_c <span class="sc">+</span> sex <span class="sc">+</span> race, <span class="at">family =</span> <span class="fu">binomial</span>()) <span class="er">})</span> pool_mi <span class="ot">&lt;-</span> <span class="fu">pool</span>(fit_mi) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Tab A</a></li><li><a href="#tabset-1-2">Tab B</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<p>Fit logistic regression model on imputed dataset and Pool estimates f</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>fit_mi \<span class="ot">&lt;-</span> <span class="fu">with</span>(<span class="at">data =</span> imp, <span class="at">exp =</span> <span class="fu">glm</span>(diabetes_dx \<span class="sc">~</span> age_c <span class="sc">+</span> bmi_c <span class="sc">+</span> sex <span class="sc">+</span> race, <span class="at">family =</span> <span class="fu">binomial</span>())) pool_mi \<span class="ot">&lt;-</span> <span class="fu">pool</span>(fit_mi)\<span class="st">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-1-2">
 <ul>
-<li class="fragment"><p>It iteratively imputes incomplete variables using regression models<br>
-</p></li>
-<li class="fragment"><p><strong>PMM</strong> for continuous variables; <strong>logistic regression</strong> for binary variables<br>
-</p></li>
-<li class="fragment"><p><strong>5 imputations × 10 iterations</strong> for stability and convergence<br>
-</p></li>
-<li class="fragment"><p>Estimates <strong>pooled using Rubin’s rules</strong> to account for uncertainty<br>
-</p></li>
-<li class="fragment"><p><strong>Trace plots</strong> confirm convergence and consistency with original data</p></li>
-<li class="fragment"><p>Model significance: All predictors are statistically significant (p &lt; 0.01), suggesting a robust association across demographic and health variables.</p></li>
+<li class="fragment"><p>Iteratively imputes incomplete variables using regression models</p></li>
+<li class="fragment"><p>PMM for continuous variables; logistic regression for binary variables</p></li>
+<li class="fragment"><p>5 imputations × 10 iterations ensure stability and convergence</p></li>
+<li class="fragment"><p>Estimates pooled using Rubin’s rules to account for uncertainty</p></li>
+<li class="fragment"><p>Trace plots confirm convergence and consistency with original data</p></li>
 </ul>
+</div>
+</div>
+</div>
 </section>
 <section id="bayesian-model-diagnostics-mcmc" class="slide level2">
 <h2>Bayesian Model Diagnostics (MCMC)</h2>
-<ul>
-<li class="fragment"><p>Rhat ≈ 1.00 → convergence achieved.</p></li>
-<li class="fragment"><p>Bulk ESS &gt; 3000 for all parameters → good mixing.</p></li>
-<li class="fragment"><p>Trace plots showed stable sampling across chains.</p></li>
-<li class="fragment"><p>Posterior distributions were unimodal and well-centered.</p>
-<p><img data-src="images/clipboard-353929734.png" width="366"></p></li>
-</ul>
+<div class="panel-tabset">
+<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Tab A</a></li><li><a href="#tabset-2-2">Tab B</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1">
+
+</div>
+<div id="tabset-2-2">
+
+</div>
+</div>
+</div>
 </section>
 <section id="posterior-estimates" class="slide level2">
 <h2>Posterior Estimates</h2>
@@ -575,24 +584,38 @@ Autumn Wilcox
 </tr>
 </tbody>
 </table>
+<ul>
+<li class="fragment"><strong>All predictors show positive associations with diabetes risk — age, BMI, and hypertension are key independent predictors.</strong></li>
+<li class="fragment"><strong>The narrow confidence intervals suggest precise estimates, and since the CIs do not include zero, the effects are statistically significant</strong>.</li>
+</ul>
 </section>
-<section id="posterior-predictive-distribution" class="slide level2">
-<h2>Posterior Predictive Distribution</h2>
+<section id="posterior-predictive-distribution-visualization" class="slide level2">
+<h2>Posterior Predictive Distribution (Visualization)</h2>
+<div class="panel-tabset">
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">Tab A</a></li><li><a href="#tabset-3-2">Tab B</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1">
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="co">#| echo: true</span></span>
-<span id="cb3-2"><a></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb3-3"><a></a></span>
-<span id="cb3-4"><a></a><span class="fu">ggplot</span>(combined_draws, <span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
-<span id="cb3-5"><a></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb3-6"><a></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> term, <span class="at">scales =</span> <span class="st">"free"</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb3-7"><a></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
-<span id="cb3-8"><a></a>  <span class="fu">labs</span>(</span>
-<span id="cb3-9"><a></a>    <span class="at">title =</span> <span class="st">"Prior vs Posterior Distributions"</span>,</span>
-<span id="cb3-10"><a></a>    <span class="at">x =</span> <span class="st">"Coefficient estimate"</span>,</span>
-<span id="cb3-11"><a></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
-<span id="cb3-12"><a></a>    <span class="at">fill =</span> <span class="st">""</span></span>
-<span id="cb3-13"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-<img data-src="Prior vs Posterior Distributions_bmi_age.png" width="296" class="r-stretch"></section>
+<span id="cb3-2"><a></a><span class="co">#| output-location: slide</span></span>
+<span id="cb3-3"><a></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb3-4"><a></a></span>
+<span id="cb3-5"><a></a><span class="fu">ggplot</span>(combined_draws, <span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
+<span id="cb3-6"><a></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb3-7"><a></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> term, <span class="at">scales =</span> <span class="st">"free"</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb3-8"><a></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb3-9"><a></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-10"><a></a>    <span class="at">title =</span> <span class="st">"Prior vs Posterior Distributions"</span>,</span>
+<span id="cb3-11"><a></a>    <span class="at">x =</span> <span class="st">"Coefficient estimate"</span>,</span>
+<span id="cb3-12"><a></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
+<span id="cb3-13"><a></a>    <span class="at">fill =</span> <span class="st">""</span></span>
+<span id="cb3-14"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-3-2">
+<p><img data-src="Prior vs Posterior Distributions_bmi_age.png" width="296"></p>
+</div>
+</div>
+</div>
+</section>
 <section id="model-interpretation" class="slide level2">
 <h2>Model Interpretation</h2>
 <ul>
