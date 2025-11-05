@@ -125,7 +125,7 @@ bayes_fit <- brm(
 
 ### Missing data analysis {.panel-tabset}
 
-![](images/clipboard-2873800077.png){width="426"}
+![](images/clipboard-2873800077.png)
 ::::
 
 ------------------------------------------------------------------------
@@ -236,7 +236,7 @@ Model fit: bayes_R2(bayes_fit)
 -   good predictive checks
 :::
 
------------------------------------------
+------------------------------------------------------------------------
 
 ### Limitations
 
@@ -252,7 +252,7 @@ Model fit: bayes_R2(bayes_fit)
 :::
 ::::
 
----------------------------------
+------------------------------------------------------------------------
 
 ### Conclusion
 
@@ -263,7 +263,6 @@ MICE improved data completeness and reliability.
 Posterior predictions provide interpretable probabilities of diabetes risk.
 
 Framework adaptable to other outcomes (e.g., hypertension, obesity).
-
 
 ------------------------------------------------------------------------
 
@@ -296,5 +295,3 @@ van Buuren, S. & Groothuis-Oudshoorn, K. (2011). MICE: Multivariate Imputation b
 
 ------------------------------------------------------------------------
 ::::
-
-:::::::::::::::
