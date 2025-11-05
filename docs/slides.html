@@ -465,22 +465,20 @@ Autumn Wilcox
 </section>
 <section id="bayesian-model-equation" class="slide level2">
 <h2>Bayesian Model Equation</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource {undefined} number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a></a>#| eval: false</span>
-<span id="cb1-2"><a></a>#| include: false</span>
-<span id="cb1-3"><a></a>library(gt)</span>
-<span id="cb1-4"><a></a>priors &lt;- c(</span>
-<span id="cb1-5"><a></a>  set_prior("normal(0, 2.5)", class = "b"),</span>
-<span id="cb1-6"><a></a>  set_prior("student_t(3, 0, 10)", class = "Intercept") </span>
-<span id="cb1-7"><a></a>)</span>
-<span id="cb1-8"><a></a>bayes_fit &lt;- brm(</span>
-<span id="cb1-9"><a></a>  formula = diabetes_dx | weights(wt_norm) ~ age_c + bmi_c + sex + race,</span>
-<span id="cb1-10"><a></a>  data    = adult_imp1,</span>
-<span id="cb1-11"><a></a>  family  = bernoulli(link = "logit"),</span>
-<span id="cb1-12"><a></a>  prior   = priors,</span>
-<span id="cb1-13"><a></a>  chains  = 4, iter = 2000, seed = 123,</span>
-<span id="cb1-14"><a></a>  control = list(adapt_delta = 0.95),</span>
-<span id="cb1-15"><a></a>  refresh = 0   # quiet Stan output</span>
-<span id="cb1-16"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">library</span>(gt)</span>
+<span id="cb1-2"><a></a>priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb1-3"><a></a>  <span class="fu">set_prior</span>(<span class="st">"normal(0, 2.5)"</span>, <span class="at">class =</span> <span class="st">"b"</span>),</span>
+<span id="cb1-4"><a></a>  <span class="fu">set_prior</span>(<span class="st">"student_t(3, 0, 10)"</span>, <span class="at">class =</span> <span class="st">"Intercept"</span>) </span>
+<span id="cb1-5"><a></a>)</span>
+<span id="cb1-6"><a></a>bayes_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb1-7"><a></a>  <span class="at">formula =</span> diabetes_dx <span class="sc">|</span> <span class="fu">weights</span>(wt_norm) <span class="sc">~</span> age_c <span class="sc">+</span> bmi_c <span class="sc">+</span> sex <span class="sc">+</span> race,</span>
+<span id="cb1-8"><a></a>  <span class="at">data    =</span> adult_imp1,</span>
+<span id="cb1-9"><a></a>  <span class="at">family  =</span> <span class="fu">bernoulli</span>(<span class="at">link =</span> <span class="st">"logit"</span>),</span>
+<span id="cb1-10"><a></a>  <span class="at">prior   =</span> priors,</span>
+<span id="cb1-11"><a></a>  <span class="at">chains  =</span> <span class="dv">4</span>, <span class="at">iter =</span> <span class="dv">2000</span>, <span class="at">seed =</span> <span class="dv">123</span>,</span>
+<span id="cb1-12"><a></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">adapt_delta =</span> <span class="fl">0.95</span>),</span>
+<span id="cb1-13"><a></a>  <span class="at">refresh =</span> <span class="dv">0</span>   <span class="co"># quiet Stan output</span></span>
+<span id="cb1-14"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><span class="math display">\[
 \text{logit}(P(Y=1)) = \beta_0 + \beta_1 \text{age}_c + \beta_2 \text{bmi}_c + \beta_3 \text{sex} + \beta_4 \text{race}
 \]</span></p>
@@ -491,9 +489,27 @@ Autumn Wilcox
 </section>
 <section id="data-survey-weighted-national-health-and-nutrition-examination-survey-dataset-2013-2014-nhanes" class="slide level2">
 <h2>Data: Survey weighted: National Health and Nutrition Examination Survey dataset (2013-2014) (NHANES)</h2>
-<p>- Study population: Adults (&gt;20 years)(n=5769): - <code>Age</code>: evenly distributed across adult age groups - <code>BMI</code>: concentrated in the overweight and obese ranges - <code>Female</code>&nbsp;&gt; <code>Male</code>&nbsp;participants - <strong>most participants are non-diabetic</strong>, a <strong>minority are diabetic</strong>: a relatively lower prevalence of diabetes in the sample - Predictors: age, sex, race, BMI - Response variable: <code>diabetes_dx</code> (diagnosis: 0 = No, 1 = Yes) <code>r head(adult)</code></p>
-
-<img data-src="images/clipboard-126412730.png" class="r-stretch"></section>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Tab A</a></li><li><a href="#tabset-1-2">Tab B</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<p><strong>Study population</strong></p>
+<ul>
+<li class="fragment"><p><strong>Adults</strong> (&gt;20 years)(n=5769)</p></li>
+<li class="fragment"><p><code>Age</code>: evenly distributed across adult age groups</p></li>
+<li class="fragment"><p><code>BMI</code>: concentrated in the overweight and obese ranges</p></li>
+<li class="fragment"><p><code>Female</code>&nbsp;&gt; <code>Male</code>&nbsp;participants</p></li>
+<li class="fragment"><p><strong>Most participants are non-diabetic</strong>, a <strong>minority are diabetic</strong>: a relatively lower prevalence of diabetes in the sample</p></li>
+<li class="fragment"><p>Predictors: age, sex, race, BMI - Response variable: <code>diabetes_dx</code> (diagnosis: 0 = No, 1 = Yes)</p></li>
+</ul>
+</div>
+<div id="tabset-1-2">
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="fu">head</span>(adult)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img data-src="images/clipboard-126412730.png"></p>
+</div>
+</div>
+</div>
+</section>
 <section id="missing-assessment-overall-missingness-4" class="slide level2">
 <h2>Missing Assessment (Overall missingness: ~4%)</h2>
 <div class="columns">
@@ -508,13 +524,13 @@ Autumn Wilcox
 <h2>Multiple Imputation by Chained Equations (MICE): Handles Missing Data</h2>
 <p><em>(van Buuren &amp; Groothuis-Oudshoorn, 2011; van Buuren, 2012)</em></p>
 <div class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Tab A</a></li><li><a href="#tabset-1-2">Tab B</a></li></ul>
+<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Tab A</a></li><li><a href="#tabset-2-2">Tab B</a></li></ul>
 <div class="tab-content">
-<div id="tabset-1-1">
+<div id="tabset-2-1">
 <p>Fit logistic regression model on imputed dataset and Pool estimates f</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>fit_mi \<span class="ot">&lt;-</span> <span class="fu">with</span>(<span class="at">data =</span> imp, <span class="at">exp =</span> <span class="fu">glm</span>(diabetes_dx \<span class="sc">~</span> age_c <span class="sc">+</span> bmi_c <span class="sc">+</span> sex <span class="sc">+</span> race, <span class="at">family =</span> <span class="fu">binomial</span>())) pool_mi \<span class="ot">&lt;-</span> <span class="fu">pool</span>(fit_mi)\<span class="st">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>fit_mi \<span class="ot">&lt;-</span> <span class="fu">with</span>(<span class="at">data =</span> imp, <span class="at">exp =</span> <span class="fu">glm</span>(diabetes_dx \<span class="sc">~</span> age_c <span class="sc">+</span> bmi_c <span class="sc">+</span> sex <span class="sc">+</span> race, <span class="at">family =</span> <span class="fu">binomial</span>())) pool_mi \<span class="ot">&lt;-</span> <span class="fu">pool</span>(fit_mi)\<span class="st">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-1-2">
+<div id="tabset-2-2">
 <ul>
 <li class="fragment"><p>Iteratively imputes incomplete variables using regression models</p></li>
 <li class="fragment"><p>PMM for continuous variables; logistic regression for binary variables</p></li>
@@ -529,12 +545,12 @@ Autumn Wilcox
 <section id="bayesian-model-diagnostics-mcmc" class="slide level2">
 <h2>Bayesian Model Diagnostics (MCMC)</h2>
 <div class="panel-tabset">
-<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Tab A</a></li><li><a href="#tabset-2-2">Tab B</a></li></ul>
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">Tab A</a></li><li><a href="#tabset-3-2">Tab B</a></li></ul>
 <div class="tab-content">
-<div id="tabset-2-1">
+<div id="tabset-3-1">
 
 </div>
-<div id="tabset-2-2">
+<div id="tabset-3-2">
 
 </div>
 </div>
@@ -592,26 +608,26 @@ Autumn Wilcox
 <section id="posterior-predictive-distribution-visualization" class="slide level2">
 <h2>Posterior Predictive Distribution (Visualization)</h2>
 <div class="panel-tabset">
-<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">Tab A</a></li><li><a href="#tabset-3-2">Tab B</a></li></ul>
+<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">Tab A</a></li><li><a href="#tabset-4-2">Tab B</a></li></ul>
 <div class="tab-content">
-<div id="tabset-3-1">
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="co">#| echo: true</span></span>
-<span id="cb3-2"><a></a><span class="co">#| output-location: slide</span></span>
-<span id="cb3-3"><a></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb3-4"><a></a></span>
-<span id="cb3-5"><a></a><span class="fu">ggplot</span>(combined_draws, <span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
-<span id="cb3-6"><a></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb3-7"><a></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> term, <span class="at">scales =</span> <span class="st">"free"</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb3-8"><a></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
-<span id="cb3-9"><a></a>  <span class="fu">labs</span>(</span>
-<span id="cb3-10"><a></a>    <span class="at">title =</span> <span class="st">"Prior vs Posterior Distributions"</span>,</span>
-<span id="cb3-11"><a></a>    <span class="at">x =</span> <span class="st">"Coefficient estimate"</span>,</span>
-<span id="cb3-12"><a></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
-<span id="cb3-13"><a></a>    <span class="at">fill =</span> <span class="st">""</span></span>
-<span id="cb3-14"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="tabset-4-1">
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="co">#| echo: true</span></span>
+<span id="cb4-2"><a></a><span class="co">#| output-location: slide</span></span>
+<span id="cb4-3"><a></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb4-4"><a></a></span>
+<span id="cb4-5"><a></a><span class="fu">ggplot</span>(combined_draws, <span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
+<span id="cb4-6"><a></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb4-7"><a></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> term, <span class="at">scales =</span> <span class="st">"free"</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb4-8"><a></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb4-9"><a></a>  <span class="fu">labs</span>(</span>
+<span id="cb4-10"><a></a>    <span class="at">title =</span> <span class="st">"Prior vs Posterior Distributions"</span>,</span>
+<span id="cb4-11"><a></a>    <span class="at">x =</span> <span class="st">"Coefficient estimate"</span>,</span>
+<span id="cb4-12"><a></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
+<span id="cb4-13"><a></a>    <span class="at">fill =</span> <span class="st">""</span></span>
+<span id="cb4-14"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-3-2">
-<p><img data-src="Prior vs Posterior Distributions_bmi_age.png" width="296"></p>
+<div id="tabset-4-2">
+<p><img data-src="Prior vs Posterior Distributions_bmi_age.png" width="415"></p>
 </div>
 </div>
 </div>

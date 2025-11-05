@@ -13,7 +13,9 @@ format:
     transition: slide
     css: slides.css
     incremental: true   
-    
+    html:
+    code-fold: true
+    code-summary: "Show the code"
     
 bibliography: references.bib
 execute:
@@ -68,9 +70,7 @@ Predictors: `age_c`, `bmi_c`, `sex`, `race`.
 
 ## Bayesian Model Equation
 
-```{undefined}
-#| eval: false
-#| include: false
+``` r
 library(gt)
 priors <- c(
   set_prior("normal(0, 2.5)", class = "b"),
@@ -98,9 +98,31 @@ $$
 
 ## Data: Survey weighted: National Health and Nutrition Examination Survey dataset (2013-2014) (NHANES)
 
-\- Study population: Adults (\>20 years)(n=5769): - `Age`: evenly distributed across adult age groups - `BMI`: concentrated in the overweight and obese ranges - `Female` \> `Male` participants - **most participants are non-diabetic**, a **minority are diabetic**: a relatively lower prevalence of diabetes in the sample - Predictors: age, sex, race, BMI - Response variable: `diabetes_dx` (diagnosis: 0 = No, 1 = Yes) `r head(adult)`
+::: panel-tabset
+### Tab A
 
+**Study population**
+
+-   **Adults** (\>20 years)(n=5769)
+
+-   `Age`: evenly distributed across adult age groups
+
+-   `BMI`: concentrated in the overweight and obese ranges
+
+-   `Female` \> `Male` participants
+
+-   **Most participants are non-diabetic**, a **minority are diabetic**: a relatively lower prevalence of diabetes in the sample
+
+-   Predictors: age, sex, race, BMI - Response variable: `diabetes_dx` (diagnosis: 0 = No, 1 = Yes)
+
+
+### Tab B
+``` r 
+head(adult)
+```
 ![](images/clipboard-126412730.png)
+:::
+
 
 ------------------------------------------------------------------------
 
@@ -128,9 +150,11 @@ Apply **Multiple Imputation by Chained Equations (MICE)**.
 ### Tab A
 
 Fit logistic regression model on imputed dataset and Pool estimates f
-```r
+
+``` r
 fit_mi \<- with(data = imp, exp = glm(diabetes_dx \~ age_c + bmi_c + sex + race, family = binomial())) pool_mi \<- pool(fit_mi)\`
 ```
+
 ### Tab B
 
 -   Iteratively imputes incomplete variables using regression models
@@ -149,14 +173,9 @@ fit_mi \<- with(data = imp, exp = glm(diabetes_dx \~ age_c + bmi_c + sex + race,
 ## Bayesian Model Diagnostics (MCMC)
 
 ::: panel-tabset
-
 ### Tab A
 
-
-
 ### Tab B
-
-
 :::
 
 ------------------------------------------------------------------------
@@ -199,7 +218,7 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
 
 ### Tab B
 
-![](Prior%20vs%20Posterior%20Distributions_bmi_age.png){width="296"}
+![](Prior%20vs%20Posterior%20Distributions_bmi_age.png){width="415"}
 :::
 
 ------------------------------------------------------------------------
