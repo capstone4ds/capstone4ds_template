@@ -1474,7 +1474,17 @@ mcmc_areas(
 
 
 ```
-Posterior Distributions of Regression Coefficients for Predictors of Diabetes
+
+
+### Assumptions for Bayesian Logistic Regression
+
+  - Data	Binary outcome, independent observations
+  - Relationship	Linear in logit, no perfect collinearity
+  - Priors	Properly chosen and informative enough
+  - Posterior	Proper and convergent
+  - Fit	No complete separation, good predictive checks
+  
+**Posterior Distributions of Regression Coefficients for Predictors of Diabetes**
 
 This figure presents the posterior distributions of regression coefficients estimated from the Bayesian logistic regression model. Each density curve represents the uncertainty around the parameter’s posterior mean for a given predictor.
 
