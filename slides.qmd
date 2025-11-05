@@ -71,7 +71,7 @@ execute:
 
 ------------------------------------------------------------------------
 
-## Slide 3: Missing Data Assessment
+## Missing Data Assessment
 
 -   Overall missingness: \~4%, No variable completely missing, Missingness is not uniform![](images/clipboard-1235247978.png){width="537"}
 -   Missingness pattern: likely *MAR* (Missing At Random).
@@ -80,7 +80,7 @@ execute:
 
 ------------------------------------------------------------------------
 
-## Slide 4: MICE Imputation
+## Multivariate Imputation by Chained Equations (MICE)
 
 -   **Method:** Predictive mean matching (PMM) for continuous vars; logistic regression for binary.
 
@@ -90,7 +90,7 @@ execute:
 
 ------------------------------------------------------------------------
 
-## Slide 5: Multivariate Imputation by Chained Equations (Pooled Logistic Regression)
+## MICE (Pooled Logistic Regression)
 
 ``` r
   glm(diabetes_dx ~ age_c + bmi_c + sex + race, family = binomial()) }) pool_mi <- pool(fit_mi) 
@@ -102,7 +102,7 @@ execute:
 
 ------------------------------------------------------------------------
 
-## Slide 5: Bayesian Logistic Regression
+## Bayesian Logistic Regression
 
 Outcome: `diabetes_dx` (0 = non-diabetic, 1 = diabetic)
 
@@ -112,13 +112,11 @@ Predictors: `age_c`, `bmi_c`, `sex`, `race`.
 
 -   Regression coefficients prior: normal(0, 2.5) — providing weakly informative regularization, constraining extreme values without overpowering the data. @VandeSchoot2021
 
--   Implemented in `brms` (Stan backend), Posterior draws = 4000 (4 chains × 1000 iterations). Logistic link function
-
-    ![](images/clipboard-87871382.png){width="332" height="60"}
+-   Implemented in `brms` (Stan backend), Posterior draws = 4000 (4 chains × 1000 iterations). Logistic link function![](images/clipboard-87871382.png){width="258" height="41"}
 
 ------------------------------------------------------------------------
 
-## Slide 6: Bayesian Model Equation
+## Bayesian Model Equation
 
 ``` r
 library(gt)
@@ -141,12 +139,10 @@ $$
 \text{logit}(P(Y=1)) = \beta_0 + \beta_1 \text{age}_c + \beta_2 \text{bmi}_c + \beta_3 \text{sex} + \beta_4 \text{race}
 $$
 
--   ( P(Y=1) ): Probability of being diabetic
+-    P(Y=1) : Probability of being diabetic
 -   Coefficients estimated with posterior means and 95% credible intervals.
 
-------------------------------------------------------------------------
-
-## Slide 7: Bayesian Model Diagnostics
+## Bayesian Model Diagnostics (MCMC)
 
 -   Rhat ≈ 1.00 → convergence achieved.
 
@@ -160,7 +156,7 @@ $$
 
 ------------------------------------------------------------------------
 
-## Slide 8: Posterior Estimates
+## Posterior Estimates
 
 | Predictor | Estimate | 95% CI           | Interpretation                     |
 |-----------|----------|------------------|------------------------------------|
@@ -171,7 +167,7 @@ $$
 
 ------------------------------------------------------------------------
 
-## Slide 9: Posterior Predictive Distribution
+## Posterior Predictive Distribution
 
 ``` r
 library(ggplot2)
@@ -196,7 +192,7 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
 
 ------------------------------------------------------------------------
 
-## Slide 10: Model Interpretation
+## Model Interpretation
 
 -   Strong positive relationship between **age**, **BMI**, and diabetes probability.
 -   Posterior predictive checks confirm the model captures data patterns well.
@@ -204,7 +200,7 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
 
 ------------------------------------------------------------------------
 
-## Slide 11: Limitations
+## Limitations
 
 -   NHANES data are cross-sectional → no causal inference.
 -   Potential unmeasured confounding (diet, physical activity).
@@ -213,7 +209,7 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
 
 ------------------------------------------------------------------------
 
-## Slide 12: Conclusion
+## Conclusion
 
 -   Bayesian logistic regression effectively models uncertainty.
 -   MICE improved data completeness and reliability.
@@ -222,7 +218,7 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
 
 ------------------------------------------------------------------------
 
-## Slide 13: References
+## References
 
 -   van Buuren S., Groothuis-Oudshoorn K. (2011). *MICE: Multivariate Imputation by Chained Equations in R.*
 -   Gelman A., Hill J. (2007). *Data Analysis Using Regression and Multilevel/Hierarchical Models.*
@@ -231,7 +227,7 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
 
 ------------------------------------------------------------------------
 
-## Slide 14: Acknowledgements
+## Acknowledgements
 
 -   Faculty: Dr. Ashraf Cohen, PhD, MS
 

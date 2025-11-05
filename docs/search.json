@@ -179,7 +179,7 @@
     "href": "slides.html#references",
     "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
     "section": "References",
-    "text": "References\n\n\n\n\n\n\n\n\nSchoot, Rens van de, Sarah Depaoli, Ruth King, Bianca Kramer, Kaspar Märtens, Mahlet G. Tadesse, Marina Vannucci, et al. 2021. “Bayesian statistics and modelling.” Nature Reviews Methods Primers 1 (1): 1. https://doi.org/10.1038/s43586-020-00001-2.\n\n\nSchoot, Rens Van De, David Kaplan, Jaap Denissen, Jens B Asendorpf, and Marcel A G Van Aken. 2013. “A Gentle Introduction to Bayesian Analysis: Applications to Developmental Research.” https://doi.org/10.1111/cdev.12169."
+    "text": "References\n\nvan Buuren S., Groothuis-Oudshoorn K. (2011). MICE: Multivariate Imputation by Chained Equations in R.\nGelman A., Hill J. (2007). Data Analysis Using Regression and Multilevel/Hierarchical Models.\nNHANES Data Documentation (CDC).\nMcElreath R. (2020). Statistical Rethinking: A Bayesian Course with Examples in R and Stan."
   },
   {
     "objectID": "slides.html#slide-1-introduction",
@@ -362,5 +362,96 @@
     "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
     "section": "Introduction",
     "text": "Introduction\n\nDiabetes is a chronic disease with rising global prevalence.\nEarly identification of risk factors is key to prevention and control.\nBayesian methods allow flexible modeling with uncertainty quantification.\nAim: Predict diabetes diagnosis using Bayesian logistic regression with imputed data ."
+  },
+  {
+    "objectID": "slides.html#missing-data-assessment",
+    "href": "slides.html#missing-data-assessment",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Missing Data Assessment",
+    "text": "Missing Data Assessment\n\nOverall missingness: ~4%, No variable completely missing, Missingness is not uniform\nMissingness pattern: likely MAR (Missing At Random).\nClustered mainly in bmi and diabetes_dx.\nDecision: Apply Multiple Imputation by Chained Equations (MICE)."
+  },
+  {
+    "objectID": "slides.html#multivariate-imputation-by-chained-equations-mice",
+    "href": "slides.html#multivariate-imputation-by-chained-equations-mice",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Multivariate Imputation by Chained Equations (MICE)",
+    "text": "Multivariate Imputation by Chained Equations (MICE)\n\nMethod: Predictive mean matching (PMM) for continuous vars; logistic regression for binary.\nIterations: 5 imputations, 10 iterations each, combined imputed datasets using Rubin’s rules.\nDistribution plots confirmed consistency with the original data."
+  },
+  {
+    "objectID": "slides.html#mice-pooled-logistic-regression",
+    "href": "slides.html#mice-pooled-logistic-regression",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "MICE (Pooled Logistic Regression)",
+    "text": "MICE (Pooled Logistic Regression)\n  glm(diabetes_dx ~ age_c + bmi_c + sex + race, family = binomial()) }) pool_mi &lt;- pool(fit_mi) \n\nn=5,769 participants\nModel significance: All predictors are statistically significant (p &lt; 0.01), suggesting a robust association across demographic and health variables."
+  },
+  {
+    "objectID": "slides.html#bayesian-logistic-regression",
+    "href": "slides.html#bayesian-logistic-regression",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Bayesian Logistic Regression",
+    "text": "Bayesian Logistic Regression\nOutcome: diabetes_dx (0 = non-diabetic, 1 = diabetic)\nPredictors: age_c, bmi_c, sex, race.\n\nIntercept prior: student_t(3, 0, 10) — allows heavy tails for flexibility in the intercept estimate. R. V. D. Schoot et al. (2013)\nRegression coefficients prior: normal(0, 2.5) — providing weakly informative regularization, constraining extreme values without overpowering the data. R. van de Schoot et al. (2021)\nImplemented in brms (Stan backend), Posterior draws = 4000 (4 chains × 1000 iterations). Logistic link function"
+  },
+  {
+    "objectID": "slides.html#bayesian-model-equation",
+    "href": "slides.html#bayesian-model-equation",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Bayesian Model Equation",
+    "text": "Bayesian Model Equation\nlibrary(gt)\npriors &lt;- c(\n  set_prior(\"normal(0, 2.5)\", class = \"b\"),\n  set_prior(\"student_t(3, 0, 10)\", class = \"Intercept\") \n)\nbayes_fit &lt;- brm(\n  formula = diabetes_dx | weights(wt_norm) ~ age_c + bmi_c + sex + race,\n  data    = adult_imp1,\n  family  = bernoulli(link = \"logit\"),\n  prior   = priors,\n  chains  = 4, iter = 2000, seed = 123,\n  control = list(adapt_delta = 0.95),\n  refresh = 0   # quiet Stan output\n)\n\\[\n\\text{logit}(P(Y=1)) = \\beta_0 + \\beta_1 \\text{age}_c + \\beta_2 \\text{bmi}_c + \\beta_3 \\text{sex} + \\beta_4 \\text{race}\n\\]\n\nP(Y=1) : Probability of being diabetic\nCoefficients estimated with posterior means and 95% credible intervals."
+  },
+  {
+    "objectID": "slides.html#bayesian-model-diagnostics-mcmc",
+    "href": "slides.html#bayesian-model-diagnostics-mcmc",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Bayesian Model Diagnostics (MCMC)",
+    "text": "Bayesian Model Diagnostics (MCMC)\n\nRhat ≈ 1.00 → convergence achieved.\nBulk ESS &gt; 3000 for all parameters → good mixing.\nTrace plots showed stable sampling across chains.\nPosterior distributions were unimodal and well-centered."
+  },
+  {
+    "objectID": "slides.html#posterior-estimates",
+    "href": "slides.html#posterior-estimates",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Posterior Estimates",
+    "text": "Posterior Estimates\n\n\n\n\n\n\n\n\n\nPredictor\nEstimate\n95% CI\nInterpretation\n\n\n\n\nIntercept\n-2.66\n[-2.84, -2.50]\nBaseline log-odds\n\n\nAge_c\n1.09\n[0.97, 1.22]\n↑ age increases diabetes risk\n\n\nBMI_c\n0.88\n[0.76, 1.01]\nHigher BMI linked with higher risk\n\n\nHTN\n0.65\n[0.50, 0.81]\nHypertension predicts diabetes"
+  },
+  {
+    "objectID": "slides.html#posterior-predictive-distribution",
+    "href": "slides.html#posterior-predictive-distribution",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Posterior Predictive Distribution",
+    "text": "Posterior Predictive Distribution\nlibrary(ggplot2)\n\nggplot(combined_draws, aes(x = estimate, fill = type)) +\n  geom_density(alpha = 0.4) +\n  facet_wrap(~ term, scales = \"free\", ncol = 2) +\n  theme_minimal(base_size = 13) +\n  labs(\n    title = \"Prior vs Posterior Distributions\",\n    x = \"Coefficient estimate\",\n    y = \"Density\",\n    fill = \"\"\n  )"
+  },
+  {
+    "objectID": "slides.html#model-interpretation",
+    "href": "slides.html#model-interpretation",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Model Interpretation",
+    "text": "Model Interpretation\n\nStrong positive relationship between age, BMI, and diabetes probability.\nPosterior predictive checks confirm the model captures data patterns well.\nImputation reduced bias and improved model robustness."
+  },
+  {
+    "objectID": "slides.html#limitations",
+    "href": "slides.html#limitations",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Limitations",
+    "text": "Limitations\n\nNHANES data are cross-sectional → no causal inference.\nPotential unmeasured confounding (diet, physical activity).\nLimited predictors → simplified model structure.\nImputation assumes MAR; violations may introduce bias."
+  },
+  {
+    "objectID": "slides.html#conclusion",
+    "href": "slides.html#conclusion",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Conclusion",
+    "text": "Conclusion\n\nBayesian logistic regression effectively models uncertainty.\nMICE improved data completeness and reliability.\nPosterior predictions provide interpretable probabilities for diabetes risk.\nFramework adaptable to other health outcomes (e.g., hypertension, obesity)."
+  },
+  {
+    "objectID": "slides.html#acknowledgements",
+    "href": "slides.html#acknowledgements",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\n\nFaculty: Dr. Ashraf Cohen, PhD, MS\nUniversity of West Florida, Department: Mathematics and Statistics\n        Thanks for the guidance"
+  },
+  {
+    "objectID": "slides.html#references-1",
+    "href": "slides.html#references-1",
+    "title": "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)",
+    "section": "References",
+    "text": "References\n\n\n\n\n\n\n\n\nSchoot, Rens van de, Sarah Depaoli, Ruth King, Bianca Kramer, Kaspar Märtens, Mahlet G. Tadesse, Marina Vannucci, et al. 2021. “Bayesian statistics and modelling.” Nature Reviews Methods Primers 1 (1): 1. https://doi.org/10.1038/s43586-020-00001-2.\n\n\nSchoot, Rens Van De, David Kaplan, Jaap Denissen, Jens B Asendorpf, and Marcel A G Van Aken. 2013. “A Gentle Introduction to Bayesian Analysis: Applications to Developmental Research.” https://doi.org/10.1111/cdev.12169."
   }
 ]

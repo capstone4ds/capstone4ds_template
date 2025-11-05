@@ -467,8 +467,8 @@ Autumn Wilcox
 </ul></li>
 </ul>
 </section>
-<section id="slide-3-missing-data-assessment" class="slide level2">
-<h2>Slide 3: Missing Data Assessment</h2>
+<section id="missing-data-assessment" class="slide level2">
+<h2>Missing Data Assessment</h2>
 <ul>
 <li>Overall missingness: ~4%, No variable completely missing, Missingness is not uniform<img data-src="images/clipboard-1235247978.png" width="537"></li>
 <li>Missingness pattern: likely <em>MAR</em> (Missing At Random).</li>
@@ -476,35 +476,34 @@ Autumn Wilcox
 <li>Decision: Apply <strong>Multiple Imputation by Chained Equations (MICE)</strong>.</li>
 </ul>
 </section>
-<section id="slide-4-mice-imputation" class="slide level2">
-<h2>Slide 4: MICE Imputation</h2>
+<section id="multivariate-imputation-by-chained-equations-mice" class="slide level2">
+<h2>Multivariate Imputation by Chained Equations (MICE)</h2>
 <ul>
 <li><p><strong>Method:</strong> Predictive mean matching (PMM) for continuous vars; logistic regression for binary.</p></li>
 <li><p><strong>Iterations:</strong> 5 imputations, 10 iterations each, combined imputed datasets using Rubin’s rules.</p></li>
 <li><p>Distribution plots confirmed consistency with the original data.</p></li>
 </ul>
 </section>
-<section id="slide-5-multivariate-imputation-by-chained-equations-pooled-logistic-regression" class="slide level2">
-<h2>Slide 5: Multivariate Imputation by Chained Equations (Pooled Logistic Regression)</h2>
+<section id="mice-pooled-logistic-regression" class="slide level2">
+<h2>MICE (Pooled Logistic Regression)</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>  <span class="fu">glm</span>(diabetes_dx <span class="sc">~</span> age_c <span class="sc">+</span> bmi_c <span class="sc">+</span> sex <span class="sc">+</span> race, <span class="at">family =</span> <span class="fu">binomial</span>()) <span class="er">})</span> pool_mi <span class="ot">&lt;-</span> <span class="fu">pool</span>(fit_mi) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li><p>n=5,769 participants</p></li>
 <li><p>Model significance: All predictors are statistically significant (p &lt; 0.01), suggesting a robust association across demographic and health variables.</p></li>
 </ul>
 </section>
-<section id="slide-5-bayesian-logistic-regression" class="slide level2">
-<h2>Slide 5: Bayesian Logistic Regression</h2>
+<section id="bayesian-logistic-regression" class="slide level2">
+<h2>Bayesian Logistic Regression</h2>
 <p>Outcome: <code>diabetes_dx</code> (0 = non-diabetic, 1 = diabetic)</p>
 <p>Predictors: <code>age_c</code>, <code>bmi_c</code>, <code>sex</code>, <code>race</code>.</p>
 <ul>
-<li><p>Intercept prior: student_t(3, 0, 10) — allows heavy tails for flexibility in the intercept estimate. <span class="citation" data-cites="VanDeSchoot2013">R. V. D. Schoot et al. (<a href="#/references" role="doc-biblioref" onclick="">2013</a>)</span></p></li>
-<li><p>Regression coefficients prior: normal(0, 2.5) — providing weakly informative regularization, constraining extreme values without overpowering the data. <span class="citation" data-cites="VandeSchoot2021">R. van de Schoot et al. (<a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span></p></li>
-<li><p>Implemented in <code>brms</code> (Stan backend), Posterior draws = 4000 (4 chains × 1000 iterations). Logistic link function</p>
-<p><img data-src="images/clipboard-87871382.png" width="332" height="60"></p></li>
+<li><p>Intercept prior: student_t(3, 0, 10) — allows heavy tails for flexibility in the intercept estimate. <span class="citation" data-cites="VanDeSchoot2013">R. V. D. Schoot et al. (<a href="#/references-1" role="doc-biblioref" onclick="">2013</a>)</span></p></li>
+<li><p>Regression coefficients prior: normal(0, 2.5) — providing weakly informative regularization, constraining extreme values without overpowering the data. <span class="citation" data-cites="VandeSchoot2021">R. van de Schoot et al. (<a href="#/references-1" role="doc-biblioref" onclick="">2021</a>)</span></p></li>
+<li><p>Implemented in <code>brms</code> (Stan backend), Posterior draws = 4000 (4 chains × 1000 iterations). Logistic link function<img data-src="images/clipboard-87871382.png" width="258" height="41"></p></li>
 </ul>
 </section>
-<section id="slide-6-bayesian-model-equation" class="slide level2">
-<h2>Slide 6: Bayesian Model Equation</h2>
+<section id="bayesian-model-equation" class="slide level2">
+<h2>Bayesian Model Equation</h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">library</span>(gt)</span>
 <span id="cb3-2"><a></a>priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
 <span id="cb3-3"><a></a>  <span class="fu">set_prior</span>(<span class="st">"normal(0, 2.5)"</span>, <span class="at">class =</span> <span class="st">"b"</span>),</span>
@@ -523,12 +522,12 @@ Autumn Wilcox
 \text{logit}(P(Y=1)) = \beta_0 + \beta_1 \text{age}_c + \beta_2 \text{bmi}_c + \beta_3 \text{sex} + \beta_4 \text{race}
 \]</span></p>
 <ul>
-<li>( P(Y=1) ): Probability of being diabetic</li>
+<li>P(Y=1) : Probability of being diabetic</li>
 <li>Coefficients estimated with posterior means and 95% credible intervals.</li>
 </ul>
 </section>
-<section id="slide-7-bayesian-model-diagnostics" class="slide level2">
-<h2>Slide 7: Bayesian Model Diagnostics</h2>
+<section id="bayesian-model-diagnostics-mcmc" class="slide level2">
+<h2>Bayesian Model Diagnostics (MCMC)</h2>
 <ul>
 <li><p>Rhat ≈ 1.00 → convergence achieved.</p></li>
 <li><p>Bulk ESS &gt; 3000 for all parameters → good mixing.</p></li>
@@ -537,8 +536,8 @@ Autumn Wilcox
 <p><img data-src="images/clipboard-353929734.png" width="366"></p></li>
 </ul>
 </section>
-<section id="slide-8-posterior-estimates" class="slide level2">
-<h2>Slide 8: Posterior Estimates</h2>
+<section id="posterior-estimates" class="slide level2">
+<h2>Posterior Estimates</h2>
 <table class="caption-top">
 <colgroup>
 <col style="width: 14%">
@@ -582,8 +581,8 @@ Autumn Wilcox
 </tbody>
 </table>
 </section>
-<section id="slide-9-posterior-predictive-distribution" class="slide level2">
-<h2>Slide 9: Posterior Predictive Distribution</h2>
+<section id="posterior-predictive-distribution" class="slide level2">
+<h2>Posterior Predictive Distribution</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb4-2"><a></a></span>
 <span id="cb4-3"><a></a><span class="fu">ggplot</span>(combined_draws, <span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
@@ -602,16 +601,16 @@ Autumn Wilcox
 
 <p><strong>Interpretation:</strong> The <strong>blue curve</strong>: estimated distribution of predicted diabetes probabilities. - <strong>Red dashed lines</strong>: lower and upper bounds of the <strong>95% credible interval</strong>, showing model uncertainty.</p>
 </section>
-<section id="slide-10-model-interpretation" class="slide level2">
-<h2>Slide 10: Model Interpretation</h2>
+<section id="model-interpretation" class="slide level2">
+<h2>Model Interpretation</h2>
 <ul>
 <li>Strong positive relationship between <strong>age</strong>, <strong>BMI</strong>, and diabetes probability.</li>
 <li>Posterior predictive checks confirm the model captures data patterns well.</li>
 <li>Imputation reduced bias and improved model robustness.</li>
 </ul>
 </section>
-<section id="slide-11-limitations" class="slide level2">
-<h2>Slide 11: Limitations</h2>
+<section id="limitations" class="slide level2">
+<h2>Limitations</h2>
 <ul>
 <li>NHANES data are cross-sectional → no causal inference.</li>
 <li>Potential unmeasured confounding (diet, physical activity).</li>
@@ -619,8 +618,8 @@ Autumn Wilcox
 <li>Imputation assumes MAR; violations may introduce bias.</li>
 </ul>
 </section>
-<section id="slide-12-conclusion" class="slide level2">
-<h2>Slide 12: Conclusion</h2>
+<section id="conclusion" class="slide level2">
+<h2>Conclusion</h2>
 <ul>
 <li>Bayesian logistic regression effectively models uncertainty.</li>
 <li>MICE improved data completeness and reliability.</li>
@@ -628,8 +627,8 @@ Autumn Wilcox
 <li>Framework adaptable to other health outcomes (e.g., hypertension, obesity).</li>
 </ul>
 </section>
-<section id="slide-13-references" class="slide level2">
-<h2>Slide 13: References</h2>
+<section id="references" class="slide level2">
+<h2>References</h2>
 <ul>
 <li>van Buuren S., Groothuis-Oudshoorn K. (2011). <em>MICE: Multivariate Imputation by Chained Equations in R.</em></li>
 <li>Gelman A., Hill J. (2007). <em>Data Analysis Using Regression and Multilevel/Hierarchical Models.</em></li>
@@ -637,15 +636,15 @@ Autumn Wilcox
 <li>McElreath R. (2020). <em>Statistical Rethinking: A Bayesian Course with Examples in R and Stan.</em></li>
 </ul>
 </section>
-<section id="slide-14-acknowledgements" class="slide level2">
-<h2>Slide 14: Acknowledgements</h2>
+<section id="acknowledgements" class="slide level2">
+<h2>Acknowledgements</h2>
 <ul>
 <li><p>Faculty: Dr.&nbsp;Ashraf Cohen, PhD, MS</p></li>
 <li><p>University of West Florida, Department: Mathematics and Statistics</p>
 <pre><code>        Thanks for the guidance</code></pre></li>
 </ul>
 </section>
-<section id="references" class="slide level2 smaller scrollable">
+<section id="references-1" class="slide level2 smaller scrollable">
 <h2>References</h2>
 
 <div class="quarto-auto-generated-content">
