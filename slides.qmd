@@ -13,6 +13,7 @@ format:
     transition: slide
     css: slides.css
     
+    
 bibliography: references.bib
 execute:
   warning: false
