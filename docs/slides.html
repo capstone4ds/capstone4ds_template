@@ -490,18 +490,27 @@ Autumn Wilcox
 <ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Exploratory data analysis</a></li><li><a href="#tabset-2-2">Missing data analysis</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1">
+<p>Response Variable: diabetes_dx (binary) : Type 2 diabetes diagnosis DIQ010 (“Doctor told you have diabetes”), excluding DIQ050 (insulin use) to prevent confounding.</p>
+<p>Predictor Variables:BMXBMI – Body Mass Index (kg/m^2): continuous with six levels (bmi_cat). RIDAGEYR: Age (continuous, 20–80 years) RIAGENDR: Sex (factor, two levels) RIDRETH1 – Ethnicity (factor, five levels)</p>
+<p><img data-src="images/clipboard-3274096863.png" width="795"></p>
+<hr>
+</div>
+<div id="tabset-2-2">
+<div class="columns">
+<div class="column">
+<p>Plot</p>
+<p><img data-src="images/clipboard-2873800077.png" width="427"></p>
+</div><div class="column">
 <div>
+<p>Abnormalities:</p>
 <ul>
-<li>Missing Data Assessment</li>
-<li>Overall missingness ≈ 4%</li>
-<li>No variable is completely missing.</li>
-<li>Missingness likely MAR (Missing At Random).</li>
+<li>Missing Data Assessment - Overall missingness ≈ 4%</li>
+<li>No variable is completely missing</li>
+<li>Missingness likely MAR (Missing At Random)</li>
 <li>Clustered mainly in BMI (4.3%) and diabetes_dx (3.1%).</li>
 </ul>
 </div>
-</div>
-<div id="tabset-2-2">
-<p><img data-src="images/clipboard-2873800077.png"></p>
+</div></div>
 </div>
 </div>
 </div>
@@ -572,7 +581,7 @@ Autumn Wilcox
 <span id="cb3-12"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="tabset-4-2">
-<p><img data-src="images/clipboard-1978292710.png" width="368"></p>
+<p><img data-src="images/clipboard-1978292710.png" width="466"></p>
 </div>
 <div id="tabset-4-3">
 <div>

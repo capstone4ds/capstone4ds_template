@@ -112,21 +112,38 @@ bayes_fit <- brm(
 
 ### **NHANES 2013–2014 (Survey weighted)**
 
-:::: panel-tabset
+::::::: panel-tabset
 ### Exploratory data analysis
 
-::: nonincremental
--   Missing Data Assessment
--   Overall missingness ≈ 4%
--   No variable is completely missing.
--   Missingness likely MAR (Missing At Random).
--   Clustered mainly in BMI (4.3%) and diabetes_dx (3.1%).
-:::
+Response Variable: diabetes_dx (binary) : Type 2 diabetes diagnosis DIQ010 (“Doctor told you have diabetes”), excluding DIQ050 (insulin use) to prevent confounding.
+
+Predictor Variables:BMXBMI – Body Mass Index (kg/m\^2): continuous with six levels (bmi_cat). RIDAGEYR: Age (continuous, 20–80 years) RIAGENDR: Sex (factor, two levels) RIDRETH1 – Ethnicity (factor, five levels)
+
+![](images/clipboard-3274096863.png){width="795"}
+
+------------------------------------------------------------------------
 
 ### Missing data analysis {.panel-tabset}
 
-![](images/clipboard-2873800077.png)
+:::::: columns
+::: column
+Plot
+
+![](images/clipboard-2873800077.png){width="427"}
+:::
+
+:::: column
+::: nonincremental
+Abnormalities:
+
+-   Missing Data Assessment - Overall missingness ≈ 4%
+-   No variable is completely missing
+-   Missingness likely MAR (Missing At Random)
+-   Clustered mainly in BMI (4.3%) and diabetes_dx (3.1%).
+:::
 ::::
+::::::
+:::::::
 
 ------------------------------------------------------------------------
 
@@ -197,7 +214,7 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
 
 ### Plot
 
-![](images/clipboard-1978292710.png){width="368"}
+![](images/clipboard-1978292710.png){width="466"}
 
 ### Interpretation
 
