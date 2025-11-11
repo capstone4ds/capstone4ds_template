@@ -618,6 +618,40 @@ Autumn Wilcox
 </section>
 <section class="slide level2">
 
+<div class="panel-tabset">
+<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">Code</a></li><li><a href="#tabset-5-2">Plot</a></li><li><a href="#tabset-5-3">Interpretation</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1">
+<p>Posterior pairwise correlation plot</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a></span>
+<span id="cb6-2"><a></a><span class="co"># Extract posterior draws</span></span>
+<span id="cb6-3"><a></a>post <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(bayes_fit)</span>
+<span id="cb6-4"><a></a></span>
+<span id="cb6-5"><a></a><span class="co"># Select numeric parameters of interest</span></span>
+<span id="cb6-6"><a></a>post_subset <span class="ot">&lt;-</span> post <span class="sc">%&gt;%</span> </span>
+<span id="cb6-7"><a></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(b_age_c, b_bmi_c, b_sexFemale, </span>
+<span id="cb6-8"><a></a>                b_raceMexicanAmerican, b_raceNHBlack)</span>
+<span id="cb6-9"><a></a></span>
+<span id="cb6-10"><a></a><span class="co"># Compute correlation matrix</span></span>
+<span id="cb6-11"><a></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">cor</span>(post_subset)</span>
+<span id="cb6-12"><a></a></span>
+<span id="cb6-13"><a></a><span class="co"># Visualize</span></span>
+<span id="cb6-14"><a></a><span class="fu">mcmc_pairs</span>(<span class="fu">as_draws_array</span>(bayes_fit), </span>
+<span id="cb6-15"><a></a>           <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"b_age_c"</span>, <span class="st">"b_bmi_c"</span>, <span class="st">"b_sexFemale"</span>),</span>
+<span id="cb6-16"><a></a>           <span class="at">off_diag_args =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>))</span>
+<span id="cb6-17"><a></a>           </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-5-2">
+<p><img data-src="images/clipboard-1737198687.png"></p>
+</div>
+<div id="tabset-5-3">
+<p>The absence of strong linear relationships among parameters suggests that age, BMI, and sex independently contributed to the prediction of diabetes status. The smooth, unimodal histograms along the diagonals confirmed stable model convergence and well-behaved posterior samples.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
 <h3 id="limitations">Limitations</h3>
 <div>
 <div>
@@ -654,12 +688,12 @@ Autumn Wilcox
 <section class="slide level2">
 
 <div class="panel-tabset">
-<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1"><strong>Thank You</strong></a></li><li><a href="#tabset-5-2">Dr.&nbsp;Ashraf Cohen, PhD, MS</a></li></ul>
+<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1"><strong>Thank You</strong></a></li><li><a href="#tabset-6-2">Dr.&nbsp;Ashraf Cohen, PhD, MS</a></li></ul>
 <div class="tab-content">
-<div id="tabset-5-1">
+<div id="tabset-6-1">
 
 </div>
-<div id="tabset-5-2">
+<div id="tabset-6-2">
 <div>
 <ul>
 <li>University of West Florida</li>

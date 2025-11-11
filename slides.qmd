@@ -255,6 +255,42 @@ Model fit: bayes_R2(bayes_fit)
 
 ------------------------------------------------------------------------
 
+::: panel-tabset
+### Code
+
+Posterior pairwise correlation plot
+
+``` r
+
+# Extract posterior draws
+post <- as_draws_df(bayes_fit)
+
+# Select numeric parameters of interest
+post_subset <- post %>% 
+  dplyr::select(b_age_c, b_bmi_c, b_sexFemale, 
+                b_raceMexicanAmerican, b_raceNHBlack)
+
+# Compute correlation matrix
+cor_matrix <- cor(post_subset)
+
+# Visualize
+mcmc_pairs(as_draws_array(bayes_fit), 
+           pars = c("b_age_c", "b_bmi_c", "b_sexFemale"),
+           off_diag_args = list(size = 1.5, alpha = 0.4))
+           
+```
+
+### Plot
+
+![](images/clipboard-1737198687.png)
+
+### Interpretation
+
+The absence of strong linear relationships among parameters suggests that age, BMI, and sex independently contributed to the prediction of diabetes status. The smooth, unimodal histograms along the diagonals confirmed stable model convergence and well-behaved posterior samples.
+:::
+
+------------------------------------------------------------------------
+
 ### Limitations
 
 :::: nonincremental
