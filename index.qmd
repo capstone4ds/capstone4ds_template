@@ -2041,6 +2041,13 @@ the reliability of posterior estimates. - This diagnostic confirms that
 the Bayesian model sampling was adequate and stable, ensuring valid
 inference from the posterior distributions.
 
+-   **Autocorrelation within MCMC samples for a *single parameter***
+    across iterations — i.e., how strongly each sample depends on its
+    previous ones.
+
+-   It reflects **MCMC chain mixing and efficiency**, not relationships
+    between parameters
+
 ```{r}
 library(bayesplot)
 
@@ -2062,26 +2069,27 @@ mcmc_pairs(as_draws_array(bayes_fit),
 
 ```
 
-Interpretation MCMC pairwise correlation)
+Interpretation of **Posterior correlation among parameters** (e.g.,
+between `b_age_c`, `b_bmi_c`, `b_sexFemale`)
 
 Each diagonal panel shows the **posterior density (distribution)** of
 one parameter, while the off-diagonal scatterplots show **pairwise
 relationships (correlations)** between parameters across posterior
 draws.
 
-#### 1. **Marginal Distributions (diagonals)**
+##### 1. **Marginal Distributions (diagonals)**
 
 -   The histograms show that all parameters (`b_age_c`, `b_bmi_c`,
     `b_sexFemale`) have **approximately symmetric and unimodal posterior
     distributions**.
 
--    This indicates **stable and well-identified estimates** with no
+-   This indicates **stable and well-identified estimates** with no
     sampling irregularities or multimodality.
 
 -   The narrow spread (small variance) reflects **high precision** of
     parameter estimates.
 
-#### 2. **Joint Distributions (off-diagonal scatterplots)** 
+##### 2. **Joint Distributions (off-diagonal scatterplots)**
 
 -   The scatterplots show **elliptical clouds centered around the
     mean**, with no strong linear patterns.
@@ -2094,7 +2102,7 @@ draws.
     **collinearity is minimal** and that the MCMC chains successfully
     explored the parameter space.
 
-#### 3. **Subtle Correlation Notes** 
+##### 3. **Subtle Correlation Notes**
 
 -   A mild negative tilt between `b_age_c` and `b_sexFemale` indicates a
     **slight negative correlation**, meaning as the posterior estimate
