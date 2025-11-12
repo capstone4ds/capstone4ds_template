@@ -422,42 +422,61 @@ Autumn Wilcox
 </style>
 <h3 id="aim">Aim</h3>
 <ul>
-<li class="fragment"><p>Early identification of risk factors is key to diabetes diagnosis and prevention.</p></li>
-<li class="fragment"><p>Predict diabetes using Bayesian logistic regression.</p></li>
+<li><p>Early identification of risk factors is key to diabetes diagnosis and prevention.</p></li>
+<li><p>Predict diabetes using Bayesian logistic regression.</p></li>
 </ul>
 <h3 id="frequentist-methods">Frequentist Methods</h3>
 <ul>
-<li class="fragment"><p>Maximum likelihood estimation is unstable with missing data, quasi-separation, or small samples.</p></li>
-<li class="fragment"><p>Probability is interpreted as long-run relative frequency.</p></li>
+<li><p>Maximum likelihood estimation is unstable with missing data, quasi-separation, or small samples.</p></li>
+<li><p>Probability is interpreted as long-run relative frequency.</p></li>
+<li><p>To the frequentist, parameter is an unknown constant.</p></li>
 </ul>
 </section>
 <section class="slide level2">
 
 <h3 id="bayesian-approach">Bayesian Approach</h3>
 <ul>
-<li class="fragment"><p>Flexible and regularizes estimates.</p></li>
-<li class="fragment"><p>Quantifies uncertainty under missingness or imputation (Baldwin &amp; Larson, 2017; Kruschke &amp; Liddell, 2017).</p></li>
-<li class="fragment"><p>Incorporates priors and provides credible intervals via MCMC to predict patient health outcomes.</p></li>
-<li class="fragment"><p>Supports model checking, variable selection, and uncertainty quantification.</p></li>
-<li class="fragment"><p>Probability represents a degree of belief.</p></li>
+<li>Flexible and regularizes estimates.</li>
+<li>Quantifies uncertainty under missingness or imputation (Baldwin &amp; Larson, 2017; Kruschke &amp; Liddell, 2017).</li>
+<li>Incorporates priors and provides credible intervals via MCMC to predict patient health outcomes.</li>
+<li>Don’t know the value of the parameter, it’s a random variable</li>
+<li>We model our uncertainty with a probability distribution <img data-src="images/clipboard-2228883614.png" width="37" height="20">, called the prior distribution.</li>
+<li>Probability represents a degree of belief.</li>
+<li>It represents the statisticians belief about before observing the data.</li>
+<li>Supports model checking, variable selection, and uncertainty quantification</li>
 </ul>
 </section>
 <section class="slide level2">
 
 <h3 id="bayesian-model">Bayesian Model</h3>
 <div class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Bayes’ theorem</a></li><li><a href="#tabset-1-2">Bayesian Logistic Regression</a></li></ul>
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Bayes’ theorem</a></li><li><a href="#tabset-1-2">🧠 Bayesian Inference</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1">
 <p><strong>Bayes’ theorem</strong> is based on conditional probability.</p>
-<p>Coefficients estimated using posterior means and 95% credible intervals.</p>
-<p>Logistic link function used for binary outcomes.</p>
 </div>
 <div id="tabset-1-2">
-<p>logit (𝑃(𝑌=1))=𝛽0+𝛽1age 𝑐 + 𝛽 2 bmi 𝑐 + 𝛽 3 sex + 𝛽 4 race</p>
-<p>Intercept prior: student_t(3, 0, 10) — heavy tails for flexibility (Van de Schoot et al., 2013).</p>
-<p>Regression coefficients prior: normal(0, 2.5) — weakly informative, constraining extreme values (Van de Schoot et al., 2021).</p>
+<p>Bayesian inference estimates the <strong>posterior probability</strong> of a parameter:</p>
+<p><span class="math display">\[
+P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
+\]</span></p>
+<p>where:</p>
+<ul>
+<li>( P(D) ): Posterior — probability of the parameter given data<br>
+</li>
+<li>( P(D ) ): Likelihood — probability of observing data given the parameter<br>
+</li>
+<li>( P() ): Prior — belief about the parameter before seeing data<br>
+</li>
+<li>( P(D) ): Marginal likelihood (normalizing constant)</li>
+</ul>
 </div>
+</div>
+</div>
+<div class="panel-tabset">
+<ul id="tabset-2" class="panel-tabset-tabby"></ul>
+<div class="tab-content">
+
 </div>
 </div>
 </section>
@@ -484,18 +503,37 @@ Autumn Wilcox
 </section>
 <section class="slide level2">
 
+<h3 id="mcmc-markov-chain-monte-carlo">MCMC (Markov Chain Monte Carlo)</h3>
+<ul>
+<li>Algorithms used to draw samples from a probability distribution.</li>
+<li>The Gibbs sampler produces a sequence of random vectors <img data-src="images/clipboard-1640325740.png" width="90" height="35">. Each one depends on the past only through the most recent one. It’s a Markov process. The samples are not just random but are drawn in a way that the long-term distribution of the samples matches the target posterior distribution.</li>
+<li>It uses a burn in period. The random vectors are sequentially dependent. Retain one parameter vector every n iterations, and discard the rest.</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="posterior-distribution">Posterior distribution</h3>
+<ul>
+<li>The distribution of after seeing the data.</li>
+<li>The posterior is the conditional distribution of the parameter given the data</li>
+<li>Subjectivity is present when it is based on the prior distribution which influences the conclusions.</li>
+<li>The influence of the prior goes to zero as the sample size increases.</li>
+</ul>
+</section>
+<section class="slide level2">
+
 <h3 id="data-source">Data Source</h3>
 <h3 id="nhanes-20132014-survey-weighted"><strong>NHANES 2013–2014 (Survey weighted)</strong></h3>
 <div class="panel-tabset">
-<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Exploratory data analysis</a></li><li><a href="#tabset-2-2">Missing data analysis</a></li></ul>
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">Exploratory data analysis</a></li><li><a href="#tabset-3-2">Missing data analysis</a></li></ul>
 <div class="tab-content">
-<div id="tabset-2-1">
+<div id="tabset-3-1">
 <p>Response Variable: diabetes_dx (binary) : Type 2 diabetes diagnosis DIQ010 (“Doctor told you have diabetes”), excluding DIQ050 (insulin use) to prevent confounding.</p>
 <p>Predictor Variables:BMXBMI – Body Mass Index (kg/m^2): continuous with six levels (bmi_cat). RIDAGEYR: Age (continuous, 20–80 years) RIAGENDR: Sex (factor, two levels) RIDRETH1 – Ethnicity (factor, five levels)</p>
 <p><img data-src="images/clipboard-3274096863.png" width="795"></p>
 <hr>
 </div>
-<div id="tabset-2-2">
+<div id="tabset-3-2">
 <div class="columns">
 <div class="column">
 <p>Plot</p>
@@ -536,16 +574,16 @@ Autumn Wilcox
 
 <h3 id="bayesian-model-diagnostics">Bayesian Model Diagnostics</h3>
 <div class="panel-tabset">
-<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">MCMC</a></li><li><a href="#tabset-3-2">Posterior Estimates</a></li></ul>
+<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">MCMC</a></li><li><a href="#tabset-4-2">Posterior Estimates</a></li></ul>
 <div class="tab-content">
-<div id="tabset-3-1">
+<div id="tabset-4-1">
 <ul>
-<li class="fragment">Trace plots indicate convergence (no drift across iterations).</li>
-<li class="fragment">Rhat ≈ 1 → good chain mixing.</li>
-<li class="fragment">Effective sample size is adequate across parameters.</li>
+<li>Trace plots indicate convergence (no drift across iterations).</li>
+<li>Rhat ≈ 1 → good chain mixing.</li>
+<li>Effective sample size is adequate across parameters.</li>
 </ul>
 </div>
-<div id="tabset-3-2">
+<div id="tabset-4-2">
 <div>
 <ul>
 <li>Intercept -2.66 [-2.84, -2.50] Baseline log-odds</li>
@@ -564,9 +602,9 @@ Autumn Wilcox
 
 <h3 id="posterior-predictive-distribution">Posterior Predictive Distribution</h3>
 <div class="panel-tabset">
-<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">code</a></li><li><a href="#tabset-4-2">Plot</a></li><li><a href="#tabset-4-3">Interpretation</a></li></ul>
+<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">code</a></li><li><a href="#tabset-5-2">Plot</a></li><li><a href="#tabset-5-3">Interpretation</a></li></ul>
 <div class="tab-content">
-<div id="tabset-4-1">
+<div id="tabset-5-1">
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb3-2"><a></a></span>
 <span id="cb3-3"><a></a><span class="fu">ggplot</span>(combined_draws, <span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
@@ -580,10 +618,10 @@ Autumn Wilcox
 <span id="cb3-11"><a></a>    <span class="at">fill =</span> <span class="st">""</span></span>
 <span id="cb3-12"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-4-2">
+<div id="tabset-5-2">
 <p><img data-src="images/clipboard-1978292710.png" width="466"></p>
 </div>
-<div id="tabset-4-3">
+<div id="tabset-5-3">
 <div>
 <ul>
 <li><p>Strong positive relationship between age, BMI, and diabetes probability.</p></li>
@@ -619,9 +657,9 @@ Autumn Wilcox
 <section class="slide level2">
 
 <div class="panel-tabset">
-<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">Code</a></li><li><a href="#tabset-5-2">Plot</a></li><li><a href="#tabset-5-3">Interpretation</a></li></ul>
+<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">Code</a></li><li><a href="#tabset-6-2">Plot</a></li><li><a href="#tabset-6-3">Interpretation</a></li></ul>
 <div class="tab-content">
-<div id="tabset-5-1">
+<div id="tabset-6-1">
 <p>Posterior pairwise correlation plot</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a></span>
 <span id="cb6-2"><a></a><span class="co"># Extract posterior draws</span></span>
@@ -641,10 +679,10 @@ Autumn Wilcox
 <span id="cb6-16"><a></a>           <span class="at">off_diag_args =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>))</span>
 <span id="cb6-17"><a></a>           </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-5-2">
+<div id="tabset-6-2">
 <p><img data-src="images/clipboard-1737198687.png"></p>
 </div>
-<div id="tabset-5-3">
+<div id="tabset-6-3">
 <p>The absence of strong linear relationships among parameters suggests that age, BMI, and sex independently contributed to the prediction of diabetes status. The smooth, unimodal histograms along the diagonals confirmed stable model convergence and well-behaved posterior samples.</p>
 </div>
 </div>
@@ -688,12 +726,12 @@ Autumn Wilcox
 <section class="slide level2">
 
 <div class="panel-tabset">
-<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1"><strong>Thank You</strong></a></li><li><a href="#tabset-6-2">Dr.&nbsp;Ashraf Cohen, PhD, MS</a></li></ul>
+<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1"><strong>Thank You</strong></a></li><li><a href="#tabset-7-2">Dr.&nbsp;Ashraf Cohen, PhD, MS</a></li></ul>
 <div class="tab-content">
-<div id="tabset-6-1">
+<div id="tabset-7-1">
 
 </div>
-<div id="tabset-6-2">
+<div id="tabset-7-2">
 <div>
 <ul>
 <li>University of West Florida</li>

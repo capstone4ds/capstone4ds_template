@@ -11,7 +11,7 @@ format:
     slide-number: true
     transition: slide
     css: docs/slides.css
-    incremental: true
+    incremental: false
     code-fold: true
     code-summary: "Show the code"
 bibliography: references.bib
@@ -44,19 +44,20 @@ execute:
 
 -   Probability is interpreted as long-run relative frequency.
 
+-   To the frequentist, parameter is an unknown constant.
+
 ------------------------------------------------------------------------
 
 ### Bayesian Approach
 
 -   Flexible and regularizes estimates.
-
 -   Quantifies uncertainty under missingness or imputation (Baldwin & Larson, 2017; Kruschke & Liddell, 2017).
-
 -   Incorporates priors and provides credible intervals via MCMC to predict patient health outcomes.
-
--   Supports model checking, variable selection, and uncertainty quantification.
-
+-   Don't know the value of the parameter, it's a random variable
+-   We model our uncertainty with a probability distribution ![](images/clipboard-2228883614.png){width="37" height="20"}, called the prior distribution.
 -   Probability represents a degree of belief.
+-   It represents the statisticians belief about before observing the data.
+-   Supports model checking, variable selection, and uncertainty quantification
 
 ------------------------------------------------------------------------
 
@@ -67,11 +68,29 @@ execute:
 
 **Bayes’ theorem** is based on conditional probability.
 
+### 🧠 Bayesian Inference
+
+Bayesian inference estimates the **posterior probability** of a parameter:
+
+$$
+P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
+$$
+
+where:
+
+-   ( P(\theta \mid D) ): Posterior — probability of the parameter given data\
+-   ( P(D \mid \theta) ): Likelihood — probability of observing data given the parameter\
+-   ( P(\theta) ): Prior — belief about the parameter before seeing data\
+-   ( P(D) ): Marginal likelihood (normalizing constant)
+:::
+
+::: panel-tabset
+
+------------------------------------------------------------------------
+
 Coefficients estimated using posterior means and 95% credible intervals.
 
 Logistic link function used for binary outcomes.
-
-### Bayesian Logistic Regression
 
 logit (𝑃(𝑌=1))=𝛽0+𝛽1age 𝑐 + 𝛽 2 bmi 𝑐 + 𝛽 3 sex + 𝛽 4 race
 
@@ -105,6 +124,24 @@ bayes_fit <- brm(
   refresh = 0
 )
 ```
+
+------------------------------------------------------------------------
+
+### MCMC (Markov Chain Monte Carlo)
+
+-   Algorithms used to draw samples from a probability distribution.
+-   The Gibbs sampler produces a sequence of random vectors ![](images/clipboard-1640325740.png){width="90" height="35"}. Each one depends on the past only through the most recent one. It's a Markov process. The samples are not just random but are drawn in a way that the long-term distribution of the samples matches the target posterior distribution.
+-   It uses a burn in period. The random vectors are sequentially dependent. Retain one parameter vector every n iterations, and discard the rest.
+
+
+------------------------------------------------------------------------
+
+### Posterior distribution
+
+-  The distribution of after seeing the data. 
+-  The posterior is the conditional distribution of the parameter given the data 
+-  Subjectivity is present when it is based on the prior distribution which influences the conclusions. 
+-  The influence of the prior goes to zero as the sample size increases.
 
 ------------------------------------------------------------------------
 
