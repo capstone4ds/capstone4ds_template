@@ -1084,7 +1084,7 @@ Study population across the three datasets
 -   Rows: 5,769 and Columns: 12 (filtered Adult data)
 -   Rows: 5,592 and Columns: 11 (imputed data, adult_imp1)
 
-### **(2) Bayesian Logistic Regression** 
+### **(2) Bayesian Logistic Regression**
 
 -   A Bayesian logistic regression model fitted on the first pooled
     imputed dataset (adult_imp1)
@@ -1227,6 +1227,7 @@ ggplot(prior_draws, aes(x = value, fill = term)) +
 
 
 ```
+
 ## Distribution of prior and posterior
 
 (1) Plot 1: The density plots of standardized BMI and Age (imputed
@@ -1252,12 +1253,16 @@ ggplot(prior_draws, aes(x = value, fill = term)) +
 
 -   Each Trace Plots shows 4 MCMC chains (different colors) across 1000
     iterations
+
 -   The chains mix well and overlap substantially, without visible
     trends or drifts → indicates good convergence.
+
 -   The parameter values oscillate around stable means with no
     systematic pattern → confirms stationarity.
+
 -   Combined with Rhat ≈ 1 and high ESS from your summary, the trace
     plots visually validate posterior convergence and independence.
+
 -   **MCMC Convergence**: well-mixed chains without trends indicate
     convergence and stable posterior estimates.
 
@@ -1351,7 +1356,6 @@ saveRDS(mi_or,     "outputs/mi_OR_table.rds")
 saveRDS(bayes_or,  "outputs/bayes_OR_table.rds")
 ```
 
-
 ```{r}
 #| label: Posterior summary
 #| include: false
@@ -1411,7 +1415,6 @@ bayes_results
 
 ```
 
-
 ```{r}
 #| label: mcmc posterior (Bayesian)
 #| echo: true
@@ -1435,15 +1438,12 @@ plot(bayes_fit)   # Posterior distributions
 -   **Reference**: *Male* , *Non-Hispanic White.* Age and BMI are
     standardized (per 1 SD).\*
 
-**Posterior Coefficients (on log-odds scale) Interpretation**
+**Posterior Coefficients (log-odds scale)**
 
 **Intercept:** `b_Intercept = –2.66 (SD = 0.088, LCL ≈ –2.84)`
 
--   Represents baseline log-odds of diabetes for: **male, NH White,
-    average age, average BMI** with \~ **6.5% baseline diabetes
-    probability**.
-
-**Continuous Predictors:**
+-   Baseline log-odds of diabetes for: **male, NH White, average age,
+    average BMI** with \~ **6.5% baseline diabetes probability**.
 
 **Age (per 1 SD):** `b_age_c = 1.094 (SD = 0.062, LCL ≈ 0.97)`
 
@@ -1469,13 +1469,15 @@ plot(bayes_fit)   # Posterior distributions
 
 **Race**
 
-**Mexican American:** `b_raceMexicanAmerican = 0.692 (SD = 0.177, LCL ≈ 0.347)`
+**Mexican American:**
+`b_raceMexicanAmerican = 0.692 (SD = 0.177, LCL ≈ 0.347)`
 
 -   Increased odds of diabetes.
 -   **OR ≈ exp(0.692) ≈ 1.99**
 -   Nearly **double** the odds compared to NH Whites.
 
-**Other Hispanic:** `b_raceOtherHispanic = 0.431 (SD = 0.244, LCL ≈ –0.072)`
+**Other Hispanic:**
+`b_raceOtherHispanic = 0.431 (SD = 0.244, LCL ≈ –0.072)`
 
 -   Positive mean, but lower bound crosses 0.
 -   **OR ≈ exp(0.431) ≈ 1.54**
@@ -1488,7 +1490,8 @@ plot(bayes_fit)   # Posterior distributions
 -   **OR ≈ exp(0.538) ≈ 1.71**
 -   NH Black individuals have **\~70% higher odds** vs NH Whites.
 
-**Other / Multiracial:** `b_raceOtherDMulti = 0.819 (SD = 0.189, LCL ≈ 0.445)`
+**Other / Multiracial:**
+`b_raceOtherDMulti = 0.819 (SD = 0.189, LCL ≈ 0.445)`
 
 -   Strong evidence of increased risk.
 
@@ -1498,17 +1501,18 @@ plot(bayes_fit)   # Posterior distributions
 
 **Interpretation**
 
-    -   Age and BMI showed positive associations
-    -   BMI showed a negative association in most draws, with posterior
-        estimates ranging roughly from 0.61 to 0.70, indicating that
-        higher BMI is associated with lower odds of the outcome in this
-        analysis
-    -   Age showed a positive association, with posterior estimates
-        ranging roughly from 1.00 to 1.14, suggesting that higher age
-        increases the odds of the outcome.
-    -   Female sex showed a negative association
-    -   Racial/ethnic groups had elevated odds relative to the reference
-        group.
+-   Age and BMI showed positive associations
+-   BMI showed a negative association in most draws, with posterior
+    estimates ranging roughly from 0.61 to 0.70, indicating that higher
+    BMI is associated with lower odds of the outcome in this analysis
+-   Age showed a positive association, with posterior estimates ranging
+    roughly from 1.00 to 1.14, suggesting that higher age increases the
+    odds of the outcome.
+-   Female sex showed a negative association
+-   Racial/ethnic groups had elevated odds relative to the reference
+    group
+
+### Predictive Checking
 
 ```{r}
 #| label: Posterior predictive draws
@@ -1522,14 +1526,18 @@ pp_samples <- posterior_predict(bayes_fit, ndraws = 500)  # 500 draws
 dim(pp_samples)  # rows = draws, cols = observations
 
 ```
-### Predictive Checking
 
-We generates predicted outcomes for each observation using samples from the posterior distribution of the model parameters with ndraws = 500, samling 500 draws from the posterior to simulate predicted data to compare these simulated outcomes with the actual observed data to see if the model can reasonably reproduce the patterns in the data
+We generates predicted outcomes for each observation using samples from
+the posterior distribution of the model parameters with ndraws = 500,
+samling 500 draws from the posterior to simulate predicted data to
+compare these simulated outcomes with the actual observed data to see if
+the model can reasonably reproduce the patterns in the data
 
--   Predicted outcomes: binary outcome with 0 or 1 simulated 
--   Presented below are the rows (500) and columns = number of observations (5592)
+-   Predicted outcomes: binary outcome with 0 or 1 simulated
+-   Presented below are the rows (500) and columns = number of
+    observations (5592)
 
-## Posterior Predictive Checks (PPC)
+### Posterior Predictive Checks (PPC)
 
 ```{r}
 #| echo: true
@@ -1539,8 +1547,8 @@ ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:500, ])
 
 -   ppc_bars() plot compared the observed diabetes outcomes
 -   Density overlays for both mean and SD. There was no large
-        discrepancies indicating potential misfit and good alignment
-        suggesting reliable predictions.
+    discrepancies indicating potential misfit and good alignment
+    suggesting reliable predictions.
 -   Model’s predictions align with reality where mean(y_rep) = average
     predicted probability of diabetes for each individual, across all
     posterior draws of the parameters and y = the actual observed
@@ -1558,7 +1566,7 @@ ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "mean") 
 
 ```
 
-### Posterior Predictive stats: Mean
+#### Posterior Predictive stats: Mean
 
 -   A posterior predictive check using 100 replicated datasets from the
     posterior distribution shows the mean diabetes outcome closely
@@ -1579,7 +1587,7 @@ ppc_stat(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ], stat = "sd") +
 
 ```
 
-### Posterior Predictive stats: Standard Deviation
+#### Posterior Predictive stats: Standard Deviation
 
 -   A posterior predictive check on the standard deviation of diabetes
     outcomes using 100 replicated datasets from the posterior
@@ -1597,7 +1605,7 @@ ppc_scatter_avg(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ]) +
 
 ```
 
-**Observed vs. Predicted Average**
+#### **Observed vs. Predicted Average**
 
 The plot here shows **how well the model's predicted probabilities match
 the observed outcomes**, across individuals and checks model calibration
@@ -1606,9 +1614,9 @@ Logistic regression fit at person-level.
 -   **Each point = one observation** (an individual).
 -   **x-axis = observed value** (`0` or `1` in your binary diabetes
     variable).
--   **y-axis = average predicted posterior probability** for that same individual across simulated datasets.
+-   **y-axis = average predicted posterior probability** for that same
+    individual across simulated datasets.
 -   Points near (0, 0) or (1, 1) → good prediction.
-
 
 ```{r}
 #| label: mcmc areas (post vs obs)
@@ -1633,8 +1641,7 @@ mcmc_areas(
 
 ```
 
-**Posterior Distributions of Regression Coefficients for Predictors of
-Diabetes**
+#### **Posterior Distributions of Regression Coefficients** 
 
 This figure presents the posterior distributions of regression
 coefficients estimated from the Bayesian logistic regression model. Each
@@ -1658,19 +1665,6 @@ posterior mean for a given predictor.
     lie based on the posterior samples.
 
 ```{r}
-bayes_R2(bayes_fit)      # Model fit
-
-```
-
-### Bayesian 𝑅\^2 (model fit statics):
-
-Model Fit to quantify predictive performance. - Explains about 13% of
-the variability in diabetes status, with credible uncertainty bounds
-suggesting reasonable but modest explanatory power. - but other factors
-(e.g., genetics, lifestyle, environment) also contribute to outcome
-variability.
-
-```{r}
 #| label: ggplot bmi (obs vs pred)
 #| echo: true
 
@@ -1686,6 +1680,7 @@ ggplot(data = NULL, aes(x = observed$bmi, y = predicted[, "Estimate"])) +
   xlab("Observed bmi") + ylab("Predicted bmi")
 
 ```
+
 ### Observed vs. Predicted BMI
 
 A comparison of observed BMI values and osterior predicted estimates
@@ -2186,6 +2181,19 @@ draws.
     of diabetes status. The smooth, unimodal histograms along the
     diagonals confirmed stable model convergence and well-behaved
     posterior samples.
+
+```{r}
+bayes_R2(bayes_fit)      # Model fit
+
+```
+
+### Bayesian 𝑅\^2 (model fit statics):
+
+Model Fit to quantify predictive performance. - Explains about 13% of
+the variability in diabetes status, with credible uncertainty bounds
+suggesting reasonable but modest explanatory power. - but other factors
+(e.g., genetics, lifestyle, environment) also contribute to outcome
+variability.
 
 # Conclusion
 
