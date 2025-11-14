@@ -562,6 +562,21 @@ str(adult)
 
 ```
 
+Below are the quick weighted checks
+
+-   mean age of adults in NHANES
+
+-   prevalence of diabetes_dx (0/1)
+
+-   standard error
+
+-   **actual NHANES variance**, inflated by clustering + stratification
+
+-   Variance under simple random sampling (SRS)
+
+-   effective sample size for diabetes and the design effect = actual
+    variance / SRS variance)
+
 ```{r}
 #| label: survey data results
 #| echo: false
@@ -600,10 +615,6 @@ cat("Effective sample size for diabetes_dx:", round(ess), "\n")
 
 ```
 
--   quick weighted checks
--   effective sample size for diabetes
--   Design effect = actual variance / SRS variance
-
 ```{r}
 #| echo: false
 plot_intro(adult, title="Figure 1 (Adult dataset). Structure of variables and missing observations.")
@@ -624,21 +635,26 @@ plot_missing(adult, title="Figure 2(Adult dataset). Breakdown of missing observa
 -   Overall missingness: \~4% → low, but non-trivial given the small
     number of variables involved.
 
-**Study Cohort**
+**Study Cohort (Adult)**
 
--   The adult cohort includes standardized variables for age and BMI
-    (age_c, bmi_c), categorical indicators for sex and race/ethnicity,
-    and a binary doctor-diagnosed diabetes.
--   The adult cohort included 5,769 adults aged 20–80 years with the
-    mean age of participants was 49.1 years (SD = 17.6), and
-    participants are fairly evenly distributed across adult age groups,
-    with no sharp skewness.
--   The mean BMI was 29.1 kg/m² (SD = 7.15), with values ranging from
-    14.1 to 82.9 kg/m².A small proportion of missing values in variables
-    (BMI and diabetes status). BMI data were available for 5,520
-    participants, with 249 missing values. BMI: Most participants have
-    BMI values within the normal to overweight range, with fewer in the
-    obese category.
+Cohort includes standardized variables for age and BMI (age_c, bmi_c),
+categorical indicators for sex and race/ethnicity, and a binary
+doctor-diagnosed diabetes.
+
+-   Age
+    -   5,769 adults aged 20–80 years
+    -   mean age = 49.1 years (SD = 17.6), and participants are fairly
+        evenly distributed across adult age groups, with no sharp
+        skewness.
+-   BMI
+    -   The mean BMI was 29.1 kg/m² (SD = 7.15), with values ranging
+        from 14.1 to 82.9 kg/m².
+    -   A small proportion of missing values in variables (BMI and
+        diabetes status).
+    -   BMI data were available for 5,520 participants, with 249 missing
+        values.
+    -   Most participants have BMI values within the normal to
+        overweight range, with fewer in the obese category.
 -   Sex: Sample includes a higher proportion of females than males.
 
 ```{r}
@@ -765,14 +781,15 @@ ggplot(adult1, aes(x = diabetes_dx, y = count, fill = sex)) +
 
 # Statistical Modeling
 
-Two modeling frameworks were compared using identical predictors
+Two modeling frameworks are compared using identical predictors
 (standardized age, BMI, sex, and race4) and the binary outcome
 diabetes_dx:
 
-(1) Survey-weighted logistic regression and and complete-case analysis\
-(2) Bayesian logistic regression with weakly informative priors was
-    conducted after perfroming multiple imputation (MICE) o address
-    missing values.
+-   Survey-weighted logistic regression and complete-case analysi
+
+-   Bayesian logistic regression with weakly informative priors
+
+**(1) Survey-weighted logistic regression and complete-case analysis**
 
 ```{r}
 #| label: Modeling-Survey-weighted complete-case
@@ -804,6 +821,7 @@ if (nlevels(droplevels(adult$race[!is.na(adult$diabetes_dx)])) < 2)
   stop("race has <2 observed levels after filtering; check Data Prep.")
 
    #  Survey-weighted complete-case 
+
 # Build a logical filter on the original adult data (same length as design$data)
 keep_cc <- with(
   adult,
@@ -824,30 +842,24 @@ summary(svy_fit)
 
 ```
 
-### (2) Survey weighted Multiple Logistic Regression model
+**Results**
 
--   Strongest predictors: Age and BMI show the largest ORs among
-    continuous variables—both strongly linked to diabetes risk.
+Strongest predictors: Age and BMI show the largest ORs among continuous
+variables—both strongly linked to diabetes risk.
+
 -   Protective factor: Being female reduces the odds of diabetes.
 -   Race disparities: All racial/ethnic minority groups show
     significantly higher odds compared to Non-Hispanic Whites,
     consistent with known health disparities in diabetes prevalence.
 -   Significance: All p-values \< 0.05, so all predictors are
     statistically significant.
-
-**Results**
-
 -   Baseline log-odds of diabetes = -2.69
-
 -   For each 1 SD increase in age, the log-odds of diabetes increase by
     1.07 → odds increase by exp(1.07) = 2.9× (≈3× higher odds).
-
 -   For each 1 SD increase in BMI, odds of diabetes increase by
     exp(0.55) = 1.73× (≈73% higher).
-
 -   Females have exp(-0.62) = 0.54× the odds of diabetes compared to
     males → about 46% lower odds.
-
 -   Mexican Americans have exp(0.89) = 2.43× higher odds of diabetes vs.
     Non-Hispanic Whites. Other Hispanics have exp(0.56) = 1.75× higher
     odds Non-Hispanic Blacks have exp(0.68) = 1.97× higher odds. Those
@@ -870,6 +882,7 @@ svy_or <- broom::tidy(svy_fit, conf.int = TRUE) %>%
   dplyr::select(term, OR, LCL, UCL, p.value) %>%
   dplyr::filter(term != "(Intercept)")
 knitr::kable(svy_or, caption = "Survey-weighted odds ratios (per 1 SD)")
+
 ```
 
 ### Multivariate Imputation by Chained Equations (Pooled Logistic Regression)
@@ -1071,7 +1084,7 @@ Study population across the three datasets
 -   Rows: 5,769 and Columns: 12 (filtered Adult data)
 -   Rows: 5,592 and Columns: 11 (imputed data, adult_imp1)
 
-### **Bayesian Logistic Regression and Analysis**
+### **(2) Bayesian Logistic Regression** 
 
 -   A Bayesian logistic regression model fitted on the first pooled
     imputed dataset (adult_imp1)
@@ -1110,15 +1123,6 @@ Draws were sampled using sampling(NUTS).
 For each parameter, Bulk_ESS and Tail_ESS are effective sample size
 measures, and Rhat is the potential scale reduction factor on split
 chains (at convergence, Rhat = 1).
-
-**Model Estimation (Posterior draws)** - Four Markov Chain Monte Carlo
-(MCMC) chains, each with 2000 iterations (50% warm-up), and an adaptive
-delta of 0.95 ensured good chain convergence and reduced divergent
-transitions.
-
-**Posterior** **Summaries** represent the central tendency and
-uncertainty around the model parameters through credible intervals
-(CrI).
 
 ```{r}
 #| label: adult_imp1 - Prior, Bayesian model and summary
@@ -1176,6 +1180,15 @@ summary(bayes_fit)            # Bayesian model summary
 -   Individuals identifying as Other/Multi-racial have more than double
     the odds of diabetes, strong evidence.
 
+**Model Estimation (Posterior draws)** - Four Markov Chain Monte Carlo
+(MCMC) chains, each with 2000 iterations (50% warm-up), and an adaptive
+delta of 0.95 ensured good chain convergence and reduced divergent
+transitions.
+
+**Posterior** **Summaries** represent the central tendency and
+uncertainty around the model parameters through credible intervals
+(CrI).
+
 ```{r}
 #| label: Visualization of prior and adult_imp1 (bmi, age)
 #| echo: true
@@ -1214,18 +1227,9 @@ ggplot(prior_draws, aes(x = value, fill = term)) +
 
 
 ```
+## Distribution of prior and posterior
 
-```{r}
-#| label: Assumptions (Bayesian)
-#| echo: true
-
-library(brms)
-
-plot(bayes_fit)   # Posterior distributions
-
-```
-
--   Plot 1: The density plots of standardized BMI and Age (imputed
+(1) Plot 1: The density plots of standardized BMI and Age (imputed
     dataset) (adult_imp1) show
 
     -   approximately normal distributions centered near zero,
@@ -1244,8 +1248,6 @@ plot(bayes_fit)   # Posterior distributions
     strong bias toward positive or negative effects before observing
     data.
 
-### Predictive Checking
-
 ### MCMC Trace Plots (Right Panels)
 
 -   Each Trace Plots shows 4 MCMC chains (different colors) across 1000
@@ -1258,8 +1260,6 @@ plot(bayes_fit)   # Posterior distributions
     plots visually validate posterior convergence and independence.
 -   **MCMC Convergence**: well-mixed chains without trends indicate
     convergence and stable posterior estimates.
-
-### Posterior Distribution Plots (Left Panels)
 
 -   Plots of posterior distributions with high uncertainty, narrow
     distributions indicating precise estimates.
@@ -1351,6 +1351,7 @@ saveRDS(mi_or,     "outputs/mi_OR_table.rds")
 saveRDS(bayes_or,  "outputs/bayes_OR_table.rds")
 ```
 
+
 ```{r}
 #| label: Posterior summary
 #| include: false
@@ -1407,6 +1408,18 @@ bayes_results <- post %>%
   )
 
 bayes_results
+
+```
+
+
+```{r}
+#| label: mcmc posterior (Bayesian)
+#| echo: true
+
+library(brms)
+
+plot(bayes_fit)   # Posterior distributions
+
 ```
 
 ### Posterior Summary
@@ -1424,29 +1437,29 @@ bayes_results
 
 **Posterior Coefficients (on log-odds scale) Interpretation**
 
-#### **Intercept:** `b_Intercept = –2.66 (SD = 0.088, LCL ≈ –2.84)`
+**Intercept:** `b_Intercept = –2.66 (SD = 0.088, LCL ≈ –2.84)`
 
 -   Represents baseline log-odds of diabetes for: **male, NH White,
     average age, average BMI** with \~ **6.5% baseline diabetes
     probability**.
 
-#### **Continuous Predictors:**
+**Continuous Predictors:**
 
-#### **Age (per 1 SD):** `b_age_c = 1.094 (SD = 0.062, LCL ≈ 0.97)`
+**Age (per 1 SD):** `b_age_c = 1.094 (SD = 0.062, LCL ≈ 0.97)`
 
 -   Very strong positive effect.
 -   Interpreting as odds ratio: **OR ≈ exp(1.094) ≈ 2.99** A 1-SD
     increase in age almost **triples** the odds of diabetes.
 -   95% credible interval excludes 0 → strong evidence of association.
 
-#### **BMI (per 1 SD):** `b_bmi_c = 0.627 (SD = 0.048, LCL ≈ 0.53)`
+**BMI (per 1 SD):** `b_bmi_c = 0.627 (SD = 0.048, LCL ≈ 0.53)`
 
 -   Also strong positive effect.
 -   **OR ≈ exp(0.627) ≈ 1.87**
 -   A 1-SD BMI increase raises the odds of diabetes by **\~87%**.
 -   Very tight credible interval → high certainty.
 
-#### **Sex (Female)** `b_sexFemale = –0.659 (SD = 0.102, LCL ≈ –0.859)`
+**Sex (Female)** `b_sexFemale = –0.659 (SD = 0.102, LCL ≈ –0.859)`
 
 -   Women have **lower odds of diabetes** than men **(Reference =
     Male)**
@@ -1454,28 +1467,28 @@ bayes_results
 -   Females have **\~48% lower odds** compared with males, holding age,
     BMI, race constant.
 
-#### **Race**
+**Race**
 
-#### **Mexican American:** `b_raceMexicanAmerican = 0.692 (SD = 0.177, LCL ≈ 0.347)`
+**Mexican American:** `b_raceMexicanAmerican = 0.692 (SD = 0.177, LCL ≈ 0.347)`
 
 -   Increased odds of diabetes.
 -   **OR ≈ exp(0.692) ≈ 1.99**
 -   Nearly **double** the odds compared to NH Whites.
 
-#### **Other Hispanic:** `b_raceOtherHispanic = 0.431 (SD = 0.244, LCL ≈ –0.072)`
+**Other Hispanic:** `b_raceOtherHispanic = 0.431 (SD = 0.244, LCL ≈ –0.072)`
 
 -   Positive mean, but lower bound crosses 0.
 -   **OR ≈ exp(0.431) ≈ 1.54**
 -   Evidence is **weaker** that "Other Hispanic" have higher odds than
     NH Whites.
 
-#### **NH Black:** `b_raceNHBlack = 0.538 (SD = 0.147, LCL ≈ 0.243)`
+**NH Black:** `b_raceNHBlack = 0.538 (SD = 0.147, LCL ≈ 0.243)`
 
 -   Strong positive association.
 -   **OR ≈ exp(0.538) ≈ 1.71**
 -   NH Black individuals have **\~70% higher odds** vs NH Whites.
 
-#### **Other / Multiracial:** `b_raceOtherDMulti = 0.819 (SD = 0.189, LCL ≈ 0.445)`
+**Other / Multiracial:** `b_raceOtherDMulti = 0.819 (SD = 0.189, LCL ≈ 0.445)`
 
 -   Strong evidence of increased risk.
 
@@ -1483,7 +1496,7 @@ bayes_results
 
 -   Over **twice the odds** compared to NH Whites
 
-    Interpretation:
+**Interpretation**
 
     -   Age and BMI showed positive associations
     -   BMI showed a negative association in most draws, with posterior
@@ -1509,6 +1522,12 @@ pp_samples <- posterior_predict(bayes_fit, ndraws = 500)  # 500 draws
 dim(pp_samples)  # rows = draws, cols = observations
 
 ```
+### Predictive Checking
+
+We generates predicted outcomes for each observation using samples from the posterior distribution of the model parameters with ndraws = 500, samling 500 draws from the posterior to simulate predicted data to compare these simulated outcomes with the actual observed data to see if the model can reasonably reproduce the patterns in the data
+
+-   Predicted outcomes: binary outcome with 0 or 1 simulated 
+-   Presented below are the rows (500) and columns = number of observations (5592)
 
 ## Posterior Predictive Checks (PPC)
 
@@ -1518,14 +1537,8 @@ ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:500, ])
 
 ```
 
--   A total of 500 posterior predictive sample draws generated 5,592
-    observations, producing a simulated distribution of predicted
-    outcomes to assess how the model reproduces observed data and
-    validate model fit, visualizations below compares the predicted and
-    observed data
-    -   ppc_bars() plot compared the observed diabetes outcomes with 500
-        replicated datasets drawn from the posterior distribution.
-    -   Density overlays for both mean and SD. There was no large
+-   ppc_bars() plot compared the observed diabetes outcomes
+-   Density overlays for both mean and SD. There was no large
         discrepancies indicating potential misfit and good alignment
         suggesting reliable predictions.
 -   Model’s predictions align with reality where mean(y_rep) = average
@@ -1591,18 +1604,11 @@ the observed outcomes**, across individuals and checks model calibration
 Logistic regression fit at person-level.
 
 -   **Each point = one observation** (an individual).
-
 -   **x-axis = observed value** (`0` or `1` in your binary diabetes
     variable).
-
-<!-- -->
-
--   **y-axis = average predicted posterior probability** for that same
-    individual across simulated datasets.
-
+-   **y-axis = average predicted posterior probability** for that same individual across simulated datasets.
 -   Points near (0, 0) or (1, 1) → good prediction.
 
--   Points between → the model is uncertain or mispredicting.
 
 ```{r}
 #| label: mcmc areas (post vs obs)
@@ -1680,7 +1686,6 @@ ggplot(data = NULL, aes(x = observed$bmi, y = predicted[, "Estimate"])) +
   xlab("Observed bmi") + ylab("Predicted bmi")
 
 ```
-
 ### Observed vs. Predicted BMI
 
 A comparison of observed BMI values and osterior predicted estimates
