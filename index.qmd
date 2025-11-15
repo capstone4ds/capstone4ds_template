@@ -2228,12 +2228,49 @@ variability.
 ### Comparison of Odds Ratios Across Models
 
 ```{r}
-kable(
-  res_wide,
-  align = c("l","c","c"),
-  caption = "Odds ratios (per 1 SD) with 95% CIs across models"
-)
+# Combine results from remaining models (Survey-weighted and Bayesian)
+svy_tbl <- if (exists("svy_or") && nrow(svy_or) > 0)
+  mutate(svy_or, Model = "Survey-weighted (MLE)") else NULL
+
+bayes_tbl <- if (exists("bayes_or") && nrow(bayes_or) > 0)
+  mutate(bayes_or, Model = "Bayesian") %>%
+  filter(term != "Intercept") else NULL
+
+# Long format
+all_tbl <- bind_rows(Filter(Negate(is.null), list(svy_tbl, bayes_tbl))) %>%
+  mutate(
+    term = case_when(
+      grepl("bmi", term, ignore.case = TRUE) ~ "BMI (per 1 SD)",
+      grepl("age", term, ignore.case = TRUE) ~ "Age (per 1 SD)",
+      grepl("^sexFemale$", term)             ~ "Female (vs. Male)",
+      grepl("^sexMale$", term)               ~ "Male (vs. Female)",
+      grepl("^raceHispanic$", term)          ~ "Hispanic (vs. White)",
+      grepl("^raceBlack$", term)             ~ "Black (vs. White)",
+      grepl("^raceOther$", term)             ~ "Other (vs. White)",
+      TRUE ~ term
+    ),
+    OR_CI = sprintf("%.2f (%.2f – %.2f)", OR, LCL, UCL)
+  ) %>%
+  select(Model, term, OR_CI)
+
+# ➜ WIDE TABLE: Predictors as rows, Models as columns
+vertical_tbl <- all_tbl %>%
+  pivot_wider(
+    names_from = Model,
+    values_from = OR_CI
+  ) %>%
+  arrange(term)
+
+# Print as nice table
+kable(vertical_tbl,
+      align = "lcc",
+      caption = "Odds Ratios (95% CI) Across Models")
+
+
+
+
 ```
+
 
 # Conclusion
 
@@ -2684,48 +2721,5 @@ ggplot(data.frame(prev = post_prev), aes(x = prev)) +
     estimates.\
     → This indicates **strong model calibration and external validity**.
 
-```{r}
-
-# Combine results from remaining models (Survey-weighted and Bayesian)
-svy_tbl <- if (exists("svy_or") && nrow(svy_or) > 0)
-  mutate(svy_or, Model = "Survey-weighted (MLE)") else NULL
-
-bayes_tbl <- if (exists("bayes_or") && nrow(bayes_or) > 0)
-  mutate(bayes_or, Model = "Bayesian") %>%
-  filter(term != "Intercept") else NULL
-
-# Long format
-all_tbl <- bind_rows(Filter(Negate(is.null), list(svy_tbl, bayes_tbl))) %>%
-  mutate(
-    term = case_when(
-      grepl("bmi", term, ignore.case = TRUE) ~ "BMI (per 1 SD)",
-      grepl("age", term, ignore.case = TRUE) ~ "Age (per 1 SD)",
-      grepl("^sexFemale$", term)             ~ "Female (vs. Male)",
-      grepl("^sexMale$", term)               ~ "Male (vs. Female)",
-      grepl("^raceHispanic$", term)          ~ "Hispanic (vs. White)",
-      grepl("^raceBlack$", term)             ~ "Black (vs. White)",
-      grepl("^raceOther$", term)             ~ "Other (vs. White)",
-      TRUE ~ term
-    ),
-    OR_CI = sprintf("%.2f (%.2f – %.2f)", OR, LCL, UCL)
-  ) %>%
-  select(Model, term, OR_CI)
-
-# ➜ WIDE TABLE: Predictors as rows, Models as columns
-vertical_tbl <- all_tbl %>%
-  pivot_wider(
-    names_from = Model,
-    values_from = OR_CI
-  ) %>%
-  arrange(term)
-
-# Print as nice table
-kable(vertical_tbl,
-      align = "lcc",
-      caption = "Odds Ratios (95% CI) Across Models")
-
-
-
-```
 
 # References
