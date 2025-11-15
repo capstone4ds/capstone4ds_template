@@ -2374,8 +2374,9 @@ Translational Research Implications:
 -   Vary modifiable predictors (BMI) until the model predicts the
     desired probability.
 
-#Validation 
-##Internal validation
+# Validation 
+
+## Internal validation
 
 -   To illustrate personalized risk estimation using the Bayesian model,
     we computed the posterior predicted probability of diabetes for a
