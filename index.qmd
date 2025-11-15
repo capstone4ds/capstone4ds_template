@@ -2036,16 +2036,14 @@ mcmc_acf(post_array, pars = c("b_age_c", "b_bmi_c"))
 
 ## Model Assumptions for Bayesian Logistic Regression
 
-### Comparison of Odds Ratios Across Models
-
-1.  Data & Observations\*\*
+1.  Data & Observations
 
 -   The outcome is **binary** (0/1).
 -   Observations are **independent**, conditional on predictors.
 -   Predictors are measured without structural errors (no deterministic
     misclassification).
 
-2.  Model Structure\*\*
+2.  Model Structure
 
 -   The relationship between predictors and the log-odds of the outcome
     is **linear in the logit scale**
@@ -2053,14 +2051,14 @@ mcmc_acf(post_array, pars = c("b_age_c", "b_bmi_c"))
 -   No **complete or quasi-complete separation**, which would create
     infinite log-odds estimates.
 
-3.  Priors\*\*
+3.  Priors
 
 -   Priors are **proper** (integrate to 1)
 -   Priors are **informative enough** to regularize
     estimation—especially important for logistic models with sparse
     data.
 
-4.  Posterior Behavior\*\*
+4.  Posterior Behavior
 
 -   Posterior distribution is **proper** (i.e., well-defined).
 
@@ -2074,7 +2072,7 @@ mcmc_acf(post_array, pars = c("b_age_c", "b_bmi_c"))
 
     -   Trace plots show good mixing
 
-5.  Model Fit\*\*
+5.  Model Fit
 
 -   Posterior predictive checks show that the model can **reasonably
     reproduce** key features of the observed data.
@@ -2183,6 +2181,17 @@ the variability in diabetes status, with credible uncertainty bounds
 suggesting reasonable but modest explanatory power. - but other factors
 (e.g., genetics, lifestyle, environment) also contribute to outcome
 variability.
+
+### Comparison of Odds Ratios Across Models
+
+```{r}
+kable(
+  res_wide,
+  align = c("l","c","c"),
+  caption = "Odds ratios (per 1 SD) with 95% CIs across models"
+)
+```
+
 
 # Conclusion
 
