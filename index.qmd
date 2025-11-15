@@ -464,7 +464,7 @@ kable(var_descriptions, caption = "Variable Descriptions: Adult Dataset") %>%
 **TABLE**
 
 | Step | Description- recoding, categorization, missing data and final data |
-|----|----|
+|------------------------------------|------------------------------------|
 | **Weighting** | Used the `survey` package to calculate weighted means and standard deviations for all variables. |
 | **Standardization** | Standardized BMI and age variables for analysis. |
 | **Age Categorization** | Recoded into intervals: 20–\<30, 30–\<40, 40–\<50, 50–\<60, 60–\<70, and 70–80 years. |
@@ -2341,7 +2341,7 @@ population-level prevalence.
     clinical decision-making. External validation in independent cohorts
     is needed before application.
 
-### Targeted Therapy
+# Targeted Therapy
 
 -   Translational Perspective from the Bayesian Diabetes Prediction
     Project. This project further demonstrates the translational
@@ -2374,7 +2374,8 @@ Translational Research Implications:
 -   Vary modifiable predictors (BMI) until the model predicts the
     desired probability.
 
-### Internal validation
+#Validation 
+##Internal validation
 
 -   To illustrate personalized risk estimation using the Bayesian model,
     we computed the posterior predicted probability of diabetes for a
@@ -2461,7 +2462,7 @@ ggplot(post_pred_df2, aes(x = pred)) +
 
 ```
 
-### External validation
+## External validation
 
 -   Predicting Diabetes Risk for a New Participant to demonstrate the
     application of the Bayesian model for personalized prediction, we
@@ -2526,7 +2527,7 @@ ggplot(post_pred_df_new, aes(x = pred)) +
 
 ```
 
-### Estimate Targeted BMI for Predicted Diabetes Risk
+ ## Trageted BMI Estimation for Predicted Diabetes Risk
 
 -   To analyze the relationship between BMI and the predicted
     probability of diabetes, holding other covariates (age, sex, race)
@@ -2564,7 +2565,7 @@ ggplot(post_pred_df_new, aes(x = pred)) +
         informing precision prevention strategies based on modifiable
         risk factors like BMI.
 
-### Practical Implications
+**Practical Implications**
 
 -   age and BMI as robust and independent predictors of diabetes,
     underscore the importance of early targeted interventions in
