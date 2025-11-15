@@ -66,9 +66,9 @@ execute:
 ::: panel-tabset
 ### Bayes’ theorem
 
-**Bayes’ theorem** is based on conditional probability.
+**Bayes’ theorm** is based on conditional probability.
 
-### 🧠 Bayesian Inference
+### Bayesian Inference
 
 Bayesian inference estimates the **posterior probability** of a parameter:
 
@@ -84,28 +84,89 @@ where:
 -   ( P(D) ): Marginal likelihood (normalizing constant)
 :::
 
-::: panel-tabset
+------------------------------------------------------------------------
+
+**Bayesian regression and Coefficient estimation**
+
+-   Logistic link function used for binary outcomes.
+-   logit (𝑃(𝑌=1))=𝛽0+𝛽1age 𝑐 + 𝛽 2 bmi 𝑐 + 𝛽 3 sex + 𝛽 4 race
+-   Intercept prior: student_t(3, 0, 10) — heavy tails for flexibility (Van de Schoot et al., 2013).
+-   Regression coefficients prior: normal(0, 2.5) — weakly informative, constraining extreme values (Van de Schoot et al., 2021).
 
 ------------------------------------------------------------------------
 
-Coefficients estimated using posterior means and 95% credible intervals.
+### Data Source
 
-Logistic link function used for binary outcomes.
+::: panel-tabset
+### Data
 
-logit (𝑃(𝑌=1))=𝛽0+𝛽1age 𝑐 + 𝛽 2 bmi 𝑐 + 𝛽 3 sex + 𝛽 4 race
+National Health and Nutrition Examination Survey (NHANES) 2013–2014\
+**Design:** Complex multistage probability sampling; survey weights applied. **Response Variable** - **diabetes_dx (binary)**\
+- Based on **DIQ010**: “Has a doctor told you that you have diabetes?”\
+- Excluded **DIQ050 (insulin use)** to avoid clinical confounding. **Predictor Variables** - **RIDAGEYR — Age (continuous)** - adults 20–80 years (per 1 SD)\
+- **BMXBMI — Body Mass Index (continuous)** 1 SD increase\
+- **RIAGENDR — Sex (factor)**\
+- **RIDRETH1 — Race/Ethnicity (factor)**\
+- *Mexican American*, *Other Hispanic*, *Non-Hispanic White*,\
+*Non-Hispanic Black*, *Other/Multi-racial*
 
-Intercept prior: student_t(3, 0, 10) — heavy tails for flexibility (Van de Schoot et al., 2013).
+### Data view
 
-Regression coefficients prior: normal(0, 2.5) — weakly informative, constraining extreme values (Van de Schoot et al., 2021).
+![](images/clipboard-3274096863.png){width="795"}
 :::
+
+------------------------------------------------------------------------
+
+### Missing data analysis {.panel-tabset}
+
+::: panel-tabset
+### Plot
+
+![](images/clipboard-2873800077.png){width="427"}
+
+### Abnormalities:
+
+-   Missing Data Assessment - Overall missingness ≈ 4%
+-   No variable is completely missing
+-   Missingness likely MAR (Missing At Random)
+-   Clustered mainly in BMI (4.3%) and diabetes_dx (3.1%).
+:::
+
+------------------------------------------------------------------------
+
+### Multiple Imputation by Chained Equations (MICE)
+
+:::: nonincremental
+*van Buuren & Groothuis-Oudshoorn, 2011; van Buuren, 2012*
+
+Bayesian models assume complete data. **Multivariate Imputation by Chained Equations (MICE)** provides multiple realistic versions of missing data. Pooling across posterior distributions yields the correct full posterior:
+
+Posterior (parameters + missing data uncertainty)
+
+::: panel-tabset
+### MICE
+
+-   Iteratively imputes incomplete variables using regression models.
+-   PMM for continuous; logistic regression for binary variables.
+-   MICE procedure ran 5 iterations for each of the 5 imputed datasets to ensure stability and convergence.
+-   Estimates pooled using Rubin’s rules.
+
+### Fit logistic regression model
+
+``` r
+fit_mi <- with(data = imp, exp = glm(diabetes_dx ~ age_c + bmi_c + sex + race, family = binomial()))
+pool_mi <- pool(fit_mi)
+```
+:::
+::::
 
 ------------------------------------------------------------------------
 
 **Bayesian Logistic Regression**
 
-In **R** using brms **(Stan backend)**
+A Bayesian logistic regression model was then fitted to each imputed dataset in **R** using brms **(Stan backend)**, 2000 itirations
 
-Posterior draws = 4000 (4 chains × 1000 iterations).
+-   Prior: **normal(0, 2.5)** for coefficients **student_t(3, 0, 10)** for Intercept
 
 ``` r
 library(gt)
@@ -133,76 +194,16 @@ bayes_fit <- brm(
 -   The Gibbs sampler produces a sequence of random vectors ![](images/clipboard-1640325740.png){width="90" height="35"}. Each one depends on the past only through the most recent one. It's a Markov process. The samples are not just random but are drawn in a way that the long-term distribution of the samples matches the target posterior distribution.
 -   It uses a burn in period. The random vectors are sequentially dependent. Retain one parameter vector every n iterations, and discard the rest.
 
-
 ------------------------------------------------------------------------
 
 ### Posterior distribution
 
--  The distribution of after seeing the data. 
--  The posterior is the conditional distribution of the parameter given the data 
--  Subjectivity is present when it is based on the prior distribution which influences the conclusions. 
--  The influence of the prior goes to zero as the sample size increases.
+Posterior draws = 4000 (4 chains × 1000 iterations) for posterior predeictive checks for -
 
-------------------------------------------------------------------------
-
-### Data Source
-
-### **NHANES 2013–2014 (Survey weighted)**
-
-::::::: panel-tabset
-### Exploratory data analysis
-
-Response Variable: diabetes_dx (binary) : Type 2 diabetes diagnosis DIQ010 (“Doctor told you have diabetes”), excluding DIQ050 (insulin use) to prevent confounding.
-
-Predictor Variables:BMXBMI – Body Mass Index (kg/m\^2): continuous with six levels (bmi_cat). RIDAGEYR: Age (continuous, 20–80 years) RIAGENDR: Sex (factor, two levels) RIDRETH1 – Ethnicity (factor, five levels)
-
-![](images/clipboard-3274096863.png){width="795"}
-
-------------------------------------------------------------------------
-
-### Missing data analysis {.panel-tabset}
-
-:::::: columns
-::: column
-Plot
-
-![](images/clipboard-2873800077.png){width="427"}
-:::
-
-:::: column
-::: nonincremental
-Abnormalities:
-
--   Missing Data Assessment - Overall missingness ≈ 4%
--   No variable is completely missing
--   Missingness likely MAR (Missing At Random)
--   Clustered mainly in BMI (4.3%) and diabetes_dx (3.1%).
-:::
-::::
-::::::
-:::::::
-
-------------------------------------------------------------------------
-
-### Multiple Imputation by Chained Equations (MICE)
-
-::: nonincremental
-Handling Missing Data *(van Buuren & Groothuis-Oudshoorn, 2011; van Buuren, 2012*)
-
-**Fit logistic regression model**
-
-MICE performed on imputed datasets and pool estimates:
-
-``` r
-fit_mi <- with(data = imp, exp = glm(diabetes_dx ~ age_c + bmi_c + sex + race, family = binomial()))
-pool_mi <- pool(fit_mi)
-```
-
--   Iteratively imputes incomplete variables using regression models.
--   PMM for continuous; logistic regression for binary variables.
--   5 imputations × 10 iterations ensure stability and convergence.
--   Estimates pooled using Rubin’s rules.
-:::
+-   The distribution of predictors after seeing the data.
+-   The posterior is the conditional distribution of the parameter given the data
+-   Subjectivity is present when it is based on the prior distribution which influences the conclusions.
+-   The influence of the prior goes to zero as the sample size increases.
 
 ------------------------------------------------------------------------
 
@@ -231,8 +232,8 @@ pool_mi <- pool(fit_mi)
 
 ### Posterior Predictive Distribution
 
-::::: panel-tabset
-### code
+::: panel-tabset
+### Code
 
 ``` r
 library(ggplot2)
@@ -251,51 +252,34 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
 
 ### Plot
 
-![](images/clipboard-1978292710.png){width="466"}
+Prior vs Posterior Distributions ![](images/clipboard-1978292710.png){width="466"}
 
 ### Interpretation
 
-:::: nonincremental
 -   Strong positive relationship between age, BMI, and diabetes probability.
 
 -   **Posterior predictive checks** confirm good model fit.
 
 -   Imputation reduced bias and improved robustness.
 
-::: nonincremental
+### R Square
+
 ```         
 Model fit: bayes_R2(bayes_fit)
 ```
-:::
 
 ```         
-        Estimate        Est.Error       Q2.5        Q97.5 
-        R2 0.1313342    0.01265055    0.1064607     0.156078
+    Estimate        Est.Error       Q2.5        Q97.5 
+    R2 0.1313342    0.01265055    0.1064607     0.156078
 ```
-::::
-:::::
-
-------------------------------------------------------------------------
-
-### Assumptions for Bayesian Logistic Regression
-
-::: nonincremental
--   Data Binary outcome
--   independent observations
--   Relationship Linear in logit
--   no perfect collinearity
--   Priors Properly chosen: informative enough
--   Posterior Proper and convergent Fit
--   No complete separation
--   good predictive checks
 :::
 
 ------------------------------------------------------------------------
+
+**Posterior pairwise correlation plot**
 
 ::: panel-tabset
 ### Code
-
-Posterior pairwise correlation plot
 
 ``` r
 
@@ -328,19 +312,49 @@ The absence of strong linear relationships among parameters suggests that age, B
 
 ------------------------------------------------------------------------
 
+### Model Check: Comparison of Odds Ratios Across Models
+
+![](images/clipboard-329828759.png){width="363"}
+
+-   Age and BMI are consistently strong risk factors for diabetes in this population.
+-   The Bayesian model complements frequentist approaches by providing stable, interpretable, and uncertainty-quantified estimates, while broadly reproducing population-level prevalence.
+
+------------------------------------------------------------------------
+
+### Assumptions for Bayesian Logistic Regression
+
+::: nonincremental
+-   Data Binary outcome
+-   Independent observations
+-   Relationship Linear in logit
+-   No perfect collinearity
+-   Priors Properly chosen: informative enough
+-   Posterior Proper and convergent Fit
+-   No complete separation
+-   Good predictive checks
+:::
+
+----------------------------------------------
+
 ### Limitations
 
-:::: nonincremental
-::: nonincremental
--   NHANES is cross-sectional → cannot infer causality
+::::: nonincremental
+-   **Cross-sectional** NHANES design limits causal inference.
 
--   Role of Potential unmeasured confounding factors (diet, activity)
+-   Multiple **imputation** assumes MAR; MNAR may bias results.
 
--   Limited predictors simplify model structure
+-   Residual **confounding** from unmeasured factors (diet, activity, SES, genetics).
 
--   Imputation assumes MAR → violation may bias estimates
-:::
-::::
+-   Bayesian estimates may be influenced by **prior choices**.
+
+-   **BMI measured once**; may not capture long-term exposure.
+
+-   **Self-reported** variables may introduce recall/reporting bias.
+
+-   **Interaction effects** (e.g., age × BMI) not tested.
+
+:::::
+
 
 ------------------------------------------------------------------------
 
@@ -358,30 +372,24 @@ Framework adaptable to other outcomes (e.g., hypertension, obesity).
 
 ### References
 
-::: nonincremental
 van Buuren, S. & Groothuis-Oudshoorn, K. (2011). MICE: Multivariate Imputation by Chained Equations in R.
 
--   Gelman, A. & Hill, J. (2007). Data Analysis Using Regression and Multilevel/Hierarchical Models.
+Gelman, A. & Hill, J. (2007). Data Analysis Using Regression and Multilevel/Hierarchical Models.
 
--   McElreath, R. (2020). Statistical Rethinking: A Bayesian Course with Examples in R and Stan.
+McElreath, R. (2020). Statistical Rethinking: A Bayesian Course with Examples in R and Stan.
 
--   NHANES Data Documentation (CDC).
+NHANES Data Documentation (CDC).
 
--   Van de Schoot, R. et al. (2013, 2021). Weakly Informative Priors in Bayesian Regression.
-:::
+Van de Schoot, R. et al. (2013, 2021). Weakly Informative Priors in Bayesian Regression.
 
 ------------------------------------------------------------------------
 
-:::: panel-tabset
 ### **Thank You**
 
-### Dr. Ashraf Cohen, PhD, MS
+**Dr. Ashraf Cohen, PhD, MS**
 
-::: nonincremental
 -   University of West Florida
 -   Department of Mathematics and Statistics
--   Thanks for the guidance
-:::
 
 ------------------------------------------------------------------------
-::::
+

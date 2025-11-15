@@ -464,7 +464,7 @@ kable(var_descriptions, caption = "Variable Descriptions: Adult Dataset") %>%
 **TABLE**
 
 | Step | Description- recoding, categorization, missing data and final data |
-|------------------------------------|------------------------------------|
+|----|----|
 | **Weighting** | Used the `survey` package to calculate weighted means and standard deviations for all variables. |
 | **Standardization** | Standardized BMI and age variables for analysis. |
 | **Age Categorization** | Recoded into intervals: 20–\<30, 30–\<40, 40–\<50, 50–\<60, 60–\<70, and 70–80 years. |
@@ -784,7 +784,29 @@ diabetes_dx:
 
 -   Bayesian logistic regression with weakly informative priors
 
-## (1) Survey-weighted logistic regression and complete-case analysis
+## Survey-Weighted Logistic Regression (Complete-Case Analysis)
+
+-   We conducted a **complete-case survey-weighted logistic regression**
+    to estimate the association between age, BMI, sex, and race with
+    diabetes status.
+-   All analyses accounted for the **NHANES complex sampling design**,
+    including sampling weights, primary sampling units (PSUs), and
+    strata with the sufficiency of outcome data and categorical
+    predictors (sex and race) retained at least two observed levels
+    among participants with non-missing diabetes outcomes.
+-   For a complete-case indicator to retain only participants with
+    **non-missing values** on the outcome and all model predictors (age,
+    BMI, sex, and race).
+-   Complete-case dataset to fit a survey-weighted logistic regression
+    model:
+
+**diabetes_dx∼age_c + bmi_c + sex + race**
+
+-   The model was estimated using svyglm() with a **quasibinomial
+    family** to accommodate the binary outcome under the NHANES design.
+-   This generated design-adjusted coefficient estimates, standard
+    errors, and odds ratios reflecting population-representative
+    associations for U.S. adults.
 
 ```{r}
 #| label: Modeling-Survey-weighted complete-case
@@ -837,37 +859,6 @@ summary(svy_fit)
 
 ```
 
-**Results**
-
-Strongest predictors: Age and BMI show the largest ORs among continuous
-variables—both strongly linked to diabetes risk.
-
--   Protective factor: Being female reduces the odds of diabetes.
--   Race disparities: All racial/ethnic minority groups show
-    significantly higher odds compared to Non-Hispanic Whites,
-    consistent with known health disparities in diabetes prevalence.
--   Significance: All p-values \< 0.05, so all predictors are
-    statistically significant.
--   Baseline log-odds of diabetes = -2.69
--   For each 1 SD increase in age, the log-odds of diabetes increase by
-    1.07 → odds increase by exp(1.07) = 2.9× (≈3× higher odds).
--   For each 1 SD increase in BMI, odds of diabetes increase by
-    exp(0.55) = 1.73× (≈73% higher).
--   Females have exp(-0.62) = 0.54× the odds of diabetes compared to
-    males → about 46% lower odds.
--   Mexican Americans have exp(0.89) = 2.43× higher odds of diabetes vs.
-    Non-Hispanic Whites. Other Hispanics have exp(0.56) = 1.75× higher
-    odds Non-Hispanic Blacks have exp(0.68) = 1.97× higher odds. Those
-    identifying as “Other/Multi-racial” have exp(0.75) = 2.12× higher
-    odds of diabetes.
-
-**Interpretation** - Age and BMI are strong positive predictors of
-diabetes - Females show significantly lower odds compared to males. -
-All non-White racial groups have significantly higher odds of diabetes,
-highlighting persistent disparities in diabetes risk. - All predictors
-are statistically significant (p \< 0.01), suggesting a robust
-association across demographic and health variables.
-
 ```{r}
 #| label: Survey weighted data results
 #| echo: true
@@ -880,7 +871,54 @@ knitr::kable(svy_or, caption = "Survey-weighted odds ratios (per 1 SD)")
 
 ```
 
-### Multivariate Imputation by Chained Equations (Pooled Logistic Regression)
+**Interpretation**
+
+-   Age (age_c) Estimate: 1.10833 (p \< 0.0001) For each 1 SD increase
+    in age (if centered & scaled):The log-odds of diabetes increase by
+    1.108.The odds increase by exp(1.108) ≈ 3.03.
+-   Older adults have \~3 times higher odds of diabetes per unit
+    increase in age_c. BMI (bmi_c): Estimate: 0.63412 (p \< 0.0001) For
+    each 1-unit increase in centered BMI:Odds of diabetes increase by
+    exp(0.634) ≈ 1.88.
+-   Sex (reference = Male): sexFemale
+-   Estimate: –0.63844 (p \< 0.001) Females have:Lower log-odds of
+    diabetes than males.Odds ratio = exp(–0.638) ≈ 0.53. Females have
+    about 47% lower odds of diabetes compared to males, after adjusting
+    for age, BMI, and race.
+-   Race (reference = Non-Hispanic White) Mexican American Estimate:
+    0.71091 OR = exp(0.711) ≈ 2.04 About 2× higher odds of diabetes
+    compared to NH Whites.
+-   Other Hispanic Estimate: 0.46469 OR = exp(0.465) ≈ 1.59 \~59% higher
+    odds compared to NH Whites.
+-   Non-Hispanic Black Estimate: 0.51221 OR = exp(0.512) ≈ 1.67 \~67%
+    higher odds compared to NH Whites.
+-   Other/Multi-racial Estimate: 0.84460 OR = exp(0.845) ≈ 2.33 More
+    than twice the odds compared to NH Whites.
+
+Overall Conclusion
+
+-   Age and BMI are very strong predictors of diabetes. Females are
+    significantly less likely to have diabetes than males. Several
+    racial/ethnic groups (Mexican American, NH Black, Other/Multi) have
+    significantly higher odds than Non-Hispanic Whites.
+
+-   All associations remain after adjusting for other variables.
+
+## Bayesian Logistic Regression
+
+Bayesian models assume complete data. **Multivariate Imputation by
+Chained Equations (MICE)** provides multiple realistic versions of
+missing data. Pooling across posterior distributions yields the correct
+full posterior:
+
+Posterior (parameters + missing data uncertainty)
+
+#### Multivariate Imputation by Chained Equations (Pooled Logistic Regression)
+
+Multiple Imputation (MICE) was applied to impute missing predictors
+using robust chained‐equation models. Five multiply imputed datasets
+were created, each representing a plausible version of the complete
+data.
 
 -   MICE @JSSv045i03, manages missiging data
 -   Flatness of the density, heavy tails, non-zero peakedness, skewness
@@ -926,7 +964,7 @@ imp <- mice::mice(mi_dat, m = 5, method = meth, predictorMatrix = pred, seed = 1
 
 ```
 
-Imputation performed on the survey weighted adult data (obs = 5769)
+Imputation was performed on the survey weighted adult data (obs = 5769)
 
 -   BMI was imputed using PMM
 -   m = 5 multiply imputed datasets
@@ -1079,23 +1117,29 @@ Study population across the three datasets
 -   Rows: 5,769 and Columns: 12 (filtered Adult data)
 -   Rows: 5,592 and Columns: 11 (imputed data, adult_imp1)
 
-## (2) Bayesian Logistic Regression
+#### Bayesian Logistic Regression:
 
--   A Bayesian logistic regression model fitted on the first pooled
-    imputed dataset (adult_imp1)
+A Bayesian logistic regression model was then fitted to each imputed
+dataset
+
 -   with survey weights-Normalized MEC exam weights (wt_norm) and mean
     1.00 (SD 0.79)
 -   with no missing values
 -   with continuous variables standardized
--   categorical variables re-leveled for reference categories
+-   categorical variables re-leveled for reference categoriesand
+    posterior samples were combined across imputations.
+
+Posterior (parameters + missing data uncertainty)
+
+This procedure appropriately propagates uncertainty from both sampling
+variability and missing data, producing valid Bayesian posterior
+estimates.
 
 Prior Specification
 
 -   Intercept prior: student_t(3, 0, 10) — allowing heavy tails for
     flexibility in the intercept estimate @VanDeSchoot2013
-
 -   Regression coefficients prior: normal(0, 2.5)
-
 -   Weakly informative regularization provide gentle regularization,
     constraining extreme values without overpowering the data
     @VandeSchoot2021
@@ -1104,20 +1148,12 @@ Prior Specification
 
 **diabetes_dx \| weights(wt_norm) \~ age_c + bmi_c + sex + race**
 
-Family: bernoulli Links:
-
-mu = logit
-
-Data: adult_imp1 (Number of observations: 5592)
-
-Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1; total
-post-warmup draws = 4000
-
-Draws were sampled using sampling(NUTS).
-
-For each parameter, Bulk_ESS and Tail_ESS are effective sample size
-measures, and Rhat is the potential scale reduction factor on split
-chains (at convergence, Rhat = 1).
+Family: bernoulli Links:mu = logit Data: adult_imp1 (Number of
+observations: 5592) Draws: 4 chains, each with iter = 2000; warmup =
+1000; thin = 1; total post-warmup draws = 4000 Draws were sampled using
+sampling(NUTS). For each parameter, Bulk_ESS and Tail_ESS are effective
+sample size measures, and Rhat is the potential scale reduction factor
+on split chains (at convergence, Rhat = 1).
 
 ```{r}
 #| label: adult_imp1 - Prior, Bayesian model and summary
@@ -1153,21 +1189,28 @@ summary(bayes_fit)            # Bayesian model summary
 -   Four Markov Chain Monte Carlo (MCMC) chains, each with 2000
     iterations (50% warm-up), and an adaptive delta of 0.95 ensured good
     chain convergence and reduced divergent transitions.
+
 -   Each Trace Plots shows 4 MCMC chains (different colors) across 2000
     iterations
+
 -   The chains mix well and overlap substantially, without visible
     trends or drifts → indicates good convergence.
+
 -   The parameter values oscillate around stable means with no
     systematic pattern → confirms stationarity.
+
 -   Combined with Rhat ≈ 1 and high ESS from your summary, the trace
     plots visually validate posterior convergence and independence.
 
 -   **MCMC Convergence**: well-mixed chains without trends indicate
     convergence and stable posterior estimates.
+
 -   Plots of posterior distributions with high uncertainty, narrow
     distributions indicating precise estimates.
+
 -   All distributions look smooth and unimodal → no multimodality,
     confirming stable posteriors.
+
 -   Each histogram represents the distribution of sampled coefficient
     values after convergence across all MCMC draws
 
@@ -2191,7 +2234,6 @@ kable(
   caption = "Odds ratios (per 1 SD) with 95% CIs across models"
 )
 ```
-
 
 # Conclusion
 

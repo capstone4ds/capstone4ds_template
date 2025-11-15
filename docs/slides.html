@@ -450,10 +450,10 @@ Autumn Wilcox
 
 <h3 id="bayesian-model">Bayesian Model</h3>
 <div class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Bayes’ theorem</a></li><li><a href="#tabset-1-2">🧠 Bayesian Inference</a></li></ul>
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Bayes’ theorem</a></li><li><a href="#tabset-1-2">Bayesian Inference</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1">
-<p><strong>Bayes’ theorem</strong> is based on conditional probability.</p>
+<p><strong>Bayes’ theorm</strong> is based on conditional probability.</p>
 </div>
 <div id="tabset-1-2">
 <p>Bayesian inference estimates the <strong>posterior probability</strong> of a parameter:</p>
@@ -473,33 +473,108 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </div>
 </div>
 </div>
-<div class="panel-tabset">
-<ul id="tabset-2" class="panel-tabset-tabby"></ul>
-<div class="tab-content">
+</section>
+<section class="slide level2">
 
+<p><strong>Bayesian regression and Coefficient estimation</strong></p>
+<ul>
+<li>Logistic link function used for binary outcomes.</li>
+<li>logit (𝑃(𝑌=1))=𝛽0+𝛽1age 𝑐 + 𝛽 2 bmi 𝑐 + 𝛽 3 sex + 𝛽 4 race</li>
+<li>Intercept prior: student_t(3, 0, 10) — heavy tails for flexibility (Van de Schoot et al., 2013).</li>
+<li>Regression coefficients prior: normal(0, 2.5) — weakly informative, constraining extreme values (Van de Schoot et al., 2021).</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="data-source">Data Source</h3>
+<div class="panel-tabset">
+<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Data</a></li><li><a href="#tabset-2-2">Data view</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1">
+<p>National Health and Nutrition Examination Survey (NHANES) 2013–2014<br>
+<strong>Design:</strong> Complex multistage probability sampling; survey weights applied. <strong>Response Variable</strong> - <strong>diabetes_dx (binary)</strong><br>
+- Based on <strong>DIQ010</strong>: “Has a doctor told you that you have diabetes?”<br>
+- Excluded <strong>DIQ050 (insulin use)</strong> to avoid clinical confounding. <strong>Predictor Variables</strong> - <strong>RIDAGEYR — Age (continuous)</strong> - adults 20–80 years (per 1 SD)<br>
+- <strong>BMXBMI — Body Mass Index (continuous)</strong> 1 SD increase<br>
+- <strong>RIAGENDR — Sex (factor)</strong><br>
+- <strong>RIDRETH1 — Race/Ethnicity (factor)</strong><br>
+- <em>Mexican American</em>, <em>Other Hispanic</em>, <em>Non-Hispanic White</em>,<br>
+<em>Non-Hispanic Black</em>, <em>Other/Multi-racial</em></p>
+</div>
+<div id="tabset-2-2">
+<p><img data-src="images/clipboard-3274096863.png" width="795"></p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 class="panel-tabset" id="missing-data-analysis">Missing data analysis</h3>
+<div class="panel-tabset">
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">Plot</a></li><li><a href="#tabset-3-2">Abnormalities:</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1">
+<p><img data-src="images/clipboard-2873800077.png" width="427"></p>
+</div>
+<div id="tabset-3-2">
+<ul>
+<li>Missing Data Assessment - Overall missingness ≈ 4%</li>
+<li>No variable is completely missing</li>
+<li>Missingness likely MAR (Missing At Random)</li>
+<li>Clustered mainly in BMI (4.3%) and diabetes_dx (3.1%).</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="multiple-imputation-by-chained-equations-mice">Multiple Imputation by Chained Equations (MICE)</h3>
+<div>
+<p><em>van Buuren &amp; Groothuis-Oudshoorn, 2011; van Buuren, 2012</em></p>
+<p>Bayesian models assume complete data. <strong>Multivariate Imputation by Chained Equations (MICE)</strong> provides multiple realistic versions of missing data. Pooling across posterior distributions yields the correct full posterior:</p>
+<p>Posterior (parameters + missing data uncertainty)</p>
+<div class="panel-tabset">
+<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">MICE</a></li><li><a href="#tabset-4-2">Fit logistic regression model</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1">
+<ul>
+<li>Iteratively imputes incomplete variables using regression models.</li>
+<li>PMM for continuous; logistic regression for binary variables.</li>
+<li>MICE procedure ran 5 iterations for each of the 5 imputed datasets to ensure stability and convergence.</li>
+<li>Estimates pooled using Rubin’s rules.</li>
+</ul>
+</div>
+<div id="tabset-4-2">
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>fit_mi <span class="ot">&lt;-</span> <span class="fu">with</span>(<span class="at">data =</span> imp, <span class="at">exp =</span> <span class="fu">glm</span>(diabetes_dx <span class="sc">~</span> age_c <span class="sc">+</span> bmi_c <span class="sc">+</span> sex <span class="sc">+</span> race, <span class="at">family =</span> <span class="fu">binomial</span>()))</span>
+<span id="cb1-2"><a></a>pool_mi <span class="ot">&lt;-</span> <span class="fu">pool</span>(fit_mi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
 </div>
 </div>
 </section>
 <section class="slide level2">
 
 <p><strong>Bayesian Logistic Regression</strong></p>
-<p>In <strong>R</strong> using brms <strong>(Stan backend)</strong></p>
-<p>Posterior draws = 4000 (4 chains × 1000 iterations).</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">library</span>(gt)</span>
-<span id="cb1-2"><a></a>priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb1-3"><a></a>  <span class="fu">set_prior</span>(<span class="st">"normal(0, 2.5)"</span>, <span class="at">class =</span> <span class="st">"b"</span>),</span>
-<span id="cb1-4"><a></a>  <span class="fu">set_prior</span>(<span class="st">"student_t(3, 0, 10)"</span>, <span class="at">class =</span> <span class="st">"Intercept"</span>)</span>
-<span id="cb1-5"><a></a>)</span>
-<span id="cb1-6"><a></a></span>
-<span id="cb1-7"><a></a>bayes_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb1-8"><a></a>  <span class="at">formula =</span> diabetes_dx <span class="sc">|</span> <span class="fu">weights</span>(wt_norm) <span class="sc">~</span> age_c <span class="sc">+</span> bmi_c <span class="sc">+</span> sex <span class="sc">+</span> race,</span>
-<span id="cb1-9"><a></a>  <span class="at">data    =</span> adult_imp1,</span>
-<span id="cb1-10"><a></a>  <span class="at">family  =</span> <span class="fu">bernoulli</span>(<span class="at">link =</span> <span class="st">"logit"</span>),</span>
-<span id="cb1-11"><a></a>  <span class="at">prior   =</span> priors,</span>
-<span id="cb1-12"><a></a>  <span class="at">chains  =</span> <span class="dv">4</span>, <span class="at">iter =</span> <span class="dv">2000</span>, <span class="at">seed =</span> <span class="dv">123</span>,</span>
-<span id="cb1-13"><a></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">adapt_delta =</span> <span class="fl">0.95</span>),</span>
-<span id="cb1-14"><a></a>  <span class="at">refresh =</span> <span class="dv">0</span></span>
-<span id="cb1-15"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A Bayesian logistic regression model was then fitted to each imputed dataset in <strong>R</strong> using brms <strong>(Stan backend)</strong>, 2000 itirations</p>
+<ul>
+<li>Prior: <strong>normal(0, 2.5)</strong> for coefficients <strong>student_t(3, 0, 10)</strong> for Intercept</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="fu">library</span>(gt)</span>
+<span id="cb2-2"><a></a>priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb2-3"><a></a>  <span class="fu">set_prior</span>(<span class="st">"normal(0, 2.5)"</span>, <span class="at">class =</span> <span class="st">"b"</span>),</span>
+<span id="cb2-4"><a></a>  <span class="fu">set_prior</span>(<span class="st">"student_t(3, 0, 10)"</span>, <span class="at">class =</span> <span class="st">"Intercept"</span>)</span>
+<span id="cb2-5"><a></a>)</span>
+<span id="cb2-6"><a></a></span>
+<span id="cb2-7"><a></a>bayes_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb2-8"><a></a>  <span class="at">formula =</span> diabetes_dx <span class="sc">|</span> <span class="fu">weights</span>(wt_norm) <span class="sc">~</span> age_c <span class="sc">+</span> bmi_c <span class="sc">+</span> sex <span class="sc">+</span> race,</span>
+<span id="cb2-9"><a></a>  <span class="at">data    =</span> adult_imp1,</span>
+<span id="cb2-10"><a></a>  <span class="at">family  =</span> <span class="fu">bernoulli</span>(<span class="at">link =</span> <span class="st">"logit"</span>),</span>
+<span id="cb2-11"><a></a>  <span class="at">prior   =</span> priors,</span>
+<span id="cb2-12"><a></a>  <span class="at">chains  =</span> <span class="dv">4</span>, <span class="at">iter =</span> <span class="dv">2000</span>, <span class="at">seed =</span> <span class="dv">123</span>,</span>
+<span id="cb2-13"><a></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">adapt_delta =</span> <span class="fl">0.95</span>),</span>
+<span id="cb2-14"><a></a>  <span class="at">refresh =</span> <span class="dv">0</span></span>
+<span id="cb2-15"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section class="slide level2">
 
@@ -513,8 +588,9 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <section class="slide level2">
 
 <h3 id="posterior-distribution">Posterior distribution</h3>
+<p>Posterior draws = 4000 (4 chains × 1000 iterations) for posterior predeictive checks for -</p>
 <ul>
-<li>The distribution of after seeing the data.</li>
+<li>The distribution of predictors after seeing the data.</li>
 <li>The posterior is the conditional distribution of the parameter given the data</li>
 <li>Subjectivity is present when it is based on the prior distribution which influences the conclusions.</li>
 <li>The influence of the prior goes to zero as the sample size increases.</li>
@@ -522,68 +598,18 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </section>
 <section class="slide level2">
 
-<h3 id="data-source">Data Source</h3>
-<h3 id="nhanes-20132014-survey-weighted"><strong>NHANES 2013–2014 (Survey weighted)</strong></h3>
-<div class="panel-tabset">
-<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">Exploratory data analysis</a></li><li><a href="#tabset-3-2">Missing data analysis</a></li></ul>
-<div class="tab-content">
-<div id="tabset-3-1">
-<p>Response Variable: diabetes_dx (binary) : Type 2 diabetes diagnosis DIQ010 (“Doctor told you have diabetes”), excluding DIQ050 (insulin use) to prevent confounding.</p>
-<p>Predictor Variables:BMXBMI – Body Mass Index (kg/m^2): continuous with six levels (bmi_cat). RIDAGEYR: Age (continuous, 20–80 years) RIAGENDR: Sex (factor, two levels) RIDRETH1 – Ethnicity (factor, five levels)</p>
-<p><img data-src="images/clipboard-3274096863.png" width="795"></p>
-<hr>
-</div>
-<div id="tabset-3-2">
-<div class="columns">
-<div class="column">
-<p>Plot</p>
-<p><img data-src="images/clipboard-2873800077.png" width="427"></p>
-</div><div class="column">
-<div>
-<p>Abnormalities:</p>
-<ul>
-<li>Missing Data Assessment - Overall missingness ≈ 4%</li>
-<li>No variable is completely missing</li>
-<li>Missingness likely MAR (Missing At Random)</li>
-<li>Clustered mainly in BMI (4.3%) and diabetes_dx (3.1%).</li>
-</ul>
-</div>
-</div></div>
-</div>
-</div>
-</div>
-</section>
-<section class="slide level2">
-
-<h3 id="multiple-imputation-by-chained-equations-mice">Multiple Imputation by Chained Equations (MICE)</h3>
-<div>
-<p>Handling Missing Data <em>(van Buuren &amp; Groothuis-Oudshoorn, 2011; van Buuren, 2012</em>)</p>
-<p><strong>Fit logistic regression model</strong></p>
-<p>MICE performed on imputed datasets and pool estimates:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>fit_mi <span class="ot">&lt;-</span> <span class="fu">with</span>(<span class="at">data =</span> imp, <span class="at">exp =</span> <span class="fu">glm</span>(diabetes_dx <span class="sc">~</span> age_c <span class="sc">+</span> bmi_c <span class="sc">+</span> sex <span class="sc">+</span> race, <span class="at">family =</span> <span class="fu">binomial</span>()))</span>
-<span id="cb2-2"><a></a>pool_mi <span class="ot">&lt;-</span> <span class="fu">pool</span>(fit_mi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ul>
-<li>Iteratively imputes incomplete variables using regression models.</li>
-<li>PMM for continuous; logistic regression for binary variables.</li>
-<li>5 imputations × 10 iterations ensure stability and convergence.</li>
-<li>Estimates pooled using Rubin’s rules.</li>
-</ul>
-</div>
-</section>
-<section class="slide level2">
-
 <h3 id="bayesian-model-diagnostics">Bayesian Model Diagnostics</h3>
 <div class="panel-tabset">
-<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">MCMC</a></li><li><a href="#tabset-4-2">Posterior Estimates</a></li></ul>
+<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">MCMC</a></li><li><a href="#tabset-5-2">Posterior Estimates</a></li></ul>
 <div class="tab-content">
-<div id="tabset-4-1">
+<div id="tabset-5-1">
 <ul>
 <li>Trace plots indicate convergence (no drift across iterations).</li>
 <li>Rhat ≈ 1 → good chain mixing.</li>
 <li>Effective sample size is adequate across parameters.</li>
 </ul>
 </div>
-<div id="tabset-4-2">
+<div id="tabset-5-2">
 <div>
 <ul>
 <li>Intercept -2.66 [-2.84, -2.50] Baseline log-odds</li>
@@ -602,9 +628,9 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 
 <h3 id="posterior-predictive-distribution">Posterior Predictive Distribution</h3>
 <div class="panel-tabset">
-<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">code</a></li><li><a href="#tabset-5-2">Plot</a></li><li><a href="#tabset-5-3">Interpretation</a></li></ul>
+<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">Code</a></li><li><a href="#tabset-6-2">Plot</a></li><li><a href="#tabset-6-3">Interpretation</a></li><li><a href="#tabset-6-4">R Square</a></li></ul>
 <div class="tab-content">
-<div id="tabset-5-1">
+<div id="tabset-6-1">
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb3-2"><a></a></span>
 <span id="cb3-3"><a></a><span class="fu">ggplot</span>(combined_draws, <span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
@@ -618,49 +644,31 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <span id="cb3-11"><a></a>    <span class="at">fill =</span> <span class="st">""</span></span>
 <span id="cb3-12"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-5-2">
-<p><img data-src="images/clipboard-1978292710.png" width="466"></p>
+<div id="tabset-6-2">
+<p>Prior vs Posterior Distributions <img data-src="images/clipboard-1978292710.png" width="466"></p>
 </div>
-<div id="tabset-5-3">
-<div>
+<div id="tabset-6-3">
 <ul>
 <li><p>Strong positive relationship between age, BMI, and diabetes probability.</p></li>
 <li><p><strong>Posterior predictive checks</strong> confirm good model fit.</p></li>
 <li><p>Imputation reduced bias and improved robustness.</p></li>
 </ul>
-<div>
+</div>
+<div id="tabset-6-4">
 <pre><code>Model fit: bayes_R2(bayes_fit)</code></pre>
-</div>
-<pre><code>        Estimate        Est.Error       Q2.5        Q97.5 
-        R2 0.1313342    0.01265055    0.1064607     0.156078</code></pre>
-</div>
+<pre><code>    Estimate        Est.Error       Q2.5        Q97.5 
+    R2 0.1313342    0.01265055    0.1064607     0.156078</code></pre>
 </div>
 </div>
 </div>
 </section>
 <section class="slide level2">
 
-<h3 id="assumptions-for-bayesian-logistic-regression">Assumptions for Bayesian Logistic Regression</h3>
-<div>
-<ul>
-<li>Data Binary outcome</li>
-<li>independent observations</li>
-<li>Relationship Linear in logit</li>
-<li>no perfect collinearity</li>
-<li>Priors Properly chosen: informative enough</li>
-<li>Posterior Proper and convergent Fit</li>
-<li>No complete separation</li>
-<li>good predictive checks</li>
-</ul>
-</div>
-</section>
-<section class="slide level2">
-
+<p><strong>Posterior pairwise correlation plot</strong></p>
 <div class="panel-tabset">
-<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">Code</a></li><li><a href="#tabset-6-2">Plot</a></li><li><a href="#tabset-6-3">Interpretation</a></li></ul>
+<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">Code</a></li><li><a href="#tabset-7-2">Plot</a></li><li><a href="#tabset-7-3">Interpretation</a></li></ul>
 <div class="tab-content">
-<div id="tabset-6-1">
-<p>Posterior pairwise correlation plot</p>
+<div id="tabset-7-1">
 <div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a></span>
 <span id="cb6-2"><a></a><span class="co"># Extract posterior draws</span></span>
 <span id="cb6-3"><a></a>post <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(bayes_fit)</span>
@@ -679,10 +687,10 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <span id="cb6-16"><a></a>           <span class="at">off_diag_args =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>))</span>
 <span id="cb6-17"><a></a>           </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-6-2">
+<div id="tabset-7-2">
 <p><img data-src="images/clipboard-1737198687.png"></p>
 </div>
-<div id="tabset-6-3">
+<div id="tabset-7-3">
 <p>The absence of strong linear relationships among parameters suggests that age, BMI, and sex independently contributed to the prediction of diabetes status. The smooth, unimodal histograms along the diagonals confirmed stable model convergence and well-behaved posterior samples.</p>
 </div>
 </div>
@@ -690,16 +698,42 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </section>
 <section class="slide level2">
 
-<h3 id="limitations">Limitations</h3>
-<div>
+<h3 id="model-check-comparison-of-odds-ratios-across-models">Model Check: Comparison of Odds Ratios Across Models</h3>
+
+<img data-src="images/clipboard-329828759.png" width="363" class="r-stretch"><ul>
+<li>Age and BMI are consistently strong risk factors for diabetes in this population.</li>
+<li>The Bayesian model complements frequentist approaches by providing stable, interpretable, and uncertainty-quantified estimates, while broadly reproducing population-level prevalence.</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="assumptions-for-bayesian-logistic-regression">Assumptions for Bayesian Logistic Regression</h3>
 <div>
 <ul>
-<li><p>NHANES is cross-sectional → cannot infer causality</p></li>
-<li><p>Role of Potential unmeasured confounding factors (diet, activity)</p></li>
-<li><p>Limited predictors simplify model structure</p></li>
-<li><p>Imputation assumes MAR → violation may bias estimates</p></li>
+<li>Data Binary outcome</li>
+<li>Independent observations</li>
+<li>Relationship Linear in logit</li>
+<li>No perfect collinearity</li>
+<li>Priors Properly chosen: informative enough</li>
+<li>Posterior Proper and convergent Fit</li>
+<li>No complete separation</li>
+<li>Good predictive checks</li>
 </ul>
 </div>
+</section>
+<section class="slide level2">
+
+<h3 id="limitations">Limitations</h3>
+<div>
+<ul>
+<li><p><strong>Cross-sectional</strong> NHANES design limits causal inference.</p></li>
+<li><p>Multiple <strong>imputation</strong> assumes MAR; MNAR may bias results.</p></li>
+<li><p>Residual <strong>confounding</strong> from unmeasured factors (diet, activity, SES, genetics).</p></li>
+<li><p>Bayesian estimates may be influenced by <strong>prior choices</strong>.</p></li>
+<li><p><strong>BMI measured once</strong>; may not capture long-term exposure.</p></li>
+<li><p><strong>Self-reported</strong> variables may introduce recall/reporting bias.</p></li>
+<li><p><strong>Interaction effects</strong> (e.g., age × BMI) not tested.</p></li>
+</ul>
 </div>
 </section>
 <section class="slide level2">
@@ -713,36 +747,23 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <section class="slide level2">
 
 <h3 id="references">References</h3>
-<div>
 <p>van Buuren, S. &amp; Groothuis-Oudshoorn, K. (2011). MICE: Multivariate Imputation by Chained Equations in R.</p>
-<ul>
-<li><p>Gelman, A. &amp; Hill, J. (2007). Data Analysis Using Regression and Multilevel/Hierarchical Models.</p></li>
-<li><p>McElreath, R. (2020). Statistical Rethinking: A Bayesian Course with Examples in R and Stan.</p></li>
-<li><p>NHANES Data Documentation (CDC).</p></li>
-<li><p>Van de Schoot, R. et al.&nbsp;(2013, 2021). Weakly Informative Priors in Bayesian Regression.</p></li>
-</ul>
-</div>
+<p>Gelman, A. &amp; Hill, J. (2007). Data Analysis Using Regression and Multilevel/Hierarchical Models.</p>
+<p>McElreath, R. (2020). Statistical Rethinking: A Bayesian Course with Examples in R and Stan.</p>
+<p>NHANES Data Documentation (CDC).</p>
+<p>Van de Schoot, R. et al.&nbsp;(2013, 2021). Weakly Informative Priors in Bayesian Regression.</p>
 </section>
 <section class="slide level2">
 
-<div class="panel-tabset">
-<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1"><strong>Thank You</strong></a></li><li><a href="#tabset-7-2">Dr.&nbsp;Ashraf Cohen, PhD, MS</a></li></ul>
-<div class="tab-content">
-<div id="tabset-7-1">
-
-</div>
-<div id="tabset-7-2">
-<div>
+<h3 id="thank-you"><strong>Thank You</strong></h3>
+<p><strong>Dr.&nbsp;Ashraf Cohen, PhD, MS</strong></p>
 <ul>
 <li>University of West Florida</li>
 <li>Department of Mathematics and Statistics</li>
-<li>Thanks for the guidance</li>
 </ul>
-</div>
-<hr>
-</div>
-</div>
-</div>
+</section>
+<section class="slide level2">
+
 
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
