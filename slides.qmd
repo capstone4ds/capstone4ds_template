@@ -27,7 +27,7 @@ execute:
   font-size: 34px; /* Change all slide text */
 }
 .reveal h1 {
-  font-size: 48px; /* Title font */
+  font-size: 40px; /* Title font */
 }
 </style>
 ```
@@ -276,6 +276,12 @@ Model fit: bayes_R2(bayes_fit)
 
 ------------------------------------------------------------------------
 
+![](images/clipboard-4013951629.png){width="576"}
+
+![](images/clipboard-3433503019.png){width="466"}
+
+------------------------------------------------------------------------
+
 **Posterior pairwise correlation plot**
 
 ::: panel-tabset
@@ -307,7 +313,37 @@ mcmc_pairs(as_draws_array(bayes_fit),
 
 ### Interpretation
 
-The absence of strong linear relationships among parameters suggests that age, BMI, and sex independently contributed to the prediction of diabetes status. The smooth, unimodal histograms along the diagonals confirmed stable model convergence and well-behaved posterior samples.
+-   The absence of strong linear relationships among parameters suggests that age, BMI, and sex independently contributed to the prediction of diabetes status.
+-   The smooth, unimodal histograms along the diagonals confirmed stable model convergence and well-behaved posterior samples.
+-   A mild negative tilt between b_age_c and b_sexFemale: a slight negative correlation, meaning as the posterior estimate for age increases, the effect of being female slightly decreases.
+-   However, this pattern is weak — confirming that both predictors contribute distinct information to the diabetes outcome.
+:::
+
+------------------------------------------------------------------------
+
+### Autocorrelation for age and bmi
+
+::: panel-tabset
+### Plot
+
+![](images/clipboard-4119356386.png){width="489"}
+
+### Code
+
+``` r
+# Convert fitted model to draws array
+post_array <- as_draws_array(bayes_fit)  # draws x chains x parameters
+
+# Plot autocorrelation for age and bmi
+mcmc_acf(post_array, pars = c("b_age_c", "b_bmi_c"))
+```
+
+### Interpretation
+
+-   Plot of age and BMI coefficients - assess chain mixing and convergence, showing correlation of each draw with its lagged values across iterations.
+-   Rapid decay towards zero: Markov chains are mixing well, and successive draws are relatively independent.
+-   Both age and BMI coefficients exhibited low autocorrelation after a few lags,
+-   Bayesian model sampling was adequate and stable, with reliable and valid inference from the posterior distributions.
 :::
 
 ------------------------------------------------------------------------
@@ -318,6 +354,7 @@ The absence of strong linear relationships among parameters suggests that age, B
 
 -   Age and BMI are consistently strong risk factors for diabetes in this population.
 -   The Bayesian model complements frequentist approaches by providing stable, interpretable, and uncertainty-quantified estimates, while broadly reproducing population-level prevalence.
+-   The Bayesian model used normalized weights, which approximates the effect of survey weights but does not fully account for stratification, clustering, or design-based variance adjustments.
 
 ------------------------------------------------------------------------
 
@@ -334,11 +371,75 @@ The absence of strong linear relationships among parameters suggests that age, B
 -   Good predictive checks
 :::
 
-----------------------------------------------
+
+---------------------------------------------------------------------
+
+### Targeted Therapy
+
+
+### Translational Perspective 
+-  This project further demonstrates the translational potential of Bayesian modeling in clinical decision-making and public health strategy
+-  By using patient-level predictors such as age, BMI, sex, and race to estimate the probability of diabetes, the model moves beyond descriptive statistics toward individualized risk prediction
+- The translational move lies in converting these probabilistic outputs into actionable thresholds—such as identifying the BMI or age at which the predicted risk of diabetes exceeds a clinically meaningful level (e.g., 30%).
+-  Only BMI is a modifiable risk factor
+We can make changes in BMI (behavior or lifestyle) to achieve a lower risk threshold
+we hold non modifiable predictors as constant (sex, race).
+
+
+### 
+---------------------------
+---------------------------------------------------------------------------
+### Internal validation
+
+::: panel-tabset
+### Personalized risk estimation
+-  To illustrate personalized risk estimation using the Bayesian model, we computed the posterior predicted probability of diabetes for a representative participant.
+-  We selected one participant from the dataset (adult[1, ]) including all relevant covariates (age, BMI, sex, race).
+Used posterior_linpred with transform = TRUE to obtain predicted probabilities for logistic regression
+-  Extracted posterior draws computed 95% credible interval from the posterior draws.
+
+### Code
+``` r
+# Use the first participant 
+# using multiple covariates to select someone
+participant1_data  <- adult[1, ]
+# predicted probabilities for patient 1
+phat1 <- posterior_linpred(bayes_fit, newdata = participant1_data, transform = TRUE)
+# 'transform = TRUE' gives probabilities for logistic regression
+# Store in a data frame for plotting
+post_pred_df <- data.frame(pred = phat1)
+# Compute 95% credible interval
+ci_95_participant1 <- quantile(phat1, c(0.025, 0.975))
+# Plot
+ggplot(post_pred_df, aes(x = pred)) + 
+  geom_density(color='darkblue', fill='lightblue') +
+  geom_vline(xintercept = ci_95_participant1[1], color='red', linetype='dashed') +
+  geom_vline(xintercept = ci_95_participant1[2], color='red', linetype='dashed') +
+  xlab('Probability of being diabetic (Outcome=1)') +
+  ggtitle('Posterior Predictive Distribution 95% Credible Interval') +
+  theme_bw()
+```
+
+### Interpretation
+-  Plot shows the posterior predictive distribution for the probability that a specific individual in your dataset is diabetic (Outcome = 1)
+
+(1) Median/mean predicted probability ≈ 0.25
+-  The peak of the density curve is around 25%: participant has a 1 in 4 chance of being diabetic.
+
+(2) 95% credible interval ≈ 0.20 to 0.31
+-  The red dashed lines represent the 95% credible interval (CI):
+
+Lower bound ≈ 0.20
+Upper bound ≈ 0.31
+
+Given the model and the participant’s characteristics, there is a 95% probability that this participant’s true diabetes risk lies between 20% and 31%.
+
+:::
+------------------------------------------------------------------------
 
 ### Limitations
 
-::::: nonincremental
+::: nonincremental
 -   **Cross-sectional** NHANES design limits causal inference.
 
 -   Multiple **imputation** assumes MAR; MNAR may bias results.
@@ -352,9 +453,7 @@ The absence of strong linear relationships among parameters suggests that age, B
 -   **Self-reported** variables may introduce recall/reporting bias.
 
 -   **Interaction effects** (e.g., age × BMI) not tested.
-
-:::::
-
+:::
 
 ------------------------------------------------------------------------
 
@@ -392,4 +491,3 @@ Van de Schoot, R. et al. (2013, 2021). Weakly Informative Priors in Bayesian Reg
 -   Department of Mathematics and Statistics
 
 ------------------------------------------------------------------------
-

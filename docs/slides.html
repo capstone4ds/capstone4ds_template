@@ -417,7 +417,7 @@ Autumn Wilcox
   font-size: 34px; /* Change all slide text */
 }
 .reveal h1 {
-  font-size: 48px; /* Title font */
+  font-size: 40px; /* Title font */
 }
 </style>
 <h3 id="aim">Aim</h3>
@@ -664,6 +664,11 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </section>
 <section class="slide level2">
 
+<p><img data-src="images/clipboard-4013951629.png" width="576"></p>
+<p><img data-src="images/clipboard-3433503019.png" width="466"></p>
+</section>
+<section class="slide level2">
+
 <p><strong>Posterior pairwise correlation plot</strong></p>
 <div class="panel-tabset">
 <ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">Code</a></li><li><a href="#tabset-7-2">Plot</a></li><li><a href="#tabset-7-3">Interpretation</a></li></ul>
@@ -691,7 +696,39 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <p><img data-src="images/clipboard-1737198687.png"></p>
 </div>
 <div id="tabset-7-3">
-<p>The absence of strong linear relationships among parameters suggests that age, BMI, and sex independently contributed to the prediction of diabetes status. The smooth, unimodal histograms along the diagonals confirmed stable model convergence and well-behaved posterior samples.</p>
+<ul>
+<li>The absence of strong linear relationships among parameters suggests that age, BMI, and sex independently contributed to the prediction of diabetes status.</li>
+<li>The smooth, unimodal histograms along the diagonals confirmed stable model convergence and well-behaved posterior samples.</li>
+<li>A mild negative tilt between b_age_c and b_sexFemale: a slight negative correlation, meaning as the posterior estimate for age increases, the effect of being female slightly decreases.</li>
+<li>However, this pattern is weak — confirming that both predictors contribute distinct information to the diabetes outcome.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="autocorrelation-for-age-and-bmi">Autocorrelation for age and bmi</h3>
+<div class="panel-tabset">
+<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">Plot</a></li><li><a href="#tabset-8-2">Code</a></li><li><a href="#tabset-8-3">Interpretation</a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1">
+<p><img data-src="images/clipboard-4119356386.png" width="489"></p>
+</div>
+<div id="tabset-8-2">
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="co"># Convert fitted model to draws array</span></span>
+<span id="cb7-2"><a></a>post_array <span class="ot">&lt;-</span> <span class="fu">as_draws_array</span>(bayes_fit)  <span class="co"># draws x chains x parameters</span></span>
+<span id="cb7-3"><a></a></span>
+<span id="cb7-4"><a></a><span class="co"># Plot autocorrelation for age and bmi</span></span>
+<span id="cb7-5"><a></a><span class="fu">mcmc_acf</span>(post_array, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"b_age_c"</span>, <span class="st">"b_bmi_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-8-3">
+<ul>
+<li>Plot of age and BMI coefficients - assess chain mixing and convergence, showing correlation of each draw with its lagged values across iterations.</li>
+<li>Rapid decay towards zero: Markov chains are mixing well, and successive draws are relatively independent.</li>
+<li>Both age and BMI coefficients exhibited low autocorrelation after a few lags,</li>
+<li>Bayesian model sampling was adequate and stable, with reliable and valid inference from the posterior distributions.</li>
+</ul>
 </div>
 </div>
 </div>
@@ -703,6 +740,7 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <img data-src="images/clipboard-329828759.png" width="363" class="r-stretch"><ul>
 <li>Age and BMI are consistently strong risk factors for diabetes in this population.</li>
 <li>The Bayesian model complements frequentist approaches by providing stable, interpretable, and uncertainty-quantified estimates, while broadly reproducing population-level prevalence.</li>
+<li>The Bayesian model used normalized weights, which approximates the effect of survey weights but does not fully account for stratification, clustering, or design-based variance adjustments.</li>
 </ul>
 </section>
 <section class="slide level2">
@@ -723,6 +761,51 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </section>
 <section class="slide level2">
 
+<h3 id="targeted-therapy">Targeted Therapy</h3>
+<h3 id="translational-perspective">Translational Perspective</h3>
+<ul>
+<li>This project further demonstrates the translational potential of Bayesian modeling in clinical decision-making and public health strategy</li>
+<li>By using patient-level predictors such as age, BMI, sex, and race to estimate the probability of diabetes, the model moves beyond descriptive statistics toward individualized risk prediction</li>
+<li>The translational move lies in converting these probabilistic outputs into actionable thresholds—such as identifying the BMI or age at which the predicted risk of diabetes exceeds a clinically meaningful level (e.g., 30%).</li>
+<li>Only BMI is a modifiable risk factor We can make changes in BMI (behavior or lifestyle) to achieve a lower risk threshold we hold non modifiable predictors as constant (sex, race).</li>
+</ul>
+</section>
+<section id="section" class="slide level2">
+<h2>###</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 100%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">### Internal validation</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: panel-tabset ### Personalized risk estimation - To illustrate personalized risk estimation using the Bayesian model, we computed the posterior predicted probability of diabetes for a representative participant. - We selected one participant from the dataset (adult[1, ]) including all relevant covariates (age, BMI, sex, race). Used posterior_linpred with transform = TRUE to obtain predicted probabilities for logistic regression - Extracted posterior draws computed 95% credible interval from the posterior draws.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">### Code</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">### Interpretation - Plot shows the posterior predictive distribution for the probability that a specific individual in your dataset is diabetic (Outcome = 1)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">(1) Median/mean predicted probability ≈ 0.25 - The peak of the density curve is around 25%: participant has a 1 in 4 chance of being diabetic.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">(2) 95% credible interval ≈ 0.20 to 0.31 - The red dashed lines represent the 95% credible interval (CI):</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Lower bound ≈ 0.20 Upper bound ≈ 0.31</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Given the model and the participant’s characteristics, there is a 95% probability that this participant’s true diabetes risk lies between 20% and 31%.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">:::</td>
+</tr>
+</tbody>
+</table>
 <h3 id="limitations">Limitations</h3>
 <div>
 <ul>
