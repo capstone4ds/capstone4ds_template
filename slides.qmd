@@ -374,8 +374,9 @@ pp_samples \<- posterior_predict(bayes_fit, ndraws = 500)
 # Check dimensions dim(pp_samples) \# rows = draws, cols = observations ppc_bars(y = adult_imp1\$diabetes_dx, yrep = pp_samples\[1:500, \]) 
 ```
 
-### Compare Predicted vs observed outcome
+### Compare outcome
 
+Predicted vs observed outcome
 ![](images/clipboard-2418526955.png){width="274"}
 
 ### Proportion
