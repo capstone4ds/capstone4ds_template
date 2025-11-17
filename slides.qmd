@@ -64,7 +64,7 @@ execute:
 ### Bayesian Model
 
 ::: panel-tabset
-### Bayes’ theorem
+### Bayes’ Theorem
 
 **Bayes’ theorm** is based on conditional probability.
 
@@ -86,7 +86,7 @@ where:
 
 ------------------------------------------------------------------------
 
-**Bayesian regression and Coefficient estimation**
+**Bayesian Regression and Coefficient Estimation**
 
 -   Logistic link function used for binary outcomes.
 -   logit (𝑃(𝑌=1))=𝛽0+𝛽1age 𝑐 + 𝛽 2 bmi 𝑐 + 𝛽 3 sex + 𝛽 4 race
@@ -111,13 +111,13 @@ National Health and Nutrition Examination Survey (NHANES) 2013–2014\
 *Non-Hispanic Black*, *Other/Multi-racial*
 
 ### Data view
-
-![](images/clipboard-3274096863.png){width="795"}
 :::
+
+![](images/clipboard-4180967765.png)
 
 ------------------------------------------------------------------------
 
-### Missing data analysis {.panel-tabset}
+### Missing Data Analysis {.panel-tabset}
 
 ::: panel-tabset
 ### Plot
@@ -130,6 +130,8 @@ National Health and Nutrition Examination Survey (NHANES) 2013–2014\
 -   No variable is completely missing
 -   Missingness likely MAR (Missing At Random)
 -   Clustered mainly in BMI (4.3%) and diabetes_dx (3.1%).
+
+### Complete Case Analysis
 :::
 
 ------------------------------------------------------------------------
@@ -151,12 +153,30 @@ Posterior (parameters + missing data uncertainty)
 -   MICE procedure ran 5 iterations for each of the 5 imputed datasets to ensure stability and convergence.
 -   Estimates pooled using Rubin’s rules.
 
-### Fit logistic regression model
+### Survey-Weighted Logistic Regression (Complete-Case Analysis)
 
-``` r
-fit_mi <- with(data = imp, exp = glm(diabetes_dx ~ age_c + bmi_c + sex + race, family = binomial()))
-pool_mi <- pool(fit_mi)
-```
+-   **Complete-case survey-weighted logistic regression**
+    estimate the association between age, BMI, sex, and race with
+    diabetes status.
+-   All analyses accounted for the **NHANES complex sampling design**,
+    including sampling weights, primary sampling units (PSUs), and
+    strata with the sufficiency of outcome data and categorical
+    predictors (sex and race) retained at least two observed levels
+    among participants with non-missing diabetes outcomes.
+-   For a complete-case indicator to retain only participants with
+    **non-missing values** on the outcome and all model predictors (age,
+    BMI, sex, and race).
+-   Complete-case dataset to fit a survey-weighted logistic regression
+    model:
+
+**diabetes_dx∼age_c + bmi_c + sex + race**
+
+-   The model was estimated using svyglm() with a **quasibinomial
+    family** to accommodate the binary outcome under the NHANES design.
+-   This generated design-adjusted coefficient estimates, standard
+    errors, and odds ratios reflecting population-representative
+    associations for U.S. adults.
+
 :::
 ::::
 
@@ -270,7 +290,6 @@ Posterior draws = 4000 (4 chains × 1000 iterations) for posterior predictive ch
 
 ### Interpretation
 
-         
 **Posterior Coefficients**
 
 Age (per 1 SD): strong positive effect (≈ +1.1, 80% CrI ≈ 0.9–1.3).
@@ -286,7 +305,6 @@ Other Hispanic: moderate positive effect (≈ +0.35, wide CrI).
 Non-Hispanic Black: clear positive effect (≈ +0.75, CrI ≈ 0.6–0.9).
 
 Other/Multi: small positive effect (≈ +0.3, wide CrI).
-
 :::
 
 ------------------------------------------------------------------------
@@ -361,6 +379,7 @@ ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:500, ])
 ```
 
 ### Compare Outcome
+
 **Predicted vs observed outcome**
 
 ![](images/clipboard-2418526955.png){width="274"}
@@ -524,17 +543,18 @@ ggplot(pp_df, aes(x = proportion)) +
 ------------------------------------------------------------------------
 
 ### Translational Perspective
-::: panel-tabset 
-### Internal Validation 
-#### Personalized Risk Estimation 
 
--   Model enables individualized diabetes risk prediction using age, BMI, sex, race and outputs can guide actionable thresholds (e.g., risk >30%)
+::: panel-tabset
+### Internal Validation
+
+#### Personalized Risk Estimation
+
+-   Model enables individualized diabetes risk prediction using age, BMI, sex, race and outputs can guide actionable thresholds (e.g., risk \>30%)
 -   BMI is modifiable- interventions can lower risk while sex and race remain constant.
--   Selected one participant (adult[1, ]) with all covariates (age, BMI, sex, race) obtain predicted probabilities from the logistic regression model.
-**posterior_linpred(transform = TRUE)**
+-   Selected one participant (adult\[1, \]) with all covariates (age, BMI, sex, race) obtain predicted probabilities from the logistic regression model. **posterior_linpred(transform = TRUE)**
 -   Posterior draws: calculate the 95% credible interval for the predicted probability
 
-### Code 
+### Code
 
 ``` r
 participant1_data  <- adult[1, ]
@@ -552,17 +572,18 @@ ggplot(post_pred_df, aes(x = pred)) +
   theme_bw()
   
 ```
-### Interpretation 
+
+### Interpretation
 
 Posterior predictive distribution for a specific individual with Outcome = 1
 
--    Median/mean predicted probability ≈ 0.25 
--   The peak of the density curve is around 25%: participant has a 1 in 4 chance of being diabetic. 
--  95% credible interval ≈ 0.20 to 0.31 
--  The red dashed lines represent the 95% credible interval (CI): Lower bound ≈ 0.20 Upper bound ≈ 0.31 
+-   Median/mean predicted probability ≈ 0.25
+-   The peak of the density curve is around 25%: participant has a 1 in 4 chance of being diabetic.
+-   95% credible interval ≈ 0.20 to 0.31
+-   The red dashed lines represent the 95% credible interval (CI): Lower bound ≈ 0.20 Upper bound ≈ 0.31
 
-**Given the model and the participant’s characteristics, there is a 95% probability that this participant’s true diabetes risk lies between 20% and 31%** 
-::: 
+**Given the model and the participant’s characteristics, there is a 95% probability that this participant’s true diabetes risk lies between 20% and 31%**
+:::
 
 ------------------------------------------------------------------------
 
@@ -580,8 +601,7 @@ Posterior predictive distribution for a specific individual with Outcome = 1
 
 -   **Self-reported** variables may introduce recall/reporting bias.
 
--   **Interaction effects** (e.g., age × BMI) not tested.
-:::
+-   **Interaction effects** (e.g., age × BMI) not tested. :::
 
 ------------------------------------------------------------------------
 
