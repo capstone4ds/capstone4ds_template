@@ -196,6 +196,7 @@ Interpretation
 
 -   Model was estimated using svyglm(),**quasibinomial family** for binary outcome for NHANES design.
 -   Design-adjusted coefficient estimates, standard errors, and odds ratios reflect population-representative associations for U.S. adults.
+-   Complete case analysis (n= 5348)
 -   Age (per 1 SD ↑): OR ≈ 3.03 →Older adults \~3× higher odds
 -   BMI (per 1 SD ↑): OR ≈ 1.88 → Higher BMI increases risk
 -   Sex (Female vs Male): OR ≈ 0.53 → Females \~47% lower odds
