@@ -1,9 +1,9 @@
 ---
-title: "Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)"
+title: "Bayesian Logistic Regression for Diabetes Risk Prediction (NHANES 2013 - 2014)"
 subtitle: "Capstone Presentation"
 author:
-  - "Namita Mishra"
-  - "Autumn Wilcox"
+  - "**Namita Mishra**"
+  - "**Autumn Wilcox**"
 advisor: "Dr. Ashraf Cohen"
 format:
   revealjs:
@@ -315,6 +315,18 @@ Other/Multi: small positive effect (≈ +0.3, wide CrI).
 #### Prior and Posterior Predictive Distribution (age and BMI)
 
 ::: panel-tabset
+### Plot
+
+Prior vs Posterior Distributions ![](images/clipboard-1978292710.png){width="466"}
+
+### Interpretation
+
+-   Strong positive relationship between age, BMI, and diabetes probability.
+
+-   **Posterior predictive checks** confirm good model fit.
+
+-   Imputation reduced bias and improved robustness.
+
 ### Code
 
 ``` r
@@ -331,60 +343,44 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
     fill = ""
   )
 ```
-
-### Plot
-
-Prior vs Posterior Distributions ![](images/clipboard-1978292710.png){width="466"}
-
-### Interpretation
-
--   Strong positive relationship between age, BMI, and diabetes probability.
-
--   **Posterior predictive checks** confirm good model fit.
-
--   Imputation reduced bias and improved robustness.
-
-### R Square
-
-```         
-Model fit: bayes_R2(bayes_fit)
-```
-
-```         
-    Estimate        Est.Error       Q2.5        Q97.5 
-    R2 0.1313342    0.01265055    0.1064607     0.156078
-```
 :::
 
------------------------------------------------------------------------
+------------------------------------------------------------------------
 
-### Model Diagnostics 
-#### Posterior Predictive Checks 
-500 draws: predicted outcomes for each observation compare ( observed data vs predeicted outcomes: binary outcome with 0 or 1 simulated 
+### Model Diagnostics
 
-::: panel-tabset 
+#### Posterior Predictive Checks
 
-### Code 
-```r 
+500 draws: predicted outcomes for each observation compare ( observed data vs predeicted outcomes: binary outcome with 0 or 1 simulated
+
+::: panel-tabset
+### Code
+
+``` r
 pp_samples \<- posterior_predict(bayes_fit, ndraws = 500) 
 # 500 draws 
 
 # Check dimensions dim(pp_samples) \# rows = draws, cols = observations ppc_bars(y = adult_imp1\$diabetes_dx, yrep = pp_samples\[1:500, \]) 
 ```
-### Compare Outcome 
 
-**Predicted vs observed outcome** 
-![](images/clipboard-2418526955.png){width="274"} 
-### Proportion 
+### Compare Predicted vs observed outcome
 
-![](images/clipboard-122565288.png){width="273"} 
-### Mean 
+![](images/clipboard-2418526955.png){width="274"}
 
-![](images/clipboard-2726352750.png){width="340"} 
-### SD 
+### Proportion
 
-![](images/clipboard-1023519991.png){width="331"} 
-::: 
+![](images/clipboard-122565288.png){width="273"}
+
+### Mean
+
+![](images/clipboard-2726352750.png){width="340"}
+
+### SD
+
+![](images/clipboard-1023519991.png){width="331"}
+:::
+
+------------------------------------------------------------------------
 
 ### Model Diagnostics
 
@@ -393,9 +389,7 @@ pp_samples \<- posterior_predict(bayes_fit, ndraws = 500)
 ::: panel-tabset
 ### Result and Visualization
 
-![](images/clipboard-4013951629.png){width="576"}
-
-![](images/clipboard-3433503019.png){width="466"}
+![](images/clipboard-4013951629.png){width="576"}\| ![](images/clipboard-3433503019.png){width="466"}
 
 ### Interpretation
 
@@ -415,15 +409,6 @@ pp_samples \<- posterior_predict(bayes_fit, ndraws = 500)
 #### Observed vs. Predicted Average diabetes outcome across individuals
 
 ::: panel-tabset
-### Code
-
-``` r
-# PP checks with bayesplot options
-color_scheme_set("blue")
-ppc_scatter_avg(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ]) +
-labs(title = "Observed vs Predicted (Avg) Posterior Predictive at individual level")
-```
-
 ### Plot
 
 ![](images/clipboard-2608056459.png){width="287"}
@@ -439,7 +424,16 @@ labs(title = "Observed vs Predicted (Avg) Posterior Predictive at individual lev
 
 -   Each point represents an individual’s observed BMI versus the model’s predicted mean.
 -   Error bars indicate the 95% credible intervals of the predictions.
--   The plot demonstrates that the model’s predictions generally align with the observed data,
+-   The plot demonstrates that the model’s predictions generally align with the observed data
+
+### Code
+
+``` r
+# PP checks with bayesplot options
+color_scheme_set("blue")
+ppc_scatter_avg(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ]) +
+labs(title = "Observed vs Predicted (Avg) Posterior Predictive at individual level")
+```
 :::
 
 ------------------------------------------------------------------------
@@ -458,7 +452,7 @@ bayes_tbl <- bayes_or %>% mutate(Model = "Bayesian")
 
 ![](images/clipboard-329828759.png){width="363"}
 
--   Age and BMI - strong risk factors for both models for diabetes in this population.
+-   **Age and BMI: strong risk factors in both models for diabetes predictors**.
 -   The Bayesian model complements frequentist approaches by providing stable, interpretable, and uncertainty-quantified estimates, while broadly reproducing population-level prevalence.
 -   The Bayesian model used normalized weights, which approximates the effect of survey weights but does not fully account for stratification, clustering, or design-based variance adjustments.
 
@@ -469,7 +463,7 @@ bayes_tbl <- bayes_or %>% mutate(Model = "Bayesian")
 ::: panel-tabset
 ### Plot pairwise correlation
 
-![](images/clipboard-1737198687.png)
+![](images/clipboard-1737198687.png){width="521"}
 
 ### Code
 
@@ -495,7 +489,8 @@ mcmc_pairs(as_draws_array(bayes_fit),
 -   The smooth, unimodal histograms along the diagonals confirmed stable model convergence and well-behaved posterior samples.
 -   A mild negative tilt between b_age_c and b_sexFemale: a slight negative correlation:
 -   As the posterior estimate for age increases, the effect of being female slightly decreases.
--   Weak correlation: confirms both predictors contribute distinct information to the diabetes outcome.
+
+**Weak correlation: confirms both predictors contribute distinct information to the diabetes outcome**.
 :::
 
 ------------------------------------------------------------------------
@@ -538,7 +533,12 @@ ggplot(pp_df, aes(x = proportion)) +
 ```
 :::
 
-------------------------------------------------------------------------
+|  |
+|:-----------------------------------------------------------------------|
+| \### Model Diagnostics |
+| \#### R Square |
+| `Model fit: bayes_R2(bayes_fit)` |
+| `Estimate        Est.Error       Q2.5        Q97.5 R2 0.1313342    0.01265055    0.1064607     0.156078` |
 
 ### Assumptions for Bayesian Logistic Regression
 

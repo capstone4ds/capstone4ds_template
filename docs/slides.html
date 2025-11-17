@@ -12,7 +12,7 @@
 
   <meta name="author" content="Namita Mishra">
   <meta name="author" content="Autumn Wilcox">
-  <title>Bayesian Logistic Regression Capstone – Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)</title>
+  <title>Bayesian Logistic Regression Capstone – Bayesian Logistic Regression for Diabetes Risk Prediction (NHANES 2013 - 2014)</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -393,18 +393,18 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Bayesian Logistic Regression for Diabetes Risk (NHANES 2013–2014)</h1>
+  <h1 class="title">Bayesian Logistic Regression for Diabetes Risk Prediction (NHANES 2013 - 2014)</h1>
   <p class="subtitle">Capstone Presentation</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Namita Mishra 
+<strong>Namita Mishra</strong> 
 </div>
 </div>
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Autumn Wilcox 
+<strong>Autumn Wilcox</strong> 
 </div>
 </div>
 </div>
@@ -689,9 +689,19 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <h3 id="model-diagnostics">Model Diagnostics</h3>
 <h4 id="prior-and-posterior-predictive-distribution-age-and-bmi">Prior and Posterior Predictive Distribution (age and BMI)</h4>
 <div class="panel-tabset">
-<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">Code</a></li><li><a href="#tabset-8-2">Plot</a></li><li><a href="#tabset-8-3">Interpretation</a></li><li><a href="#tabset-8-4">R Square</a></li></ul>
+<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">Plot</a></li><li><a href="#tabset-8-2">Interpretation</a></li><li><a href="#tabset-8-3">Code</a></li></ul>
 <div class="tab-content">
 <div id="tabset-8-1">
+<p>Prior vs Posterior Distributions <img data-src="images/clipboard-1978292710.png" width="466"></p>
+</div>
+<div id="tabset-8-2">
+<ul>
+<li><p>Strong positive relationship between age, BMI, and diabetes probability.</p></li>
+<li><p><strong>Posterior predictive checks</strong> confirm good model fit.</p></li>
+<li><p>Imputation reduced bias and improved robustness.</p></li>
+</ul>
+</div>
+<div id="tabset-8-3">
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb4-2"><a></a></span>
 <span id="cb4-3"><a></a><span class="fu">ggplot</span>(combined_draws, <span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
@@ -705,21 +715,6 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <span id="cb4-11"><a></a>    <span class="at">fill =</span> <span class="st">""</span></span>
 <span id="cb4-12"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-8-2">
-<p>Prior vs Posterior Distributions <img data-src="images/clipboard-1978292710.png" width="466"></p>
-</div>
-<div id="tabset-8-3">
-<ul>
-<li><p>Strong positive relationship between age, BMI, and diabetes probability.</p></li>
-<li><p><strong>Posterior predictive checks</strong> confirm good model fit.</p></li>
-<li><p>Imputation reduced bias and improved robustness.</p></li>
-</ul>
-</div>
-<div id="tabset-8-4">
-<pre><code>Model fit: bayes_R2(bayes_fit)</code></pre>
-<pre><code>    Estimate        Est.Error       Q2.5        Q97.5 
-    R2 0.1313342    0.01265055    0.1064607     0.156078</code></pre>
-</div>
 </div>
 </div>
 </section>
@@ -729,30 +724,38 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <h4 id="posterior-predictive-checks">Posterior Predictive Checks</h4>
 <p>500 draws: predicted outcomes for each observation compare ( observed data vs predeicted outcomes: binary outcome with 0 or 1 simulated</p>
 <div class="panel-tabset">
-<ul id="tabset-9" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-9-1">Code</a></li><li><a href="#tabset-9-2">Compare Outcome</a></li></ul>
+<ul id="tabset-9" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-9-1">Code</a></li><li><a href="#tabset-9-2">Compare Predicted vs observed outcome</a></li><li><a href="#tabset-9-3">Proportion</a></li><li><a href="#tabset-9-4">Mean</a></li><li><a href="#tabset-9-5">SD</a></li></ul>
 <div class="tab-content">
 <div id="tabset-9-1">
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>pp_samples \<span class="ot">&lt;-</span> <span class="fu">posterior_predict</span>(bayes_fit, <span class="at">ndraws =</span> <span class="dv">500</span>) </span>
-<span id="cb7-2"><a></a><span class="co"># 500 draws </span></span>
-<span id="cb7-3"><a></a></span>
-<span id="cb7-4"><a></a><span class="co"># Check dimensions dim(pp_samples) \# rows = draws, cols = observations ppc_bars(y = adult_imp1\$diabetes_dx, yrep = pp_samples\[1:500, \]) </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a>pp_samples \<span class="ot">&lt;-</span> <span class="fu">posterior_predict</span>(bayes_fit, <span class="at">ndraws =</span> <span class="dv">500</span>) </span>
+<span id="cb5-2"><a></a><span class="co"># 500 draws </span></span>
+<span id="cb5-3"><a></a></span>
+<span id="cb5-4"><a></a><span class="co"># Check dimensions dim(pp_samples) \# rows = draws, cols = observations ppc_bars(y = adult_imp1\$diabetes_dx, yrep = pp_samples\[1:500, \]) </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="tabset-9-2">
-<p><strong>Predicted vs observed outcome</strong> <img data-src="images/clipboard-2418526955.png" width="274"> ### Proportion</p>
-<p><img data-src="images/clipboard-122565288.png" width="273"> ### Mean</p>
-<p><img data-src="images/clipboard-2726352750.png" width="340"> ### SD</p>
+<p><img data-src="images/clipboard-2418526955.png" width="274"></p>
+</div>
+<div id="tabset-9-3">
+<p><img data-src="images/clipboard-122565288.png" width="273"></p>
+</div>
+<div id="tabset-9-4">
+<p><img data-src="images/clipboard-2726352750.png" width="340"></p>
+</div>
+<div id="tabset-9-5">
 <p><img data-src="images/clipboard-1023519991.png" width="331"></p>
 </div>
 </div>
 </div>
+</section>
+<section class="slide level2">
+
 <h3 id="model-diagnostics-2">Model Diagnostics</h3>
 <h4 id="diabetes-prevalence-survey-weighted-nhanes-vs-predicted">Diabetes Prevalence (Survey weighted NHANES vs Predicted)</h4>
 <div class="panel-tabset">
 <ul id="tabset-10" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-10-1">Result and Visualization</a></li><li><a href="#tabset-10-2">Interpretation</a></li></ul>
 <div class="tab-content">
 <div id="tabset-10-1">
-<p><img data-src="images/clipboard-4013951629.png" width="576"></p>
-<p><img data-src="images/clipboard-3433503019.png" width="466"></p>
+<p><img data-src="images/clipboard-4013951629.png" width="576">| <img data-src="images/clipboard-3433503019.png" width="466"></p>
 </div>
 <div id="tabset-10-2">
 <p><strong>Prevalence of diabetes</strong> (Posterior-predicted vs NHANES survey-weighted)</p>
@@ -771,15 +774,9 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <h3 id="model-diagnostics-3">Model Diagnostics</h3>
 <h4 id="observed-vs.-predicted-average-diabetes-outcome-across-individuals">Observed vs.&nbsp;Predicted Average diabetes outcome across individuals</h4>
 <div class="panel-tabset">
-<ul id="tabset-11" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-11-1">Code</a></li><li><a href="#tabset-11-2">Plot</a></li><li><a href="#tabset-11-3">Plot</a></li></ul>
+<ul id="tabset-11" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-11-1">Plot</a></li><li><a href="#tabset-11-2">Plot</a></li><li><a href="#tabset-11-3">Code</a></li></ul>
 <div class="tab-content">
 <div id="tabset-11-1">
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="co"># PP checks with bayesplot options</span></span>
-<span id="cb8-2"><a></a><span class="fu">color_scheme_set</span>(<span class="st">"blue"</span>)</span>
-<span id="cb8-3"><a></a><span class="fu">ppc_scatter_avg</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ]) <span class="sc">+</span></span>
-<span id="cb8-4"><a></a><span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Observed vs Predicted (Avg) Posterior Predictive at individual level"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="tabset-11-2">
 <p><img data-src="images/clipboard-2608056459.png" width="287"></p>
 <ul>
 <li>Each point = one observation (an individual)</li>
@@ -788,13 +785,19 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <li>Points near (0, 0) or (1, 1) → good prediction</li>
 </ul>
 </div>
-<div id="tabset-11-3">
+<div id="tabset-11-2">
 <p><img data-src="images/clipboard-2167517988.png" width="340"></p>
 <ul>
 <li>Each point represents an individual’s observed BMI versus the model’s predicted mean.</li>
 <li>Error bars indicate the 95% credible intervals of the predictions.</li>
-<li>The plot demonstrates that the model’s predictions generally align with the observed data,</li>
+<li>The plot demonstrates that the model’s predictions generally align with the observed data</li>
 </ul>
+</div>
+<div id="tabset-11-3">
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co"># PP checks with bayesplot options</span></span>
+<span id="cb6-2"><a></a><span class="fu">color_scheme_set</span>(<span class="st">"blue"</span>)</span>
+<span id="cb6-3"><a></a><span class="fu">ppc_scatter_avg</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ]) <span class="sc">+</span></span>
+<span id="cb6-4"><a></a><span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Observed vs Predicted (Avg) Posterior Predictive at individual level"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -807,11 +810,11 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <li><strong>Survey-weighted maximum likelihood estimation (MLE)</strong></li>
 <li><strong>Bayesian regression</strong></li>
 </ol>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a>svy_tbl   <span class="ot">&lt;-</span> svy_or   <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="st">"Survey-weighted MLE"</span>)</span>
-<span id="cb9-2"><a></a>bayes_tbl <span class="ot">&lt;-</span> bayes_or <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="st">"Bayesian"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>svy_tbl   <span class="ot">&lt;-</span> svy_or   <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="st">"Survey-weighted MLE"</span>)</span>
+<span id="cb7-2"><a></a>bayes_tbl <span class="ot">&lt;-</span> bayes_or <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="st">"Bayesian"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 <img data-src="images/clipboard-329828759.png" width="363" class="r-stretch"><ul>
-<li>Age and BMI - strong risk factors for both models for diabetes in this population.</li>
+<li><strong>Age and BMI: strong risk factors in both models for diabetes predictors</strong>.</li>
 <li>The Bayesian model complements frequentist approaches by providing stable, interpretable, and uncertainty-quantified estimates, while broadly reproducing population-level prevalence.</li>
 <li>The Bayesian model used normalized weights, which approximates the effect of survey weights but does not fully account for stratification, clustering, or design-based variance adjustments.</li>
 </ul>
@@ -823,21 +826,21 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <ul id="tabset-12" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-12-1">Plot pairwise correlation</a></li><li><a href="#tabset-12-2">Code</a></li><li><a href="#tabset-12-3">Interpretation</a></li></ul>
 <div class="tab-content">
 <div id="tabset-12-1">
-<p><img data-src="images/clipboard-1737198687.png"></p>
+<p><img data-src="images/clipboard-1737198687.png" width="521"></p>
 </div>
 <div id="tabset-12-2">
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a><span class="co"># Extract posterior draws</span></span>
-<span id="cb10-2"><a></a>post <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(bayes_fit)</span>
-<span id="cb10-3"><a></a><span class="co"># Select numeric parameters of interest</span></span>
-<span id="cb10-4"><a></a>post_subset <span class="ot">&lt;-</span> post <span class="sc">%&gt;%</span> </span>
-<span id="cb10-5"><a></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(b_age_c, b_bmi_c, b_sexFemale, </span>
-<span id="cb10-6"><a></a>                b_raceMexicanAmerican, b_raceNHBlack)</span>
-<span id="cb10-7"><a></a><span class="co"># Compute correlation matrix</span></span>
-<span id="cb10-8"><a></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">cor</span>(post_subset)</span>
-<span id="cb10-9"><a></a><span class="co"># Visualize</span></span>
-<span id="cb10-10"><a></a><span class="fu">mcmc_pairs</span>(<span class="fu">as_draws_array</span>(bayes_fit), </span>
-<span id="cb10-11"><a></a>           <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"b_age_c"</span>, <span class="st">"b_bmi_c"</span>, <span class="st">"b_sexFemale"</span>),</span>
-<span id="cb10-12"><a></a>           <span class="at">off_diag_args =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="co"># Extract posterior draws</span></span>
+<span id="cb8-2"><a></a>post <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(bayes_fit)</span>
+<span id="cb8-3"><a></a><span class="co"># Select numeric parameters of interest</span></span>
+<span id="cb8-4"><a></a>post_subset <span class="ot">&lt;-</span> post <span class="sc">%&gt;%</span> </span>
+<span id="cb8-5"><a></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(b_age_c, b_bmi_c, b_sexFemale, </span>
+<span id="cb8-6"><a></a>                b_raceMexicanAmerican, b_raceNHBlack)</span>
+<span id="cb8-7"><a></a><span class="co"># Compute correlation matrix</span></span>
+<span id="cb8-8"><a></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">cor</span>(post_subset)</span>
+<span id="cb8-9"><a></a><span class="co"># Visualize</span></span>
+<span id="cb8-10"><a></a><span class="fu">mcmc_pairs</span>(<span class="fu">as_draws_array</span>(bayes_fit), </span>
+<span id="cb8-11"><a></a>           <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"b_age_c"</span>, <span class="st">"b_bmi_c"</span>, <span class="st">"b_sexFemale"</span>),</span>
+<span id="cb8-12"><a></a>           <span class="at">off_diag_args =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="tabset-12-3">
 <ul>
@@ -846,8 +849,8 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <li>The smooth, unimodal histograms along the diagonals confirmed stable model convergence and well-behaved posterior samples.</li>
 <li>A mild negative tilt between b_age_c and b_sexFemale: a slight negative correlation:</li>
 <li>As the posterior estimate for age increases, the effect of being female slightly decreases.</li>
-<li>Weak correlation: confirms both predictors contribute distinct information to the diabetes outcome.</li>
 </ul>
+<p><strong>Weak correlation: confirms both predictors contribute distinct information to the diabetes outcome</strong>.</p>
 </div>
 </div>
 </div>
@@ -870,29 +873,45 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </ul>
 </div>
 <div id="tabset-13-3">
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a><span class="co"># pp_proportion &lt;- rowMeans(pp_samples)  # if not already done</span></span>
-<span id="cb11-2"><a></a>known_prev <span class="ot">&lt;-</span> <span class="fl">0.089</span>   <span class="co"># NHANES prevalence</span></span>
-<span id="cb11-3"><a></a>posterior_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(pp_proportion)</span>
-<span id="cb11-4"><a></a>posterior_ci <span class="ot">&lt;-</span> <span class="fu">quantile</span>(pp_proportion, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))  <span class="co"># 95% credible interval</span></span>
-<span id="cb11-5"><a></a>pp_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">proportion =</span> pp_proportion)</span>
-<span id="cb11-6"><a></a><span class="fu">ggplot</span>(pp_df, <span class="fu">aes</span>(<span class="at">x =</span> proportion)) <span class="sc">+</span></span>
-<span id="cb11-7"><a></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.005</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb11-8"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> known_prev, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb11-9"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> posterior_mean, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">linetype =</span> <span class="st">"solid"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb11-10"><a></a>  <span class="fu">labs</span>(</span>
-<span id="cb11-11"><a></a>    <span class="at">title =</span> <span class="st">"Posterior Predicted Diabetes Proportion vs NHANES Prevalence"</span>,</span>
-<span id="cb11-12"><a></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"Red dashed = NHANES prevalence ("</span>, known_prev, </span>
-<span id="cb11-13"><a></a>                      <span class="st">"), Blue solid = Posterior mean ("</span>, <span class="fu">round</span>(posterior_mean,<span class="dv">3</span>), <span class="st">")"</span>),</span>
-<span id="cb11-14"><a></a>    <span class="at">x =</span> <span class="st">"Proportion of Diabetes = 1"</span>,</span>
-<span id="cb11-15"><a></a>    <span class="at">y =</span> <span class="st">"Frequency"</span></span>
-<span id="cb11-16"><a></a>  ) <span class="sc">+</span></span>
-<span id="cb11-17"><a></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a><span class="co"># pp_proportion &lt;- rowMeans(pp_samples)  # if not already done</span></span>
+<span id="cb9-2"><a></a>known_prev <span class="ot">&lt;-</span> <span class="fl">0.089</span>   <span class="co"># NHANES prevalence</span></span>
+<span id="cb9-3"><a></a>posterior_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(pp_proportion)</span>
+<span id="cb9-4"><a></a>posterior_ci <span class="ot">&lt;-</span> <span class="fu">quantile</span>(pp_proportion, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))  <span class="co"># 95% credible interval</span></span>
+<span id="cb9-5"><a></a>pp_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">proportion =</span> pp_proportion)</span>
+<span id="cb9-6"><a></a><span class="fu">ggplot</span>(pp_df, <span class="fu">aes</span>(<span class="at">x =</span> proportion)) <span class="sc">+</span></span>
+<span id="cb9-7"><a></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.005</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb9-8"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> known_prev, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb9-9"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> posterior_mean, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">linetype =</span> <span class="st">"solid"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb9-10"><a></a>  <span class="fu">labs</span>(</span>
+<span id="cb9-11"><a></a>    <span class="at">title =</span> <span class="st">"Posterior Predicted Diabetes Proportion vs NHANES Prevalence"</span>,</span>
+<span id="cb9-12"><a></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"Red dashed = NHANES prevalence ("</span>, known_prev, </span>
+<span id="cb9-13"><a></a>                      <span class="st">"), Blue solid = Posterior mean ("</span>, <span class="fu">round</span>(posterior_mean,<span class="dv">3</span>), <span class="st">")"</span>),</span>
+<span id="cb9-14"><a></a>    <span class="at">x =</span> <span class="st">"Proportion of Diabetes = 1"</span>,</span>
+<span id="cb9-15"><a></a>    <span class="at">y =</span> <span class="st">"Frequency"</span></span>
+<span id="cb9-16"><a></a>  ) <span class="sc">+</span></span>
+<span id="cb9-17"><a></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
+<table class="caption-top">
+<colgroup>
+<col style="width: 100%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">### Model Diagnostics</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">#### R Square</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Model fit: bayes_R2(bayes_fit)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Estimate        Est.Error       Q2.5        Q97.5 R2 0.1313342    0.01265055    0.1064607     0.156078</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="assumptions-for-bayesian-logistic-regression">Assumptions for Bayesian Logistic Regression</h3>
 <div>
 <ul>
@@ -923,20 +942,20 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </ul>
 </div>
 <div id="tabset-14-2">
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>participant1_data  <span class="ot">&lt;-</span> adult[<span class="dv">1</span>, ]</span>
-<span id="cb12-2"><a></a>phat1 <span class="ot">&lt;-</span> <span class="fu">posterior_linpred</span>(bayes_fit, <span class="at">newdata =</span> participant1_data, <span class="at">transform =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb12-3"><a></a><span class="co"># Store in a data frame for plotting</span></span>
-<span id="cb12-4"><a></a>post_pred_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">pred =</span> phat1)</span>
-<span id="cb12-5"><a></a>ci_95_participant1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(phat1, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
-<span id="cb12-6"><a></a></span>
-<span id="cb12-7"><a></a><span class="fu">ggplot</span>(post_pred_df, <span class="fu">aes</span>(<span class="at">x =</span> pred)) <span class="sc">+</span> </span>
-<span id="cb12-8"><a></a>  <span class="fu">geom_density</span>(<span class="at">color=</span><span class="st">'darkblue'</span>, <span class="at">fill=</span><span class="st">'lightblue'</span>) <span class="sc">+</span></span>
-<span id="cb12-9"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_95_participant1[<span class="dv">1</span>], <span class="at">color=</span><span class="st">'red'</span>, <span class="at">linetype=</span><span class="st">'dashed'</span>) <span class="sc">+</span></span>
-<span id="cb12-10"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_95_participant1[<span class="dv">2</span>], <span class="at">color=</span><span class="st">'red'</span>, <span class="at">linetype=</span><span class="st">'dashed'</span>) <span class="sc">+</span></span>
-<span id="cb12-11"><a></a>  <span class="fu">xlab</span>(<span class="st">'Probability of being diabetic (Outcome=1)'</span>) <span class="sc">+</span></span>
-<span id="cb12-12"><a></a>  <span class="fu">ggtitle</span>(<span class="st">'Posterior Predictive Distribution 95% Credible Interval'</span>) <span class="sc">+</span></span>
-<span id="cb12-13"><a></a>  <span class="fu">theme_bw</span>()</span>
-<span id="cb12-14"><a></a>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a>participant1_data  <span class="ot">&lt;-</span> adult[<span class="dv">1</span>, ]</span>
+<span id="cb10-2"><a></a>phat1 <span class="ot">&lt;-</span> <span class="fu">posterior_linpred</span>(bayes_fit, <span class="at">newdata =</span> participant1_data, <span class="at">transform =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-3"><a></a><span class="co"># Store in a data frame for plotting</span></span>
+<span id="cb10-4"><a></a>post_pred_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">pred =</span> phat1)</span>
+<span id="cb10-5"><a></a>ci_95_participant1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(phat1, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb10-6"><a></a></span>
+<span id="cb10-7"><a></a><span class="fu">ggplot</span>(post_pred_df, <span class="fu">aes</span>(<span class="at">x =</span> pred)) <span class="sc">+</span> </span>
+<span id="cb10-8"><a></a>  <span class="fu">geom_density</span>(<span class="at">color=</span><span class="st">'darkblue'</span>, <span class="at">fill=</span><span class="st">'lightblue'</span>) <span class="sc">+</span></span>
+<span id="cb10-9"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_95_participant1[<span class="dv">1</span>], <span class="at">color=</span><span class="st">'red'</span>, <span class="at">linetype=</span><span class="st">'dashed'</span>) <span class="sc">+</span></span>
+<span id="cb10-10"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_95_participant1[<span class="dv">2</span>], <span class="at">color=</span><span class="st">'red'</span>, <span class="at">linetype=</span><span class="st">'dashed'</span>) <span class="sc">+</span></span>
+<span id="cb10-11"><a></a>  <span class="fu">xlab</span>(<span class="st">'Probability of being diabetic (Outcome=1)'</span>) <span class="sc">+</span></span>
+<span id="cb10-12"><a></a>  <span class="fu">ggtitle</span>(<span class="st">'Posterior Predictive Distribution 95% Credible Interval'</span>) <span class="sc">+</span></span>
+<span id="cb10-13"><a></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb10-14"><a></a>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="tabset-14-3">
 <p>Posterior predictive distribution for a specific individual with Outcome = 1</p>
