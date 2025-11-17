@@ -562,39 +562,39 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 </section>
 <section class="slide level2">
 
-<h3 class="panel-tabset" id="missing-data-analysis">Missing Data Analysis</h3>
+<h3 class="panel-tabset" id="missing-data-and-complete-case-analysis">Missing Data and Complete Case Analysis</h3>
 <div class="panel-tabset">
-<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">Plot</a></li><li><a href="#tabset-5-2">Abnormalities</a></li><li><a href="#tabset-5-3">Complete Case Analysis</a></li><li><a href="#tabset-5-4">Code</a></li></ul>
+<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">Plot</a></li><li><a href="#tabset-5-2">Complete Case Analysis</a></li><li><a href="#tabset-5-3">Code</a></li></ul>
 <div class="tab-content">
 <div id="tabset-5-1">
 <p><img data-src="images/clipboard-2873800077.png" width="427"></p>
-</div>
-<div id="tabset-5-2">
 <ul>
 <li>Missing Data Assessment - Overall missingness ≈ 4%</li>
 <li>No variable is completely missing</li>
 <li>Missingness likely MAR (Missing At Random)</li>
 <li>Clustered mainly in BMI (4.3%) and diabetes_dx (3.1%).</li>
 </ul>
+<p><strong>MAR: the reason for a data point being missing is related to other variables in the dataset, but not to the value of the missing variable itself</strong></p>
 </div>
-<div id="tabset-5-3">
+<div id="tabset-5-2">
 <h4 id="survey-weighted-diabetes-risk-u.s.-adults">Survey-Weighted Diabetes Risk (U.S. Adults)</h4>
 <p><strong>diabetes_dx∼age_c + bmi_c + sex + race</strong></p>
-<p>Interpretation</p>
 <ul>
-<li>Model was estimated using svyglm(),<strong>quasibinomial family</strong> for binary outcome for NHANES design.</li>
-<li>Design-adjusted coefficient estimates, standard errors, and odds ratios reflect population-representative associations for U.S. adults.</li>
-<li>Complete case analysis (n= 5348)</li>
-<li>Age (per 1 SD ↑): OR ≈ 3.03 →Older adults ~3× higher odds</li>
-<li>BMI (per 1 SD ↑): OR ≈ 1.88 → Higher BMI increases risk</li>
-<li>Sex (Female vs Male): OR ≈ 0.53 → Females ~47% lower odds</li>
+<li><p>Model was estimated using svyglm(),<strong>quasibinomial family</strong> for binary outcome for NHANES design.</p></li>
+<li><p>Design-adjusted coefficient estimates, standard errors, and odds ratios reflect population-representative associations for U.S. adults.</p></li>
+<li><p><strong>Survey weighted (MLR):Complete case analysis (n= 5348)</strong></p>
+<ul>
+<li>Age (per 1 SD ↑): OR ≈ 3.03 →Older adults <strong>~3× higher odds</strong></li>
+<li>BMI (per 1 SD ↑): OR ≈ 1.88 → <strong>Higher BMI increases risk</strong></li>
+<li>Sex (Female vs Male): OR ≈ 0.53 → Females <strong>~47% lower odds</strong></li>
 <li>Race (vs NH White): - Mexican American: OR ≈ 2.04</li>
 <li>Other Hispanic: OR ≈ 1.59 - NH Black: OR ≈ 1.67</li>
 <li>Other/Multi-racial: OR ≈ 2.33</li>
+</ul></li>
 </ul>
 <p>Age and BMI are strongest predictors Females have lower risk Certain racial/ethnic groups have higher odds</p>
 </div>
-<div id="tabset-5-4">
+<div id="tabset-5-3">
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>form_cc <span class="ot">&lt;-</span> diabetes_dx <span class="sc">~</span> age_c <span class="sc">+</span> bmi_c <span class="sc">+</span> sex <span class="sc">+</span> race</span>
 <span id="cb1-2"><a></a>svy_fit <span class="ot">&lt;-</span> survey<span class="sc">::</span><span class="fu">svyglm</span>(<span class="at">formula =</span> form_cc, <span class="at">design =</span> des_cc, <span class="at">family =</span> <span class="fu">quasibinomial</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -605,13 +605,13 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 
 <h3 id="bayesian-logistic-regression">Bayesian Logistic Regression</h3>
 <div class="panel-tabset">
-<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">Data (Adults)</a></li><li><a href="#tabset-6-2">MICE</a></li><li><a href="#tabset-6-3">Bayesian Logistic Regression Model</a></li><li><a href="#tabset-6-4">Code</a></li><li><a href="#tabset-6-5">Result</a></li></ul>
+<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">Data (Adults)</a></li><li><a href="#tabset-6-2">MICE</a></li><li><a href="#tabset-6-3">Bayesian Logistic Regression Model</a></li><li><a href="#tabset-6-4">Code</a></li></ul>
 <div class="tab-content">
 <div id="tabset-6-1">
 <ul>
 <li>Raw imported: <strong>10175 obs</strong><br>
 </li>
-<li>Survey-weighted (Filtered = Adult): <strong>5,769 (~7%)</strong><br>
+<li>Survey-weighted (Filtered = Adult): <strong>5,769 (~4%)</strong><br>
 </li>
 <li>Complete Case Analysis: <strong>5348</strong> (with no missing values)<br>
 </li>
@@ -623,12 +623,20 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <div id="tabset-6-2">
 <p><strong>Multivariate Imputation by Chained Equation</strong><br>
 <em>van Buuren &amp; Groothuis-Oudshoorn, 2011; van Buuren, 2012</em><br>
-- Iteratively imputes incomplete variables using regression models.<br>
-- MICE run 5 iterations for each of the 5 imputed datasets to ensure stability and convergence and provides multiple realistic versions of missing data<br>
-- Use PMM method for continuous (<em>Predictive Mean Matching)</em> to fill missing values with the observed values “closest” to predicted values)<br>
-- Use logistic regression for binary variables.<br>
-- Rubin’s rule finds pooled Estimates from across posterior distributions to yield full posterior<br>
-<strong>Posterior (parameters + missing data uncertainty)</strong></p>
+</p>
+<ul>
+<li>Iteratively imputes incomplete variables using regression models.<br>
+</li>
+<li>MICE run 5 iterations for each of the 5 imputed datasets to ensure stability and convergence and provides multiple realistic versions of missing data<br>
+</li>
+<li>Use PMM method for continuous (<em>Predictive Mean Matching)</em> to fill missing values with the observed values “closest” to predicted values)<br>
+</li>
+<li>Use logistic regression for binary variables.<br>
+</li>
+<li>Rubin’s rule finds pooled Estimates from across posterior distributions to yield full posterior<br>
+</li>
+</ul>
+<p><strong>Posterior (parameters + missing data uncertainty)</strong></p>
 </div>
 <div id="tabset-6-3">
 <p>Model is fitted to each imputed dataset in <strong>R</strong> using brms <strong>(Stan backend)</strong>, 2000 itirations<br>
@@ -663,11 +671,6 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <span id="cb2-14"><a></a>  <span class="at">refresh =</span> <span class="dv">0</span></span>
 <span id="cb2-15"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-6-5">
-<p><strong>warmup= 1000</strong><br>
-<strong>total draws = 4000</strong></p>
-<p><img data-src="images/clipboard-2724235725.png"></p>
-</div>
 </div>
 </div>
 </section>
@@ -675,7 +678,7 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 
 <h3 id="mcmc-markov-chain-monte-carlo">MCMC (Markov Chain Monte Carlo)</h3>
 <div class="panel-tabset">
-<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">Markov Process</a></li><li><a href="#tabset-7-2">Code</a></li></ul>
+<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">Markov Process</a></li><li><a href="#tabset-7-2">Code</a></li><li><a href="#tabset-7-3">Result</a></li></ul>
 <div class="tab-content">
 <div id="tabset-7-1">
 <ul>
@@ -684,7 +687,8 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <li><p>The samples are not just random but are drawn in a way that the long-term distribution of the samples matches the target posterior distribution.</p></li>
 <li><p>It uses a burn in period.</p></li>
 <li><p>The random vectors are sequentially dependent. Retain one parameter vector every n iterations, and discard the rest.</p>
-<p><img data-src="images/clipboard-1907802712.png"></p></li>
+<p><img data-src="images/clipboard-1907802712.png"><br>
+<strong>GIBBS SAMPLER: A specific algorithm that falls under the MCMC category</strong></p></li>
 </ul>
 </div>
 <div id="tabset-7-2">
@@ -699,6 +703,19 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <span id="cb3-9"><a></a>    <span class="at">OR_LCL   =</span> <span class="fu">exp</span>(Q2<span class="fl">.5</span>),</span>
 <span id="cb3-10"><a></a>    <span class="at">OR_UCL   =</span> <span class="fu">exp</span>(Q97<span class="fl">.5</span>)</span>
 <span id="cb3-11"><a></a>  ) <span class="sc">%&gt;%</span>  <span class="fu">select</span>(term,    Estimate,Est.Error,Q2<span class="fl">.5</span>, Q97<span class="fl">.5</span>,Rhat, n_eff, OR,  OR_LCL,  OR_UCL )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>rstan::monitor( samples = rstan::extract(fit, permuted = FALSE), probs = c(0.025, 0.5, 0.975) ) Provides the following summaries:</p>
+<ul>
+<li><strong>Posterior mean</strong> and <strong>standard deviation (SD)</strong></li>
+<li><strong>Monte Carlo standard error (MCSE)</strong></li>
+<li><strong>Quantiles:</strong> 2.5%, 25%, 50%, 75%, 97.5%</li>
+<li><strong>Effective sample sizes:</strong> Bulk_ESS and Tail_ESS</li>
+<li><strong>R-hat (convergence diagnostic)</strong></li>
+</ul>
+</div>
+<div id="tabset-7-3">
+<p><strong>warmup= 1000</strong><br>
+<strong>total draws = 4000</strong></p>
+<p><img data-src="images/clipboard-2724235725.png"></p>
 </div>
 </div>
 </div>

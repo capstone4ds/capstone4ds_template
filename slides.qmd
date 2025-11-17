@@ -176,19 +176,19 @@ Logistic link transforms the linear predictor into a probability between (0 and 
 
 ------------------------------------------------------------------------
 
-### Missing Data Analysis {.panel-tabset}
+### Missing Data and Complete Case Analysis {.panel-tabset}
 
 ::: panel-tabset
 ### Plot
 
 ![](images/clipboard-2873800077.png){width="427"}
 
-### Abnormalities
-
 -   Missing Data Assessment - Overall missingness ≈ 4%
 -   No variable is completely missing
 -   Missingness likely MAR (Missing At Random)
 -   Clustered mainly in BMI (4.3%) and diabetes_dx (3.1%).
+
+**MAR: the reason for a data point being missing is related to other variables in the dataset, but not to the value of the missing variable itself**
 
 ### Complete Case Analysis
 
@@ -196,17 +196,20 @@ Logistic link transforms the linear predictor into a probability between (0 and 
 
 **diabetes_dx∼age_c + bmi_c + sex + race**
 
-Interpretation
-
 -   Model was estimated using svyglm(),**quasibinomial family** for binary outcome for NHANES design.
+
 -   Design-adjusted coefficient estimates, standard errors, and odds ratios reflect population-representative associations for U.S. adults.
--   Complete case analysis (n= 5348)
--   Age (per 1 SD ↑): OR ≈ 3.03 →Older adults \~3× higher odds
--   BMI (per 1 SD ↑): OR ≈ 1.88 → Higher BMI increases risk
--   Sex (Female vs Male): OR ≈ 0.53 → Females \~47% lower odds
--   Race (vs NH White): - Mexican American: OR ≈ 2.04
--   Other Hispanic: OR ≈ 1.59 - NH Black: OR ≈ 1.67
--   Other/Multi-racial: OR ≈ 2.33
+
+-   **Survey weighted (MLR):Complete case analysis (n= 5348)**
+
+           
+    -   Age (per 1 SD ↑): OR ≈ 3.03 →Older adults **\~3× higher odds**
+    -   BMI (per 1 SD ↑): OR ≈ 1.88 → **Higher BMI increases risk**
+    -   Sex (Female vs Male): OR ≈ 0.53 → Females **\~47% lower odds**
+    -   Race (vs NH White): - Mexican American: OR ≈ 2.04
+    -   Other Hispanic: OR ≈ 1.59 - NH Black: OR ≈ 1.67
+    -   Other/Multi-racial: OR ≈ 2.33
+  
 
 Age and BMI are strongest predictors Females have lower risk Certain racial/ethnic groups have higher odds
 
@@ -226,7 +229,7 @@ svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibino
 ### Data (Adults)
 
 -   Raw imported: **10175 obs**\
--   Survey-weighted (Filtered = Adult): **5,769 (\~7%)**\
+-   Survey-weighted (Filtered = Adult): **5,769 (\~4%)**\
 -   Complete Case Analysis: **5348** (with no missing values)\
 -   Imputed dataset (adult_imp1): **5,592**\
 
@@ -236,11 +239,13 @@ svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibino
 
 **Multivariate Imputation by Chained Equation**\
 *van Buuren & Groothuis-Oudshoorn, 2011; van Buuren, 2012*\
+
 - Iteratively imputes incomplete variables using regression models.\
 - MICE run 5 iterations for each of the 5 imputed datasets to ensure stability and convergence and provides multiple realistic versions of missing data\
 - Use PMM method for continuous (*Predictive Mean Matching)* to fill missing values with the observed values “closest” to predicted values)\
 - Use logistic regression for binary variables.\
 - Rubin’s rule finds pooled Estimates from across posterior distributions to yield full posterior\
+
 **Posterior (parameters + missing data uncertainty)**
 
 ### Bayesian Logistic Regression Model
@@ -280,13 +285,7 @@ bayes_fit <- brm(
 )
 ```
 
-### Result
-**warmup= 1000**\
-**total draws = 4000**
-
-![](images/clipboard-2724235725.png)
 :::
-
 
 ------------------------------------------------------------------------
 
@@ -305,7 +304,8 @@ bayes_fit <- brm(
 
 -   The random vectors are sequentially dependent. Retain one parameter vector every n iterations, and discard the rest.
 
-    ![](images/clipboard-1907802712.png)
+    ![](images/clipboard-1907802712.png)\
+    **GIBBS SAMPLER: A specific algorithm that falls under the MCMC category**
 
 ### Code
 
@@ -323,6 +323,25 @@ bayes_results <- post %>%  left_join(diag, by = "term") %>%  mutate(
   ) %>%  select(term,    Estimate,Est.Error,Q2.5, Q97.5,Rhat, n_eff, OR,  OR_LCL,  OR_UCL )
 ```
 
+rstan::monitor(
+  samples = rstan::extract(fit, permuted = FALSE),
+  probs = c(0.025, 0.5, 0.975)
+)
+Provides the following summaries:
+
+- **Posterior mean** and **standard deviation (SD)**
+- **Monte Carlo standard error (MCSE)**
+- **Quantiles:** 2.5%, 25%, 50%, 75%, 97.5%
+- **Effective sample sizes:** Bulk_ESS and Tail_ESS
+- **R-hat (convergence diagnostic)**
+
+
+### Result
+
+**warmup= 1000**\
+**total draws = 4000**
+
+![](images/clipboard-2724235725.png)
 :::
 
 ------------------------------------------------------------------------
