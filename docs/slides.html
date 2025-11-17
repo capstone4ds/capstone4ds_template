@@ -526,7 +526,18 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </div>
 <div id="tabset-3-3">
 <h4 id="survey-weighted-diabetes-risk-u.s.-adults">Survey-Weighted Diabetes Risk (U.S. Adults)</h4>
-<p><strong>diabetes_dx∼age_c + bmi_c + sex + race</strong> Interpretation - model was estimated using svyglm(),<strong>quasibinomial family</strong> for binary outcome for NHANES design. - Design-adjusted coefficient estimates, standard errors, and odds ratios reflect population-representative associations for U.S. adults. - Age (per 1 SD ↑): OR ≈ 3.03 → Older adults ~3× higher odds - BMI (per 1 SD ↑): OR ≈ 1.88 → Higher BMI increases risk - Sex (Female vs Male): OR ≈ 0.53 → Females ~47% lower odds - Race (vs NH White): - Mexican American: OR ≈ 2.04 - Other Hispanic: OR ≈ 1.59 - NH Black: OR ≈ 1.67 - Other/Multi-racial: OR ≈ 2.33</p>
+<p><strong>diabetes_dx∼age_c + bmi_c + sex + race</strong></p>
+<p>Interpretation</p>
+<ul>
+<li>model was estimated using svyglm(),<strong>quasibinomial family</strong> for binary outcome for NHANES design.</li>
+<li>Design-adjusted coefficient estimates, standard errors, and odds ratios reflect population-representative associations for U.S. adults.</li>
+<li>Age (per 1 SD ↑): OR ≈ 3.03 →Older adults ~3× higher odds</li>
+<li>BMI (per 1 SD ↑): OR ≈ 1.88 → Higher BMI increases risk</li>
+<li>Sex (Female vs Male): OR ≈ 0.53 → Females ~47% lower odds</li>
+<li>Race (vs NH White): - Mexican American: OR ≈ 2.04</li>
+<li>Other Hispanic: OR ≈ 1.59 - NH Black: OR ≈ 1.67</li>
+<li>Other/Multi-racial: OR ≈ 2.33</li>
+</ul>
 <p>Age and BMI are strongest predictors Females have lower risk Certain racial/ethnic groups have higher odds</p>
 </div>
 <div id="tabset-3-4">
@@ -893,27 +904,22 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </div>
 </div>
 </div>
-<table class="caption-top">
-<colgroup>
-<col style="width: 100%">
-</colgroup>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">### Model Diagnostics</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">#### R Square</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>Model fit: bayes_R2(bayes_fit)</code></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>Estimate        Est.Error       Q2.5        Q97.5 R2 0.1313342    0.01265055    0.1064607     0.156078</code></td>
-</tr>
-</tbody>
-</table>
+</section>
+<section class="slide level2">
+
+<h3 id="model-diagnostics-7">Model Diagnostics</h3>
+<h4 id="r-square">R Square</h4>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a>Model fit<span class="sc">:</span> <span class="fu">bayes_R2</span>(bayes_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+<img data-src="images/clipboard-2402173436.png" class="r-stretch"><p>Interpretation</p>
+<ul>
+<li>Explains about 13% of the variability in diabetes status, with credible uncertainty bounds suggesting reasonable but modest explanatory power.</li>
+<li>but other factors (e.g., genetics, lifestyle, environment) also contribute to outcome variability.</li>
+</ul>
+</section>
+<section class="slide level2">
+
 <h3 id="assumptions-for-bayesian-logistic-regression">Assumptions for Bayesian Logistic Regression</h3>
-<div>
 <ul>
 <li>Data Binary outcome</li>
 <li>Independent observations</li>
@@ -924,7 +930,6 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <li>No complete separation</li>
 <li>Good predictive checks</li>
 </ul>
-</div>
 </section>
 <section class="slide level2">
 
@@ -942,20 +947,18 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </ul>
 </div>
 <div id="tabset-14-2">
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a>participant1_data  <span class="ot">&lt;-</span> adult[<span class="dv">1</span>, ]</span>
-<span id="cb10-2"><a></a>phat1 <span class="ot">&lt;-</span> <span class="fu">posterior_linpred</span>(bayes_fit, <span class="at">newdata =</span> participant1_data, <span class="at">transform =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb10-3"><a></a><span class="co"># Store in a data frame for plotting</span></span>
-<span id="cb10-4"><a></a>post_pred_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">pred =</span> phat1)</span>
-<span id="cb10-5"><a></a>ci_95_participant1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(phat1, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
-<span id="cb10-6"><a></a></span>
-<span id="cb10-7"><a></a><span class="fu">ggplot</span>(post_pred_df, <span class="fu">aes</span>(<span class="at">x =</span> pred)) <span class="sc">+</span> </span>
-<span id="cb10-8"><a></a>  <span class="fu">geom_density</span>(<span class="at">color=</span><span class="st">'darkblue'</span>, <span class="at">fill=</span><span class="st">'lightblue'</span>) <span class="sc">+</span></span>
-<span id="cb10-9"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_95_participant1[<span class="dv">1</span>], <span class="at">color=</span><span class="st">'red'</span>, <span class="at">linetype=</span><span class="st">'dashed'</span>) <span class="sc">+</span></span>
-<span id="cb10-10"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_95_participant1[<span class="dv">2</span>], <span class="at">color=</span><span class="st">'red'</span>, <span class="at">linetype=</span><span class="st">'dashed'</span>) <span class="sc">+</span></span>
-<span id="cb10-11"><a></a>  <span class="fu">xlab</span>(<span class="st">'Probability of being diabetic (Outcome=1)'</span>) <span class="sc">+</span></span>
-<span id="cb10-12"><a></a>  <span class="fu">ggtitle</span>(<span class="st">'Posterior Predictive Distribution 95% Credible Interval'</span>) <span class="sc">+</span></span>
-<span id="cb10-13"><a></a>  <span class="fu">theme_bw</span>()</span>
-<span id="cb10-14"><a></a>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a>participant1_data  <span class="ot">&lt;-</span> adult[<span class="dv">1</span>, ]</span>
+<span id="cb11-2"><a></a>phat1 <span class="ot">&lt;-</span> <span class="fu">posterior_linpred</span>(bayes_fit, <span class="at">newdata =</span> participant1_data, <span class="at">transform =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-3"><a></a>post_pred_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">pred =</span> phat1)</span>
+<span id="cb11-4"><a></a>ci_95_participant1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(phat1, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb11-5"><a></a></span>
+<span id="cb11-6"><a></a><span class="fu">ggplot</span>(post_pred_df, <span class="fu">aes</span>(<span class="at">x =</span> pred)) <span class="sc">+</span> </span>
+<span id="cb11-7"><a></a>  <span class="fu">geom_density</span>(<span class="at">color=</span><span class="st">'darkblue'</span>, <span class="at">fill=</span><span class="st">'lightblue'</span>) <span class="sc">+</span></span>
+<span id="cb11-8"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_95_participant1[<span class="dv">1</span>], <span class="at">color=</span><span class="st">'red'</span>, <span class="at">linetype=</span><span class="st">'dashed'</span>) <span class="sc">+</span></span>
+<span id="cb11-9"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_95_participant1[<span class="dv">2</span>], <span class="at">color=</span><span class="st">'red'</span>, <span class="at">linetype=</span><span class="st">'dashed'</span>) <span class="sc">+</span></span>
+<span id="cb11-10"><a></a>  <span class="fu">xlab</span>(<span class="st">'Probability of being diabetic (Outcome=1)'</span>) <span class="sc">+</span></span>
+<span id="cb11-11"><a></a>  <span class="fu">ggtitle</span>(<span class="st">'Posterior Predictive Distribution 95% Credible Interval'</span>) <span class="sc">+</span></span>
+<span id="cb11-12"><a></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="tabset-14-3">
 <p>Posterior predictive distribution for a specific individual with Outcome = 1</p>
@@ -965,7 +968,7 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <li>95% credible interval ≈ 0.20 to 0.31</li>
 <li>The red dashed lines represent the 95% credible interval (CI): Lower bound ≈ 0.20 Upper bound ≈ 0.31</li>
 </ul>
-<p><strong>Given the model and the participant’s characteristics, there is a 95% probability that this participant’s true diabetes risk lies between 20% and 31%</strong></p>
+<p><strong>Given the model and the participant’s characteristics, there is a 95% probability that this participant’s true diabetes risk lies between 20% and 31%</strong> :::</p>
 </div>
 </div>
 </div>

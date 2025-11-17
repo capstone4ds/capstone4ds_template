@@ -135,7 +135,18 @@ National Health and Nutrition Examination Survey (NHANES) 2013–2014\
 
 #### Survey-Weighted Diabetes Risk (U.S. Adults)
 
-**diabetes_dx∼age_c + bmi_c + sex + race** Interpretation - model was estimated using svyglm(),**quasibinomial family** for binary outcome for NHANES design. - Design-adjusted coefficient estimates, standard errors, and odds ratios reflect population-representative associations for U.S. adults. - Age (per 1 SD ↑): OR ≈ 3.03 → Older adults \~3× higher odds - BMI (per 1 SD ↑): OR ≈ 1.88 → Higher BMI increases risk - Sex (Female vs Male): OR ≈ 0.53 → Females \~47% lower odds - Race (vs NH White): - Mexican American: OR ≈ 2.04 - Other Hispanic: OR ≈ 1.59 - NH Black: OR ≈ 1.67 - Other/Multi-racial: OR ≈ 2.33
+**diabetes_dx∼age_c + bmi_c + sex + race**
+
+Interpretation
+
+-   model was estimated using svyglm(),**quasibinomial family** for binary outcome for NHANES design.
+-   Design-adjusted coefficient estimates, standard errors, and odds ratios reflect population-representative associations for U.S. adults.
+-   Age (per 1 SD ↑): OR ≈ 3.03 →Older adults \~3× higher odds
+-   BMI (per 1 SD ↑): OR ≈ 1.88 → Higher BMI increases risk
+-   Sex (Female vs Male): OR ≈ 0.53 → Females \~47% lower odds
+-   Race (vs NH White): - Mexican American: OR ≈ 2.04
+-   Other Hispanic: OR ≈ 1.59 - NH Black: OR ≈ 1.67
+-   Other/Multi-racial: OR ≈ 2.33
 
 Age and BMI are strongest predictors Females have lower risk Certain racial/ethnic groups have higher odds
 
@@ -533,16 +544,26 @@ ggplot(pp_df, aes(x = proportion)) +
 ```
 :::
 
-|  |
-|:-----------------------------------------------------------------------|
-| \### Model Diagnostics |
-| \#### R Square |
-| `Model fit: bayes_R2(bayes_fit)` |
-| `Estimate        Est.Error       Q2.5        Q97.5 R2 0.1313342    0.01265055    0.1064607     0.156078` |
+------------------------------------------------------------------------
+
+### Model Diagnostics
+
+#### R Square
+
+``` r
+Model fit: bayes_R2(bayes_fit)
+```
+![](images/clipboard-2402173436.png)
+
+Interpretation
+
+-   Explains about 13% of the variability in diabetes status, with credible uncertainty bounds suggesting reasonable but modest explanatory power.
+-   but other factors (e.g., genetics, lifestyle, environment) also contribute to outcome variability.
+
+------------------------------------------------------------------------
 
 ### Assumptions for Bayesian Logistic Regression
 
-::: nonincremental
 -   Data Binary outcome
 -   Independent observations
 -   Relationship Linear in logit
@@ -551,7 +572,6 @@ ggplot(pp_df, aes(x = proportion)) +
 -   Posterior Proper and convergent Fit
 -   No complete separation
 -   Good predictive checks
-:::
 
 ------------------------------------------------------------------------
 
@@ -572,7 +592,6 @@ ggplot(pp_df, aes(x = proportion)) +
 ``` r
 participant1_data  <- adult[1, ]
 phat1 <- posterior_linpred(bayes_fit, newdata = participant1_data, transform = TRUE)
-# Store in a data frame for plotting
 post_pred_df <- data.frame(pred = phat1)
 ci_95_participant1 <- quantile(phat1, c(0.025, 0.975))
 
@@ -583,7 +602,6 @@ ggplot(post_pred_df, aes(x = pred)) +
   xlab('Probability of being diabetic (Outcome=1)') +
   ggtitle('Posterior Predictive Distribution 95% Credible Interval') +
   theme_bw()
-  
 ```
 
 ### Interpretation
@@ -595,7 +613,7 @@ Posterior predictive distribution for a specific individual with Outcome = 1
 -   95% credible interval ≈ 0.20 to 0.31
 -   The red dashed lines represent the 95% credible interval (CI): Lower bound ≈ 0.20 Upper bound ≈ 0.31
 
-**Given the model and the participant’s characteristics, there is a 95% probability that this participant’s true diabetes risk lies between 20% and 31%**
+**Given the model and the participant’s characteristics, there is a 95% probability that this participant’s true diabetes risk lies between 20% and 31%** :::
 :::
 
 ------------------------------------------------------------------------
