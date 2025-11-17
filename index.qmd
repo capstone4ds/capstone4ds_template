@@ -2432,29 +2432,7 @@ ggplot(post_pred_df2, aes(x = pred)) +
 
 ## External validation
 
--   Predicting Diabetes Risk for a New Participant to demonstrate the
-    application of the Bayesian model for personalized prediction, we
-    applied the trained model to a new participant not included in the
-    original dataset.
--   Selected a new participant with specific covariates (age, BMI, sex,
-    race).
--   Used posterior_linpred with transform = TRUE to compute posterior
-    predicted probabilities of diabetes. Generated posterior draws to
-    capture predictive uncertainty.
--   Created a density plot of predicted probabilities. Computed 95%
-    credible interval to summarize the range of likely outcomes.
--   Red dashed lines indicate the lower and upper bounds of the
-    interval.
--   The distribution shows not only the most probable risk but also the
-    uncertainty around it.
--   Credible intervals help quantify confidence in individual-level
-    predictions.
--   Supports personalized decision-making, such as targeted lifestyle
-    interventions, early monitoring, or preventive care.
--   Bayesian posterior predictive draws allow probabilistic,
-    individualized predictions for new participants, providing both
-    point estimates and uncertainty measures for actionable risk
-    assessment.
+-   Using the Bayesian model, we computed the posterior predicted probability for a new participant based on age, BMI, sex, and race. The density plot with 95% credible intervals captures both the most likely risk and uncertainty, supporting individualized preventive care
 
 ```{r}
 #| label: new participant
@@ -2495,22 +2473,19 @@ ggplot(post_pred_df_new, aes(x = pred)) +
 
 ```
 
-\## Trageted BMI Estimation for Predicted Diabetes Risk
+\## Targeted BMI Estimation for Predicted Diabetes Risk
 
--   To analyze the relationship between BMI and the predicted
-    probability of diabetes, holding other covariates (age, sex, race)
-    constant, via fitted Bayesian logistic regression model, we
-    generated a grid of BMI values (e.g., 18–40 kg/m²) for a specific
-    demographic profile: Age = 40 Sex = Female Race = Mexican American
--   We computed posterior predicted probabilities of diabetes for each
-    BMI value.
--   Averaged across posterior draws to obtain the mean predicted
-    probability per BMI.
--   Target Probability Approach Defined a target probability of diabetes
-    (e.g., 0.3). Identified the BMI value whose predicted probability is
-    closest to the target. This enables inverse prediction, linking
-    statistical inference to clinically meaningful thresholds.
--   Visualization Line plot of predicted probability vs BMI shows
+-  To examine how BMI influences the predicted probability of diabetes while holding other covariates constant (age, sex, race), we used the fitted Bayesian logistic regression model:
+
+BMI grid: Generated a range of BMI values (18–40 kg/m²) for a representative individual: Age = 40, Sex = Female, Race = Mexican American.
+
+Posterior predictions: Computed the posterior predicted probability of diabetes for each BMI value.
+
+Averaging: Calculated the mean predicted probability across posterior draws for each BMI.
+
+Target probability approach: Defined a clinically relevant target probability (e.g., 0.3) and identified the BMI whose predicted probability is closest to this target, allowing inverse prediction from probability to BMI.
+    
+**Visualization Line plot of predicted probability vs BMI**
     -   The blue curve shows how likely different probability values are
         according to your posterior predictive distribution.-\
     -   The red dashed lines show the 95% credible interval (CI) for

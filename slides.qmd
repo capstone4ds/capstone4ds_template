@@ -125,13 +125,14 @@ p = 1 / (1 + exp(-(β0 + βX)))
 -   In Model: links age, BMI, sex, and race to the probability of having diabetes.
 
 #### Prior
+
 **Intercept prior: student_t(3, 0, 10)** — (Van de Schoot et al., 2013)\
--   **df = 3 (degrees of freedom):** **heavy tails**- allow for occasional extreme values more than a normal distribution.\
--   **location = 0:** Centered at 0, so the prior expects the parameter to be near 0\
--   **scale = 10:** Controls spread out the distribution (Larger scale → wider spread).\
+- **df = 3 (degrees of freedom):** **heavy tails**- allow for occasional extreme values more than a normal distribution.\
+- **location = 0:** Centered at 0, so the prior expects the parameter to be near 0\
+- **scale = 10:** Controls spread out the distribution (Larger scale → wider spread).\
 **Prior for Regression coefficient : normal(0, 2.5)** (Van de Schoot et al., 2021)\
--   weakly informative with **Mean = 0, Standard deviation = 2.5**\
--   probability of very large or very small parameter values is very low and **stabilize the model**
+- weakly informative with **Mean = 0, Standard deviation = 2.5**\
+- probability of very large or very small parameter values is very low and **stabilize the model**
 
 ![](images/clipboard-3802967430.png){width="313"}
 :::
@@ -645,7 +646,7 @@ Interpretation
 ### Translational Perspective
 
 ::: panel-tabset
-### Internal Validation
+### Validation
 
 #### Personalized Risk Estimation
 
@@ -671,16 +672,63 @@ ggplot(post_pred_df, aes(x = pred)) +
   theme_bw()
 ```
 
+### Internal Validation
+
+![](images/clipboard-2754134965.png){width="196"}\
+Posterior Predictive for Individual (Outcome = 1): Median predicted probability ≈ 0.25, with a 95% credible interval of 0.20–0.31, indicating a \~1 in 4 chance of diabetes.
+
+### External Validation
+
+![](images/clipboard-2142022257.png){width="166"}\
+Using the Bayesian model, we computed the posterior predicted probability for a new participant based on age, BMI, sex, and race. The density plot with 95% credible intervals captures both the most likely risk and uncertainty, supporting individualized preventive care.\
+
+X-axis: Predicted probability of diabetes (Outcome = 1)\
+Y-axis: Density of predicted probabilities\
+Blue curve: Posterior predictive distribution for this individual\
+Shaded area: High probability values near 1, indicating high diabetes risk\
+Red dashed line: Upper bound of 95% credible interval\
+Peak: Most likely predicted probability ≈ 1
+
+:::
+
+----------------------------------------------------------------------------
+
+### Reverse Prediction
+
+**Targeted BMI Estimation for Predicted Diabetes Risk**
+
+::: panel-tabset
+### Plot
+
+![](images/clipboard-3125514674.png)
+
 ### Interpretation
 
-Posterior predictive distribution for a specific individual with Outcome = 1
+X-axis: BMI values (centered or raw, depending on the model).\
+Y-axis: Predicted probability of diabetes for a representative individual (Age = 40, Female, Mexican American).\
+Blue curve: predicted probability of diabetes across the BMI range; consistently high (≈1) for most BMI values.\
+Red horizontal line: Target probability of diabetes = 0.3.\
+Red vertical line is the targeted BMI: when the predicted probability of diabetes is closest to the target bmi probability (≈18). \
 
--   Median/mean predicted probability ≈ 0.25
--   The peak of the density curve is around 25%: participant has a 1 in 4 chance of being diabetic.
--   95% credible interval ≈ 0.20 to 0.31
--   The red dashed lines represent the 95% credible interval (CI): Lower bound ≈ 0.20 Upper bound ≈ 0.31
+### Code
+```r
+bmi_seq <- seq(18, 40, by = 0.5)
 
-**Given the model and the participant’s characteristics, there is a 95% probability that this participant’s true diabetes risk lies between 20% and 31%** :::
+newdata_grid <- data.frame(
+  age_c = 40,
+  bmi_c = bmi_seq,
+  sex   = "Female",
+  race  = "Mexican American"
+)
+```
+
+### Practical Implications
+
+**This is the inverse prediction—the BMI needed to reach a 30% diabetes risk**.\
+
+For this demographic profile, even a relatively low BMI (~18) is associated with a 30% diabetes risk\
+Indicating that other factors (age, sex, race) and the model’s coefficients contribute strongly to predicted diabetes risk.
+
 :::
 
 ------------------------------------------------------------------------

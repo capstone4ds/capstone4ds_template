@@ -997,7 +997,7 @@ Assess chain mixing, convergence, and correlation of each draw with its lagged v
 
 <h3 id="translational-perspective">Translational Perspective</h3>
 <div class="panel-tabset">
-<ul id="tabset-16" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-16-1">Internal Validation</a></li><li><a href="#tabset-16-2">Code</a></li><li><a href="#tabset-16-3">Interpretation</a></li></ul>
+<ul id="tabset-16" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-16-1">Validation</a></li><li><a href="#tabset-16-2">Code</a></li><li><a href="#tabset-16-3">Internal Validation</a></li><li><a href="#tabset-16-4">External Validation</a></li></ul>
 <div class="tab-content">
 <div id="tabset-16-1">
 <h4 id="personalized-risk-estimation">Personalized Risk Estimation</h4>
@@ -1023,14 +1023,56 @@ Assess chain mixing, convergence, and correlation of each draw with its lagged v
 <span id="cb11-12"><a></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="tabset-16-3">
-<p>Posterior predictive distribution for a specific individual with Outcome = 1</p>
-<ul>
-<li>Median/mean predicted probability ≈ 0.25</li>
-<li>The peak of the density curve is around 25%: participant has a 1 in 4 chance of being diabetic.</li>
-<li>95% credible interval ≈ 0.20 to 0.31</li>
-<li>The red dashed lines represent the 95% credible interval (CI): Lower bound ≈ 0.20 Upper bound ≈ 0.31</li>
-</ul>
-<p><strong>Given the model and the participant’s characteristics, there is a 95% probability that this participant’s true diabetes risk lies between 20% and 31%</strong> :::</p>
+<p><img data-src="images/clipboard-2754134965.png" width="196"><br>
+Posterior Predictive for Individual (Outcome = 1): Median predicted probability ≈ 0.25, with a 95% credible interval of 0.20–0.31, indicating a ~1 in 4 chance of diabetes.</p>
+</div>
+<div id="tabset-16-4">
+<p><img data-src="images/clipboard-2142022257.png" width="166"><br>
+Using the Bayesian model, we computed the posterior predicted probability for a new participant based on age, BMI, sex, and race. The density plot with 95% credible intervals captures both the most likely risk and uncertainty, supporting individualized preventive care.<br>
+</p>
+<p>X-axis: Predicted probability of diabetes (Outcome = 1)<br>
+Y-axis: Density of predicted probabilities<br>
+Blue curve: Posterior predictive distribution for this individual<br>
+Shaded area: High probability values near 1, indicating high diabetes risk<br>
+Red dashed line: Upper bound of 95% credible interval<br>
+Peak: Most likely predicted probability ≈ 1</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="reverse-prediction">Reverse Prediction</h3>
+<p><strong>Targeted BMI Estimation for Predicted Diabetes Risk</strong></p>
+<div class="panel-tabset">
+<ul id="tabset-17" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-17-1">Plot</a></li><li><a href="#tabset-17-2">Interpretation</a></li><li><a href="#tabset-17-3">Code</a></li><li><a href="#tabset-17-4">Practical Implications</a></li></ul>
+<div class="tab-content">
+<div id="tabset-17-1">
+<p><img data-src="images/clipboard-3125514674.png"></p>
+</div>
+<div id="tabset-17-2">
+<p>X-axis: BMI values (centered or raw, depending on the model).<br>
+Y-axis: Predicted probability of diabetes for a representative individual (Age = 40, Female, Mexican American).<br>
+Blue curve: predicted probability of diabetes across the BMI range; consistently high (≈1) for most BMI values.<br>
+Red horizontal line: Target probability of diabetes = 0.3.<br>
+Red vertical line is the targeted BMI: when the predicted probability of diabetes is closest to the target bmi probability (≈18).<br>
+</p>
+</div>
+<div id="tabset-17-3">
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>bmi_seq <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">18</span>, <span class="dv">40</span>, <span class="at">by =</span> <span class="fl">0.5</span>)</span>
+<span id="cb12-2"><a></a></span>
+<span id="cb12-3"><a></a>newdata_grid <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb12-4"><a></a>  <span class="at">age_c =</span> <span class="dv">40</span>,</span>
+<span id="cb12-5"><a></a>  <span class="at">bmi_c =</span> bmi_seq,</span>
+<span id="cb12-6"><a></a>  <span class="at">sex   =</span> <span class="st">"Female"</span>,</span>
+<span id="cb12-7"><a></a>  <span class="at">race  =</span> <span class="st">"Mexican American"</span></span>
+<span id="cb12-8"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-17-4">
+<p><strong>This is the inverse prediction—the BMI needed to reach a 30% diabetes risk</strong>.<br>
+</p>
+<p>For this demographic profile, even a relatively low BMI (~18) is associated with a 30% diabetes risk<br>
+Indicating that other factors (age, sex, race) and the model’s coefficients contribute strongly to predicted diabetes risk.</p>
 </div>
 </div>
 </div>
