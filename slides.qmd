@@ -24,7 +24,7 @@ execute:
 ```{=html}
 <style>
 .reveal {
-  font-size: 34px; /* Change all slide text */
+  font-size: 32px; /* Change all slide text */
 }
 .reveal h1 {
   font-size: 40px; /* Title font */
@@ -124,7 +124,7 @@ National Health and Nutrition Examination Survey (NHANES) 2013–2014\
 
 ![](images/clipboard-2873800077.png){width="427"}
 
-### Abnormalities:
+### Abnormalities
 
 -   Missing Data Assessment - Overall missingness ≈ 4%
 -   No variable is completely missing
@@ -190,15 +190,65 @@ bayes_fit <- brm(
 
 ### MCMC (Markov Chain Monte Carlo)
 
--   Algorithms used to draw samples from a probability distribution.
--   The Gibbs sampler produces a sequence of random vectors ![](images/clipboard-1640325740.png){width="90" height="35"}. Each one depends on the past only through the most recent one. It's a Markov process. The samples are not just random but are drawn in a way that the long-term distribution of the samples matches the target posterior distribution.
--   It uses a burn in period. The random vectors are sequentially dependent. Retain one parameter vector every n iterations, and discard the rest.
+::: panel-tabset
+### Markov Process
+
+-   Gibbs sampler produces a sequence of random vectors ![](images/clipboard-1640325740.png){width="90" height="35"}
+-   each depends on the past only through the most recent one.
+-   The samples are not just random but are drawn in a way that the long-term distribution of the samples matches the target posterior distribution.
+-   It uses a burn in period.
+-   The random vectors are sequentially dependent.
+-   Retain one parameter vector every n iterations, and discard the rest.
+
+### Code
+
+``` r
+post <- posterior_summary(bayes_fit, robust = FALSE) %>%  as_tibble(rownames = "term")
+# Extract convergence diagnostics
+diag <- rstan::monitor(as.array(bayes_fit$fit), print = FALSE) %>%
+  as_tibble(rownames = "term") %>%
+  select(term, Rhat, n_eff = Bulk_ESS)
+
+bayes_results <- post %>%  left_join(diag, by = "term") %>%  mutate(
+    OR       = exp(Estimate),
+    OR_LCL   = exp(Q2.5),
+    OR_UCL   = exp(Q97.5)
+  ) %>%  select(term,    Estimate,Est.Error,Q2.5, Q97.5,Rhat, n_eff, OR,  OR_LCL,  OR_UCL )
+```
+
+### Results
+
+![](images/clipboard-1727290712.png){width="443"}
+
+### Diagnostics
+
+-   R-hat ≈ 1 → good chain mixing
+-   Effective sample sizeTrace plots
+-   Trace plots indicate convergence (no drift across iterations).
+-   Autocorrelation (mcmc_acf())
+
+### Trace Plots
+
+![](images/clipboard-2853565372.png){width="313"}
+
+### Autocorrelation Plot
+
+![](images/clipboard-3030610644.png){width="344"}
+
+### Interpretation
+
+-   Assess chain mixing and convergence showing correlation of each draw with its lagged values across iterations.
+-   Rapid decay of autocorrelation toward zero indicates: chains are mixing well and successive draws are relatively independent.
+-   Age and BMI coefficients exhibited low autocorrelation after a few lags, supporting the reliability of posterior estimates.
+
+This diagnostic confirms that the Bayesian model sampling was adequate and stable, ensuring valid inference from the posterior distributions reflecting MCMC chain mixing and efficiency, not relationships between parameters
+:::
 
 ------------------------------------------------------------------------
 
-### Posterior distribution
+### Posterior Draws
 
-Posterior draws = 4000 (4 chains × 1000 iterations) for posterior predeictive checks for -
+Posterior draws = 4000 (4 chains × 1000 iterations) for posterior predictive checks
 
 -   The distribution of predictors after seeing the data.
 -   The posterior is the conditional distribution of the parameter given the data
@@ -207,30 +257,41 @@ Posterior draws = 4000 (4 chains × 1000 iterations) for posterior predeictive c
 
 ------------------------------------------------------------------------
 
-### Bayesian Model Diagnostics
+### Posterior Results
 
-:::: panel-tabset
-### MCMC
-
--   Trace plots indicate convergence (no drift across iterations).
--   Rhat ≈ 1 → good chain mixing.
--   Effective sample size is adequate across parameters.
-
+::: panel-tabset
 ### Posterior Estimates
 
-::: nonincremental
--   Intercept -2.66 \[-2.84, -2.50\] Baseline log-odds
--   Age_c 1.09 \[0.97, 1.22\] ↑ Age increases diabetes risk
--   BMI_c 0.88 \[0.76, 1.01\] Higher BMI predicts diabetes
--   All predictors show positive associations.
--   Narrow credible intervals → precise estimates (Predictor Estimate 95% CI )
--   CIs exclude zero → statistically significant effects.
+![](images/clipboard-1727290712.png)
+
+### Posterior Distribution
+
+![](images/clipboard-2417602744.png)
+
+### Interpretation
+
+         
+**Posterior Coefficients**
+
+Age (per 1 SD): strong positive effect (≈ +1.1, 80% CrI ≈ 0.9–1.3).
+
+BMI (per 1 SD): positive association (≈ +0.6, 80% CrI ≈ 0.45–0.75).
+
+**Female: slightly protective (≈ –0.2, CrI spans slightly below zero).**
+
+Mexican American: small positive effect (≈ +0.25, wide CrI).
+
+Other Hispanic: moderate positive effect (≈ +0.35, wide CrI).
+
+Non-Hispanic Black: clear positive effect (≈ +0.75, CrI ≈ 0.6–0.9).
+
+Other/Multi: small positive effect (≈ +0.3, wide CrI).
+
 :::
-::::
 
 ------------------------------------------------------------------------
 
-### Posterior Predictive Distribution
+### Prior and Posterior Predictive Distribution (age and BMI)
 
 ::: panel-tabset
 ### Code
@@ -276,85 +337,174 @@ Model fit: bayes_R2(bayes_fit)
 
 ------------------------------------------------------------------------
 
+### Proportion of Diabetes Prevalence (Survey weighted NHANES vs Predicted)
+
 ![](images/clipboard-4013951629.png){width="576"}
 
 ![](images/clipboard-3433503019.png){width="466"}
 
 ------------------------------------------------------------------------
 
-**Posterior pairwise correlation plot**
+### Posterior Predictive Checks
+
+500 draws: predicted outcomes for each observation compare ( observed data vs predeicted outcomes: binary outcome with 0 or 1 simulated
 
 ::: panel-tabset
 ### Code
 
 ``` r
+pp_samples <- posterior_predict(bayes_fit, ndraws = 500)  # 500 draws
 
+# Check dimensions
+dim(pp_samples)  # rows = draws, cols = observations
+ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:500, ])
+```
+
+### Compare Outcome
+**Predicted vs observed outcome**
+
+![](images/clipboard-2418526955.png){width="274"}
+
+### Proportion
+
+![](images/clipboard-122565288.png){width="273"}
+
+### Mean
+
+![](images/clipboard-2726352750.png){width="340"}
+
+### SD
+
+![](images/clipboard-1023519991.png){width="331"}
+:::
+
+------------------------------------------------------------------------
+
+### Observed vs. Predicted Average diabetes outcome across individuals
+
+::: panel-tabset
+### Code
+
+``` r
+# PP checks with bayesplot options
+color_scheme_set("blue")
+ppc_scatter_avg(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:100, ]) +
+labs(title = "Observed vs Predicted (Avg) Posterior Predictive at individual level")
+```
+
+### Plot
+
+![](images/clipboard-2608056459.png){width="287"}
+
+-   Each point = one observation (an individual)
+-   **x-axis = observed value** (`0` or `1` in your binary diabetes variable)
+-   **y-axis = average predicted posterior probability** for that same individual across simulated datasets
+-   Points near (0, 0) or (1, 1) → good prediction
+
+### Plot
+
+![](images/clipboard-2167517988.png){width="340"}
+
+-   Each point represents an individual’s observed BMI versus the model’s predicted mean.
+-   Error bars indicate the 95% credible intervals of the predictions.
+-   The plot demonstrates that the model’s predictions generally align with the observed data,
+:::
+
+------------------------------------------------------------------------
+
+### Model Diagnostics
+
+#### Model Comparison Across methods
+
+(1) **Survey-weighted maximum likelihood estimation (MLE)**
+(2) **Bayesian regression**
+
+``` r
+svy_tbl   <- svy_or   %>% mutate(Model = "Survey-weighted MLE")
+bayes_tbl <- bayes_or %>% mutate(Model = "Bayesian")
+```
+
+![](images/clipboard-329828759.png){width="363"}
+
+-   Age and BMI - strong risk factors for both models for diabetes in this population.
+-   The Bayesian model complements frequentist approaches by providing stable, interpretable, and uncertainty-quantified estimates, while broadly reproducing population-level prevalence.
+-   The Bayesian model used normalized weights, which approximates the effect of survey weights but does not fully account for stratification, clustering, or design-based variance adjustments.
+
+------------------------------------------------------------------------
+
+### Model Diagnostics
+
+::: panel-tabset
+### Plot pairwise correlation
+
+![](images/clipboard-1737198687.png)
+
+### Code
+
+``` r
 # Extract posterior draws
 post <- as_draws_df(bayes_fit)
-
 # Select numeric parameters of interest
 post_subset <- post %>% 
   dplyr::select(b_age_c, b_bmi_c, b_sexFemale, 
                 b_raceMexicanAmerican, b_raceNHBlack)
-
 # Compute correlation matrix
 cor_matrix <- cor(post_subset)
-
 # Visualize
 mcmc_pairs(as_draws_array(bayes_fit), 
            pars = c("b_age_c", "b_bmi_c", "b_sexFemale"),
            off_diag_args = list(size = 1.5, alpha = 0.4))
-           
 ```
-
-### Plot
-
-![](images/clipboard-1737198687.png)
 
 ### Interpretation
 
--   The absence of strong linear relationships among parameters suggests that age, BMI, and sex independently contributed to the prediction of diabetes status.
+-   The absence of strong linear relationships between age, BMI, and sex
+-   Independently contribute to the prediction of diabetes status.
 -   The smooth, unimodal histograms along the diagonals confirmed stable model convergence and well-behaved posterior samples.
--   A mild negative tilt between b_age_c and b_sexFemale: a slight negative correlation, meaning as the posterior estimate for age increases, the effect of being female slightly decreases.
--   However, this pattern is weak — confirming that both predictors contribute distinct information to the diabetes outcome.
+-   A mild negative tilt between b_age_c and b_sexFemale: a slight negative correlation:
+-   As the posterior estimate for age increases, the effect of being female slightly decreases.
+-   Weak correlation: confirms both predictors contribute distinct information to the diabetes outcome.
 :::
 
 ------------------------------------------------------------------------
 
-### Autocorrelation for age and bmi
+### Model Diagnostics
+
+#### Predicted Diabetes Prevalence vs. NHANES Prevalence
 
 ::: panel-tabset
 ### Plot
 
-![](images/clipboard-4119356386.png){width="489"}
+![](images/clipboard-2142249375.png){width="329"}
+
+### Interpretation
+
+-   We compared the Bayesian posterior-predicted diabetes prevalence with the NHANES survey-weighted estimate (8.9%, SE = 0.0048).
+-   The model’s posterior mean was 10.95%, with a 95% credible interval of 8.5%–12.8%. Although the model predicts slightly higher prevalence, the credible interval overlaps the NHANES estimate.
+-   This indicates that the model is reasonably well-calibrated, with NHANES falling near the lower end of the posterior distribution but still within a plausible range.
 
 ### Code
 
 ``` r
-# Convert fitted model to draws array
-post_array <- as_draws_array(bayes_fit)  # draws x chains x parameters
-
-# Plot autocorrelation for age and bmi
-mcmc_acf(post_array, pars = c("b_age_c", "b_bmi_c"))
+# pp_proportion <- rowMeans(pp_samples)  # if not already done
+known_prev <- 0.089   # NHANES prevalence
+posterior_mean <- mean(pp_proportion)
+posterior_ci <- quantile(pp_proportion, c(0.025, 0.975))  # 95% credible interval
+pp_df <- tibble(proportion = pp_proportion)
+ggplot(pp_df, aes(x = proportion)) +
+  geom_histogram(binwidth = 0.005, fill = "skyblue", color = "black") +
+  geom_vline(xintercept = known_prev, color = "red", linetype = "dashed", size = 1) +
+  geom_vline(xintercept = posterior_mean, color = "blue", linetype = "solid", size = 1) +
+  labs(
+    title = "Posterior Predicted Diabetes Proportion vs NHANES Prevalence",
+    subtitle = paste0("Red dashed = NHANES prevalence (", known_prev, 
+                      "), Blue solid = Posterior mean (", round(posterior_mean,3), ")"),
+    x = "Proportion of Diabetes = 1",
+    y = "Frequency"
+  ) +
+  theme_minimal()
 ```
-
-### Interpretation
-
--   Plot of age and BMI coefficients - assess chain mixing and convergence, showing correlation of each draw with its lagged values across iterations.
--   Rapid decay towards zero: Markov chains are mixing well, and successive draws are relatively independent.
--   Both age and BMI coefficients exhibited low autocorrelation after a few lags,
--   Bayesian model sampling was adequate and stable, with reliable and valid inference from the posterior distributions.
 :::
-
-------------------------------------------------------------------------
-
-### Model Check: Comparison of Odds Ratios Across Models
-
-![](images/clipboard-329828759.png){width="363"}
-
--   Age and BMI are consistently strong risk factors for diabetes in this population.
--   The Bayesian model complements frequentist approaches by providing stable, interpretable, and uncertainty-quantified estimates, while broadly reproducing population-level prevalence.
--   The Bayesian model used normalized weights, which approximates the effect of survey weights but does not fully account for stratification, clustering, or design-based variance adjustments.
 
 ------------------------------------------------------------------------
 
@@ -371,46 +521,28 @@ mcmc_acf(post_array, pars = c("b_age_c", "b_bmi_c"))
 -   Good predictive checks
 :::
 
+------------------------------------------------------------------------
 
----------------------------------------------------------------------
+### Translational Perspective
+::: panel-tabset 
+### Internal Validation 
+#### Personalized Risk Estimation 
 
-### Targeted Therapy
+-   Model enables individualized diabetes risk prediction using age, BMI, sex, race and outputs can guide actionable thresholds (e.g., risk >30%)
+-   BMI is modifiable- interventions can lower risk while sex and race remain constant.
+-   Selected one participant (adult[1, ]) with all covariates (age, BMI, sex, race) obtain predicted probabilities from the logistic regression model.
+**posterior_linpred(transform = TRUE)**
+-   Posterior draws: calculate the 95% credible interval for the predicted probability
 
+### Code 
 
-### Translational Perspective 
--  This project further demonstrates the translational potential of Bayesian modeling in clinical decision-making and public health strategy
--  By using patient-level predictors such as age, BMI, sex, and race to estimate the probability of diabetes, the model moves beyond descriptive statistics toward individualized risk prediction
-- The translational move lies in converting these probabilistic outputs into actionable thresholds—such as identifying the BMI or age at which the predicted risk of diabetes exceeds a clinically meaningful level (e.g., 30%).
--  Only BMI is a modifiable risk factor
-We can make changes in BMI (behavior or lifestyle) to achieve a lower risk threshold
-we hold non modifiable predictors as constant (sex, race).
-
-
-### 
----------------------------
----------------------------------------------------------------------------
-### Internal validation
-
-::: panel-tabset
-### Personalized risk estimation
--  To illustrate personalized risk estimation using the Bayesian model, we computed the posterior predicted probability of diabetes for a representative participant.
--  We selected one participant from the dataset (adult[1, ]) including all relevant covariates (age, BMI, sex, race).
-Used posterior_linpred with transform = TRUE to obtain predicted probabilities for logistic regression
--  Extracted posterior draws computed 95% credible interval from the posterior draws.
-
-### Code
 ``` r
-# Use the first participant 
-# using multiple covariates to select someone
 participant1_data  <- adult[1, ]
-# predicted probabilities for patient 1
 phat1 <- posterior_linpred(bayes_fit, newdata = participant1_data, transform = TRUE)
-# 'transform = TRUE' gives probabilities for logistic regression
 # Store in a data frame for plotting
 post_pred_df <- data.frame(pred = phat1)
-# Compute 95% credible interval
 ci_95_participant1 <- quantile(phat1, c(0.025, 0.975))
-# Plot
+
 ggplot(post_pred_df, aes(x = pred)) + 
   geom_density(color='darkblue', fill='lightblue') +
   geom_vline(xintercept = ci_95_participant1[1], color='red', linetype='dashed') +
@@ -418,28 +550,24 @@ ggplot(post_pred_df, aes(x = pred)) +
   xlab('Probability of being diabetic (Outcome=1)') +
   ggtitle('Posterior Predictive Distribution 95% Credible Interval') +
   theme_bw()
+  
 ```
+### Interpretation 
 
-### Interpretation
--  Plot shows the posterior predictive distribution for the probability that a specific individual in your dataset is diabetic (Outcome = 1)
+Posterior predictive distribution for a specific individual with Outcome = 1
 
-(1) Median/mean predicted probability ≈ 0.25
--  The peak of the density curve is around 25%: participant has a 1 in 4 chance of being diabetic.
+-    Median/mean predicted probability ≈ 0.25 
+-   The peak of the density curve is around 25%: participant has a 1 in 4 chance of being diabetic. 
+-  95% credible interval ≈ 0.20 to 0.31 
+-  The red dashed lines represent the 95% credible interval (CI): Lower bound ≈ 0.20 Upper bound ≈ 0.31 
 
-(2) 95% credible interval ≈ 0.20 to 0.31
--  The red dashed lines represent the 95% credible interval (CI):
+**Given the model and the participant’s characteristics, there is a 95% probability that this participant’s true diabetes risk lies between 20% and 31%** 
+::: 
 
-Lower bound ≈ 0.20
-Upper bound ≈ 0.31
-
-Given the model and the participant’s characteristics, there is a 95% probability that this participant’s true diabetes risk lies between 20% and 31%.
-
-:::
 ------------------------------------------------------------------------
 
 ### Limitations
 
-::: nonincremental
 -   **Cross-sectional** NHANES design limits causal inference.
 
 -   Multiple **imputation** assumes MAR; MNAR may bias results.

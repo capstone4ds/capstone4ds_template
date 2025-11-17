@@ -414,7 +414,7 @@ Autumn Wilcox
 
 <style>
 .reveal {
-  font-size: 34px; /* Change all slide text */
+  font-size: 32px; /* Change all slide text */
 }
 .reveal h1 {
   font-size: 40px; /* Title font */
@@ -511,7 +511,7 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 
 <h3 class="panel-tabset" id="missing-data-analysis">Missing data analysis</h3>
 <div class="panel-tabset">
-<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">Plot</a></li><li><a href="#tabset-3-2">Abnormalities:</a></li></ul>
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">Plot</a></li><li><a href="#tabset-3-2">Abnormalities</a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1">
 <p><img data-src="images/clipboard-2873800077.png" width="427"></p>
@@ -579,16 +579,64 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <section class="slide level2">
 
 <h3 id="mcmc-markov-chain-monte-carlo">MCMC (Markov Chain Monte Carlo)</h3>
+<div class="panel-tabset">
+<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">Markov Process</a></li><li><a href="#tabset-5-2">Code</a></li><li><a href="#tabset-5-3">Results</a></li><li><a href="#tabset-5-4">Diagnostics</a></li><li><a href="#tabset-5-5">Trace Plots</a></li><li><a href="#tabset-5-6">Autocorrelation Plot</a></li><li><a href="#tabset-5-7">Interpretation</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1">
 <ul>
-<li>Algorithms used to draw samples from a probability distribution.</li>
-<li>The Gibbs sampler produces a sequence of random vectors <img data-src="images/clipboard-1640325740.png" width="90" height="35">. Each one depends on the past only through the most recent one. It’s a Markov process. The samples are not just random but are drawn in a way that the long-term distribution of the samples matches the target posterior distribution.</li>
-<li>It uses a burn in period. The random vectors are sequentially dependent. Retain one parameter vector every n iterations, and discard the rest.</li>
+<li>Gibbs sampler produces a sequence of random vectors <img data-src="images/clipboard-1640325740.png" width="90" height="35"></li>
+<li>each depends on the past only through the most recent one.</li>
+<li>The samples are not just random but are drawn in a way that the long-term distribution of the samples matches the target posterior distribution.</li>
+<li>It uses a burn in period.</li>
+<li>The random vectors are sequentially dependent.</li>
+<li>Retain one parameter vector every n iterations, and discard the rest.</li>
 </ul>
+</div>
+<div id="tabset-5-2">
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>post <span class="ot">&lt;-</span> <span class="fu">posterior_summary</span>(bayes_fit, <span class="at">robust =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span>  <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="st">"term"</span>)</span>
+<span id="cb3-2"><a></a><span class="co"># Extract convergence diagnostics</span></span>
+<span id="cb3-3"><a></a>diag <span class="ot">&lt;-</span> rstan<span class="sc">::</span><span class="fu">monitor</span>(<span class="fu">as.array</span>(bayes_fit<span class="sc">$</span>fit), <span class="at">print =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a></a>  <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="st">"term"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a></a>  <span class="fu">select</span>(term, Rhat, <span class="at">n_eff =</span> Bulk_ESS)</span>
+<span id="cb3-6"><a></a></span>
+<span id="cb3-7"><a></a>bayes_results <span class="ot">&lt;-</span> post <span class="sc">%&gt;%</span>  <span class="fu">left_join</span>(diag, <span class="at">by =</span> <span class="st">"term"</span>) <span class="sc">%&gt;%</span>  <span class="fu">mutate</span>(</span>
+<span id="cb3-8"><a></a>    <span class="at">OR       =</span> <span class="fu">exp</span>(Estimate),</span>
+<span id="cb3-9"><a></a>    <span class="at">OR_LCL   =</span> <span class="fu">exp</span>(Q2<span class="fl">.5</span>),</span>
+<span id="cb3-10"><a></a>    <span class="at">OR_UCL   =</span> <span class="fu">exp</span>(Q97<span class="fl">.5</span>)</span>
+<span id="cb3-11"><a></a>  ) <span class="sc">%&gt;%</span>  <span class="fu">select</span>(term,    Estimate,Est.Error,Q2<span class="fl">.5</span>, Q97<span class="fl">.5</span>,Rhat, n_eff, OR,  OR_LCL,  OR_UCL )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-5-3">
+<p><img data-src="images/clipboard-1727290712.png" width="443"></p>
+</div>
+<div id="tabset-5-4">
+<ul>
+<li>R-hat ≈ 1 → good chain mixing</li>
+<li>Effective sample sizeTrace plots</li>
+<li>Trace plots indicate convergence (no drift across iterations).</li>
+<li>Autocorrelation (mcmc_acf())</li>
+</ul>
+</div>
+<div id="tabset-5-5">
+<p><img data-src="images/clipboard-2853565372.png" width="313"></p>
+</div>
+<div id="tabset-5-6">
+<p><img data-src="images/clipboard-3030610644.png" width="344"></p>
+</div>
+<div id="tabset-5-7">
+<ul>
+<li>Assess chain mixing and convergence showing correlation of each draw with its lagged values across iterations.</li>
+<li>Rapid decay of autocorrelation toward zero indicates: chains are mixing well and successive draws are relatively independent.</li>
+<li>Age and BMI coefficients exhibited low autocorrelation after a few lags, supporting the reliability of posterior estimates.</li>
+</ul>
+<p>This diagnostic confirms that the Bayesian model sampling was adequate and stable, ensuring valid inference from the posterior distributions reflecting MCMC chain mixing and efficiency, not relationships between parameters</p>
+</div>
+</div>
+</div>
 </section>
 <section class="slide level2">
 
-<h3 id="posterior-distribution">Posterior distribution</h3>
-<p>Posterior draws = 4000 (4 chains × 1000 iterations) for posterior predeictive checks for -</p>
+<h3 id="posterior-draws">Posterior Draws</h3>
+<p>Posterior draws = 4000 (4 chains × 1000 iterations) for posterior predictive checks</p>
 <ul>
 <li>The distribution of predictors after seeing the data.</li>
 <li>The posterior is the conditional distribution of the parameter given the data</li>
@@ -598,63 +646,60 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </section>
 <section class="slide level2">
 
-<h3 id="bayesian-model-diagnostics">Bayesian Model Diagnostics</h3>
+<h3 id="posterior-results">Posterior Results</h3>
 <div class="panel-tabset">
-<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">MCMC</a></li><li><a href="#tabset-5-2">Posterior Estimates</a></li></ul>
+<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">Posterior Estimates</a></li><li><a href="#tabset-6-2">Posterior Distribution</a></li><li><a href="#tabset-6-3">Interpretation</a></li></ul>
 <div class="tab-content">
-<div id="tabset-5-1">
-<ul>
-<li>Trace plots indicate convergence (no drift across iterations).</li>
-<li>Rhat ≈ 1 → good chain mixing.</li>
-<li>Effective sample size is adequate across parameters.</li>
-</ul>
+<div id="tabset-6-1">
+<p><img data-src="images/clipboard-1727290712.png"></p>
 </div>
-<div id="tabset-5-2">
-<div>
-<ul>
-<li>Intercept -2.66 [-2.84, -2.50] Baseline log-odds</li>
-<li>Age_c 1.09 [0.97, 1.22] ↑ Age increases diabetes risk</li>
-<li>BMI_c 0.88 [0.76, 1.01] Higher BMI predicts diabetes</li>
-<li>All predictors show positive associations.</li>
-<li>Narrow credible intervals → precise estimates (Predictor Estimate 95% CI )</li>
-<li>CIs exclude zero → statistically significant effects.</li>
-</ul>
+<div id="tabset-6-2">
+<p><img data-src="images/clipboard-2417602744.png"></p>
 </div>
+<div id="tabset-6-3">
+<p><strong>Posterior Coefficients</strong></p>
+<p>Age (per 1 SD): strong positive effect (≈ +1.1, 80% CrI ≈ 0.9–1.3).</p>
+<p>BMI (per 1 SD): positive association (≈ +0.6, 80% CrI ≈ 0.45–0.75).</p>
+<p><strong>Female: slightly protective (≈ –0.2, CrI spans slightly below zero).</strong></p>
+<p>Mexican American: small positive effect (≈ +0.25, wide CrI).</p>
+<p>Other Hispanic: moderate positive effect (≈ +0.35, wide CrI).</p>
+<p>Non-Hispanic Black: clear positive effect (≈ +0.75, CrI ≈ 0.6–0.9).</p>
+<p>Other/Multi: small positive effect (≈ +0.3, wide CrI).</p>
 </div>
 </div>
 </div>
 </section>
 <section class="slide level2">
 
-<h3 id="posterior-predictive-distribution">Posterior Predictive Distribution</h3>
+<h3 id="prior-and-posterior-predictive-distribution-age-and-bmi">Prior and Posterior Predictive Distribution (age and BMI)</h3>
 <div class="panel-tabset">
-<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">Code</a></li><li><a href="#tabset-6-2">Plot</a></li><li><a href="#tabset-6-3">Interpretation</a></li><li><a href="#tabset-6-4">R Square</a></li></ul>
+<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">Code</a></li><li><a href="#tabset-7-2">Plot</a></li><li><a href="#tabset-7-3">Interpretation</a></li><li><a href="#tabset-7-4">R Square</a></li></ul>
 <div class="tab-content">
-<div id="tabset-6-1">
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb3-2"><a></a></span>
-<span id="cb3-3"><a></a><span class="fu">ggplot</span>(combined_draws, <span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
-<span id="cb3-4"><a></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb3-5"><a></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> term, <span class="at">scales =</span> <span class="st">"free"</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb3-6"><a></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
-<span id="cb3-7"><a></a>  <span class="fu">labs</span>(</span>
-<span id="cb3-8"><a></a>    <span class="at">title =</span> <span class="st">"Prior vs Posterior Distributions"</span>,</span>
-<span id="cb3-9"><a></a>    <span class="at">x =</span> <span class="st">"Coefficient estimate"</span>,</span>
-<span id="cb3-10"><a></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
-<span id="cb3-11"><a></a>    <span class="at">fill =</span> <span class="st">""</span></span>
-<span id="cb3-12"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="tabset-7-1">
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb4-2"><a></a></span>
+<span id="cb4-3"><a></a><span class="fu">ggplot</span>(combined_draws, <span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
+<span id="cb4-4"><a></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb4-5"><a></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> term, <span class="at">scales =</span> <span class="st">"free"</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb4-6"><a></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb4-7"><a></a>  <span class="fu">labs</span>(</span>
+<span id="cb4-8"><a></a>    <span class="at">title =</span> <span class="st">"Prior vs Posterior Distributions"</span>,</span>
+<span id="cb4-9"><a></a>    <span class="at">x =</span> <span class="st">"Coefficient estimate"</span>,</span>
+<span id="cb4-10"><a></a>    <span class="at">y =</span> <span class="st">"Density"</span>,</span>
+<span id="cb4-11"><a></a>    <span class="at">fill =</span> <span class="st">""</span></span>
+<span id="cb4-12"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-6-2">
+<div id="tabset-7-2">
 <p>Prior vs Posterior Distributions <img data-src="images/clipboard-1978292710.png" width="466"></p>
 </div>
-<div id="tabset-6-3">
+<div id="tabset-7-3">
 <ul>
 <li><p>Strong positive relationship between age, BMI, and diabetes probability.</p></li>
 <li><p><strong>Posterior predictive checks</strong> confirm good model fit.</p></li>
 <li><p>Imputation reduced bias and improved robustness.</p></li>
 </ul>
 </div>
-<div id="tabset-6-4">
+<div id="tabset-7-4">
 <pre><code>Model fit: bayes_R2(bayes_fit)</code></pre>
 <pre><code>    Estimate        Est.Error       Q2.5        Q97.5 
     R2 0.1313342    0.01265055    0.1064607     0.156078</code></pre>
@@ -664,70 +709,67 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </section>
 <section class="slide level2">
 
+<h3 id="proportion-of-diabetes-prevalence-survey-weighted-nhanes-vs-predicted">Proportion of Diabetes Prevalence (Survey weighted NHANES vs Predicted)</h3>
 <p><img data-src="images/clipboard-4013951629.png" width="576"></p>
 <p><img data-src="images/clipboard-3433503019.png" width="466"></p>
 </section>
 <section class="slide level2">
 
-<p><strong>Posterior pairwise correlation plot</strong></p>
+<h3 id="posterior-predictive-checks">Posterior Predictive Checks</h3>
+<p>500 draws: predicted outcomes for each observation compare ( observed data vs predeicted outcomes: binary outcome with 0 or 1 simulated</p>
 <div class="panel-tabset">
-<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">Code</a></li><li><a href="#tabset-7-2">Plot</a></li><li><a href="#tabset-7-3">Interpretation</a></li></ul>
-<div class="tab-content">
-<div id="tabset-7-1">
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a></span>
-<span id="cb6-2"><a></a><span class="co"># Extract posterior draws</span></span>
-<span id="cb6-3"><a></a>post <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(bayes_fit)</span>
-<span id="cb6-4"><a></a></span>
-<span id="cb6-5"><a></a><span class="co"># Select numeric parameters of interest</span></span>
-<span id="cb6-6"><a></a>post_subset <span class="ot">&lt;-</span> post <span class="sc">%&gt;%</span> </span>
-<span id="cb6-7"><a></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(b_age_c, b_bmi_c, b_sexFemale, </span>
-<span id="cb6-8"><a></a>                b_raceMexicanAmerican, b_raceNHBlack)</span>
-<span id="cb6-9"><a></a></span>
-<span id="cb6-10"><a></a><span class="co"># Compute correlation matrix</span></span>
-<span id="cb6-11"><a></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">cor</span>(post_subset)</span>
-<span id="cb6-12"><a></a></span>
-<span id="cb6-13"><a></a><span class="co"># Visualize</span></span>
-<span id="cb6-14"><a></a><span class="fu">mcmc_pairs</span>(<span class="fu">as_draws_array</span>(bayes_fit), </span>
-<span id="cb6-15"><a></a>           <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"b_age_c"</span>, <span class="st">"b_bmi_c"</span>, <span class="st">"b_sexFemale"</span>),</span>
-<span id="cb6-16"><a></a>           <span class="at">off_diag_args =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>))</span>
-<span id="cb6-17"><a></a>           </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="tabset-7-2">
-<p><img data-src="images/clipboard-1737198687.png"></p>
-</div>
-<div id="tabset-7-3">
-<ul>
-<li>The absence of strong linear relationships among parameters suggests that age, BMI, and sex independently contributed to the prediction of diabetes status.</li>
-<li>The smooth, unimodal histograms along the diagonals confirmed stable model convergence and well-behaved posterior samples.</li>
-<li>A mild negative tilt between b_age_c and b_sexFemale: a slight negative correlation, meaning as the posterior estimate for age increases, the effect of being female slightly decreases.</li>
-<li>However, this pattern is weak — confirming that both predictors contribute distinct information to the diabetes outcome.</li>
-</ul>
-</div>
-</div>
-</div>
-</section>
-<section class="slide level2">
-
-<h3 id="autocorrelation-for-age-and-bmi">Autocorrelation for age and bmi</h3>
-<div class="panel-tabset">
-<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">Plot</a></li><li><a href="#tabset-8-2">Code</a></li><li><a href="#tabset-8-3">Interpretation</a></li></ul>
+<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">Code</a></li><li><a href="#tabset-8-2">Compare Outcome</a></li><li><a href="#tabset-8-3">Proportion</a></li><li><a href="#tabset-8-4">Mean</a></li><li><a href="#tabset-8-5">SD</a></li></ul>
 <div class="tab-content">
 <div id="tabset-8-1">
-<p><img data-src="images/clipboard-4119356386.png" width="489"></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>pp_samples <span class="ot">&lt;-</span> <span class="fu">posterior_predict</span>(bayes_fit, <span class="at">ndraws =</span> <span class="dv">500</span>)  <span class="co"># 500 draws</span></span>
+<span id="cb7-2"><a></a></span>
+<span id="cb7-3"><a></a><span class="co"># Check dimensions</span></span>
+<span id="cb7-4"><a></a><span class="fu">dim</span>(pp_samples)  <span class="co"># rows = draws, cols = observations</span></span>
+<span id="cb7-5"><a></a><span class="fu">ppc_bars</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>, ])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="tabset-8-2">
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="co"># Convert fitted model to draws array</span></span>
-<span id="cb7-2"><a></a>post_array <span class="ot">&lt;-</span> <span class="fu">as_draws_array</span>(bayes_fit)  <span class="co"># draws x chains x parameters</span></span>
-<span id="cb7-3"><a></a></span>
-<span id="cb7-4"><a></a><span class="co"># Plot autocorrelation for age and bmi</span></span>
-<span id="cb7-5"><a></a><span class="fu">mcmc_acf</span>(post_array, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"b_age_c"</span>, <span class="st">"b_bmi_c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Predicted vs observed outcome</strong></p>
+<p><img data-src="images/clipboard-2418526955.png" width="274"></p>
 </div>
 <div id="tabset-8-3">
+<p><img data-src="images/clipboard-122565288.png" width="273"></p>
+</div>
+<div id="tabset-8-4">
+<p><img data-src="images/clipboard-2726352750.png" width="340"></p>
+</div>
+<div id="tabset-8-5">
+<p><img data-src="images/clipboard-1023519991.png" width="331"></p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="observed-vs.-predicted-average-diabetes-outcome-across-individuals">Observed vs.&nbsp;Predicted Average diabetes outcome across individuals</h3>
+<div class="panel-tabset">
+<ul id="tabset-9" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-9-1">Code</a></li><li><a href="#tabset-9-2">Plot</a></li><li><a href="#tabset-9-3">Plot</a></li></ul>
+<div class="tab-content">
+<div id="tabset-9-1">
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="co"># PP checks with bayesplot options</span></span>
+<span id="cb8-2"><a></a><span class="fu">color_scheme_set</span>(<span class="st">"blue"</span>)</span>
+<span id="cb8-3"><a></a><span class="fu">ppc_scatter_avg</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ]) <span class="sc">+</span></span>
+<span id="cb8-4"><a></a><span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Observed vs Predicted (Avg) Posterior Predictive at individual level"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-9-2">
+<p><img data-src="images/clipboard-2608056459.png" width="287"></p>
 <ul>
-<li>Plot of age and BMI coefficients - assess chain mixing and convergence, showing correlation of each draw with its lagged values across iterations.</li>
-<li>Rapid decay towards zero: Markov chains are mixing well, and successive draws are relatively independent.</li>
-<li>Both age and BMI coefficients exhibited low autocorrelation after a few lags,</li>
-<li>Bayesian model sampling was adequate and stable, with reliable and valid inference from the posterior distributions.</li>
+<li>Each point = one observation (an individual)</li>
+<li><strong>x-axis = observed value</strong> (<code>0</code> or <code>1</code> in your binary diabetes variable)</li>
+<li><strong>y-axis = average predicted posterior probability</strong> for that same individual across simulated datasets</li>
+<li>Points near (0, 0) or (1, 1) → good prediction</li>
+</ul>
+</div>
+<div id="tabset-9-3">
+<p><img data-src="images/clipboard-2167517988.png" width="340"></p>
+<ul>
+<li>Each point represents an individual’s observed BMI versus the model’s predicted mean.</li>
+<li>Error bars indicate the 95% credible intervals of the predictions.</li>
+<li>The plot demonstrates that the model’s predictions generally align with the observed data,</li>
 </ul>
 </div>
 </div>
@@ -735,13 +777,95 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </section>
 <section class="slide level2">
 
-<h3 id="model-check-comparison-of-odds-ratios-across-models">Model Check: Comparison of Odds Ratios Across Models</h3>
+<h3 id="model-diagnostics">Model Diagnostics</h3>
+<h4 id="model-comparison-across-methods">Model Comparison Across methods</h4>
+<ol type="1">
+<li><strong>Survey-weighted maximum likelihood estimation (MLE)</strong></li>
+<li><strong>Bayesian regression</strong></li>
+</ol>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a>svy_tbl   <span class="ot">&lt;-</span> svy_or   <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="st">"Survey-weighted MLE"</span>)</span>
+<span id="cb9-2"><a></a>bayes_tbl <span class="ot">&lt;-</span> bayes_or <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="st">"Bayesian"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 <img data-src="images/clipboard-329828759.png" width="363" class="r-stretch"><ul>
-<li>Age and BMI are consistently strong risk factors for diabetes in this population.</li>
+<li>Age and BMI - strong risk factors for both models for diabetes in this population.</li>
 <li>The Bayesian model complements frequentist approaches by providing stable, interpretable, and uncertainty-quantified estimates, while broadly reproducing population-level prevalence.</li>
 <li>The Bayesian model used normalized weights, which approximates the effect of survey weights but does not fully account for stratification, clustering, or design-based variance adjustments.</li>
 </ul>
+</section>
+<section class="slide level2">
+
+<h3 id="model-diagnostics-1">Model Diagnostics</h3>
+<div class="panel-tabset">
+<ul id="tabset-10" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-10-1">Plot pairwise correlation</a></li><li><a href="#tabset-10-2">Code</a></li><li><a href="#tabset-10-3">Interpretation</a></li></ul>
+<div class="tab-content">
+<div id="tabset-10-1">
+<p><img data-src="images/clipboard-1737198687.png"></p>
+</div>
+<div id="tabset-10-2">
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a><span class="co"># Extract posterior draws</span></span>
+<span id="cb10-2"><a></a>post <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(bayes_fit)</span>
+<span id="cb10-3"><a></a><span class="co"># Select numeric parameters of interest</span></span>
+<span id="cb10-4"><a></a>post_subset <span class="ot">&lt;-</span> post <span class="sc">%&gt;%</span> </span>
+<span id="cb10-5"><a></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(b_age_c, b_bmi_c, b_sexFemale, </span>
+<span id="cb10-6"><a></a>                b_raceMexicanAmerican, b_raceNHBlack)</span>
+<span id="cb10-7"><a></a><span class="co"># Compute correlation matrix</span></span>
+<span id="cb10-8"><a></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">cor</span>(post_subset)</span>
+<span id="cb10-9"><a></a><span class="co"># Visualize</span></span>
+<span id="cb10-10"><a></a><span class="fu">mcmc_pairs</span>(<span class="fu">as_draws_array</span>(bayes_fit), </span>
+<span id="cb10-11"><a></a>           <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"b_age_c"</span>, <span class="st">"b_bmi_c"</span>, <span class="st">"b_sexFemale"</span>),</span>
+<span id="cb10-12"><a></a>           <span class="at">off_diag_args =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-10-3">
+<ul>
+<li>The absence of strong linear relationships between age, BMI, and sex</li>
+<li>Independently contribute to the prediction of diabetes status.</li>
+<li>The smooth, unimodal histograms along the diagonals confirmed stable model convergence and well-behaved posterior samples.</li>
+<li>A mild negative tilt between b_age_c and b_sexFemale: a slight negative correlation:</li>
+<li>As the posterior estimate for age increases, the effect of being female slightly decreases.</li>
+<li>Weak correlation: confirms both predictors contribute distinct information to the diabetes outcome.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="model-diagnostics-2">Model Diagnostics</h3>
+<h4 id="predicted-diabetes-prevalence-vs.-nhanes-prevalence">Predicted Diabetes Prevalence vs.&nbsp;NHANES Prevalence</h4>
+<div class="panel-tabset">
+<ul id="tabset-11" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-11-1">Plot</a></li><li><a href="#tabset-11-2">Interpretation</a></li><li><a href="#tabset-11-3">Code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-11-1">
+<p><img data-src="images/clipboard-2142249375.png" width="329"></p>
+</div>
+<div id="tabset-11-2">
+<ul>
+<li>We compared the Bayesian posterior-predicted diabetes prevalence with the NHANES survey-weighted estimate (8.9%, SE = 0.0048).</li>
+<li>The model’s posterior mean was 10.95%, with a 95% credible interval of 8.5%–12.8%. Although the model predicts slightly higher prevalence, the credible interval overlaps the NHANES estimate.</li>
+<li>This indicates that the model is reasonably well-calibrated, with NHANES falling near the lower end of the posterior distribution but still within a plausible range.</li>
+</ul>
+</div>
+<div id="tabset-11-3">
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a><span class="co"># pp_proportion &lt;- rowMeans(pp_samples)  # if not already done</span></span>
+<span id="cb11-2"><a></a>known_prev <span class="ot">&lt;-</span> <span class="fl">0.089</span>   <span class="co"># NHANES prevalence</span></span>
+<span id="cb11-3"><a></a>posterior_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(pp_proportion)</span>
+<span id="cb11-4"><a></a>posterior_ci <span class="ot">&lt;-</span> <span class="fu">quantile</span>(pp_proportion, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))  <span class="co"># 95% credible interval</span></span>
+<span id="cb11-5"><a></a>pp_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">proportion =</span> pp_proportion)</span>
+<span id="cb11-6"><a></a><span class="fu">ggplot</span>(pp_df, <span class="fu">aes</span>(<span class="at">x =</span> proportion)) <span class="sc">+</span></span>
+<span id="cb11-7"><a></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.005</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb11-8"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> known_prev, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb11-9"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> posterior_mean, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">linetype =</span> <span class="st">"solid"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb11-10"><a></a>  <span class="fu">labs</span>(</span>
+<span id="cb11-11"><a></a>    <span class="at">title =</span> <span class="st">"Posterior Predicted Diabetes Proportion vs NHANES Prevalence"</span>,</span>
+<span id="cb11-12"><a></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"Red dashed = NHANES prevalence ("</span>, known_prev, </span>
+<span id="cb11-13"><a></a>                      <span class="st">"), Blue solid = Posterior mean ("</span>, <span class="fu">round</span>(posterior_mean,<span class="dv">3</span>), <span class="st">")"</span>),</span>
+<span id="cb11-14"><a></a>    <span class="at">x =</span> <span class="st">"Proportion of Diabetes = 1"</span>,</span>
+<span id="cb11-15"><a></a>    <span class="at">y =</span> <span class="st">"Frequency"</span></span>
+<span id="cb11-16"><a></a>  ) <span class="sc">+</span></span>
+<span id="cb11-17"><a></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
 </section>
 <section class="slide level2">
 
@@ -761,53 +885,51 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </section>
 <section class="slide level2">
 
-<h3 id="targeted-therapy">Targeted Therapy</h3>
 <h3 id="translational-perspective">Translational Perspective</h3>
+<div class="panel-tabset">
+<ul id="tabset-12" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-12-1">Internal Validation</a></li><li><a href="#tabset-12-2">Code</a></li><li><a href="#tabset-12-3">Interpretation</a></li></ul>
+<div class="tab-content">
+<div id="tabset-12-1">
+<h4 id="personalized-risk-estimation">Personalized Risk Estimation</h4>
 <ul>
-<li>This project further demonstrates the translational potential of Bayesian modeling in clinical decision-making and public health strategy</li>
-<li>By using patient-level predictors such as age, BMI, sex, and race to estimate the probability of diabetes, the model moves beyond descriptive statistics toward individualized risk prediction</li>
-<li>The translational move lies in converting these probabilistic outputs into actionable thresholds—such as identifying the BMI or age at which the predicted risk of diabetes exceeds a clinically meaningful level (e.g., 30%).</li>
-<li>Only BMI is a modifiable risk factor We can make changes in BMI (behavior or lifestyle) to achieve a lower risk threshold we hold non modifiable predictors as constant (sex, race).</li>
+<li>Model enables individualized diabetes risk prediction using age, BMI, sex, race and outputs can guide actionable thresholds (e.g., risk &gt;30%)</li>
+<li>BMI is modifiable- interventions can lower risk while sex and race remain constant.</li>
+<li>Selected one participant (adult[1, ]) with all covariates (age, BMI, sex, race) obtain predicted probabilities from the logistic regression model. <strong>posterior_linpred(transform = TRUE)</strong></li>
+<li>Posterior draws: calculate the 95% credible interval for the predicted probability</li>
 </ul>
+</div>
+<div id="tabset-12-2">
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>participant1_data  <span class="ot">&lt;-</span> adult[<span class="dv">1</span>, ]</span>
+<span id="cb12-2"><a></a>phat1 <span class="ot">&lt;-</span> <span class="fu">posterior_linpred</span>(bayes_fit, <span class="at">newdata =</span> participant1_data, <span class="at">transform =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-3"><a></a><span class="co"># Store in a data frame for plotting</span></span>
+<span id="cb12-4"><a></a>post_pred_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">pred =</span> phat1)</span>
+<span id="cb12-5"><a></a>ci_95_participant1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(phat1, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb12-6"><a></a></span>
+<span id="cb12-7"><a></a><span class="fu">ggplot</span>(post_pred_df, <span class="fu">aes</span>(<span class="at">x =</span> pred)) <span class="sc">+</span> </span>
+<span id="cb12-8"><a></a>  <span class="fu">geom_density</span>(<span class="at">color=</span><span class="st">'darkblue'</span>, <span class="at">fill=</span><span class="st">'lightblue'</span>) <span class="sc">+</span></span>
+<span id="cb12-9"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_95_participant1[<span class="dv">1</span>], <span class="at">color=</span><span class="st">'red'</span>, <span class="at">linetype=</span><span class="st">'dashed'</span>) <span class="sc">+</span></span>
+<span id="cb12-10"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_95_participant1[<span class="dv">2</span>], <span class="at">color=</span><span class="st">'red'</span>, <span class="at">linetype=</span><span class="st">'dashed'</span>) <span class="sc">+</span></span>
+<span id="cb12-11"><a></a>  <span class="fu">xlab</span>(<span class="st">'Probability of being diabetic (Outcome=1)'</span>) <span class="sc">+</span></span>
+<span id="cb12-12"><a></a>  <span class="fu">ggtitle</span>(<span class="st">'Posterior Predictive Distribution 95% Credible Interval'</span>) <span class="sc">+</span></span>
+<span id="cb12-13"><a></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb12-14"><a></a>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-12-3">
+<p>Posterior predictive distribution for a specific individual with Outcome = 1</p>
+<ul>
+<li>Median/mean predicted probability ≈ 0.25</li>
+<li>The peak of the density curve is around 25%: participant has a 1 in 4 chance of being diabetic.</li>
+<li>95% credible interval ≈ 0.20 to 0.31</li>
+<li>The red dashed lines represent the 95% credible interval (CI): Lower bound ≈ 0.20 Upper bound ≈ 0.31</li>
+</ul>
+<p><strong>Given the model and the participant’s characteristics, there is a 95% probability that this participant’s true diabetes risk lies between 20% and 31%</strong></p>
+</div>
+</div>
+</div>
 </section>
-<section id="section" class="slide level2">
-<h2>###</h2>
-<table class="caption-top">
-<colgroup>
-<col style="width: 100%">
-</colgroup>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">### Internal validation</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">::: panel-tabset ### Personalized risk estimation - To illustrate personalized risk estimation using the Bayesian model, we computed the posterior predicted probability of diabetes for a representative participant. - We selected one participant from the dataset (adult[1, ]) including all relevant covariates (age, BMI, sex, race). Used posterior_linpred with transform = TRUE to obtain predicted probabilities for logistic regression - Extracted posterior draws computed 95% credible interval from the posterior draws.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">### Code</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">### Interpretation - Plot shows the posterior predictive distribution for the probability that a specific individual in your dataset is diabetic (Outcome = 1)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">(1) Median/mean predicted probability ≈ 0.25 - The peak of the density curve is around 25%: participant has a 1 in 4 chance of being diabetic.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">(2) 95% credible interval ≈ 0.20 to 0.31 - The red dashed lines represent the 95% credible interval (CI):</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Lower bound ≈ 0.20 Upper bound ≈ 0.31</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Given the model and the participant’s characteristics, there is a 95% probability that this participant’s true diabetes risk lies between 20% and 31%.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">:::</td>
-</tr>
-</tbody>
-</table>
+<section class="slide level2">
+
 <h3 id="limitations">Limitations</h3>
-<div>
 <ul>
 <li><p><strong>Cross-sectional</strong> NHANES design limits causal inference.</p></li>
 <li><p>Multiple <strong>imputation</strong> assumes MAR; MNAR may bias results.</p></li>
@@ -815,9 +937,8 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <li><p>Bayesian estimates may be influenced by <strong>prior choices</strong>.</p></li>
 <li><p><strong>BMI measured once</strong>; may not capture long-term exposure.</p></li>
 <li><p><strong>Self-reported</strong> variables may introduce recall/reporting bias.</p></li>
-<li><p><strong>Interaction effects</strong> (e.g., age × BMI) not tested.</p></li>
+<li><p><strong>Interaction effects</strong> (e.g., age × BMI) not tested. :::</p></li>
 </ul>
-</div>
 </section>
 <section class="slide level2">
 
