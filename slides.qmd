@@ -111,9 +111,9 @@ National Health and Nutrition Examination Survey (NHANES) 2013–2014\
 *Non-Hispanic Black*, *Other/Multi-racial*
 
 ### Data view
-:::
 
-![](images/clipboard-4180967765.png)
+![](images/clipboard-4180967765.png){width="660"}
+:::
 
 ------------------------------------------------------------------------
 
@@ -132,6 +132,31 @@ National Health and Nutrition Examination Survey (NHANES) 2013–2014\
 -   Clustered mainly in BMI (4.3%) and diabetes_dx (3.1%).
 
 ### Complete Case Analysis
+
+#### Survey-Weighted Diabetes Risk (U.S. Adults)
+
+**diabetes_dx∼age_c + bmi_c + sex + race**
+Interpretation
+-   model was estimated using svyglm(),**quasibinomial family** for binary outcome for NHANES design.
+-  Design-adjusted coefficient estimates, standard errors, and odds ratios reflect population-representative associations for U.S. adults.
+-   Age (per 1 SD ↑): OR ≈ 3.03 → Older adults \~3× higher odds
+-   BMI (per 1 SD ↑): OR ≈ 1.88 → Higher BMI increases risk
+-   Sex (Female vs Male): OR ≈ 0.53 → Females \~47% lower odds
+-   Race (vs NH White):
+-   Mexican American: OR ≈ 2.04
+-   Other Hispanic: OR ≈ 1.59
+-   NH Black: OR ≈ 1.67
+-   Other/Multi-racial: OR ≈ 2.33
+
+Age and BMI are strongest predictors Females have lower risk Certain racial/ethnic groups have higher odds
+
+### Code
+
+``` r
+form_cc <- diabetes_dx ~ age_c + bmi_c + sex + race
+svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibinomial())
+```
+
 :::
 
 ------------------------------------------------------------------------
@@ -153,29 +178,6 @@ Posterior (parameters + missing data uncertainty)
 -   MICE procedure ran 5 iterations for each of the 5 imputed datasets to ensure stability and convergence.
 -   Estimates pooled using Rubin’s rules.
 
-### Survey-Weighted Logistic Regression (Complete-Case Analysis)
-
--   **Complete-case survey-weighted logistic regression**
-    estimate the association between age, BMI, sex, and race with
-    diabetes status.
--   All analyses accounted for the **NHANES complex sampling design**,
-    including sampling weights, primary sampling units (PSUs), and
-    strata with the sufficiency of outcome data and categorical
-    predictors (sex and race) retained at least two observed levels
-    among participants with non-missing diabetes outcomes.
--   For a complete-case indicator to retain only participants with
-    **non-missing values** on the outcome and all model predictors (age,
-    BMI, sex, and race).
--   Complete-case dataset to fit a survey-weighted logistic regression
-    model:
-
-**diabetes_dx∼age_c + bmi_c + sex + race**
-
--   The model was estimated using svyglm() with a **quasibinomial
-    family** to accommodate the binary outcome under the NHANES design.
--   This generated design-adjusted coefficient estimates, standard
-    errors, and odds ratios reflecting population-representative
-    associations for U.S. adults.
 
 :::
 ::::
@@ -186,7 +188,10 @@ Posterior (parameters + missing data uncertainty)
 
 A Bayesian logistic regression model was then fitted to each imputed dataset in **R** using brms **(Stan backend)**, 2000 itirations
 
--   Prior: **normal(0, 2.5)** for coefficients **student_t(3, 0, 10)** for Intercept
+Prior
+
+-  **normal(0, 2.5)** for coefficients 
+-  **student_t(3, 0, 10)** for Intercept
 
 ``` r
 library(gt)
