@@ -231,7 +231,7 @@ collinearity, or potential outliers.
 -   **Posterior inference** performed using Markov Chain Monte
     Carlo (MCMC) sampling via the No-U-Turn Sampler (NUTS), a variant of
     Hamiltonian Monte Carlo (HMC). Four chains run with sufficient
-    warm-up iterations to ensure convergence. @Austin2021
+    warm-up iterations to ensure convergence. @Austin2021, @inbook
 -   **Convergence diagnostics:** Markov Chain Monte Carlo (MCMC)
     performance was evaluated using ( \hat{R} ) (R-hat) and effective
     sample size (ESS).
@@ -1825,7 +1825,7 @@ ggplot(pp_proportion_df, aes(x = proportion)) +
     prevalence of diabetes calculated for each draw of the Bayesian
     model
 
--   reflecting uncertainty in the model estimates, central tendency and
+-   Reflecting uncertainty in the model estimates, central tendency and
     variability of diabetes prevalence
 
 -   Most posterior predictions cluster around 10–11%, indicating good
@@ -2148,9 +2148,11 @@ bayes_R2(bayes_fit)      # Model fit
 
 ### Bayesian 𝑅\^2 (model fit statics):
 
-Model Fit to quantify predictive performance. - Explains about 13% of
+Model Fit to quantify predictive performance. 
+-    Explains about 13% of
 the variability in diabetes status, with credible uncertainty bounds
-suggesting reasonable but modest explanatory power. - but other factors
+suggesting reasonable but modest explanatory power. 
+-  but other factors
 (e.g., genetics, lifestyle, environment) also contribute to outcome
 variability.
 

@@ -24,7 +24,7 @@ execute:
 ```{=html}
 <style>
 .reveal {
-  font-size: 32px; /* Change all slide text */
+  font-size: 28px; /* Change all slide text */
 }
 .reveal h1 {
   font-size: 40px; /* Title font */
@@ -32,6 +32,7 @@ execute:
 </style>
 ```
 
+::: panel-tabset
 ### Aim
 
 -   Early identification of risk factors is key to diabetes diagnosis and prevention.
@@ -41,33 +42,32 @@ execute:
 ### Frequentist Methods
 
 -   Maximum likelihood estimation is unstable with missing data, quasi-separation, or small samples.
-
 -   Probability is interpreted as long-run relative frequency.
-
--   To the frequentist, parameter is an unknown constant.
-
-------------------------------------------------------------------------
+-   Parameter is an unknown constant.
 
 ### Bayesian Approach
 
--   Flexible and regularizes estimates.
--   Quantifies uncertainty under missingness or imputation (Baldwin & Larson, 2017; Kruschke & Liddell, 2017).
--   Incorporates priors and provides credible intervals via MCMC to predict patient health outcomes.
--   Don't know the value of the parameter, it's a random variable
--   We model our uncertainty with a probability distribution ![](images/clipboard-2228883614.png){width="37" height="20"}, called the prior distribution.
+-   We model uncertainty with a probability distribution ![](images/clipboard-2228883614.png){width="37" height="20"}, called the prior distribution.
 -   Probability represents a degree of belief.
 -   It represents the statisticians belief about before observing the data.
+-   Parameter is not known but is considered random variable
+
+**Benefits**
+
+-   Model is flexible and regularizes estimates.
+-   Quantifies uncertainty under missingness or imputation (Baldwin & Larson, 2017; Kruschke & Liddell, 2017).
+-   Incorporates priors
+-   Provides credible intervals via MCMC to predict patient health outcomes.
 -   Supports model checking, variable selection, and uncertainty quantification
+:::
 
 ------------------------------------------------------------------------
 
 ### Bayesian Model
 
+#### Bayes’ Theorm is based on conditional probability.
+
 ::: panel-tabset
-### Bayes’ Theorem
-
-**Bayes’ theorm** is based on conditional probability.
-
 ### Bayesian Inference
 
 Bayesian inference estimates the **posterior probability** of a parameter:
@@ -76,22 +76,65 @@ $$
 P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 $$
 
-where:
+Bayesian Inference in the Model
 
--   ( P(\theta \mid D) ): Posterior — probability of the parameter given data\
--   ( P(D \mid \theta) ): Likelihood — probability of observing data given the parameter\
--   ( P(\theta) ): Prior — belief about the parameter before seeing data\
--   ( P(D) ): Marginal likelihood (normalizing constant)
+**In the Model**
+
+-   **θ (Parameters):**\
+    Regression coefficients (eg:age, BMI, sex, and race)
+
+-   **D (Data):**\
+    Data (eg:NHANES) with the observed disease status (eg: diabetes) and covariates
+
+------------------------------------------------------------------------
+
+### Baye's Interpretation
+
+-   **Prior P(θ):**\
+    Prior beliefs about effect sizes before seeing data\
+    (weakly informative priors centered around “no effect”).
+
+-   **Likelihood P(D**\\θ):\
+    Probability of the observed disease outcomes *given* the parameter values\
+    (logistic regression model).
+
+-   **Marginal Likelihood P(D):**\
+    Normalizing constant ensuring the posterior is a valid probability distribution
+
+-   **Posterior P(θ/D):**\
+    Updated probability distribution for predictor effects (eg: age, BMI, sex, and race) *after observing the data* — This is **brms** model estimates
+
+    ![](images/clipboard-3708975756.png){width="250"}
 :::
 
 ------------------------------------------------------------------------
 
-**Bayesian Regression and Coefficient Estimation**
+### Bayesian Regression and Coefficient Estimation
+
+::: panel-tabset
+#### Logistic Link Function
 
 -   Logistic link function used for binary outcomes.
--   logit (𝑃(𝑌=1))=𝛽0+𝛽1age 𝑐 + 𝛽 2 bmi 𝑐 + 𝛽 3 sex + 𝛽 4 race
--   Intercept prior: student_t(3, 0, 10) — heavy tails for flexibility (Van de Schoot et al., 2013).
--   Regression coefficients prior: normal(0, 2.5) — weakly informative, constraining extreme values (Van de Schoot et al., 2021).
+-   logit (𝑃(𝑌=1))= (intercept) + 𝛽age_𝑐 + 𝛽bmi_𝑐 + 𝛽sex + 𝛽race
+
+Logistic link function transforms the linear predictor into a probability between (0 and 1)
+
+p = 1 / (1 + exp(-(β0 + βX)))
+
+-   Converts changes in predictors into changes in **log-odds** of the outcome.
+-   In Model: links age, BMI, sex, and race to the probability of having diabetes.
+
+#### Prior
+**Intercept prior: student_t(3, 0, 10)** — (Van de Schoot et al., 2013)\
+-   **df = 3 (degrees of freedom):** **heavy tails**- allow for occasional extreme values more than a normal distribution.\
+-   **location = 0:** Centered at 0, so the prior expects the parameter to be near 0\
+-   **scale = 10:** Controls spread out the distribution (Larger scale → wider spread).\
+**Prior for Regression coefficient : normal(0, 2.5)** (Van de Schoot et al., 2021)\
+-   weakly informative with **Mean = 0, Standard deviation = 2.5**\
+-   probability of very large or very small parameter values is very low and **stabilize the model**
+
+![](images/clipboard-3802967430.png){width="313"}
+:::
 
 ------------------------------------------------------------------------
 
@@ -100,19 +143,30 @@ where:
 ::: panel-tabset
 ### Data
 
-National Health and Nutrition Examination Survey (NHANES) 2013–2014\
-**Design:** Complex multistage probability sampling; survey weights applied. **Response Variable** - **diabetes_dx (binary)**\
-- Based on **DIQ010**: “Has a doctor told you that you have diabetes?”\
-- Excluded **DIQ050 (insulin use)** to avoid clinical confounding. **Predictor Variables** - **RIDAGEYR — Age (continuous)** - adults 20–80 years (per 1 SD)\
-- **BMXBMI — Body Mass Index (continuous)** 1 SD increase\
-- **RIAGENDR — Sex (factor)**\
-- **RIDRETH1 — Race/Ethnicity (factor)**\
-- *Mexican American*, *Other Hispanic*, *Non-Hispanic White*,\
-*Non-Hispanic Black*, *Other/Multi-racial*
+**National Health and Nutrition Examination Survey (NHANES) 2013–2014**\
+**Design:** Complex multistage probability sampling; survey weights applied
+
+**Response Variable (diabetes_dx : binary)**
+
+-   Based on **DIQ010**: “Has a doctor told you that you have diabetes?”
+
+-   Excluded **DIQ050 (insulin use)** to avoid clinical confounding.
+
+**Predictor Variables**
+
+-   **RIDAGEYR — Age (continuous)** - adults 20–80 years (per 1 SD)
+
+-   **BMXBMI — Body Mass Index (continuous)** 1 SD increase
+
+-   **RIAGENDR — Sex (factor)**
+
+-   **RIDRETH1 — Race/Ethnicity (factor)**\
+
+    -   *Mexican American*, *Other Hispanic*, *Non-Hispanic White*, *Non-Hispanic Black*, *Other/Multi-racial*
 
 ### Data view
 
-![](images/clipboard-4180967765.png){width="660"}
+![](images/clipboard-4180967765.png){width="604"}
 :::
 
 ------------------------------------------------------------------------
@@ -139,7 +193,7 @@ National Health and Nutrition Examination Survey (NHANES) 2013–2014\
 
 Interpretation
 
--   model was estimated using svyglm(),**quasibinomial family** for binary outcome for NHANES design.
+-   Model was estimated using svyglm(),**quasibinomial family** for binary outcome for NHANES design.
 -   Design-adjusted coefficient estimates, standard errors, and odds ratios reflect population-representative associations for U.S. adults.
 -   Age (per 1 SD ↑): OR ≈ 3.03 →Older adults \~3× higher odds
 -   BMI (per 1 SD ↑): OR ≈ 1.88 → Higher BMI increases risk
@@ -160,35 +214,43 @@ svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibino
 
 ------------------------------------------------------------------------
 
-### Multiple Imputation by Chained Equations (MICE)
+### Bayesian Logistic Regression
 
-:::: nonincremental
-*van Buuren & Groothuis-Oudshoorn, 2011; van Buuren, 2012*
-
-Bayesian models assume complete data. **Multivariate Imputation by Chained Equations (MICE)** provides multiple realistic versions of missing data. Pooling across posterior distributions yields the correct full posterior:
-
-Posterior (parameters + missing data uncertainty)
+Bayesian models assume complete data.\
 
 ::: panel-tabset
 ### MICE
 
+**Multivariate Imputation by Chained Equation**\
+
+*van Buuren & Groothuis-Oudshoorn, 2011; van Buuren, 2012*
+
 -   Iteratively imputes incomplete variables using regression models.
--   PMM for continuous; logistic regression for binary variables.
 -   MICE procedure ran 5 iterations for each of the 5 imputed datasets to ensure stability and convergence.
--   Estimates pooled using Rubin’s rules.
-:::
-::::
+-   PMM method for continuous (*Predictive Mean Matching)* - fills missing values with observed values that are “closest” to predicted values)
+-   logistic regression for binary variables.
+-   Provides multiple realistic versions of missing data
+-   Using Rubin’s rules, the Estimates are pooled across posterior distributions to yield the correct full posterior\
+    **Posterior (parameters + missing data uncertainty)**
 
-------------------------------------------------------------------------
+### Bayesian Logistic Regression Model
 
-**Bayesian Logistic Regression**
+Model is fitted to each imputed dataset in **R** using brms **(Stan backend)**, 2000 itirations\
 
-A Bayesian logistic regression model was then fitted to each imputed dataset in **R** using brms **(Stan backend)**, 2000 itirations
+**Formula**\
 
-Prior
+diabetes_dx \| weights(wt_norm) \~ age_c + bmi_c + sex + race\
+
+**Prior**
 
 -   **normal(0, 2.5)** for coefficients
 -   **student_t(3, 0, 10)** for Intercept
+
+**Data set**: Pooled Imputed dataset-1\
+**Bernoulli family**\
+**Chains = 4, Iteration = 2000, seed = 123**
+
+### Code
 
 ``` r
 library(gt)
@@ -207,6 +269,7 @@ bayes_fit <- brm(
   refresh = 0
 )
 ```
+:::
 
 ------------------------------------------------------------------------
 
@@ -216,11 +279,16 @@ bayes_fit <- brm(
 ### Markov Process
 
 -   Gibbs sampler produces a sequence of random vectors ![](images/clipboard-1640325740.png){width="90" height="35"}
--   each depends on the past only through the most recent one.
+
+-   Each sample depends on the past only through the most recent one.
+
 -   The samples are not just random but are drawn in a way that the long-term distribution of the samples matches the target posterior distribution.
+
 -   It uses a burn in period.
--   The random vectors are sequentially dependent.
--   Retain one parameter vector every n iterations, and discard the rest.
+
+-   The random vectors are sequentially dependent. Retain one parameter vector every n iterations, and discard the rest.
+
+    ![](images/clipboard-1907802712.png)
 
 ### Code
 
@@ -240,40 +308,38 @@ bayes_results <- post %>%  left_join(diag, by = "term") %>%  mutate(
 
 ### Results
 
-![](images/clipboard-1727290712.png){width="443"}
+![](images/clipboard-1727290712.png){width="740"}
+
+**warmup= 1000**\
+**total draws = 4000**
 :::
 
 ------------------------------------------------------------------------
 
-### Diagnostics
+### Model Diagnostics (**MCMC Convergence**)
+
+R-hat ≈ 1 → good chain mixing\
+Effective sample size\
+Trace Autocorrelation plots: for convergence (no drift across iterations). Well-mixed chains without trends show convergence and stable posterior estimates.
 
 ::: panel-tabset
--   R-hat ≈ 1 → good chain mixing
--   Effective sample sizeTrace plots
--   Trace plots indicate convergence (no drift across iterations).
--   Autocorrelation (mcmc_acf())
-
 ### Trace Plots
 
-![](images/clipboard-2853565372.png){width="313"}
-
-### Autocorrelation Plot
+-   precise estimates with high uncertainty narrow distributions,
+-   smooth and unimodal → no multimodality confirming stable posteriors.
+-   histogram is the distribution of sampled coefficient values after convergence across all MCMC draws
 
 ![](images/clipboard-3030610644.png){width="344"}
 
-### Interpretation (Trace Plots)
+### Autocorrelation Plot
 
--   Convergence: well-mixed chains without trends indicate convergence and stable posterior estimates. Plots of posterior distributions with high uncertainty, narrow distributions indicating precise estimates.
--   All distributions look smooth and unimodal → no multimodality, confirming stable posteriors.
--   Each histogram represents the distribution of sampled coefficient values after convergence across all MCMC draws
+![](images/clipboard-2853565372.png){width="313"}\
+Assess chain mixing, convergence, and correlation of each draw with its lagged values across iterations
 
-### Interpretation (Autocorrelation)
-
--   Assess chain mixing and convergence showing correlation of each draw with its lagged values across iterations.
--   Rapid decay of autocorrelation toward zero indicates: chains are mixing well and successive draws are relatively independent.
--   Age and BMI coefficients exhibited low autocorrelation after a few lags, supporting the reliability of posterior estimates.
-
-This diagnostic confirms that the Bayesian model sampling was adequate and stable, ensuring valid inference from the posterior distributions reflecting MCMC chain mixing and efficiency, not relationships between parameters
+**Sampling shows**: Well mixing, draws are relatively independent, adequate, and stable, valid inference\
+- Rapid decay of autocorrelation toward zero\
+- Age and BMI coefficients exhibited low autocorrelation\
+- Does not show relationships between parameters
 :::
 
 ------------------------------------------------------------------------
@@ -376,8 +442,7 @@ pp_samples \<- posterior_predict(bayes_fit, ndraws = 500)
 
 ### Compare outcome
 
-Predicted vs observed outcome
-![](images/clipboard-2418526955.png){width="274"}
+Predicted vs observed outcome ![](images/clipboard-2418526955.png){width="274"}
 
 ### Proportion
 
@@ -554,6 +619,7 @@ ggplot(pp_df, aes(x = proportion)) +
 ``` r
 Model fit: bayes_R2(bayes_fit)
 ```
+
 ![](images/clipboard-2402173436.png)
 
 Interpretation
