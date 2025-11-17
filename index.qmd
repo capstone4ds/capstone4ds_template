@@ -863,11 +863,19 @@ summary(svy_fit)
 #| label: Survey weighted data results
 #| echo: true
 
+# Assuming your dataset is called 'df'
+# Assuming your dataset is called 'df'
+n_complete <- sum(complete.cases(adult))
+n_complete
+
+
 svy_or <- broom::tidy(svy_fit, conf.int = TRUE) %>%
   dplyr::mutate(OR = exp(estimate), LCL = exp(conf.low), UCL = exp(conf.high)) %>%
   dplyr::select(term, OR, LCL, UCL, p.value) %>%
   dplyr::filter(term != "(Intercept)")
 knitr::kable(svy_or, caption = "Survey-weighted odds ratios (per 1 SD)")
+
+
 
 ```
 
@@ -1335,7 +1343,12 @@ post
 post_sum <- posterior_summary(bayes_fit)
 post_sum
 
+# Posterior predictive check comparing observed vs. simulated outcomes
+pp_check(bayes_fit, ndraws = 100) +
+  labs(title = "Posterior Predictive Check: Observed vs. Replicated Outcomes")
+
 ```
+The posterior predictive check compares the observed outcomes (`y`) with replicated outcomes (`yrep`) generated from the posterior predictive distribution. If the model is adequate, the distribution of `yrep` should resemble the distribution of `y`. Large discrepancies suggest model misfit, such as underestimating variability, bias in predictions, or failure to capture important data patterns.
 
 ```{r}
 #| label: posterior summary

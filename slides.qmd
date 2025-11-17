@@ -24,7 +24,7 @@ execute:
 ```{=html}
 <style>
 .reveal {
-  font-size: 28px; /* Change all slide text */
+  font-size: 24px; /* Change all slide text */
 }
 .reveal h1 {
   font-size: 40px; /* Title font */
@@ -109,7 +109,7 @@ Bayesian Inference in the Model
 
 ------------------------------------------------------------------------
 
-### Bayesian Regression and Coefficient Estimation
+### Bayesian Regression
 
 ::: panel-tabset
 #### Logistic Link Function
@@ -134,6 +134,7 @@ Logistic link transforms the linear predictor into a probability between (0 and 
 - **df = 3 (degrees of freedom):** **heavy tails**- allow for occasional extreme values.\
 - **location = 0:** Centered at 0, so the prior expects the parameter to be near 0\
 - **scale = 10:** Controls spread out the distribution (Larger scale → wider spread).\
+
 **Prior for Regression coefficient : normal(0, 2.5)** (Van de Schoot et al., 2021)\
 - weakly informative with **Mean = 0, Standard deviation = 2.5**\
 - probability of very large or very small parameter values is very low and **stabilizes the model**
@@ -181,14 +182,9 @@ Logistic link transforms the linear predictor into a probability between (0 and 
 ::: panel-tabset
 ### Plot
 
-![](images/clipboard-2873800077.png){width="427"}
+![](images/clipboard-2873800077.png){width="427"}![](images/clipboard-2016873286.png){width="596"}
 
--   Missing Data Assessment - Overall missingness ≈ 4%
--   No variable is completely missing
--   Missingness likely MAR (Missing At Random)
--   Clustered mainly in BMI (4.3%) and diabetes_dx (3.1%).
-
-**MAR: the reason for a data point being missing is related to other variables in the dataset, but not to the value of the missing variable itself**
+**MAR\*: when the missing data point is related to other variables in the dataset, but not to the value of the missing variable itself**
 
 ### Complete Case Analysis
 
@@ -202,14 +198,12 @@ Logistic link transforms the linear predictor into a probability between (0 and 
 
 -   **Survey weighted (MLR):Complete case analysis (n= 5348)**
 
-           
     -   Age (per 1 SD ↑): OR ≈ 3.03 →Older adults **\~3× higher odds**
     -   BMI (per 1 SD ↑): OR ≈ 1.88 → **Higher BMI increases risk**
-    -   Sex (Female vs Male): OR ≈ 0.53 → Females **\~47% lower odds**
+    -   Sex (Female vs Male): OR ≈ 0.53 → Females **\~ 47% lower odds**
     -   Race (vs NH White): - Mexican American: OR ≈ 2.04
     -   Other Hispanic: OR ≈ 1.59 - NH Black: OR ≈ 1.67
     -   Other/Multi-racial: OR ≈ 2.33
-  
 
 Age and BMI are strongest predictors Females have lower risk Certain racial/ethnic groups have higher odds
 
@@ -229,7 +223,7 @@ svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibino
 ### Data (Adults)
 
 -   Raw imported: **10175 obs**\
--   Survey-weighted (Filtered = Adult): **5,769 (\~4%)**\
+-   Survey-weighted (Filtered = Adult): **5,769 (\~ 7%)**\
 -   Complete Case Analysis: **5348** (with no missing values)\
 -   Imputed dataset (adult_imp1): **5,592**\
 
@@ -240,11 +234,11 @@ svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibino
 **Multivariate Imputation by Chained Equation**\
 *van Buuren & Groothuis-Oudshoorn, 2011; van Buuren, 2012*\
 
-- Iteratively imputes incomplete variables using regression models.\
-- MICE run 5 iterations for each of the 5 imputed datasets to ensure stability and convergence and provides multiple realistic versions of missing data\
-- Use PMM method for continuous (*Predictive Mean Matching)* to fill missing values with the observed values “closest” to predicted values)\
-- Use logistic regression for binary variables.\
-- Rubin’s rule finds pooled Estimates from across posterior distributions to yield full posterior\
+-   Iteratively imputes incomplete variables using regression models.\
+-   MICE run 5 iterations for each of the 5 imputed datasets to ensure stability and convergence and provides multiple realistic versions of missing data\
+-   Use PMM method for continuous (*Predictive Mean Matching)* to fill missing values with the observed values “closest” to predicted values)\
+-   Use logistic regression for binary variables.\
+-   Rubin’s rule finds pooled Estimates from across posterior distributions to yield full posterior\
 
 **Posterior (parameters + missing data uncertainty)**
 
@@ -284,7 +278,6 @@ bayes_fit <- brm(
   refresh = 0
 )
 ```
-
 :::
 
 ------------------------------------------------------------------------
@@ -323,18 +316,13 @@ bayes_results <- post %>%  left_join(diag, by = "term") %>%  mutate(
   ) %>%  select(term,    Estimate,Est.Error,Q2.5, Q97.5,Rhat, n_eff, OR,  OR_LCL,  OR_UCL )
 ```
 
-rstan::monitor(
-  samples = rstan::extract(fit, permuted = FALSE),
-  probs = c(0.025, 0.5, 0.975)
-)
-Provides the following summaries:
+rstan::monitor( samples = rstan::extract(fit, permuted = FALSE), probs = c(0.025, 0.5, 0.975) ) Provides the following summaries:
 
-- **Posterior mean** and **standard deviation (SD)**
-- **Monte Carlo standard error (MCSE)**
-- **Quantiles:** 2.5%, 25%, 50%, 75%, 97.5%
-- **Effective sample sizes:** Bulk_ESS and Tail_ESS
-- **R-hat (convergence diagnostic)**
-
+-   **Posterior mean** and **standard deviation (SD)**
+-   **Monte Carlo standard error (MCSE)**
+-   **Quantiles:** 2.5%, 25%, 50%, 75%, 97.5%
+-   **Effective sample sizes:** Bulk_ESS and Tail_ESS
+-   **R-hat (convergence diagnostic)**
 
 ### Result
 
@@ -350,38 +338,51 @@ Provides the following summaries:
 
 R-hat ≈ 1 → good chain mixing\
 Effective sample size\
-Trace Autocorrelation plots: for convergence (no drift across iterations). Well-mixed chains without trends show convergence and stable posterior estimates.
+Trace & Autocorrelation plots show convergence (no drift across iterations), well-mixed chains without trends with stable posterior estimates.
 
 ::: panel-tabset
-### Trace Plots
+### Trace Plots (stable posteriors)
 
--   precise estimates with high uncertainty narrow distributions,
--   smooth and unimodal → no multimodality confirming stable posteriors.
--   histogram is the distribution of sampled coefficient values after convergence across all MCMC draws
+-   precise estimates, with high uncertainty narrow distributions, smooth and unimodal → no multimodality confirming stable posteriors.
+-   histogram: distribution of sampled coeffs. after convergence across all mcmc draws
 
 ![](images/clipboard-3030610644.png){width="344"}
 
 ### Autocorrelation Plot
 
-![](images/clipboard-2853565372.png){width="313"}\
-Assess chain mixing, convergence, and correlation of each draw with its lagged values across iterations
+![](images/clipboard-2853565372.png){width="313"} ![](images/clipboard-4067031519.png)
 
-**Sampling shows**: Well mixing, draws are relatively independent, adequate, and stable, valid inference\
-- Rapid decay of autocorrelation toward zero\
-- Age and BMI coefficients exhibited low autocorrelation\
-- Does not show relationships between parameters
+Results: chain mixing, convergence, correlation of draws with lagged values across iterations
 :::
 
 ------------------------------------------------------------------------
 
-### Posterior Draws
+### Posterior Distribution
 
-Posterior draws = 4000 (4 chains × 1000 iterations) for posterior predictive checks
+::: panel-tabset
+###Posterior draws
+
+Posterior draws = 4000 (4 chains × 1000 iterations) for posterior predictive checks\
+
+**MCMC samples, which represent the posterior distribution of the model parameters**
 
 -   The distribution of predictors after seeing the data.
 -   The posterior is the conditional distribution of the parameter given the data
--   Subjectivity is present when it is based on the prior distribution which influences the conclusions.
+-   Subjectivity is present when - prior distribution influences the conclusions.
 -   The influence of the prior goes to zero as the sample size increases.
+
+### Code
+
+``` r
+# Posterior predictive check comparing observed vs. simulated outcomes
+pp_check(bayes_fit, nsamples = 100) +
+  labs(title = "Posterior Predictive Check: Observed vs. Replicated Outcomes")
+```
+
+### Plot
+
+![](images/clipboard-2255770791.png)
+:::
 
 ------------------------------------------------------------------------
 
@@ -813,3 +814,4 @@ Van de Schoot, R. et al. (2013, 2021). Weakly Informative Priors in Bayesian Reg
 -   Department of Mathematics and Statistics
 
 ------------------------------------------------------------------------
+::::::::::::
