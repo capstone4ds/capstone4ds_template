@@ -587,7 +587,7 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 
 <h3 id="mcmc-markov-chain-monte-carlo">MCMC (Markov Chain Monte Carlo)</h3>
 <div class="panel-tabset">
-<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">Markov Process</a></li><li><a href="#tabset-5-2">Code</a></li><li><a href="#tabset-5-3">Results</a></li><li><a href="#tabset-5-4">Diagnostics</a></li><li><a href="#tabset-5-5">Trace Plots</a></li><li><a href="#tabset-5-6">Autocorrelation Plot</a></li><li><a href="#tabset-5-7">Interpretation</a></li></ul>
+<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">Markov Process</a></li><li><a href="#tabset-5-2">Code</a></li><li><a href="#tabset-5-3">Results</a></li></ul>
 <div class="tab-content">
 <div id="tabset-5-1">
 <ul>
@@ -615,21 +615,29 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <div id="tabset-5-3">
 <p><img data-src="images/clipboard-1727290712.png" width="443"></p>
 </div>
-<div id="tabset-5-4">
-<ul>
-<li>R-hat ≈ 1 → good chain mixing</li>
-<li>Effective sample sizeTrace plots</li>
-<li>Trace plots indicate convergence (no drift across iterations).</li>
-<li>Autocorrelation (mcmc_acf())</li>
-</ul>
 </div>
-<div id="tabset-5-5">
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="diagnostics">Diagnostics</h3>
+<div class="panel-tabset">
+<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">Trace Plots</a></li><li><a href="#tabset-6-2">Autocorrelation Plot</a></li><li><a href="#tabset-6-3">Interpretation (Trace Plots)</a></li><li><a href="#tabset-6-4">Interpretation (Autocorrelation)</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1">
 <p><img data-src="images/clipboard-2853565372.png" width="313"></p>
 </div>
-<div id="tabset-5-6">
+<div id="tabset-6-2">
 <p><img data-src="images/clipboard-3030610644.png" width="344"></p>
 </div>
-<div id="tabset-5-7">
+<div id="tabset-6-3">
+<ul>
+<li>Convergence: well-mixed chains without trends indicate convergence and stable posterior estimates. Plots of posterior distributions with high uncertainty, narrow distributions indicating precise estimates.</li>
+<li>All distributions look smooth and unimodal → no multimodality, confirming stable posteriors.</li>
+<li>Each histogram represents the distribution of sampled coefficient values after convergence across all MCMC draws</li>
+</ul>
+</div>
+<div id="tabset-6-4">
 <ul>
 <li>Assess chain mixing and convergence showing correlation of each draw with its lagged values across iterations.</li>
 <li>Rapid decay of autocorrelation toward zero indicates: chains are mixing well and successive draws are relatively independent.</li>
@@ -655,15 +663,15 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 
 <h3 id="posterior-results">Posterior Results</h3>
 <div class="panel-tabset">
-<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">Posterior Estimates</a></li><li><a href="#tabset-6-2">Posterior Distribution</a></li><li><a href="#tabset-6-3">Interpretation</a></li></ul>
+<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">Posterior Estimates</a></li><li><a href="#tabset-7-2">Posterior Distribution</a></li><li><a href="#tabset-7-3">Interpretation</a></li></ul>
 <div class="tab-content">
-<div id="tabset-6-1">
+<div id="tabset-7-1">
 <p><img data-src="images/clipboard-1727290712.png"></p>
 </div>
-<div id="tabset-6-2">
+<div id="tabset-7-2">
 <p><img data-src="images/clipboard-2417602744.png"></p>
 </div>
-<div id="tabset-6-3">
+<div id="tabset-7-3">
 <p><strong>Posterior Coefficients</strong></p>
 <p>Age (per 1 SD): strong positive effect (≈ +1.1, 80% CrI ≈ 0.9–1.3).</p>
 <p>BMI (per 1 SD): positive association (≈ +0.6, 80% CrI ≈ 0.45–0.75).</p>
@@ -678,11 +686,12 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </section>
 <section class="slide level2">
 
-<h3 id="prior-and-posterior-predictive-distribution-age-and-bmi">Prior and Posterior Predictive Distribution (age and BMI)</h3>
+<h3 id="model-diagnostics">Model Diagnostics</h3>
+<h4 id="prior-and-posterior-predictive-distribution-age-and-bmi">Prior and Posterior Predictive Distribution (age and BMI)</h4>
 <div class="panel-tabset">
-<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">Code</a></li><li><a href="#tabset-7-2">Plot</a></li><li><a href="#tabset-7-3">Interpretation</a></li><li><a href="#tabset-7-4">R Square</a></li></ul>
+<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">Code</a></li><li><a href="#tabset-8-2">Plot</a></li><li><a href="#tabset-8-3">Interpretation</a></li><li><a href="#tabset-8-4">R Square</a></li></ul>
 <div class="tab-content">
-<div id="tabset-7-1">
+<div id="tabset-8-1">
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb4-2"><a></a></span>
 <span id="cb4-3"><a></a><span class="fu">ggplot</span>(combined_draws, <span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
@@ -696,17 +705,17 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <span id="cb4-11"><a></a>    <span class="at">fill =</span> <span class="st">""</span></span>
 <span id="cb4-12"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-7-2">
+<div id="tabset-8-2">
 <p>Prior vs Posterior Distributions <img data-src="images/clipboard-1978292710.png" width="466"></p>
 </div>
-<div id="tabset-7-3">
+<div id="tabset-8-3">
 <ul>
 <li><p>Strong positive relationship between age, BMI, and diabetes probability.</p></li>
 <li><p><strong>Posterior predictive checks</strong> confirm good model fit.</p></li>
 <li><p>Imputation reduced bias and improved robustness.</p></li>
 </ul>
 </div>
-<div id="tabset-7-4">
+<div id="tabset-8-4">
 <pre><code>Model fit: bayes_R2(bayes_fit)</code></pre>
 <pre><code>    Estimate        Est.Error       Q2.5        Q97.5 
     R2 0.1313342    0.01265055    0.1064607     0.156078</code></pre>
@@ -716,53 +725,61 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </section>
 <section class="slide level2">
 
-<h3 id="proportion-of-diabetes-prevalence-survey-weighted-nhanes-vs-predicted">Proportion of Diabetes Prevalence (Survey weighted NHANES vs Predicted)</h3>
-<p><img data-src="images/clipboard-4013951629.png" width="576"></p>
-<p><img data-src="images/clipboard-3433503019.png" width="466"></p>
-</section>
-<section class="slide level2">
-
-<h3 id="posterior-predictive-checks">Posterior Predictive Checks</h3>
+<h3 id="model-diagnostics-1">Model Diagnostics</h3>
+<h4 id="posterior-predictive-checks">Posterior Predictive Checks</h4>
 <p>500 draws: predicted outcomes for each observation compare ( observed data vs predeicted outcomes: binary outcome with 0 or 1 simulated</p>
 <div class="panel-tabset">
-<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">Code</a></li><li><a href="#tabset-8-2">Compare Outcome</a></li><li><a href="#tabset-8-3">Proportion</a></li><li><a href="#tabset-8-4">Mean</a></li><li><a href="#tabset-8-5">SD</a></li></ul>
+<ul id="tabset-9" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-9-1">Code</a></li><li><a href="#tabset-9-2">Compare Outcome</a></li></ul>
 <div class="tab-content">
-<div id="tabset-8-1">
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>pp_samples <span class="ot">&lt;-</span> <span class="fu">posterior_predict</span>(bayes_fit, <span class="at">ndraws =</span> <span class="dv">500</span>)  <span class="co"># 500 draws</span></span>
-<span id="cb7-2"><a></a></span>
-<span id="cb7-3"><a></a><span class="co"># Check dimensions</span></span>
-<span id="cb7-4"><a></a><span class="fu">dim</span>(pp_samples)  <span class="co"># rows = draws, cols = observations</span></span>
-<span id="cb7-5"><a></a><span class="fu">ppc_bars</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>, ])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="tabset-9-1">
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>pp_samples \<span class="ot">&lt;-</span> <span class="fu">posterior_predict</span>(bayes_fit, <span class="at">ndraws =</span> <span class="dv">500</span>) </span>
+<span id="cb7-2"><a></a><span class="co"># 500 draws </span></span>
+<span id="cb7-3"><a></a></span>
+<span id="cb7-4"><a></a><span class="co"># Check dimensions dim(pp_samples) \# rows = draws, cols = observations ppc_bars(y = adult_imp1\$diabetes_dx, yrep = pp_samples\[1:500, \]) </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-8-2">
-<p><strong>Predicted vs observed outcome</strong></p>
-<p><img data-src="images/clipboard-2418526955.png" width="274"></p>
-</div>
-<div id="tabset-8-3">
-<p><img data-src="images/clipboard-122565288.png" width="273"></p>
-</div>
-<div id="tabset-8-4">
-<p><img data-src="images/clipboard-2726352750.png" width="340"></p>
-</div>
-<div id="tabset-8-5">
+<div id="tabset-9-2">
+<p><strong>Predicted vs observed outcome</strong> <img data-src="images/clipboard-2418526955.png" width="274"> ### Proportion</p>
+<p><img data-src="images/clipboard-122565288.png" width="273"> ### Mean</p>
+<p><img data-src="images/clipboard-2726352750.png" width="340"> ### SD</p>
 <p><img data-src="images/clipboard-1023519991.png" width="331"></p>
 </div>
 </div>
 </div>
+<h3 id="model-diagnostics-2">Model Diagnostics</h3>
+<h4 id="diabetes-prevalence-survey-weighted-nhanes-vs-predicted">Diabetes Prevalence (Survey weighted NHANES vs Predicted)</h4>
+<div class="panel-tabset">
+<ul id="tabset-10" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-10-1">Result and Visualization</a></li><li><a href="#tabset-10-2">Interpretation</a></li></ul>
+<div class="tab-content">
+<div id="tabset-10-1">
+<p><img data-src="images/clipboard-4013951629.png" width="576"></p>
+<p><img data-src="images/clipboard-3433503019.png" width="466"></p>
+</div>
+<div id="tabset-10-2">
+<p><strong>Prevalence of diabetes</strong> (Posterior-predicted vs NHANES survey-weighted)</p>
+<ul>
+<li>NHANES survey-weighted estimate (8.9%, SE = 0.0048).</li>
+<li>The predicted posterior mean was 10.95%, with a 95% credible interval of 8.5%–12.8%.</li>
+<li>Although the model predicts slightly higher prevalence, the credible interval overlaps the NHANES estimate.</li>
+</ul>
+<p><strong>Model is well-calibrated, with NHANES falling near the lower end of the posterior distribution but still within a plausible range</strong></p>
+</div>
+</div>
+</div>
 </section>
 <section class="slide level2">
 
-<h3 id="observed-vs.-predicted-average-diabetes-outcome-across-individuals">Observed vs.&nbsp;Predicted Average diabetes outcome across individuals</h3>
+<h3 id="model-diagnostics-3">Model Diagnostics</h3>
+<h4 id="observed-vs.-predicted-average-diabetes-outcome-across-individuals">Observed vs.&nbsp;Predicted Average diabetes outcome across individuals</h4>
 <div class="panel-tabset">
-<ul id="tabset-9" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-9-1">Code</a></li><li><a href="#tabset-9-2">Plot</a></li><li><a href="#tabset-9-3">Plot</a></li></ul>
+<ul id="tabset-11" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-11-1">Code</a></li><li><a href="#tabset-11-2">Plot</a></li><li><a href="#tabset-11-3">Plot</a></li></ul>
 <div class="tab-content">
-<div id="tabset-9-1">
+<div id="tabset-11-1">
 <div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="co"># PP checks with bayesplot options</span></span>
 <span id="cb8-2"><a></a><span class="fu">color_scheme_set</span>(<span class="st">"blue"</span>)</span>
 <span id="cb8-3"><a></a><span class="fu">ppc_scatter_avg</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ]) <span class="sc">+</span></span>
 <span id="cb8-4"><a></a><span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Observed vs Predicted (Avg) Posterior Predictive at individual level"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-9-2">
+<div id="tabset-11-2">
 <p><img data-src="images/clipboard-2608056459.png" width="287"></p>
 <ul>
 <li>Each point = one observation (an individual)</li>
@@ -771,7 +788,7 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <li>Points near (0, 0) or (1, 1) → good prediction</li>
 </ul>
 </div>
-<div id="tabset-9-3">
+<div id="tabset-11-3">
 <p><img data-src="images/clipboard-2167517988.png" width="340"></p>
 <ul>
 <li>Each point represents an individual’s observed BMI versus the model’s predicted mean.</li>
@@ -784,7 +801,7 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </section>
 <section class="slide level2">
 
-<h3 id="model-diagnostics">Model Diagnostics</h3>
+<h3 id="model-diagnostics-4">Model Diagnostics</h3>
 <h4 id="model-comparison-across-methods">Model Comparison Across methods</h4>
 <ol type="1">
 <li><strong>Survey-weighted maximum likelihood estimation (MLE)</strong></li>
@@ -801,14 +818,14 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </section>
 <section class="slide level2">
 
-<h3 id="model-diagnostics-1">Model Diagnostics</h3>
+<h3 id="model-diagnostics-5">Model Diagnostics</h3>
 <div class="panel-tabset">
-<ul id="tabset-10" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-10-1">Plot pairwise correlation</a></li><li><a href="#tabset-10-2">Code</a></li><li><a href="#tabset-10-3">Interpretation</a></li></ul>
+<ul id="tabset-12" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-12-1">Plot pairwise correlation</a></li><li><a href="#tabset-12-2">Code</a></li><li><a href="#tabset-12-3">Interpretation</a></li></ul>
 <div class="tab-content">
-<div id="tabset-10-1">
+<div id="tabset-12-1">
 <p><img data-src="images/clipboard-1737198687.png"></p>
 </div>
-<div id="tabset-10-2">
+<div id="tabset-12-2">
 <div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a><span class="co"># Extract posterior draws</span></span>
 <span id="cb10-2"><a></a>post <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(bayes_fit)</span>
 <span id="cb10-3"><a></a><span class="co"># Select numeric parameters of interest</span></span>
@@ -822,7 +839,7 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <span id="cb10-11"><a></a>           <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"b_age_c"</span>, <span class="st">"b_bmi_c"</span>, <span class="st">"b_sexFemale"</span>),</span>
 <span id="cb10-12"><a></a>           <span class="at">off_diag_args =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-10-3">
+<div id="tabset-12-3">
 <ul>
 <li>The absence of strong linear relationships between age, BMI, and sex</li>
 <li>Independently contribute to the prediction of diabetes status.</li>
@@ -837,22 +854,22 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 </section>
 <section class="slide level2">
 
-<h3 id="model-diagnostics-2">Model Diagnostics</h3>
+<h3 id="model-diagnostics-6">Model Diagnostics</h3>
 <h4 id="predicted-diabetes-prevalence-vs.-nhanes-prevalence">Predicted Diabetes Prevalence vs.&nbsp;NHANES Prevalence</h4>
 <div class="panel-tabset">
-<ul id="tabset-11" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-11-1">Plot</a></li><li><a href="#tabset-11-2">Interpretation</a></li><li><a href="#tabset-11-3">Code</a></li></ul>
+<ul id="tabset-13" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-13-1">Plot</a></li><li><a href="#tabset-13-2">Interpretation</a></li><li><a href="#tabset-13-3">Code</a></li></ul>
 <div class="tab-content">
-<div id="tabset-11-1">
+<div id="tabset-13-1">
 <p><img data-src="images/clipboard-2142249375.png" width="329"></p>
 </div>
-<div id="tabset-11-2">
+<div id="tabset-13-2">
 <ul>
 <li>We compared the Bayesian posterior-predicted diabetes prevalence with the NHANES survey-weighted estimate (8.9%, SE = 0.0048).</li>
 <li>The model’s posterior mean was 10.95%, with a 95% credible interval of 8.5%–12.8%. Although the model predicts slightly higher prevalence, the credible interval overlaps the NHANES estimate.</li>
 <li>This indicates that the model is reasonably well-calibrated, with NHANES falling near the lower end of the posterior distribution but still within a plausible range.</li>
 </ul>
 </div>
-<div id="tabset-11-3">
+<div id="tabset-13-3">
 <div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a><span class="co"># pp_proportion &lt;- rowMeans(pp_samples)  # if not already done</span></span>
 <span id="cb11-2"><a></a>known_prev <span class="ot">&lt;-</span> <span class="fl">0.089</span>   <span class="co"># NHANES prevalence</span></span>
 <span id="cb11-3"><a></a>posterior_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(pp_proportion)</span>
@@ -894,9 +911,9 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 
 <h3 id="translational-perspective">Translational Perspective</h3>
 <div class="panel-tabset">
-<ul id="tabset-12" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-12-1">Internal Validation</a></li><li><a href="#tabset-12-2">Code</a></li><li><a href="#tabset-12-3">Interpretation</a></li></ul>
+<ul id="tabset-14" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-14-1">Internal Validation</a></li><li><a href="#tabset-14-2">Code</a></li><li><a href="#tabset-14-3">Interpretation</a></li></ul>
 <div class="tab-content">
-<div id="tabset-12-1">
+<div id="tabset-14-1">
 <h4 id="personalized-risk-estimation">Personalized Risk Estimation</h4>
 <ul>
 <li>Model enables individualized diabetes risk prediction using age, BMI, sex, race and outputs can guide actionable thresholds (e.g., risk &gt;30%)</li>
@@ -905,7 +922,7 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <li>Posterior draws: calculate the 95% credible interval for the predicted probability</li>
 </ul>
 </div>
-<div id="tabset-12-2">
+<div id="tabset-14-2">
 <div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>participant1_data  <span class="ot">&lt;-</span> adult[<span class="dv">1</span>, ]</span>
 <span id="cb12-2"><a></a>phat1 <span class="ot">&lt;-</span> <span class="fu">posterior_linpred</span>(bayes_fit, <span class="at">newdata =</span> participant1_data, <span class="at">transform =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb12-3"><a></a><span class="co"># Store in a data frame for plotting</span></span>
@@ -921,7 +938,7 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 <span id="cb12-13"><a></a>  <span class="fu">theme_bw</span>()</span>
 <span id="cb12-14"><a></a>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-12-3">
+<div id="tabset-14-3">
 <p>Posterior predictive distribution for a specific individual with Outcome = 1</p>
 <ul>
 <li>Median/mean predicted probability ≈ 0.25</li>

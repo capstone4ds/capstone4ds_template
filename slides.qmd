@@ -135,18 +135,7 @@ National Health and Nutrition Examination Survey (NHANES) 2013–2014\
 
 #### Survey-Weighted Diabetes Risk (U.S. Adults)
 
-**diabetes_dx∼age_c + bmi_c + sex + race**
-Interpretation
--   model was estimated using svyglm(),**quasibinomial family** for binary outcome for NHANES design.
--  Design-adjusted coefficient estimates, standard errors, and odds ratios reflect population-representative associations for U.S. adults.
--   Age (per 1 SD ↑): OR ≈ 3.03 → Older adults \~3× higher odds
--   BMI (per 1 SD ↑): OR ≈ 1.88 → Higher BMI increases risk
--   Sex (Female vs Male): OR ≈ 0.53 → Females \~47% lower odds
--   Race (vs NH White):
--   Mexican American: OR ≈ 2.04
--   Other Hispanic: OR ≈ 1.59
--   NH Black: OR ≈ 1.67
--   Other/Multi-racial: OR ≈ 2.33
+**diabetes_dx∼age_c + bmi_c + sex + race** Interpretation - model was estimated using svyglm(),**quasibinomial family** for binary outcome for NHANES design. - Design-adjusted coefficient estimates, standard errors, and odds ratios reflect population-representative associations for U.S. adults. - Age (per 1 SD ↑): OR ≈ 3.03 → Older adults \~3× higher odds - BMI (per 1 SD ↑): OR ≈ 1.88 → Higher BMI increases risk - Sex (Female vs Male): OR ≈ 0.53 → Females \~47% lower odds - Race (vs NH White): - Mexican American: OR ≈ 2.04 - Other Hispanic: OR ≈ 1.59 - NH Black: OR ≈ 1.67 - Other/Multi-racial: OR ≈ 2.33
 
 Age and BMI are strongest predictors Females have lower risk Certain racial/ethnic groups have higher odds
 
@@ -156,7 +145,6 @@ Age and BMI are strongest predictors Females have lower risk Certain racial/ethn
 form_cc <- diabetes_dx ~ age_c + bmi_c + sex + race
 svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibinomial())
 ```
-
 :::
 
 ------------------------------------------------------------------------
@@ -177,8 +165,6 @@ Posterior (parameters + missing data uncertainty)
 -   PMM for continuous; logistic regression for binary variables.
 -   MICE procedure ran 5 iterations for each of the 5 imputed datasets to ensure stability and convergence.
 -   Estimates pooled using Rubin’s rules.
-
-
 :::
 ::::
 
@@ -190,8 +176,8 @@ A Bayesian logistic regression model was then fitted to each imputed dataset in 
 
 Prior
 
--  **normal(0, 2.5)** for coefficients 
--  **student_t(3, 0, 10)** for Intercept
+-   **normal(0, 2.5)** for coefficients
+-   **student_t(3, 0, 10)** for Intercept
 
 ``` r
 library(gt)
@@ -244,9 +230,13 @@ bayes_results <- post %>%  left_join(diag, by = "term") %>%  mutate(
 ### Results
 
 ![](images/clipboard-1727290712.png){width="443"}
+:::
+
+------------------------------------------------------------------------
 
 ### Diagnostics
 
+::: panel-tabset
 -   R-hat ≈ 1 → good chain mixing
 -   Effective sample sizeTrace plots
 -   Trace plots indicate convergence (no drift across iterations).
@@ -260,7 +250,13 @@ bayes_results <- post %>%  left_join(diag, by = "term") %>%  mutate(
 
 ![](images/clipboard-3030610644.png){width="344"}
 
-### Interpretation
+### Interpretation (Trace Plots)
+
+-   Convergence: well-mixed chains without trends indicate convergence and stable posterior estimates. Plots of posterior distributions with high uncertainty, narrow distributions indicating precise estimates.
+-   All distributions look smooth and unimodal → no multimodality, confirming stable posteriors.
+-   Each histogram represents the distribution of sampled coefficient values after convergence across all MCMC draws
+
+### Interpretation (Autocorrelation)
 
 -   Assess chain mixing and convergence showing correlation of each draw with its lagged values across iterations.
 -   Rapid decay of autocorrelation toward zero indicates: chains are mixing well and successive draws are relatively independent.
@@ -314,7 +310,9 @@ Other/Multi: small positive effect (≈ +0.3, wide CrI).
 
 ------------------------------------------------------------------------
 
-### Prior and Posterior Predictive Distribution (age and BMI)
+### Model Diagnostics
+
+#### Prior and Posterior Predictive Distribution (age and BMI)
 
 ::: panel-tabset
 ### Code
@@ -358,53 +356,63 @@ Model fit: bayes_R2(bayes_fit)
 ```
 :::
 
-------------------------------------------------------------------------
+-----------------------------------------------------------------------
 
-### Proportion of Diabetes Prevalence (Survey weighted NHANES vs Predicted)
+### Model Diagnostics 
+#### Posterior Predictive Checks 
+500 draws: predicted outcomes for each observation compare ( observed data vs predeicted outcomes: binary outcome with 0 or 1 simulated 
+
+::: panel-tabset 
+
+### Code 
+```r 
+pp_samples \<- posterior_predict(bayes_fit, ndraws = 500) 
+# 500 draws 
+
+# Check dimensions dim(pp_samples) \# rows = draws, cols = observations ppc_bars(y = adult_imp1\$diabetes_dx, yrep = pp_samples\[1:500, \]) 
+```
+### Compare Outcome 
+
+**Predicted vs observed outcome** 
+![](images/clipboard-2418526955.png){width="274"} 
+### Proportion 
+
+![](images/clipboard-122565288.png){width="273"} 
+### Mean 
+
+![](images/clipboard-2726352750.png){width="340"} 
+### SD 
+
+![](images/clipboard-1023519991.png){width="331"} 
+::: 
+
+### Model Diagnostics
+
+#### Diabetes Prevalence (Survey weighted NHANES vs Predicted)
+
+::: panel-tabset
+### Result and Visualization
 
 ![](images/clipboard-4013951629.png){width="576"}
 
 ![](images/clipboard-3433503019.png){width="466"}
 
-------------------------------------------------------------------------
+### Interpretation
 
-### Posterior Predictive Checks
+**Prevalence of diabetes** (Posterior-predicted vs NHANES survey-weighted)
 
-500 draws: predicted outcomes for each observation compare ( observed data vs predeicted outcomes: binary outcome with 0 or 1 simulated
+-   NHANES survey-weighted estimate (8.9%, SE = 0.0048).
+-   The predicted posterior mean was 10.95%, with a 95% credible interval of 8.5%–12.8%.
+-   Although the model predicts slightly higher prevalence, the credible interval overlaps the NHANES estimate.
 
-::: panel-tabset
-### Code
-
-``` r
-pp_samples <- posterior_predict(bayes_fit, ndraws = 500)  # 500 draws
-
-# Check dimensions
-dim(pp_samples)  # rows = draws, cols = observations
-ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:500, ])
-```
-
-### Compare Outcome
-
-**Predicted vs observed outcome**
-
-![](images/clipboard-2418526955.png){width="274"}
-
-### Proportion
-
-![](images/clipboard-122565288.png){width="273"}
-
-### Mean
-
-![](images/clipboard-2726352750.png){width="340"}
-
-### SD
-
-![](images/clipboard-1023519991.png){width="331"}
+**Model is well-calibrated, with NHANES falling near the lower end of the posterior distribution but still within a plausible range**
 :::
 
 ------------------------------------------------------------------------
 
-### Observed vs. Predicted Average diabetes outcome across individuals
+### Model Diagnostics
+
+#### Observed vs. Predicted Average diabetes outcome across individuals
 
 ::: panel-tabset
 ### Code
