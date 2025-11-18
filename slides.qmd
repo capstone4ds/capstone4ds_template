@@ -174,7 +174,8 @@ Logistic link transforms the linear predictor into a probability between (0 and 
 
 #### Data view
 
-![](images/clipboard-4180967765.png){width="604"}
+![](images/clipboard-4180967765.png){width="604"}\
+**Standardization transforms a variable so it has mean 0 and SD 1, allowing comparisons on a common scale and improving statistical model performance.**
 :::
 
 ------------------------------------------------------------------------
