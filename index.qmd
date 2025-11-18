@@ -1547,7 +1547,7 @@ mcmc_areas(
     the true parameter values are most likely to lie based on the
     posterior samples.
 
-## **Posterior Predictive Checking (PPC)**
+## Posterior Predictive Checking (PPC)
 
 ```{r}
 #| label: Prior and Post draws
@@ -2209,8 +2209,6 @@ vertical_tbl <- all_tbl %>%
 kable(vertical_tbl,
       align = "lcc",
       caption = "Odds Ratios (95% CI) Across Models")
-
-
 
 
 ```
