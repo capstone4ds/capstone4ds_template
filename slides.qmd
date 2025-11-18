@@ -150,13 +150,15 @@ Logistic link transforms the linear predictor into a probability between (0 and 
 #### Data
 
 **National Health and Nutrition Examination Survey (NHANES) 2013–2014**\
-**Design:** Complex multistage probability sampling; survey weights applied
+**Design:** Complex multistage probability sampling; survey weights applied to account for 
+-   Unequal probability of selection \
+-   Adjusts the sample to match known population totals (Census).
 
 **Response Variable (diabetes_dx : binary)**
 
--   Based on **DIQ010**: “Has a doctor told you that you have diabetes?”
+- **DIQ010**: “Has a doctor told you that you have diabetes?”
 
--   Excluded **DIQ050 (insulin use)** to avoid clinical confounding.
+-  **DIQ050 (insulin use)**:  Excluded to avoid clinical confounding.
 
 **Predictor Variables**
 

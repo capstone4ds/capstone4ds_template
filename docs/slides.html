@@ -537,11 +537,12 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <div class="tab-content">
 <div id="tabset-4-1">
 <p><strong>National Health and Nutrition Examination Survey (NHANES) 2013–2014</strong><br>
-<strong>Design:</strong> Complex multistage probability sampling; survey weights applied</p>
+<strong>Design:</strong> Complex multistage probability sampling; survey weights applied to account for - Unequal probability of selection<br>
+- Adjusts the sample to match known population totals (Census).</p>
 <p><strong>Response Variable (diabetes_dx : binary)</strong></p>
 <ul>
-<li><p>Based on <strong>DIQ010</strong>: “Has a doctor told you that you have diabetes?”</p></li>
-<li><p>Excluded <strong>DIQ050 (insulin use)</strong> to avoid clinical confounding.</p></li>
+<li><p><strong>DIQ010</strong>: “Has a doctor told you that you have diabetes?”</p></li>
+<li><p><strong>DIQ050 (insulin use)</strong>: Excluded to avoid clinical confounding.</p></li>
 </ul>
 <p><strong>Predictor Variables</strong></p>
 <ul>
