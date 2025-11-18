@@ -943,7 +943,7 @@ Trace &amp; Autocorrelation plots show convergence (no drift across iterations),
 
 <h3 id="correlation-diagnostics">Correlation Diagnostics</h3>
 <div class="panel-tabset">
-<ul id="tabset-16" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-16-1">Plot pairwise correlation</a></li><li><a href="#tabset-16-2">Code</a></li><li><a href="#tabset-16-3">Interpretation</a></li></ul>
+<ul id="tabset-16" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-16-1">Ppairwise correlation</a></li><li><a href="#tabset-16-2">Code</a></li><li><a href="#tabset-16-3">Interpretation</a></li></ul>
 <div class="tab-content">
 <div id="tabset-16-1">
 <p><img data-src="images/clipboard-1737198687.png" width="521"></p>
@@ -1042,27 +1042,13 @@ Trace &amp; Autocorrelation plots show convergence (no drift across iterations),
 
 <h3 id="translational-research-perspective">Translational Research Perspective</h3>
 <div class="panel-tabset">
-<ul id="tabset-18" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-18-1">Validation</a></li><li><a href="#tabset-18-2">Internal Validation</a></li><li><a href="#tabset-18-3">External Validation</a></li></ul>
+<ul id="tabset-18" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-18-1">Personalized Risk Estimation</a></li><li><a href="#tabset-18-2">Internal Validation</a></li><li><a href="#tabset-18-3">Plot</a></li><li><a href="#tabset-18-4">External Validation</a></li><li><a href="#tabset-18-5">Plot</a></li></ul>
 <div class="tab-content">
 <div id="tabset-18-1">
-<h4 id="personalized-risk-estimation">Personalized Risk Estimation</h4>
 <ul>
 <li>Model enables individualized diabetes risk prediction using age, BMI, sex, race and outputs can guide actionable thresholds (e.g., risk &gt;30%)</li>
 <li>BMI is modifiable- interventions can lower risk while sex and race remain constant.</li>
 </ul>
-<h4 id="code-9">Code</h4>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>participant1_data  <span class="ot">&lt;-</span> adult[<span class="dv">1</span>, ]</span>
-<span id="cb12-2"><a></a>phat1 <span class="ot">&lt;-</span> <span class="fu">posterior_linpred</span>(bayes_fit, <span class="at">newdata =</span> participant1_data, <span class="at">transform =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb12-3"><a></a>post_pred_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">pred =</span> phat1)</span>
-<span id="cb12-4"><a></a>ci_95_participant1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(phat1, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
-<span id="cb12-5"><a></a></span>
-<span id="cb12-6"><a></a><span class="fu">ggplot</span>(post_pred_df, <span class="fu">aes</span>(<span class="at">x =</span> pred)) <span class="sc">+</span> </span>
-<span id="cb12-7"><a></a>  <span class="fu">geom_density</span>(<span class="at">color=</span><span class="st">'darkblue'</span>, <span class="at">fill=</span><span class="st">'lightblue'</span>) <span class="sc">+</span></span>
-<span id="cb12-8"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_95_participant1[<span class="dv">1</span>], <span class="at">color=</span><span class="st">'red'</span>, <span class="at">linetype=</span><span class="st">'dashed'</span>) <span class="sc">+</span></span>
-<span id="cb12-9"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_95_participant1[<span class="dv">2</span>], <span class="at">color=</span><span class="st">'red'</span>, <span class="at">linetype=</span><span class="st">'dashed'</span>) <span class="sc">+</span></span>
-<span id="cb12-10"><a></a>  <span class="fu">xlab</span>(<span class="st">'Probability of being diabetic (Outcome=1)'</span>) <span class="sc">+</span></span>
-<span id="cb12-11"><a></a>  <span class="fu">ggtitle</span>(<span class="st">'Posterior Predictive Distribution 95% Credible Interval'</span>) <span class="sc">+</span></span>
-<span id="cb12-12"><a></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="tabset-18-2">
 <ul>
@@ -1070,30 +1056,41 @@ Trace &amp; Autocorrelation plots show convergence (no drift across iterations),
 <li>Obtain predicted probabilities from the logistic regression model.&nbsp;<strong>posterior_linpred(transform = TRUE)</strong></li>
 <li>Posterior draws: calculate the 95% credible interval for the predicted probability</li>
 </ul>
-<p><img data-src="images/clipboard-2754134965.png" width="196"><br>
-</p>
-<p>Result: Median predicted probability ≈ 0.25, with a 95% credible interval of 0.20–0.31, indicate a ~1 in 4 chance of diabetes.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>participant1_data  <span class="ot">&lt;-</span> adult[<span class="dv">1</span>, ]</span>
+<span id="cb12-2"><a></a>phat1 <span class="ot">&lt;-</span> <span class="fu">posterior_linpred</span>(bayes_fit, <span class="at">newdata =</span> participant1_data, <span class="at">transform =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-3"><a></a>post_pred_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">pred =</span> phat1)</span>
+<span id="cb12-4"><a></a>ci_95_participant1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(phat1, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb12-5"><a></a><span class="fu">ggplot</span>(post_pred_df, <span class="fu">aes</span>(<span class="at">x =</span> pred)) <span class="sc">+</span> </span>
+<span id="cb12-6"><a></a>  <span class="fu">geom_density</span>(<span class="at">color=</span><span class="st">'darkblue'</span>, <span class="at">fill=</span><span class="st">'lightblue'</span>) <span class="sc">+</span></span>
+<span id="cb12-7"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_95_participant1[<span class="dv">1</span>], <span class="at">color=</span><span class="st">'red'</span>, <span class="at">linetype=</span><span class="st">'dashed'</span>) <span class="sc">+</span></span>
+<span id="cb12-8"><a></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_95_participant1[<span class="dv">2</span>], <span class="at">color=</span><span class="st">'red'</span>, <span class="at">linetype=</span><span class="st">'dashed'</span>) <span class="sc">+</span></span>
+<span id="cb12-9"><a></a>  <span class="fu">xlab</span>(<span class="st">'Probability of being diabetic (Outcome=1)'</span>) <span class="sc">+</span></span>
+<span id="cb12-10"><a></a>  <span class="fu">ggtitle</span>(<span class="st">'Posterior Predictive Distribution 95% Credible Interval'</span>) <span class="sc">+</span></span>
+<span id="cb12-11"><a></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="tabset-18-3">
-<p><img data-src="images/clipboard-2142022257.png" width="166">|</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a>new_participant <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">age_c=</span> <span class="dv">40</span>, <span class="at">bmi_c=</span> <span class="dv">25</span>, <span class="at">sex=</span> <span class="st">"Female"</span>, <span class="at">race =</span> <span class="st">"Mexican American"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img data-src="images/clipboard-2754134965.png" width="196">|</p>
+<p>Result: Median predicted probability ≈ 0.25, with a 95% credible interval of 0.20–0.31, indicate a ~1 in 4 chance of diabetes.</p>
+</div>
+<div id="tabset-18-4">
 <ul>
-<li><p>We computed the posterior predicted probability for a new participant data (age, BMI, sex, and race)).<br>
-</p></li>
-<li><p>The density plot with 95% credible intervals captures both the most likely risk and uncertainty.<br>
-</p></li>
-<li><p>X-axis: Predicted probability of diabetes (Outcome = 1)<br>
-</p></li>
-<li><p>Y-axis: Density of predicted probabilities<br>
-</p></li>
-<li><p>Blue curve: Posterior predictive distribution<br>
-</p></li>
-<li><p>Shaded area: High probability values near 1 = diabetes risk<br>
-</p></li>
-<li><p>Red dashed line: Upper bound of 95% credible interval<br>
-</p></li>
-<li><p>Peak: Most likely predicted probability ≈ 1</p></li>
+<li>We computed the posterior predicted probability for a new participant data (age, BMI, sex, and race)).<br>
+</li>
+<li>The density plot with 95% credible intervals captures both the most likely risk and uncertainty.<br>
+</li>
 </ul>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a>new_participant <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">age_c=</span> <span class="dv">40</span>, <span class="at">bmi_c=</span> <span class="dv">25</span>, <span class="at">sex=</span> <span class="st">"Female"</span>, <span class="at">race =</span> <span class="st">"Mexican American"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-18-5">
+<p><img data-src="images/clipboard-2142022257.png" width="166"><br>
+</p>
+<p>Results<br>
+- X-axis: Predicted probability of diabetes (Outcome = 1)<br>
+- Y-axis: Density of predicted probabilities<br>
+- Blue curve: Posterior predictive distribution<br>
+- Shaded area: High probability values near 1 = diabetes risk<br>
+- Red dashed line: Upper bound of 95% credible interval<br>
+- Peak: Most likely predicted probability ≈ 1</p>
 </div>
 </div>
 </div>
