@@ -337,12 +337,10 @@ rstan::monitor( samples = rstan::extract(fit, permuted = FALSE), probs = c(0.025
 ### Model Diagnostics 
 
 ::: panel-tabset
-
 #### MCMC Convergence
 R-hat ≈ 1 → good chain mixing\
 Effective sample size\
 Trace & Autocorrelation plots show convergence (no drift across iterations), well-mixed chains without trends with stable posterior estimates.
-
 
 #### Trace Plots (stable posteriors)
 
@@ -360,30 +358,29 @@ Results: chain mixing, convergence, correlation of draws with lagged values acro
 
 ------------------------------------------------------------------------
 
-#### Posterior Distribution
+#### Posterior predictive Distribution
 
 ::: panel-tabset
-#### Posterior draws
 
-Posterior draws = 4000 (4 chains × 1000 iterations) for posterior predictive checks\
-
+### Posterior draws
 **MCMC samples, which represent the posterior distribution of the model parameters**
 
--   The distribution of predictors after seeing the data.
--   The posterior is the conditional distribution of the parameter given the data
--   Subjectivity is present when - prior distribution influences the conclusions.
--   The influence of the prior goes to zero as the sample size increases.
+Posterior draws = 4000 (4 chains × 1000 iterations) for posterior predictive checks.
 
-##### Code
+- The distribution of predictors after seeing the data.
+- The posterior is the conditional distribution of the parameter given the data.
+- Subjectivity is present when the prior distribution influences the conclusions.
+- The influence of the prior goes to zero as the sample size increases.
 
+---
+
+### Code
 ``` r
 # Posterior predictive check comparing observed vs. simulated outcomes
 pp_check(bayes_fit, nsamples = 100) +
   labs(title = "Posterior Predictive Check: Observed vs. Replicated Outcomes")
 ```
-
-##### Plot
-
+### Plot
 ![](images/clipboard-2255770791.png)
 :::
 
@@ -425,6 +422,7 @@ Other/Multi: small positive effect (≈ +0.3, wide CrI).
 #### Prior and Posterior Predictive Distribution (age and BMI)
 
 ::: panel-tabset
+
 ##### Plot
 
 Prior vs Posterior Distributions ![](images/clipboard-1978292710.png){width="466"}

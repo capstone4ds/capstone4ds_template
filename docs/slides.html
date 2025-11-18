@@ -744,25 +744,27 @@ Trace &amp; Autocorrelation plots show convergence (no drift across iterations),
 </section>
 <section class="slide level2">
 
-<h4 id="posterior-distribution">Posterior Distribution</h4>
+<h4 id="posterior-predictive-distribution">Posterior predictive Distribution</h4>
 <div class="panel-tabset">
-<ul id="tabset-9" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-9-1">Posterior draws</a></li></ul>
+<ul id="tabset-9" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-9-1">Posterior draws</a></li><li><a href="#tabset-9-2">Code</a></li><li><a href="#tabset-9-3">Plot</a></li></ul>
 <div class="tab-content">
 <div id="tabset-9-1">
-<p>Posterior draws = 4000 (4 chains × 1000 iterations) for posterior predictive checks<br>
-</p>
 <p><strong>MCMC samples, which represent the posterior distribution of the model parameters</strong></p>
+<p>Posterior draws = 4000 (4 chains × 1000 iterations) for posterior predictive checks.</p>
 <ul>
 <li>The distribution of predictors after seeing the data.</li>
-<li>The posterior is the conditional distribution of the parameter given the data</li>
-<li>Subjectivity is present when - prior distribution influences the conclusions.</li>
+<li>The posterior is the conditional distribution of the parameter given the data.</li>
+<li>Subjectivity is present when the prior distribution influences the conclusions.</li>
 <li>The influence of the prior goes to zero as the sample size increases.</li>
 </ul>
-<h5 id="code-3">Code</h5>
+<hr>
+</div>
+<div id="tabset-9-2">
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="co"># Posterior predictive check comparing observed vs. simulated outcomes</span></span>
 <span id="cb4-2"><a></a><span class="fu">pp_check</span>(bayes_fit, <span class="at">nsamples =</span> <span class="dv">100</span>) <span class="sc">+</span></span>
 <span id="cb4-3"><a></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Posterior Predictive Check: Observed vs. Replicated Outcomes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<h5 id="plot-1">Plot</h5>
+</div>
+<div id="tabset-9-3">
 <p><img data-src="images/clipboard-2255770791.png"></p>
 </div>
 </div>
