@@ -2213,153 +2213,38 @@ kable(vertical_tbl,
 
 ```
 
-# Conclusion
+# Targeted Intervention
 
-Model Performance and Fit
-
--   Across multiple modeling approaches — survey-weighted MLE and
-    Bayesian logistic regression — the models were consistent and
-    reliable in predicting diabetes risk.
--   The Bayesian model showed excellent convergence (Rhat = 1.00;
-    Bulk/Tail ESS \> 2000) and explained approximately 13% of the
-    variance in diabetes (Posterior R² = 0.13, 95% CrI: 0.106–0.156).
--   Posterior predictive checks confirmed good model calibration, with
-    credible intervals capturing predictive uncertainty.
-
-Key Predictors
-
--   Age and BMI were the strongest and most consistent predictors across
-    all methods. Each 1 SD increase in age nearly tripled the odds of
-    diabetes, while a 1 SD increase in BMI increased the odds by
-    approximately 1.7–1.9×.
--   Sex (female) was associated with lower odds of diabetes.
--   Race/Ethnicity: Mexican American, NH Black, and Other/Multi groups
-    had significantly higher odds; the effect for Other Hispanic was
-    less certain.
-
-Interpretation and Robustness
-
--   Bayesian credible intervals were slightly narrower than frequentist
-    confidence intervals but largely overlapped, indicating robust
-    effect estimates and stable inference.
--   Prior regularization in the Bayesian model stabilized estimates in
-    the presence of modest missingness.
--   The results are slightly conservative relative to the observed
-    population prevalence, but the posterior predictions remain
-    consistent with both survey-weighted and imputed data.
-
-Design Considerations
-
--   Survey-weighted MLE accounts for the complex NHANES sampling design,
-    producing population-representative estimates.
--   The Bayesian model used normalized weights as importance weights,
-    which approximates the effect of survey weights but does not fully
-    account for stratification, clustering, or design-based variance
-    adjustments.
-
-Overall: - Age and BMI are consistently strong risk factors for diabetes
-in this population. - The Bayesian model complements frequentist
-approaches by providing stable, interpretable, and
-uncertainty-quantified estimates, while broadly reproducing
-population-level prevalence.
-
-# Discussions
-
--   The use of multiple imputation allowed for robust analysis despite
-    missing data, increasing power and reducing bias.
--   Comparison of frequentist and Bayesian models demonstrated
-    consistency in significant predictors, while Bayesian approaches
-    provided the advantage of posterior distributions and probabilistic
-    interpretation.
--   Across all models, both age and BMI emerged as strong and consistent
-    predictors of diabetes.
--   The consistency across modeling approaches strengthens the validity
-    of these findings Multiple imputation accounted for potential biases
-    due to missing data, and Bayesian modeling provided robust credible
-    intervals that closely matched frequentist estimates align with
-    previous epidemiological research indicating that increasing age and
-    higher BMI are among the most important determinants of type 2
-    diabetes risk.
--   Cumulative exposure to metabolic and lifestyle risk factors over
-    time, and the role of excess adiposity and insulin related effects
-    account for diabetes.
--   Survey weighted dataset strenghthens ensuring population
-    representativeness, multiple imputation to handle missing data, and
-    rigorous Bayesian estimation provided high effective sample sizes
-    and R̂ ≈ 1.00 across parameters confirmed excellent model
-    convergence.
--   Bayesian logistic regression provided inference statistically
-    consistent and interpretable achieving the aim of this study. In
-    future research hierarchical model using NHANES cycles or adding
-    variables (lab tests) could assess nonlinear effects of metabolic
-    risk factors.
-
-# Limitations
-
-1.  The study is based on cross-sectional/observational NHANES data,
-    which limits the ability to make causal inferences. Associations
-    observed between BMI, age, diabetes status cannot confirm causation.
-2.  The project relies on multiple imputation for missing values, even
-    though imputation reduces bias, it assumes missingness is at random
-    (MAR); if data are missing not at random (MNAR), results may be
-    biased.
-3.  Potential Residual Confounding - Models included key predictors
-    (age, BMI, sex, race), but unmeasured factors like diet, physical
-    activity, socioeconomic status, or genetic predisposition could
-    confound associations.
-4.  Bayesian models depend on prior choices, which could influence
-    posterior estimates if priors are informative or mis-specified.
-5.  Variable Measurement - BMI is measured at a single time point, which
-    may not reflect long-term exposure or risk.
-6.  Self-reported variables - are subjective to recall or reporting
-    bias.
-7.  Interactions are not tested in the study (bmi × age) and so other
-    potential synergistic effects might be missed.
-8.  Predicted probabilities are model-based estimates, not validated for
-    clinical decision-making. External validation in independent cohorts
-    is needed before application.
-
-# Targeted Therapy
-
--   Translational Perspective from the Bayesian Diabetes Prediction
-    Project. This project further demonstrates the translational
+-   The project further demonstrates the translational
     potential of Bayesian modeling in clinical decision-making and
     public health strategy.
 -   By using patient-level predictors such as age, BMI, sex, and race to
     estimate the probability of diabetes, the model moves beyond
     descriptive statistics toward individualized risk prediction.
--   The translational move lies in converting these probabilistic
-    outputs into actionable thresholds—such as identifying the BMI or
-    age at which the predicted risk of diabetes exceeds a clinically
+-   By converting probabilistic outputs into actionable thresholds—such as identifying the BMI or age at which the predicted risk of diabetes exceeds a clinically
     meaningful level (e.g., 30%).
 -   Such insights can guide early screening, personalized lifestyle
     interventions, and targeted prevention programs for populations at
     higher risk.
 -   This approach embodies precision public health—bridging data science
     and medical decision-making to deliver tailored, evidence-based
-    strategies that can ultimately improve diabetes prevention and
+    strategies to improve diabetes prevention and
     management outcomes.
 
-What changes in modifiable predictors would lower diabetes risk?
+## Translational Research
 
-Translational Research Implications:
+**Changes in modifiable predictors could lower diabetes risk**
 
--   We can use the model to guide prevention or intervention.
 -   Only BMI is a modifiable risk factor
--   We can make changes in BMI (behavior or lifestyle) to achieve a
+-   Manage BMI by behavior or lifestyle changes to achieve a
     lower risk threshold
--   we hold non modifiable predictors as constant (sex, race).
--   Vary modifiable predictors (BMI) until the model predicts the
-    desired probability.
+-   By holding non modifiable predictors as constant (sex, race), varying BMI until the model predicts the desired probability.
 
 # Validation
-
 ## Internal validation
 
--   To illustrate personalized risk estimation using the Bayesian model,
-    we computed the posterior predicted probability of diabetes for a
-    representative participant.
--   We selected one participant from the dataset (adult\[1, \])
+-   To illustrate personalized risk estimation, we computed the posterior predicted probability of diabetes for a
+    representative participant from the dataset (adult\[1, \])
     including all relevant covariates (age, BMI, sex, race).
 -   Used posterior_linpred with transform = TRUE to obtain predicted
     probabilities for logistic regression.
@@ -2371,12 +2256,14 @@ Translational Research Implications:
     diabetes risk.
 -   95% credible interval provides a range of probable outcomes, not
     just a point estimate.
--   This approach allows personalized risk assessment, enabling
-    clinicians or public health practitioners to identify high-risk
-    individuals
--   Tailor preventive interventions (e.g., lifestyle modification,
+## Interpretation
+
+_   This approach allows personalized risk assessment, enabling
+    clinicians or public health practitioners 
+    -   to identify high-risk
+    individuals and tailor preventive interventions (e.g., lifestyle modification,
     monitoring)
--   Quantify uncertainty in predictions for decision-making
+    -   Quantify uncertainty in predictions for decision-making
 -   Posterior predictive distributions enable probabilistic,
     individualized predictions, supporting targeted intervention
     strategies beyond population-level summaries.
@@ -2443,8 +2330,6 @@ ggplot(post_pred_df2, aes(x = pred)) +
 
 ## External validation
 
--   Using the Bayesian model, we computed the posterior predicted probability for a new participant based on age, BMI, sex, and race. The density plot with 95% credible intervals captures both the most likely risk and uncertainty, supporting individualized preventive care
-
 ```{r}
 #| label: new participant
 #| echo: true
@@ -2483,6 +2368,9 @@ ggplot(post_pred_df_new, aes(x = pred)) +
   theme_bw()
 
 ```
+
+-   We computed the posterior predicted probability for a new participant data on age, BMI, sex, and race.\
+-   The density plot with 95% credible intervals captures both the most likely risk and uncertainty.\
 
 \## Targeted BMI Estimation for Predicted Diabetes Risk
 
@@ -2637,4 +2525,110 @@ ggplot(data.frame(prev = post_prev), aes(x = prev)) +
     estimates.\
     → This indicates **strong model calibration and external validity**.
 
+# Conclusion
+
+Model Performance and Fit
+
+-   Across multiple modeling approaches — survey-weighted MLE and
+    Bayesian logistic regression — the models were consistent and
+    reliable in predicting diabetes risk.
+-   The Bayesian model showed excellent convergence (Rhat = 1.00;
+    Bulk/Tail ESS \> 2000) and explained approximately 13% of the
+    variance in diabetes (Posterior R² = 0.13, 95% CrI: 0.106–0.156).
+-   Posterior predictive checks confirmed good model calibration, with
+    credible intervals capturing predictive uncertainty.
+
+Key Predictors
+
+-   Age and BMI were the strongest and most consistent predictors across
+    all methods. Each 1 SD increase in age nearly tripled the odds of
+    diabetes, while a 1 SD increase in BMI increased the odds by
+    approximately 1.7–1.9×.
+-   Sex (female) was associated with lower odds of diabetes.
+-   Race/Ethnicity: Mexican American, NH Black, and Other/Multi groups
+    had significantly higher odds; the effect for Other Hispanic was
+    less certain.
+
+Interpretation and Robustness
+
+-   Bayesian credible intervals were slightly narrower than frequentist
+    confidence intervals but largely overlapped, indicating robust
+    effect estimates and stable inference.
+-   Prior regularization in the Bayesian model stabilized estimates in
+    the presence of modest missingness.
+-   The results are slightly conservative relative to the observed
+    population prevalence, but the posterior predictions remain
+    consistent with both survey-weighted and imputed data.
+
+Design Considerations
+
+-   Survey-weighted MLE accounts for the complex NHANES sampling design,
+    producing population-representative estimates.
+-   The Bayesian model used normalized weights as importance weights,
+    which approximates the effect of survey weights but does not fully
+    account for stratification, clustering, or design-based variance
+    adjustments.
+
+Overall: - Age and BMI are consistently strong risk factors for diabetes
+in this population. - The Bayesian model complements frequentist
+approaches by providing stable, interpretable, and
+uncertainty-quantified estimates, while broadly reproducing
+population-level prevalence.
+
+# Discussions
+
+-   The use of multiple imputation allowed for robust analysis despite
+    missing data, increasing power and reducing bias.
+-   Comparison of frequentist and Bayesian models demonstrated
+    consistency in significant predictors, while Bayesian approaches
+    provided the advantage of posterior distributions and probabilistic
+    interpretation.
+-   Across all models, both age and BMI emerged as strong and consistent
+    predictors of diabetes.
+-   The consistency across modeling approaches strengthens the validity
+    of these findings Multiple imputation accounted for potential biases
+    due to missing data, and Bayesian modeling provided robust credible
+    intervals that closely matched frequentist estimates align with
+    previous epidemiological research indicating that increasing age and
+    higher BMI are among the most important determinants of type 2
+    diabetes risk.
+-   Cumulative exposure to metabolic and lifestyle risk factors over
+    time, and the role of excess adiposity and insulin related effects
+    account for diabetes.
+-   Survey weighted dataset strenghthens ensuring population
+    representativeness, multiple imputation to handle missing data, and
+    rigorous Bayesian estimation provided high effective sample sizes
+    and R̂ ≈ 1.00 across parameters confirmed excellent model
+    convergence.
+-   Bayesian logistic regression provided inference statistically
+    consistent and interpretable achieving the aim of this study. In
+    future research hierarchical model using NHANES cycles or adding
+    variables (lab tests) could assess nonlinear effects of metabolic
+    risk factors.
+
+# Limitations
+
+1.  The study is based on cross-sectional/observational NHANES data,
+    which limits the ability to make causal inferences. Associations
+    observed between BMI, age, diabetes status cannot confirm causation.
+2.  The project relies on multiple imputation for missing values, even
+    though imputation reduces bias, it assumes missingness is at random
+    (MAR); if data are missing not at random (MNAR), results may be
+    biased.
+3.  Potential Residual Confounding - Models included key predictors
+    (age, BMI, sex, race), but unmeasured factors like diet, physical
+    activity, socioeconomic status, or genetic predisposition could
+    confound associations.
+4.  Bayesian models depend on prior choices, which could influence
+    posterior estimates if priors are informative or mis-specified.
+5.  Variable Measurement - BMI is measured at a single time point, which
+    may not reflect long-term exposure or risk.
+6.  Self-reported variables - are subjective to recall or reporting
+    bias.
+7.  Interactions are not tested in the study (bmi × age) and so other
+    potential synergistic effects might be missed.
+8.  Predicted probabilities are model-based estimates, not validated for
+    clinical decision-making. External validation in independent cohorts
+    is needed before application.
+    
 # References

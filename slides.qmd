@@ -690,11 +690,8 @@ Interpretation
 
 -   Model enables individualized diabetes risk prediction using age, BMI, sex, race and outputs can guide actionable thresholds (e.g., risk \>30%)
 -   BMI is modifiable- interventions can lower risk while sex and race remain constant.
--   Selected one participant (adult\[1, \]) with all covariates (age, BMI, sex, race) obtain predicted probabilities from the logistic regression model. **posterior_linpred(transform = TRUE)**
--   Posterior draws: calculate the 95% credible interval for the predicted probability
 
 #### Code
-
 ``` r
 participant1_data  <- adult[1, ]
 phat1 <- posterior_linpred(bayes_fit, newdata = participant1_data, transform = TRUE)
@@ -711,28 +708,37 @@ ggplot(post_pred_df, aes(x = pred)) +
 ```
 
 ### Internal Validation
+-   Selected one participant (adult\[1, \]) with all covariates (age, BMI, sex, race) 
+-   Obtain predicted probabilities from the logistic regression model.\ **posterior_linpred(transform = TRUE)**
+-   Posterior draws: calculate the 95% credible interval for the predicted probability
 
 ![](images/clipboard-2754134965.png){width="196"}\
-Posterior Predictive for Individual (Outcome = 1): Median predicted probability ≈ 0.25, with a 95% credible interval of 0.20–0.31, indicating a \~1 in 4 chance of diabetes.
+
+Result: Median predicted probability ≈ 0.25, with a 95% credible interval of 0.20–0.31, indicate a \~1 in 4 chance of diabetes.
 
 ### External Validation
 
-![](images/clipboard-2142022257.png){width="166"}\
-Using the Bayesian model, we computed the posterior predicted probability for a new participant based on age, BMI, sex, and race. The density plot with 95% credible intervals captures both the most likely risk and uncertainty, supporting individualized preventive care.\
+![](images/clipboard-2142022257.png){width="166"}|
 
-X-axis: Predicted probability of diabetes (Outcome = 1)\
-Y-axis: Density of predicted probabilities\
-Blue curve: Posterior predictive distribution for this individual\
-Shaded area: High probability values near 1, indicating high diabetes risk\
-Red dashed line: Upper bound of 95% credible interval\
-Peak: Most likely predicted probability ≈ 1
+```r
+new_participant <- data.frame(age_c= 40, bmi_c= 25, sex= "Female", race = "Mexican American")
+```
+-  We computed the posterior predicted probability for a new participant data (age, BMI, sex, and race)).\
+-   The density plot with 95% credible intervals captures both the most likely risk and uncertainty.\
+
+-   X-axis: Predicted probability of diabetes (Outcome = 1)\
+-   Y-axis: Density of predicted probabilities\
+-   Blue curve: Posterior predictive distribution \
+-   Shaded area: High probability values near 1 = diabetes risk\
+-   Red dashed line: Upper bound of 95% credible interval\
+-   Peak: Most likely predicted probability ≈ 1
 :::
 
 ------------------------------------------------------------------------
 
 ### Reverse Prediction
 
-**Targeted BMI Estimation for Predicted Diabetes Risk**
+**Predict BMI for estimated Diabetes**
 
 ::: panel-tabset
 #### Plot
