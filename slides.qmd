@@ -150,15 +150,14 @@ Logistic link transforms the linear predictor into a probability between (0 and 
 #### Data
 
 **National Health and Nutrition Examination Survey (NHANES) 2013–2014**\
-**Design:** Complex multistage probability sampling; survey weights applied to account for 
--   Unequal probability of selection \
--   Adjusts the sample to match known population totals (Census).
+**Design:** Complex multistage probability sampling; survey weights applied to account for - Unequal probability of selection\
+- Adjusts the sample to match known population totals (Census).
 
 **Response Variable (diabetes_dx : binary)**
 
-- **DIQ010**: “Has a doctor told you that you have diabetes?”
+-   **DIQ010**: “Has a doctor told you that you have diabetes?”
 
--  **DIQ050 (insulin use)**:  Excluded to avoid clinical confounding.
+-   **DIQ050 (insulin use)**: Excluded to avoid clinical confounding.
 
 **Predictor Variables**
 
@@ -185,13 +184,13 @@ Logistic link transforms the linear predictor into a probability between (0 and 
 ::: panel-tabset
 #### Plot
 
-![](images/clipboard-2873800077.png){width="427"}![](images/clipboard-2016873286.png){width="596"}
+![](images/clipboard-257345526.png)
 
 **MAR\*: when the missing data point is related to other variables in the dataset, but not to the value of the missing variable itself**
 
 #### Complete Case Analysis
 
-#### Survey-Weighted Diabetes Risk (U.S. Adults)
+**Survey-Weighted Diabetes Risk (U.S. Adults)**
 
 **diabetes_dx∼age_c + bmi_c + sex + race**
 
@@ -199,14 +198,16 @@ Logistic link transforms the linear predictor into a probability between (0 and 
 
 -   Design-adjusted coefficient estimates, standard errors, and odds ratios reflect population-representative associations for U.S. adults.
 
--   **Survey weighted (MLR):Complete case analysis (n= 5348)**
+**Survey weighted (MLR):Complete case analysis (n= 5348)**
 
-    -   Age (per 1 SD ↑): OR ≈ 3.03 →Older adults **\~3× higher odds**
-    -   BMI (per 1 SD ↑): OR ≈ 1.88 → **Higher BMI increases risk**
-    -   Sex (Female vs Male): OR ≈ 0.53 → Females **\~ 47% lower odds**
-    -   Race (vs NH White): - Mexican American: OR ≈ 2.04
-    -   Other Hispanic: OR ≈ 1.59 - NH Black: OR ≈ 1.67
-    -   Other/Multi-racial: OR ≈ 2.33
+```         
+-   Age (per 1 SD ↑): OR ≈ 3.03 →Older adults **\~3× higher odds**
+-   BMI (per 1 SD ↑): OR ≈ 1.88 → **Higher BMI increases risk**
+-   Sex (Female vs Male): OR ≈ 0.53 → Females **\~ 47% lower odds**
+-   Race (vs NH White): - Mexican American: OR ≈ 2.04
+-   Other Hispanic: OR ≈ 1.59 - NH Black: OR ≈ 1.67
+-   Other/Multi-racial: OR ≈ 2.33
+```
 
 Age and BMI are strongest predictors Females have lower risk Certain racial/ethnic groups have higher odds
 
@@ -216,6 +217,10 @@ Age and BMI are strongest predictors Females have lower risk Certain racial/ethn
 form_cc <- diabetes_dx ~ age_c + bmi_c + sex + race
 svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibinomial())
 ```
+
+#### Regression Plot (Survey weighted)
+
+![](images/clipboard-3052740534.png)
 :::
 
 ------------------------------------------------------------------------
@@ -230,7 +235,9 @@ svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibino
 -   Complete Case Analysis: **5348** (with no missing values)\
 -   Imputed dataset (adult_imp1): **5,592**\
 
-**Bayesian models assume complete data.**
+**Bayesian models assume complete data.** **Adults data stats**
+
+![](images/clipboard-3603805033.png)
 
 #### MICE
 
@@ -252,15 +259,32 @@ Model is fitted to each imputed dataset in **R** using brms **(Stan backend)**, 
 **Formula**\
 
 diabetes_dx \| weights(wt_norm) \~ age_c + bmi_c + sex + race\
-
-**Prior**
-
--   **normal(0, 2.5)** for coefficients
--   **student_t(3, 0, 10)** for Intercept
-
 **Data set**: Pooled Imputed dataset-1\
 **Bernoulli family**\
-**Chains = 4, Iteration = 2000, seed = 123**
+**Chains = 4, Iteration = 2000, seed = 123**\
+**prior**\
+- **normal(0, 2.5)** for coefficients\
+- **student_t(3, 0, 10)** for Intercept
+
+#### Prior
+
+-   **normal(0, 2.5)** for coefficients\
+
+-   **student_t(3, 0, 10)** for Intercept
+
+-   Prior is what we believed before seeing the data
+
+-   We combine prior with what the data tells (likelihood) to obtain updated beliefs (the posterior).\
+
+-   The prior has strong influence in a small sample size.\
+
+-   As sample size increases, the influence of the prior goes to zero.\
+    **After seeing the data**
+
+-   the posterior distribution reflects the data, but also the regularizing pull of the prior\
+
+**Prior = A Seatbelt for the Model**\
+**With a prior → the model stays within realistic, scientifically meaningful ranges**
 
 #### Code
 
@@ -290,18 +314,21 @@ bayes_fit <- brm(
 ::: panel-tabset
 #### Markov Process
 
--   Gibbs sampler produces a sequence of random vectors ![](images/clipboard-1640325740.png){width="90" height="35"}
+**GIBBS SAMPLER: A specific algorithm under the MCMC category** - Produces a sequence of random vectors ![](images/clipboard-1640325740.png){width="90" height="35"}
 
--   Each sample depends on the past only through the most recent one.
+-   Each sample **depends on the past only through the most recent one**.
 
--   The samples are not just random but are drawn in a way that the long-term distribution of the samples matches the target posterior distribution.
+-   The samples are **not just random**
 
--   It uses a burn in period.
+-   Samples are drawn in a way that the long-term distribution of the samples matches the target posterior distribution.
 
--   The random vectors are sequentially dependent. Retain one parameter vector every n iterations, and discard the rest.
+-   It uses a **burn in period**.
+
+-   The random vectors are s**equentially dependent**.
+
+-   Retain one parameter vector every n iterations, and discard the rest.
 
     ![](images/clipboard-1907802712.png)\
-    **GIBBS SAMPLER: A specific algorithm that falls under the MCMC category**
 
 #### Code
 
@@ -319,7 +346,7 @@ bayes_results <- post %>%  left_join(diag, by = "term") %>%  mutate(
   ) %>%  select(term,    Estimate,Est.Error,Q2.5, Q97.5,Rhat, n_eff, OR,  OR_LCL,  OR_UCL )
 ```
 
-rstan::monitor( samples = rstan::extract(fit, permuted = FALSE), probs = c(0.025, 0.5, 0.975) ) Provides the following summaries:
+rstan::monitor( samples = rstan::extract(fit, permuted = FALSE), probs = c(0.025, 0.5, 0.975) ) Provide summaries:
 
 -   **Posterior mean** and **standard deviation (SD)**
 -   **Monte Carlo standard error (MCSE)**
@@ -342,9 +369,15 @@ rstan::monitor( samples = rstan::extract(fit, permuted = FALSE), probs = c(0.025
 ::: panel-tabset
 #### MCMC Convergence
 
-R-hat ≈ 1 → good chain mixing\
-Effective sample size\
-Trace & Autocorrelation plots show convergence (no drift across iterations), well-mixed chains without trends with stable posterior estimates.
+To evaluate we look for
+
+-   the **convergence with no drift across iterations**
+
+-   **well-mixed chains** without any trends with stable posterior estimates.
+
+-   **R-hat ≈ 1** → good chain mixing, Effective sample size
+
+-   **Trace & Autocorrelation plots**
 
 #### Trace Plots (stable posteriors)
 
@@ -725,7 +758,6 @@ Result: Median predicted probability ≈ 0.25, with a 95% credible interval of 0
 
 ``` r
 new_participant <- data.frame(age_c= 40, bmi_c= 25, sex= "Female", race = "Mexican American")
-
 ```
 
 ### Plot
