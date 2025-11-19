@@ -43,52 +43,34 @@ execute:
 
 -   Maximum likelihood estimation is unstable with missing data, quasi-separation, or small samples.
 -   Probability is interpreted as long-run relative frequency.
--   Parameter is an unknown constant.
+-   Parameter is an unknown constant and is a point estimate.
 
 ### Bayesian Approach
 
--   We model uncertainty with a probability distribution ![](images/clipboard-2228883614.png){width="37" height="20"}, called the prior distribution.
--   Probability represents a degree of belief.
--   It represents the statisticians belief about before observing the data.
--   Parameter is not known but is considered random variable
+-   Probability represents a **degree of statisticians belief** about before observing the data.
+-   **Parameter is not known but is considered random variable**
 
-**Benefits**
+<!-- -->
 
--   Model is flexible and regularizes estimates.
--   Quantifies uncertainty under missingness or imputation (Baldwin & Larson, 2017; Kruschke & Liddell, 2017).
--   Incorporates priors
--   Provides credible intervals via MCMC to predict patient health outcomes.
--   Supports model checking, variable selection, and uncertainty quantification
+-   **Incorporates prior and regularizes estimates** based on the probability distribution ![](images/clipboard-2228883614.png){width="37" height="20"}, called the prior distribution.
+    -   Quantifies uncertainty under missingness or imputation (Baldwin & Larson, 2017; Kruschke & Liddell, 2017).
+-   **Provides credible intervals via MCMC** to predict outcomes.
+-   Supports **model checking, variable selection,** and the model is flexible.
 :::
 
 ------------------------------------------------------------------------
 
-### Bayesian Model
+### Bayesian Model (Bayes’ Theorm)
 
-#### Bayes’ Theorm is based on conditional probability.
-
-::: panel-tabset
-#### Bayesian Inference
-
-Bayesian inference estimates the **posterior probability** of a parameter:
+Bayesian inference estimates the **posterior probability** of a parameter based on conditional probability\*\*.
 
 $$
 P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 $$
 
-Bayesian Inference in the Model
+-   **θ (Parameters):**- Regression coefficients of predictors
 
-**In the Model**
-
--   **θ (Parameters):**\
-    Regression coefficients (eg:age, BMI, sex, and race)
-
--   **D (Data):**\
-    Data (eg:NHANES) with the observed disease status (eg: diabetes) and covariates
-
-------------------------------------------------------------------------
-
-#### Baye's Interpretation
+-   **D (Data):**- Data (eg:NHANES) with outcome (diabetes) and predictors(eg:age, BMI, sex, and race)
 
 -   **Prior P(θ):**\
     Prior beliefs about effect sizes before seeing data\
@@ -104,9 +86,6 @@ Bayesian Inference in the Model
 -   **Posterior P(θ/D):**\
     Updated probability distribution for predictor effects (eg: age, BMI, sex, and race) *after observing the data* — This is **brms** model estimates
 
-    ![](images/clipboard-3708975756.png){width="250"}
-:::
-
 ------------------------------------------------------------------------
 
 #### Bayesian Regression
@@ -114,32 +93,48 @@ Bayesian Inference in the Model
 ::: panel-tabset
 #### Logistic Link Function
 
--   Logistic link function used for binary outcomes.
--   logit (𝑃(𝑌=1))= (intercept) + 𝛽age_𝑐 + 𝛽bmi_𝑐 + 𝛽sex + 𝛽race
+-   **Logistic** function used for binary outcomes.
+-   **Logit link** function 
+    -   𝑃(𝑌=1) = intercept + 𝛽age_𝑐 + 𝛽bmi_𝑐 + 𝛽sex + 𝛽race
 
 Logistic link transforms the linear predictor into a probability between (0 and 1)
 
 **Eg: log odds = 0.69**
 
-![](images/clipboard-431380092.png)
+![](images/clipboard-431380092.png) ![](images/clipboard-1636913343.png)
 
-![](images/clipboard-1636913343.png)
-
--   Converts changes in predictors into changes in **log-odds** of the outcome.
--   In Model: links age, BMI, sex, and race to the probability of having diabetes.
+-   Changes in predictors are converted into **log-odds** of the outcome.
+-   Logit link log odds links predictors (age, BMI, sex, race) to the outcome (diabetes).
 
 #### Prior
 
-**Intercept prior: student_t(3, 0, 10)** — (Van de Schoot et al., 2013)\
+-   Before seeing the data
+
+    -   **Prior** (belief) is combined with the data likelihood and obtains updated beliefs (**Posterior)**.
+        -   The prior has a **strong influence in a small sample** size.
+        -   As the sample size increases, the influence of the prior goes to zero.
+    -   **Types of Priors**:
+        -   Non-informative – no strong beliefs
+        -   Weakly informative – realistic ranges
+        -   Informative – based on prior research
+        -   Conjugate – mathematically convenient
+        -   Empirical – data-driven
+        -   Hierarchical – for multilevel models shrinkage – regularization (LASSO, horseshoe)
+
+-   **Prior = A Seatbelt for the Model**\
+    **With a prior → the model stays within realistic, scientifically meaningful ranges**
+
+#### Posterior
+
+**After seeing the data** - Posterior distribution reflects the data, and also the regularizing pull of the prior\
+**Intercept prior: student_t(3, 0, 10)** — @VanDeSchoot2013\
 - **df = 3 (degrees of freedom):** **heavy tails**- allow for occasional extreme values.\
 - **location = 0:** Centered at 0, so the prior expects the parameter to be near 0\
 - **scale = 10:** Controls spread out the distribution (Larger scale → wider spread).\
 
-**Prior for Regression coefficient : normal(0, 2.5)** (Van de Schoot et al., 2021)\
+**Prior for Regression coefficient : normal(0, 2.5)** @VandeSchoot2021\
 - weakly informative with **Mean = 0, Standard deviation = 2.5**\
-- probability of very large or very small parameter values is very low and **stabilizes the model**
-
-![](images/clipboard-3802967430.png){width="313"}
+- Probability of very large or very small parameter values is very low and **stabilizes the model** ![](images/clipboard-3802967430.png){width="259"}\| ![](images/clipboard-2442291846.png){width="259"}
 :::
 
 ------------------------------------------------------------------------
@@ -272,20 +267,6 @@ diabetes_dx \| weights(wt_norm) \~ age_c + bmi_c + sex + race\
 
 -   **student_t(3, 0, 10)** for Intercept
 
--   Prior is what we believed before seeing the data
-
--   We combine prior with what the data tells (likelihood) to obtain updated beliefs (the posterior).\
-
--   The prior has strong influence in a small sample size.\
-
--   As sample size increases, the influence of the prior goes to zero.\
-    **After seeing the data**
-
--   the posterior distribution reflects the data, but also the regularizing pull of the prior\
-
-**Prior = A Seatbelt for the Model**\
-**With a prior → the model stays within realistic, scientifically meaningful ranges**
-
 #### Code
 
 ``` r
@@ -305,6 +286,8 @@ bayes_fit <- brm(
   refresh = 0
 )
 ```
+
+-   `brm()` in the R package {brms} - to fit complex Bayesian models
 :::
 
 ------------------------------------------------------------------------
@@ -346,7 +329,11 @@ bayes_results <- post %>%  left_join(diag, by = "term") %>%  mutate(
   ) %>%  select(term,    Estimate,Est.Error,Q2.5, Q97.5,Rhat, n_eff, OR,  OR_LCL,  OR_UCL )
 ```
 
-rstan::monitor( samples = rstan::extract(fit, permuted = FALSE), probs = c(0.025, 0.5, 0.975) ) Provide summaries:
+-   `rstan::monitor` function in the RStan package - to **compute summary statistics and diagnosing the convergence and efficiency of MCMC simulations**
+
+    Provide summaries:
+
+<!-- -->
 
 -   **Posterior mean** and **standard deviation (SD)**
 -   **Monte Carlo standard error (MCSE)**
@@ -395,21 +382,20 @@ Results: chain mixing, convergence, correlation of draws with lagged values acro
 
 ------------------------------------------------------------------------
 
-#### Posterior predictive Distribution
+### Posterior Predictive Distribution
 
 ::: panel-tabset
 ### Posterior draws
 
-**MCMC samples, which represent the posterior distribution of the model parameters**
+**MCMC samples (posterior distribution/draws)**
 
-Posterior draws = 4000 (4 chains × 1000 iterations) for posterior predictive checks.
+Posterior draws = 4000 draws (4 chains × 1000 iterations) for posterior predictive checks.
 
--   The distribution of predictors after seeing the data.
--   The posterior is the conditional distribution of the parameter given the data.
--   Subjectivity is present when the prior distribution influences the conclusions.
--   The influence of the prior goes to zero as the sample size increases.
-
-------------------------------------------------------------------------
+-   The distribution of predictors **after seeing the data.**
+-   The posterior is the **conditional distribution** of the parameter given the data.
+-   **Subjectivity** is present when the prior distribution influences the conclusions.
+-   The influence of the prior **goes to zero as the sample size increases.**
+-   The posterior distribution is the **full probability distribution** of the parameter **(mountain)**; the mean and credible interval are just summaries of that distribution, not the distribution itself.
 
 ### Code
 
@@ -421,12 +407,20 @@ pp_check(bayes_fit, nsamples = 100) +
 
 ### Plot
 
-![](images/clipboard-2255770791.png)
+![](images/clipboard-2255770791.png){width="369"}
 :::
 
-------------------------------------------------------------------------
+**y-axis:**Density (how frequent each predicted probability occurs) **x-axis:** Predicted probability values (from 0 to 1).
 
-#### Posterior Results
+The model can generate data that **looks like the observed data**\
+
+Can **reproduce the observed distribution of diabetes outcomes**. \\
+
+Most participants have low predicted probabilities of diabetes (near 0), with a smaller peak at high probability (near 1)
+
+-----------------------------------------------------------------------
+
+#### Posterior Estimates and Distribution
 
 ::: panel-tabset
 #### Posterior Estimates
@@ -463,15 +457,12 @@ Other/Multi: small positive effect (≈ +0.3, wide CrI).
 ::: panel-tabset
 ##### Plot
 
-Prior vs Posterior Distributions ![](images/clipboard-1978292710.png){width="466"}
+![](images/clipboard-1978292710.png){width="466"}\
+**Prior and posterior distributions** for the coefficient estimates of "Age (per 1 SD)" and "BMI (per 1 SD)"
 
-##### Interpretation
+-   Prior distribution: The **wide spread (variance)** - a high degree of initial uncertainty or a non-informative prior
 
--   Strong positive relationship between age, BMI, and diabetes probability.
-
--   **Posterior predictive checks** confirm good model fit.
-
--   Imputation reduced bias and improved robustness.
+-   Posterior distribution: are different from the priors and are **narrower and taller.** The **data has significantly updated the initial beliefs**
 
 ##### Code
 
@@ -495,10 +486,30 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
 
 #### Posterior Predictive Checks
 
-500 draws: predicted outcomes for each observation compare ( observed data vs predeicted outcomes: binary outcome with 0 or 1 simulated
+**500 draws: predicted outcomes** for each observation compare (observed data vs predeicted outcomes: binary outcome with 0 or 1 simulated
 
 ::: panel-tabset
-##### Code
+#### Pred vs obs outcome (proportion)
+
+![](images/clipboard-2418526955.png){width="274"}\
+**Fig**: a bar plot comparing counts/frequencies of each category (0 vs 1) in the observed data (y) and in the posterior predictive samples (y-rep)\
+Bars for y (observed) fall within the range of yrep (simulated): **model predicts the overall diabetes prevalence well**
+
+#### Outcome Proportion
+x-axis: proportion of diabetics (1s), y-axis: frequency of posterior draws with that proportion\
+![](images/clipboard-122565288.png){width="216"}\
+Spread shows the uncertainty in predicted prevalence\
+![](images/clipboard-2142249375.png){width="246"}\
+The model’s posterior mean diabetes prevalence was 10.95% (95% CI: 8.5%–12.8%), slightly higher than the NHANES estimate of 8.9% (SE = 0.0048)\
+but the credible interval overlaps the survey estimate, indicating reasonable calibration.
+
+#### Outcome Mean and SD
+
+![](images/clipboard-2726352750.png){width="340"}
+
+![](images/clipboard-1023519991.png){width="331"}
+
+#### Code
 
 ``` r
 pp_samples \<- posterior_predict(bayes_fit, ndraws = 500) 
@@ -508,22 +519,25 @@ pp_samples \<- posterior_predict(bayes_fit, ndraws = 500)
 
 ppc_bars(y = adult_imp1\$diabetes_dx, yrep = pp_samples\[1:500, \]) 
 ```
-
-##### Compare outcome
-
-Predicted vs observed outcome ![](images/clipboard-2418526955.png){width="274"}
-
-#### Proportion
-
-![](images/clipboard-122565288.png){width="273"}
-
-#### Mean
-
-![](images/clipboard-2726352750.png){width="340"}
-
-#### SD
-
-![](images/clipboard-1023519991.png){width="331"}
+```r
+# pp_proportion <- rowMeans(pp_samples)  # if not already done
+known_prev <- 0.089   # NHANES prevalence
+posterior_mean <- mean(pp_proportion)
+posterior_ci <- quantile(pp_proportion, c(0.025, 0.975))  # 95% credible interval
+pp_df <- tibble(proportion = pp_proportion)
+ggplot(pp_df, aes(x = proportion)) +
+  geom_histogram(binwidth = 0.005, fill = "skyblue", color = "black") +
+  geom_vline(xintercept = known_prev, color = "red", linetype = "dashed", size = 1) +
+  geom_vline(xintercept = posterior_mean, color = "blue", linetype = "solid", size = 1) +
+  labs(
+    title = "Posterior Predicted Diabetes Proportion vs NHANES Prevalence",
+    subtitle = paste0("Red dashed = NHANES prevalence (", known_prev, 
+                      "), Blue solid = Posterior mean (", round(posterior_mean,3), ")"),
+    x = "Proportion of Diabetes = 1",
+    y = "Frequency"
+  ) +
+  theme_minimal()
+```
 :::
 
 ------------------------------------------------------------------------
@@ -548,7 +562,7 @@ Predicted vs observed outcome ![](images/clipboard-2418526955.png){width="274"}
 
 ------------------------------------------------------------------------
 
-#### Observed vs. Predicted Average diabetes outcome across individuals
+#### Observed vs. Predicted Average diabetes (aross individuals)
 
 ::: panel-tabset
 ##### Plot
@@ -617,7 +631,7 @@ bayes_tbl <- bayes_or %>% mutate(Model = "Bayesian")
 ### Correlation Diagnostics
 
 ::: panel-tabset
-##### Ppairwise correlation
+##### Pairwise correlation
 
 ![](images/clipboard-1737198687.png){width="521"}
 
@@ -647,44 +661,6 @@ mcmc_pairs(as_draws_array(bayes_fit),
 -   As the posterior estimate for age increases, the effect of being female slightly decreases.
 
 **Weak correlation: confirms both predictors contribute distinct information to the diabetes outcome**.
-:::
-
-------------------------------------------------------------------------
-
-### Predicted Diabetes Prevalence vs. NHANES Prevalence
-
-::: panel-tabset
-#### Plot
-
-![](images/clipboard-2142249375.png){width="329"}
-
-#### Interpretation
-
--   We compared the Bayesian posterior-predicted diabetes prevalence with the NHANES survey-weighted estimate (8.9%, SE = 0.0048).
--   The model’s posterior mean was 10.95%, with a 95% credible interval of 8.5%–12.8%. Although the model predicts slightly higher prevalence, the credible interval overlaps the NHANES estimate.
--   This indicates that the model is reasonably well-calibrated, with NHANES falling near the lower end of the posterior distribution but still within a plausible range.
-
-#### Code
-
-``` r
-# pp_proportion <- rowMeans(pp_samples)  # if not already done
-known_prev <- 0.089   # NHANES prevalence
-posterior_mean <- mean(pp_proportion)
-posterior_ci <- quantile(pp_proportion, c(0.025, 0.975))  # 95% credible interval
-pp_df <- tibble(proportion = pp_proportion)
-ggplot(pp_df, aes(x = proportion)) +
-  geom_histogram(binwidth = 0.005, fill = "skyblue", color = "black") +
-  geom_vline(xintercept = known_prev, color = "red", linetype = "dashed", size = 1) +
-  geom_vline(xintercept = posterior_mean, color = "blue", linetype = "solid", size = 1) +
-  labs(
-    title = "Posterior Predicted Diabetes Proportion vs NHANES Prevalence",
-    subtitle = paste0("Red dashed = NHANES prevalence (", known_prev, 
-                      "), Blue solid = Posterior mean (", round(posterior_mean,3), ")"),
-    x = "Proportion of Diabetes = 1",
-    y = "Frequency"
-  ) +
-  theme_minimal()
-```
 :::
 
 ------------------------------------------------------------------------

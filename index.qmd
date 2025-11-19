@@ -857,6 +857,7 @@ form_cc <- diabetes_dx ~ age_c + bmi_c + sex + race
 svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibinomial())
 summary(svy_fit)
 
+
 ```
 
 ```{r}
@@ -876,6 +877,32 @@ svy_or <- broom::tidy(svy_fit, conf.int = TRUE) %>%
 knitr::kable(svy_or, caption = "Survey-weighted odds ratios (per 1 SD)")
 
 
+#####
+library(ggplot2)
+library(dplyr)
+
+# Make nicer labels (optional)
+svy_plot <- svy_or %>%
+  mutate(term = gsub("age_c", "Age (1 SD)", term),
+         term = gsub("bmi_c", "BMI (1 SD)", term),
+         term = gsub("sexFemale", "Female (vs Male)", term),
+         term = gsub("raceMexican American", "Mexican American (vs Ref)", term),
+         term = gsub("raceOther Hispanic", "Other Hispanic (vs Ref)", term),
+         term = gsub("raceNon-Hispanic Black", "Black (vs Ref)", term),
+         term = gsub("raceNon-Hispanic White", "White (vs Ref)", term),
+         term = gsub("raceOther Race", "Other Race (vs Ref)", term))
+
+# Forest plot
+ggplot(svy_plot, aes(x = term, y = OR, ymin = LCL, ymax = UCL)) +
+  geom_pointrange(size = 0.9) +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "red") +
+  coord_flip() +
+  labs(
+    title = "Survey-weighted Odds Ratios for Diabetes (95% CI)",
+    x = "",
+    y = "Odds Ratio"
+  ) +
+  theme_bw(base_size = 12)
 
 ```
 
