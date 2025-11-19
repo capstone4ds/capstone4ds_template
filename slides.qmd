@@ -35,27 +35,45 @@ execute:
 ::: panel-tabset
 ### Aim
 
--   Early identification of risk factors is key to diabetes diagnosis and prevention.
+-   **Predict Diabetes** by early identification of **risk factors**
 
--   Predict diabetes using Bayesian logistic regression.
+-   Implementing Bayesian logistic regression for predicting diabetes
+
+-   **Compare** the Frequentist Regression model vs Bayesian Regression Model.
+
+-   **Application in Targeted Interventions**:
+
+    -   To improve estimation of disease burden and risk factors in specific subgroups or individuals by combining survey data, prior research, and posterior predictive modeling
 
 ### Frequentist Methods
 
--   Maximum likelihood estimation is unstable with missing data, quasi-separation, or small samples.
--   Probability is interpreted as long-run relative frequency.
--   Parameter is an unknown constant and is a point estimate.
+-   Maximum likelihood **estimation is unstable** with missing data, quasi-separation, or small samples.
+-   Results depend strongly on **large-sample** assumptions
+-   Interpretation of confidence intervals is indirect: **based on repeating the study**
+-   Probability is interpreted as **long-run relative frequency**.
+-   **Parameter is an unknown constant and is a point estimate**.
+-   **Does not incorporate (prior):** past studies or expert opinions
 
 ### Bayesian Approach
 
 -   Probability represents a **degree of statisticians belief** about before observing the data.
+
 -   **Parameter is not known but is considered random variable**
 
-<!-- -->
+-   **Incorporates prior and regularizes estimates** based on the probability distribution ![](images/clipboard-2228883614.png){width="37" height="20"}, called the prior distribution.
 
--   **Incorporates prior and regularizes estimates** based on the probability distribution ![](images/clipboard-2228883614.png){width="37" height="20"}, called the prior distribution.
-    -   Quantifies uncertainty under missingness or imputation (Baldwin & Larson, 2017; Kruschke & Liddell, 2017).
+-   Quantifies uncertainty under missingness or imputation (Baldwin & Larson, 2017; Kruschke & Liddell, 2017).
+
 -   **Provides credible intervals via MCMC** to predict outcomes.
+
 -   Supports **model checking, variable selection,** and the model is flexible.
+
+-   Better for individualized/personalized risk prediction
+
+-   Flexible for handling complex models
+
+    -   Hierarchical structure
+    -   Missing data
 :::
 
 ------------------------------------------------------------------------
@@ -90,52 +108,50 @@ $$
 
 #### Bayesian Regression
 
-::: panel-tabset
-#### Logistic Link Function
+-   ::: panel-tabset
+    #### Logistic Link Function
 
--   **Logistic** function used for binary outcomes.
--   **Logit link** function 
-    -   𝑃(𝑌=1) = intercept + 𝛽age_𝑐 + 𝛽bmi_𝑐 + 𝛽sex + 𝛽race
+    -   **Logistic** function used for binary outcomes.
+    -   **Logit link** function 
+        -   𝑃(𝑌=1) = intercept + 𝛽age_𝑐 + 𝛽bmi_𝑐 + 𝛽sex + 𝛽race
 
-Logistic link transforms the linear predictor into a probability between (0 and 1)
+    Logistic link transforms the linear predictor into a probability between (0 and 1)
 
-**Eg: log odds = 0.69**
+    **Eg: log odds = 0.69**
 
-![](images/clipboard-431380092.png) ![](images/clipboard-1636913343.png)
+    ![](images/clipboard-431380092.png) ![](images/clipboard-1636913343.png)
 
--   Changes in predictors are converted into **log-odds** of the outcome.
--   Logit link log odds links predictors (age, BMI, sex, race) to the outcome (diabetes).
+    -   Changes in predictors are converted into **log-odds** of the outcome.
+    -   Logit link log odds links predictors (age, BMI, sex, race) to the outcome (diabetes).
 
-#### Prior
+    #### Prior
 
--   Before seeing the data
+    -   Before seeing the data
 
-    -   **Prior** (belief) is combined with the data likelihood and obtains updated beliefs (**Posterior)**.
-        -   The prior has a **strong influence in a small sample** size.
-        -   As the sample size increases, the influence of the prior goes to zero.
-    -   **Types of Priors**:
-        -   Non-informative – no strong beliefs
-        -   Weakly informative – realistic ranges
-        -   Informative – based on prior research
-        -   Conjugate – mathematically convenient
-        -   Empirical – data-driven
-        -   Hierarchical – for multilevel models shrinkage – regularization (LASSO, horseshoe)
+        -   **Prior** (belief) is combined with the data likelihood and obtains updated beliefs (**Posterior)**.
+            -   The prior has a **strong influence in a small sample** size.
+            -   As the sample size increases, the influence of the prior goes to zero.
+        -   **Types of Priors**:
+            -   Non-informative – no strong beliefs
+            -   Weakly informative – realistic ranges
+            -   Informative – based on prior research
+            -   Conjugate – mathematically convenient
+            -   Empirical – data-driven
+            -   Hierarchical – for multilevel models shrinkage – regularization (LASSO, horseshoe)
 
--   **Prior = A Seatbelt for the Model**\
-    **With a prior → the model stays within realistic, scientifically meaningful ranges**
+    -   **Prior = A Seatbelt for the Model**\
+        **With a prior → the model stays within realistic, scientifically meaningful ranges**
 
-#### Posterior
+    #### Posterior
 
-**After seeing the data** - Posterior distribution reflects the data, and also the regularizing pull of the prior\
-**Intercept prior: student_t(3, 0, 10)** — @VanDeSchoot2013\
-- **df = 3 (degrees of freedom):** **heavy tails**- allow for occasional extreme values.\
-- **location = 0:** Centered at 0, so the prior expects the parameter to be near 0\
-- **scale = 10:** Controls spread out the distribution (Larger scale → wider spread).\
+    -   **Incorporating Prior**
 
-**Prior for Regression coefficient : normal(0, 2.5)** @VandeSchoot2021\
-- weakly informative with **Mean = 0, Standard deviation = 2.5**\
-- Probability of very large or very small parameter values is very low and **stabilizes the model** ![](images/clipboard-3802967430.png){width="259"}\| ![](images/clipboard-2442291846.png){width="259"}
-:::
+    ![](images/clipboard-3802967430.png){width="259"}\| ![](images/clipboard-2442291846.png){width="259"}\|![](images/clipboard-1978292710.png){width="250"}
+
+    **After seeing the data**
+
+    -   **Posterior distribution reflects the data, and also the regularizing pull of the prior**
+    :::
 
 ------------------------------------------------------------------------
 
@@ -222,73 +238,82 @@ svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibino
 
 ### Bayesian Logistic Regression
 
-::: panel-tabset
-#### Data (Adults)
+-   ::: panel-tabset
+    #### Data (Adults)
 
--   Raw imported: **10175 obs**\
--   Survey-weighted (Filtered = Adult): **5,769 (\~ 7%)**\
--   Complete Case Analysis: **5348** (with no missing values)\
--   Imputed dataset (adult_imp1): **5,592**\
+    -   Raw imported: **10175 obs**\
+    -   Survey-weighted (Filtered = Adult): **5,769 (\~ 7%)**\
+    -   Complete Case Analysis: **5348** (with no missing values)\
+    -   **Statistics (Data = Adults )**
 
-**Bayesian models assume complete data.** **Adults data stats**
+    ![](images/clipboard-3603805033.png)
 
-![](images/clipboard-3603805033.png)
+    -   **Bayesian models assume complete data.**
+    -   Imputed dataset (adult_imp1): **5,592**
+        -   **(Raw data –\> MICE--\>** Imputed dataset **)**
 
-#### MICE
+    #### MICE
 
-**Multivariate Imputation by Chained Equation**\
-*van Buuren & Groothuis-Oudshoorn, 2011; van Buuren, 2012*\
+    **Multivariate Imputation by Chained Equation**\
+    *van Buuren & Groothuis-Oudshoorn, 2011; van Buuren, 2012*\
 
--   Iteratively imputes incomplete variables using regression models.\
--   MICE run 5 iterations for each of the 5 imputed datasets to ensure stability and convergence and provides multiple realistic versions of missing data\
--   Use PMM method for continuous (*Predictive Mean Matching)* to fill missing values with the observed values “closest” to predicted values)\
--   Use logistic regression for binary variables.\
--   Rubin’s rule finds pooled Estimates from across posterior distributions to yield full posterior\
+    -   Iteratively imputes incomplete variables using regression models.\
+    -   MICE run 5 iterations for each of the 5 imputed datasets to ensure stability and convergence and provides multiple realistic versions of missing data\
+    -   Use PMM method for continuous (*Predictive Mean Matching)* to fill missing values with the observed values “closest” to predicted values)\
+    -   Use logistic regression for binary variables.\
+    -   Rubin’s rule finds pooled Estimates from across posterior distributions to yield full posterior\
 
-**Posterior (parameters + missing data uncertainty)**
+    **Posterior (parameters + missing data uncertainty)**
 
-#### Bayesian Logistic Regression Model
+    #### Bayesian Logistic Regression Model
 
-Model is fitted to each imputed dataset in **R** using brms **(Stan backend)**, 2000 itirations\
+    Model is fitted to each imputed dataset in **R** using brms **(Stan backend)**, **2000 itirations**\
 
-**Formula**\
+    **Bayesian Regression Formula**\
 
-diabetes_dx \| weights(wt_norm) \~ age_c + bmi_c + sex + race\
-**Data set**: Pooled Imputed dataset-1\
-**Bernoulli family**\
-**Chains = 4, Iteration = 2000, seed = 123**\
-**prior**\
-- **normal(0, 2.5)** for coefficients\
-- **student_t(3, 0, 10)** for Intercept
+    ***diabetes_dx \| weights(wt_norm) \~ age_c + bmi_c + sex + race***
 
-#### Prior
+    \
+    **Data set**: Pooled Imputed dataset-1\
+    **Bernoulli family**\
+    **Chains = 4, Iteration = 2000, seed = 123**\
+    **prior**\
 
--   **normal(0, 2.5)** for coefficients\
+    -   **normal(0, 2.5)** for coefficients\
+    -   **student_t(3, 0, 10)** for Intercept
 
--   **student_t(3, 0, 10)** for Intercept
+    #### Prior
 
-#### Code
+    -   **Intercept prior: student_t(3, 0, 10)** — @VanDeSchoot2013\
+        -   **df = 3 (degrees of freedom):** **heavy tails**- allow for occasional extreme values.\
+        -   **location = 0:** Centered at 0, so the prior expects the parameter to be near 0\
+        -   **scale = 10:** Controls spread out the distribution (Larger scale → wider spread).
+    -   **Prior for Regression coefficient : normal(0, 2.5)** @VandeSchoot2021\
+        -   weakly informative with **Mean = 0, Standard deviation = 2.5**\
+        -   Probability of very large or very small parameter values is very low and **stabilizes the model**
 
-``` r
-library(gt)
-priors <- c(
-  set_prior("normal(0, 2.5)", class = "b"),
-  set_prior("student_t(3, 0, 10)", class = "Intercept")
-)
+    #### Code
 
-bayes_fit <- brm(
-  formula = diabetes_dx | weights(wt_norm) ~ age_c + bmi_c + sex + race,
-  data    = adult_imp1,
-  family  = bernoulli(link = "logit"),
-  prior   = priors,
-  chains  = 4, iter = 2000, seed = 123,
-  control = list(adapt_delta = 0.95),
-  refresh = 0
-)
-```
+    ``` r
+    library(gt)
+    priors <- c(
+      set_prior("normal(0, 2.5)", class = "b"),
+      set_prior("student_t(3, 0, 10)", class = "Intercept")
+    )
 
--   `brm()` in the R package {brms} - to fit complex Bayesian models
-:::
+    bayes_fit <- brm(
+      formula = diabetes_dx | weights(wt_norm) ~ age_c + bmi_c + sex + race,
+      data    = adult_imp1,
+      family  = bernoulli(link = "logit"),
+      prior   = priors,
+      chains  = 4, iter = 2000, seed = 123,
+      control = list(adapt_delta = 0.95),
+      refresh = 0
+    )
+    ```
+
+    -   `brm()` in the R package {brms} - to fit complex Bayesian models
+    :::
 
 ------------------------------------------------------------------------
 
@@ -297,21 +322,12 @@ bayes_fit <- brm(
 ::: panel-tabset
 #### Markov Process
 
-**GIBBS SAMPLER: A specific algorithm under the MCMC category** - Produces a sequence of random vectors ![](images/clipboard-1640325740.png){width="90" height="35"}
+-   **GIBBS SAMPLER: A specific algorithm under the MCMC category** - Produces a sequence of random vectors of parameters ![](images/clipboard-1640325740.png){width="73" height="22"}
+-   **Burn in period:** **first 500–1,000 iterations** (early draws) that are **not representative** of the true posterior are discarded
+-   After the burn-in period: the chain reaches the *stationarity*
 
--   Each sample **depends on the past only through the most recent one**.
-
--   The samples are **not just random**
-
--   Samples are drawn in a way that the long-term distribution of the samples matches the target posterior distribution.
-
--   It uses a **burn in period**.
-
--   The random vectors are s**equentially dependent**.
-
--   Retain one parameter vector every n iterations, and discard the rest.
-
-    ![](images/clipboard-1907802712.png)\
+**Each sample drawn** - **depends on the past** - **are not just random** - random vectors are **sequentially dependent**.\
+![](images/clipboard-1907802712.png){width="311"}
 
 #### Code
 
@@ -333,12 +349,14 @@ bayes_results <- post %>%  left_join(diag, by = "term") %>%  mutate(
 
     Provide summaries:
 
-<!-- -->
-
 -   **Posterior mean** and **standard deviation (SD)**
+
 -   **Monte Carlo standard error (MCSE)**
+
 -   **Quantiles:** 2.5%, 25%, 50%, 75%, 97.5%
+
 -   **Effective sample sizes:** Bulk_ESS and Tail_ESS
+
 -   **R-hat (convergence diagnostic)**
 
 #### Result
@@ -347,6 +365,10 @@ bayes_results <- post %>%  left_join(diag, by = "term") %>%  mutate(
 **total draws = 4000**
 
 ![](images/clipboard-2724235725.png)
+
+-   **Bulk ESS** → reliability of mean and median estimates
+
+-   **Tail ESS** → reliability of extreme quantiles (e.g., 2.5%, 97.5%)
 :::
 
 ------------------------------------------------------------------------
@@ -356,20 +378,35 @@ bayes_results <- post %>%  left_join(diag, by = "term") %>%  mutate(
 ::: panel-tabset
 #### MCMC Convergence
 
-To evaluate we look for
+MCMC convergence: the GIBBS sampler has reached the posterior distribution — the point where the information from the prior and the data (likelihood) has been fully combined, and the chain is now drawing valid samples from that posterior.
 
--   the **convergence with no drift across iterations**
+Good Convergence shows:
+
+-   **no drift across iterations**
 
 -   **well-mixed chains** without any trends with stable posterior estimates.
 
--   **R-hat ≈ 1** → good chain mixing, Effective sample size
+-   **R-hat ≈ 1**
+
+-   Effective sample size: **\~3500**: MCMC chain has the same information as **3,500 independent samples**.
+
+    -   **good mixing**, **low autocorrelation**, and **highly reliable** posterior estimates.
 
 -   **Trace & Autocorrelation plots**
 
 #### Trace Plots (stable posteriors)
 
--   precise estimates, with high uncertainty narrow distributions, smooth and unimodal → no multimodality confirming stable posteriors.
--   histogram: distribution of sampled coeffs. after convergence across all mcmc draws
+-   After convergence across all mcmc draws have
+
+    precise estimates, high uncertainty, narrow distributions, smooth and unimodal → no multimodality **confirming stable posteriors.**
+
+-   **Density Plot** **(Left Panel)** : histogram shows distribution of sampled coeffs.
+
+-   **Trace plots (Right Panel)**
+
+    -   No upward or downward **trend** (no drift)
+
+    -   Chains **overlap** and stay within the same band.
 
 ![](images/clipboard-3030610644.png){width="344"}
 
@@ -377,7 +414,7 @@ To evaluate we look for
 
 ![](images/clipboard-2853565372.png){width="313"} ![](images/clipboard-4067031519.png)
 
-Results: chain mixing, convergence, correlation of draws with lagged values across iterations
+Chain mixing, convergence, and correlation of draws with lagged values across iterations
 :::
 
 ------------------------------------------------------------------------
@@ -387,15 +424,13 @@ Results: chain mixing, convergence, correlation of draws with lagged values acro
 ::: panel-tabset
 ### Posterior draws
 
-**MCMC samples (posterior distribution/draws)**
+**After seeing the data,** Posterior draws = 4000 draws (4 chains × 1000 iterations) via MCMC gives a posterior distribution of predictors
 
-Posterior draws = 4000 draws (4 chains × 1000 iterations) for posterior predictive checks.
-
--   The distribution of predictors **after seeing the data.**
--   The posterior is the **conditional distribution** of the parameter given the data.
--   **Subjectivity** is present when the prior distribution influences the conclusions.
--   The influence of the prior **goes to zero as the sample size increases.**
--   The posterior distribution is the **full probability distribution** of the parameter **(mountain)**; the mean and credible interval are just summaries of that distribution, not the distribution itself.
+-   **Conditional distribution** of the parameter given the data.
+-   **Subjective** -\> prior distribution influences the conclusions.
+-   Influence of the prior **goes to zero as the sample size increases.**
+-   It is the **full probability distribution** of the parameter **(mountain)**
+-   Mean and credible interval are just summaries of that distribution, not the distribution itself.
 
 ### Code
 
@@ -408,19 +443,20 @@ pp_check(bayes_fit, nsamples = 100) +
 ### Plot
 
 ![](images/clipboard-2255770791.png){width="369"}
-:::
 
-**y-axis:**Density (how frequent each predicted probability occurs) **x-axis:** Predicted probability values (from 0 to 1).
+**y-axis:**Density (how frequent each predicted probability occurs)\
+**x-axis:** Predicted probability values (from 0 to 1).
 
 The model can generate data that **looks like the observed data**\
 
 Can **reproduce the observed distribution of diabetes outcomes**. \\
 
 Most participants have low predicted probabilities of diabetes (near 0), with a smaller peak at high probability (near 1)
+:::
 
------------------------------------------------------------------------
+------------------------------------------------------------------------
 
-#### Posterior Estimates and Distribution
+#### Regression Results (Posterior Estimates and Distribution)
 
 ::: panel-tabset
 #### Posterior Estimates
@@ -452,7 +488,7 @@ Other/Multi: small positive effect (≈ +0.3, wide CrI).
 
 ------------------------------------------------------------------------
 
-#### Prior and Posterior Predictive Distribution (age and BMI)
+#### Compare Prior and Posterior Predictive Distribution (age and BMI)
 
 ::: panel-tabset
 ##### Plot
@@ -460,9 +496,13 @@ Other/Multi: small positive effect (≈ +0.3, wide CrI).
 ![](images/clipboard-1978292710.png){width="466"}\
 **Prior and posterior distributions** for the coefficient estimates of "Age (per 1 SD)" and "BMI (per 1 SD)"
 
--   Prior distribution: The **wide spread (variance)** - a high degree of initial uncertainty or a non-informative prior
+-   **Prior distribution: wide spread (variance)** -shows a high degree of initial uncertainty or a non-informative prior
 
--   Posterior distribution: are different from the priors and are **narrower and taller.** The **data has significantly updated the initial beliefs**
+-   P**osterior distribution:**
+
+    -   Different from the priors: **Narrower and taller**
+
+    -   **Data has significantly updated the initial beliefs**
 
 ##### Code
 
@@ -496,6 +536,7 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
 Bars for y (observed) fall within the range of yrep (simulated): **model predicts the overall diabetes prevalence well**
 
 #### Outcome Proportion
+
 x-axis: proportion of diabetics (1s), y-axis: frequency of posterior draws with that proportion\
 ![](images/clipboard-122565288.png){width="216"}\
 Spread shows the uncertainty in predicted prevalence\
@@ -519,7 +560,8 @@ pp_samples \<- posterior_predict(bayes_fit, ndraws = 500)
 
 ppc_bars(y = adult_imp1\$diabetes_dx, yrep = pp_samples\[1:500, \]) 
 ```
-```r
+
+``` r
 # pp_proportion <- rowMeans(pp_samples)  # if not already done
 known_prev <- 0.089   # NHANES prevalence
 posterior_mean <- mean(pp_proportion)

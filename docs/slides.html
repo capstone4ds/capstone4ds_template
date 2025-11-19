@@ -445,30 +445,39 @@
 <div class="tab-content">
 <div id="tabset-1-1">
 <ul>
-<li><p>Early identification of risk factors is key to diabetes diagnosis and prevention.</p></li>
-<li><p>Predict diabetes using Bayesian logistic regression.</p></li>
+<li><p><strong>Predict Diabetes</strong> by early identification of <strong>risk factors</strong></p></li>
+<li><p>Implementing Bayesian logistic regression for predicting diabetes</p></li>
+<li><p><strong>Compare</strong> the Frequentist Regression model vs Bayesian Regression Model.</p></li>
+<li><p><strong>Application in Targeted Interventions</strong>:</p>
+<ul>
+<li>To improve estimation of disease burden and risk factors in specific subgroups or individuals by combining survey data, prior research, and posterior predictive modeling</li>
+</ul></li>
 </ul>
 </div>
 <div id="tabset-1-2">
 <ul>
-<li>Maximum likelihood estimation is unstable with missing data, quasi-separation, or small samples.</li>
-<li>Probability is interpreted as long-run relative frequency.</li>
-<li>Parameter is an unknown constant and is a point estimate.</li>
+<li>Maximum likelihood <strong>estimation is unstable</strong> with missing data, quasi-separation, or small samples.</li>
+<li>Results depend strongly on <strong>large-sample</strong> assumptions</li>
+<li>Interpretation of confidence intervals is indirect: <strong>based on repeating the study</strong></li>
+<li>Probability is interpreted as <strong>long-run relative frequency</strong>.</li>
+<li><strong>Parameter is an unknown constant and is a point estimate</strong>.</li>
+<li><strong>Does not incorporate (prior):</strong> past studies or expert opinions</li>
 </ul>
 </div>
 <div id="tabset-1-3">
 <ul>
-<li>Probability represents a <strong>degree of statisticians belief</strong> about before observing the data.</li>
-<li><strong>Parameter is not known but is considered random variable</strong></li>
-</ul>
-<!-- -->
+<li><p>Probability represents a <strong>degree of statisticians belief</strong> about before observing the data.</p></li>
+<li><p><strong>Parameter is not known but is considered random variable</strong></p></li>
+<li><p><strong>Incorporates prior and regularizes estimates</strong> based on the probability distribution&nbsp;<img data-src="images/clipboard-2228883614.png" width="37" height="20">, called the prior distribution.</p></li>
+<li><p>Quantifies uncertainty under missingness or imputation (Baldwin &amp; Larson, 2017; Kruschke &amp; Liddell, 2017).</p></li>
+<li><p><strong>Provides credible intervals via MCMC</strong> to predict outcomes.</p></li>
+<li><p>Supports <strong>model checking, variable selection,</strong> and the model is flexible.</p></li>
+<li><p>Better for individualized/personalized risk prediction</p></li>
+<li><p>Flexible for handling complex models</p>
 <ul>
-<li><strong>Incorporates prior and regularizes estimates</strong> based on the probability distribution <img data-src="images/clipboard-2228883614.png" width="37" height="20">, called the prior distribution.
-<ul>
-<li>Quantifies uncertainty under missingness or imputation (Baldwin &amp; Larson, 2017; Kruschke &amp; Liddell, 2017).</li>
+<li>Hierarchical structure</li>
+<li>Missing data</li>
 </ul></li>
-<li><strong>Provides credible intervals via MCMC</strong> to predict outcomes.</li>
-<li>Supports <strong>model checking, variable selection,</strong> and the model is flexible.</li>
 </ul>
 </div>
 </div>
@@ -499,7 +508,8 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <section class="slide level2">
 
 <h4 id="bayesian-regression">Bayesian Regression</h4>
-<div class="panel-tabset">
+<ul>
+<li><div class="panel-tabset">
 <ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Logistic Link Function</a></li><li><a href="#tabset-2-2">Prior</a></li><li><a href="#tabset-2-3">Posterior</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1">
@@ -542,18 +552,18 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 </ul>
 </div>
 <div id="tabset-2-3">
-<p><strong>After seeing the data</strong> - Posterior distribution reflects the data, and also the regularizing pull of the prior<br>
-<strong>Intercept prior: student_t(3, 0, 10)</strong> — <span class="citation" data-cites="VanDeSchoot2013">R. V. D. Schoot et al. (<a href="#/references" role="doc-biblioref" onclick="">2013</a>)</span><br>
-- <strong>df = 3 (degrees of freedom):</strong> <strong>heavy tails</strong>- allow for occasional extreme values.<br>
-- <strong>location = 0:</strong> Centered at 0, so the prior expects the parameter to be near 0<br>
-- <strong>scale = 10:</strong> Controls spread out the distribution (Larger scale → wider spread).<br>
-</p>
-<p><strong>Prior for Regression coefficient : normal(0, 2.5)</strong> <span class="citation" data-cites="VandeSchoot2021">R. van de Schoot et al. (<a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span><br>
-- weakly informative with <strong>Mean = 0, Standard deviation = 2.5</strong><br>
-- Probability of very large or very small parameter values is very low and <strong>stabilizes the model</strong> <img data-src="images/clipboard-3802967430.png" width="259">| <img data-src="images/clipboard-2442291846.png" width="259"></p>
+<ul>
+<li><strong>Incorporating Prior</strong></li>
+</ul>
+<p><img data-src="images/clipboard-3802967430.png" width="259">| <img data-src="images/clipboard-2442291846.png" width="259">|<img data-src="images/clipboard-1978292710.png" width="250"></p>
+<p><strong>After seeing the data</strong></p>
+<ul>
+<li><strong>Posterior distribution reflects the data, and also the regularizing pull of the prior</strong></li>
+</ul>
 </div>
 </div>
-</div>
+</div></li>
+</ul>
 </section>
 <section class="slide level2">
 
@@ -628,7 +638,8 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <section class="slide level2">
 
 <h3 id="bayesian-logistic-regression">Bayesian Logistic Regression</h3>
-<div class="panel-tabset">
+<ul>
+<li><div class="panel-tabset">
 <ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">Data (Adults)</a></li><li><a href="#tabset-5-2">MICE</a></li><li><a href="#tabset-5-3">Bayesian Logistic Regression Model</a></li><li><a href="#tabset-5-4">Prior</a></li><li><a href="#tabset-5-5">Code</a></li></ul>
 <div class="tab-content">
 <div id="tabset-5-1">
@@ -639,11 +650,16 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 </li>
 <li>Complete Case Analysis: <strong>5348</strong> (with no missing values)<br>
 </li>
-<li>Imputed dataset (adult_imp1): <strong>5,592</strong><br>
-</li>
+<li><strong>Statistics (Data = Adults )</strong></li>
 </ul>
-<p><strong>Bayesian models assume complete data.</strong> <strong>Adults data stats</strong></p>
 <p><img data-src="images/clipboard-3603805033.png"></p>
+<ul>
+<li><strong>Bayesian models assume complete data.</strong></li>
+<li>Imputed dataset (adult_imp1): <strong>5,592</strong>
+<ul>
+<li><strong>(Raw data –&gt; MICE–&gt;</strong> Imputed dataset <strong>)</strong></li>
+</ul></li>
+</ul>
 </div>
 <div id="tabset-5-2">
 <p><strong>Multivariate Imputation by Chained Equation</strong><br>
@@ -664,23 +680,41 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <p><strong>Posterior (parameters + missing data uncertainty)</strong></p>
 </div>
 <div id="tabset-5-3">
-<p>Model is fitted to each imputed dataset in <strong>R</strong> using brms <strong>(Stan backend)</strong>, 2000 itirations<br>
+<p>Model is fitted to each imputed dataset in <strong>R</strong> using brms <strong>(Stan backend)</strong>, <strong>2000 itirations</strong><br>
 </p>
-<p><strong>Formula</strong><br>
+<p><strong>Bayesian Regression Formula</strong><br>
 </p>
-<p>diabetes_dx | weights(wt_norm) ~ age_c + bmi_c + sex + race<br>
+<p><strong><em>diabetes_dx | weights(wt_norm) ~ age_c + bmi_c + sex + race</em></strong></p>
+<p><br>
 <strong>Data set</strong>: Pooled Imputed dataset-1<br>
 <strong>Bernoulli family</strong><br>
 <strong>Chains = 4, Iteration = 2000, seed = 123</strong><br>
 <strong>prior</strong><br>
-- <strong>normal(0, 2.5)</strong> for coefficients<br>
-- <strong>student_t(3, 0, 10)</strong> for Intercept</p>
+</p>
+<ul>
+<li><strong>normal(0, 2.5)</strong> for coefficients<br>
+</li>
+<li><strong>student_t(3, 0, 10)</strong> for Intercept</li>
+</ul>
 </div>
 <div id="tabset-5-4">
 <ul>
-<li><p><strong>normal(0, 2.5)</strong> for coefficients<br>
-</p></li>
-<li><p><strong>student_t(3, 0, 10)</strong> for Intercept</p></li>
+<li><strong>Intercept prior: student_t(3, 0, 10)</strong> — <span class="citation" data-cites="VanDeSchoot2013">R. V. D. Schoot et al. (<a href="#/references" role="doc-biblioref" onclick="">2013</a>)</span><br>
+
+<ul>
+<li><strong>df = 3 (degrees of freedom):</strong> <strong>heavy tails</strong>- allow for occasional extreme values.<br>
+</li>
+<li><strong>location = 0:</strong> Centered at 0, so the prior expects the parameter to be near 0<br>
+</li>
+<li><strong>scale = 10:</strong> Controls spread out the distribution (Larger scale → wider spread).</li>
+</ul></li>
+<li><strong>Prior for Regression coefficient : normal(0, 2.5)</strong> <span class="citation" data-cites="VandeSchoot2021">R. van de Schoot et al. (<a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span><br>
+
+<ul>
+<li>weakly informative with <strong>Mean = 0, Standard deviation = 2.5</strong><br>
+</li>
+<li>Probability of very large or very small parameter values is very low and <strong>stabilizes the model</strong></li>
+</ul></li>
 </ul>
 </div>
 <div id="tabset-5-5">
@@ -704,7 +738,8 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 </ul>
 </div>
 </div>
-</div>
+</div></li>
+</ul>
 </section>
 <section class="slide level2">
 
@@ -713,17 +748,13 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">Markov Process</a></li><li><a href="#tabset-6-2">Code</a></li><li><a href="#tabset-6-3">Result</a></li></ul>
 <div class="tab-content">
 <div id="tabset-6-1">
-<p><strong>GIBBS SAMPLER: A specific algorithm under the MCMC category</strong> - Produces a sequence of random vectors <img data-src="images/clipboard-1640325740.png" width="90" height="35"></p>
 <ul>
-<li><p>Each sample <strong>depends on the past only through the most recent one</strong>.</p></li>
-<li><p>The samples are <strong>not just random</strong></p></li>
-<li><p>Samples are drawn in a way that the long-term distribution of the samples matches the target posterior distribution.</p></li>
-<li><p>It uses a <strong>burn in period</strong>.</p></li>
-<li><p>The random vectors are s<strong>equentially dependent</strong>.</p></li>
-<li><p>Retain one parameter vector every n iterations, and discard the rest.</p>
-<p><img data-src="images/clipboard-1907802712.png"><br>
-</p></li>
+<li><strong>GIBBS SAMPLER: A specific algorithm under the MCMC category</strong> - Produces a sequence of random vectors of parameters <img data-src="images/clipboard-1640325740.png" width="73" height="22"></li>
+<li><strong>Burn in period:</strong> <strong>first 500–1,000 iterations</strong> (early draws) that are <strong>not representative</strong> of the true posterior are discarded</li>
+<li>After the burn-in period: the chain reaches the <em>stationarity</em></li>
 </ul>
+<p><strong>Each sample drawn</strong> - <strong>depends on the past</strong> - <strong>are not just random</strong> - random vectors are <strong>sequentially dependent</strong>.<br>
+<img data-src="images/clipboard-1907802712.png" width="311"></p>
 </div>
 <div id="tabset-6-2">
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a>post <span class="ot">&lt;-</span> <span class="fu">posterior_summary</span>(bayes_fit, <span class="at">robust =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span>  <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="st">"term"</span>)</span>
@@ -740,20 +771,21 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <ul>
 <li><p><code>rstan::monitor</code>&nbsp;function in the RStan package - to <strong>compute summary statistics and diagnosing the convergence and efficiency of MCMC simulations</strong></p>
 <p>Provide summaries:</p></li>
-</ul>
-<!-- -->
-<ul>
-<li><strong>Posterior mean</strong> and <strong>standard deviation (SD)</strong></li>
-<li><strong>Monte Carlo standard error (MCSE)</strong></li>
-<li><strong>Quantiles:</strong> 2.5%, 25%, 50%, 75%, 97.5%</li>
-<li><strong>Effective sample sizes:</strong> Bulk_ESS and Tail_ESS</li>
-<li><strong>R-hat (convergence diagnostic)</strong></li>
+<li><p><strong>Posterior mean</strong> and <strong>standard deviation (SD)</strong></p></li>
+<li><p><strong>Monte Carlo standard error (MCSE)</strong></p></li>
+<li><p><strong>Quantiles:</strong> 2.5%, 25%, 50%, 75%, 97.5%</p></li>
+<li><p><strong>Effective sample sizes:</strong> Bulk_ESS and Tail_ESS</p></li>
+<li><p><strong>R-hat (convergence diagnostic)</strong></p></li>
 </ul>
 </div>
 <div id="tabset-6-3">
 <p><strong>warmup= 1000</strong><br>
 <strong>total draws = 4000</strong></p>
 <p><img data-src="images/clipboard-2724235725.png"></p>
+<ul>
+<li><p><strong>Bulk ESS</strong> → reliability of mean and median estimates</p></li>
+<li><p><strong>Tail ESS</strong> → reliability of extreme quantiles (e.g., 2.5%, 97.5%)</p></li>
+</ul>
 </div>
 </div>
 </div>
@@ -765,24 +797,35 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">MCMC Convergence</a></li><li><a href="#tabset-7-2">Trace Plots (stable posteriors)</a></li><li><a href="#tabset-7-3">Autocorrelation Plot</a></li></ul>
 <div class="tab-content">
 <div id="tabset-7-1">
-<p>To evaluate we look for</p>
+<p>MCMC convergence: the GIBBS sampler has reached the posterior distribution — the point where the information from the prior and the data (likelihood) has been fully combined, and the chain is now drawing valid samples from that posterior.</p>
+<p>Good Convergence shows:</p>
 <ul>
-<li><p>the <strong>convergence with no drift across iterations</strong></p></li>
+<li><p><strong>no drift across iterations</strong></p></li>
 <li><p><strong>well-mixed chains</strong> without any trends with stable posterior estimates.</p></li>
-<li><p><strong>R-hat ≈ 1</strong> → good chain mixing, Effective sample size</p></li>
+<li><p><strong>R-hat ≈ 1</strong></p></li>
+<li><p>Effective sample size: <strong>~3500</strong>: MCMC chain has the same information as <strong>3,500 independent samples</strong>.</p>
+<ul>
+<li><strong>good mixing</strong>, <strong>low autocorrelation</strong>, and <strong>highly reliable</strong> posterior estimates.</li>
+</ul></li>
 <li><p><strong>Trace &amp; Autocorrelation plots</strong></p></li>
 </ul>
 </div>
 <div id="tabset-7-2">
 <ul>
-<li>precise estimates, with high uncertainty narrow distributions, smooth and unimodal → no multimodality confirming stable posteriors.</li>
-<li>histogram: distribution of sampled coeffs. after convergence across all mcmc draws</li>
+<li><p>After convergence across all mcmc draws have</p>
+<p>precise estimates, high uncertainty, narrow distributions, smooth and unimodal → no multimodality <strong>confirming stable posteriors.</strong></p></li>
+<li><p><strong>Density Plot</strong> <strong>(Left Panel)</strong> : histogram shows distribution of sampled coeffs.</p></li>
+<li><p><strong>Trace plots (Right Panel)</strong></p>
+<ul>
+<li><p>No upward or downward <strong>trend</strong> (no drift)</p></li>
+<li><p>Chains <strong>overlap</strong> and stay within the same band.</p></li>
+</ul></li>
 </ul>
 <p><img data-src="images/clipboard-3030610644.png" width="344"></p>
 </div>
 <div id="tabset-7-3">
 <p><img data-src="images/clipboard-2853565372.png" width="313"> <img data-src="images/clipboard-4067031519.png"></p>
-<p>Results: chain mixing, convergence, correlation of draws with lagged values across iterations</p>
+<p>Chain mixing, convergence, and correlation of draws with lagged values across iterations</p>
 </div>
 </div>
 </div>
@@ -794,14 +837,13 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">Posterior draws</a></li><li><a href="#tabset-8-2">Code</a></li><li><a href="#tabset-8-3">Plot</a></li></ul>
 <div class="tab-content">
 <div id="tabset-8-1">
-<p><strong>MCMC samples (posterior distribution/draws)</strong></p>
-<p>Posterior draws = 4000 draws (4 chains × 1000 iterations) for posterior predictive checks.</p>
+<p><strong>After seeing the data,</strong> Posterior draws = 4000 draws (4 chains × 1000 iterations) via MCMC gives a posterior distribution of predictors</p>
 <ul>
-<li>The distribution of predictors <strong>after seeing the data.</strong></li>
-<li>The posterior is the <strong>conditional distribution</strong> of the parameter given the data.</li>
-<li><strong>Subjectivity</strong> is present when the prior distribution influences the conclusions.</li>
-<li>The influence of the prior <strong>goes to zero as the sample size increases.</strong></li>
-<li>The posterior distribution is the <strong>full probability distribution</strong> of the parameter <strong>(mountain)</strong>; the mean and credible interval are just summaries of that distribution, not the distribution itself.</li>
+<li><strong>Conditional distribution</strong> of the parameter given the data.</li>
+<li><strong>Subjective</strong> -&gt; prior distribution influences the conclusions.</li>
+<li>Influence of the prior <strong>goes to zero as the sample size increases.</strong></li>
+<li>It is the <strong>full probability distribution</strong> of the parameter <strong>(mountain)</strong></li>
+<li>Mean and credible interval are just summaries of that distribution, not the distribution itself.</li>
 </ul>
 </div>
 <div id="tabset-8-2">
@@ -811,18 +853,19 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 </div>
 <div id="tabset-8-3">
 <p><img data-src="images/clipboard-2255770791.png" width="369"></p>
-</div>
-</div>
-</div>
-<p><strong>y-axis:</strong>Density (how frequent each predicted probability occurs) <strong>x-axis:</strong> Predicted probability values (from 0 to 1).</p>
+<p><strong>y-axis:</strong>Density (how frequent each predicted probability occurs)<br>
+<strong>x-axis:</strong> Predicted probability values (from 0 to 1).</p>
 <p>The model can generate data that <strong>looks like the observed data</strong><br>
 </p>
 <p>Can <strong>reproduce the observed distribution of diabetes outcomes</strong>. \</p>
 <p>Most participants have low predicted probabilities of diabetes (near 0), with a smaller peak at high probability (near 1)</p>
+</div>
+</div>
+</div>
 </section>
 <section class="slide level2">
 
-<h4 id="posterior-estimates-and-distribution">Posterior Estimates and Distribution</h4>
+<h4 id="regression-results-posterior-estimates-and-distribution">Regression Results (Posterior Estimates and Distribution)</h4>
 <div class="panel-tabset">
 <ul id="tabset-9" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-9-1">Posterior Estimates</a></li><li><a href="#tabset-9-2">Posterior Distribution</a></li></ul>
 <div class="tab-content">
@@ -846,7 +889,7 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 </section>
 <section class="slide level2">
 
-<h4 id="prior-and-posterior-predictive-distribution-age-and-bmi">Prior and Posterior Predictive Distribution (age and BMI)</h4>
+<h4 id="compare-prior-and-posterior-predictive-distribution-age-and-bmi">Compare Prior and Posterior Predictive Distribution (age and BMI)</h4>
 <div class="panel-tabset">
 <ul id="tabset-10" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-10-1">Plot</a></li><li><a href="#tabset-10-2">Code</a></li></ul>
 <div class="tab-content">
@@ -854,8 +897,12 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <p><img data-src="images/clipboard-1978292710.png" width="466"><br>
 <strong>Prior and posterior distributions</strong> for the coefficient estimates of “Age (per 1 SD)” and “BMI (per 1 SD)”</p>
 <ul>
-<li><p>Prior distribution: The <strong>wide spread (variance)</strong> - a high degree of initial uncertainty or a non-informative prior</p></li>
-<li><p>Posterior distribution: are different from the priors and are <strong>narrower and taller.</strong> The <strong>data has significantly updated the initial beliefs</strong></p></li>
+<li><p><strong>Prior distribution: wide spread (variance)</strong> -shows a high degree of initial uncertainty or a non-informative prior</p></li>
+<li><p>P<strong>osterior distribution:</strong></p>
+<ul>
+<li><p>Different from the priors: <strong>Narrower and taller</strong></p></li>
+<li><p><strong>Data has significantly updated the initial beliefs</strong></p></li>
+</ul></li>
 </ul>
 </div>
 <div id="tabset-10-2">
