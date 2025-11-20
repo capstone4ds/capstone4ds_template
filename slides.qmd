@@ -526,23 +526,24 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
 
 #### Posterior Predictive Checks
 
-**500 draws: predicted outcomes** for each observation compare (observed data vs predeicted outcomes: binary outcome with 0 or 1 simulated
+**500 draws: predicted outcomes** for each observation compared observed data vs predicted outcomes (binary outcome = 0 or 1) simulated
 
 ::: panel-tabset
-#### Pred vs obs outcome (proportion)
+#### Pred vs Obs Outcome
 
 ![](images/clipboard-2418526955.png){width="274"}\
 **Fig**: a bar plot comparing counts/frequencies of each category (0 vs 1) in the observed data (y) and in the posterior predictive samples (y-rep)\
-Bars for y (observed) fall within the range of yrep (simulated): **model predicts the overall diabetes prevalence well**
 
-#### Outcome Proportion
+**Bars for y (observed) fall within the range of yrep (simulated):** **model predicts the overall diabetes prevalence well**
 
-x-axis: proportion of diabetics (1s), y-axis: frequency of posterior draws with that proportion\
-![](images/clipboard-122565288.png){width="216"}\
-Spread shows the uncertainty in predicted prevalence\
-![](images/clipboard-2142249375.png){width="246"}\
-The model’s posterior mean diabetes prevalence was 10.95% (95% CI: 8.5%–12.8%), slightly higher than the NHANES estimate of 8.9% (SE = 0.0048)\
-but the credible interval overlaps the survey estimate, indicating reasonable calibration.
+#### Pred Outcome Proportion
+
+![](images/clipboard-122565288.png){width="216"}
+
+Fig: Histogram: Spread shows the uncertainty in predicted prevalence\
+
+x-axis: proportion of diabetics (1s)\
+y-axis: frequency of posterior draws\
 
 #### Outcome Mean and SD
 
@@ -552,14 +553,15 @@ but the credible interval overlaps the survey estimate, indicating reasonable ca
 
 #### Code
 
-``` r
+```r
 pp_samples \<- posterior_predict(bayes_fit, ndraws = 500) 
 # 500 draws 
 
-# Check dimensions dim(pp_samples) # rows = draws, cols = observations\ 
-
+# Check dimensions dim(pp_samples) # rows = draws, cols = observations\
 ppc_bars(y = adult_imp1\$diabetes_dx, yrep = pp_samples\[1:500, \]) 
+
 ```
+
 
 ``` r
 # pp_proportion <- rowMeans(pp_samples)  # if not already done
@@ -586,18 +588,12 @@ ggplot(pp_df, aes(x = proportion)) +
 
 #### Diabetes Prevalence (Survey weighted NHANES vs Predicted)
 
-::: panel-tabset
-##### Result and Visualization
 
-![](images/clipboard-4013951629.png){width="576"}\| ![](images/clipboard-3433503019.png){width="466"}
+![](images/clipboard-3433503019.png){width="362"}\|  ![](images/clipboard-2142249375.png){width="365"}
 
-##### Interpretation
+-   Model’s posterior mean diabetes prevalence = 10.95% (95% CI: 8.5%–12.8%) \> NHANES estimate of 8.9% (SE = 0.0048)
 
-**Prevalence of diabetes** (Posterior-predicted vs NHANES survey-weighted)
-
--   NHANES survey-weighted estimate (8.9%, SE = 0.0048).
--   The predicted posterior mean was 10.95%, with a 95% credible interval of 8.5%–12.8%.
--   Although the model predicts slightly higher prevalence, the credible interval overlaps the NHANES estimate.
+**Slightly higher** mean prevalenc, but the credible interval overlaps the survey estimate = reasonable calibration.
 
 **Model is well-calibrated, with NHANES falling near the lower end of the posterior distribution but still within a plausible range**
 :::

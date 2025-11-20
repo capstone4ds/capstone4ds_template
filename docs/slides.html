@@ -925,22 +925,23 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <section class="slide level2">
 
 <h4 id="posterior-predictive-checks">Posterior Predictive Checks</h4>
-<p><strong>500 draws: predicted outcomes</strong> for each observation compare (observed data vs predeicted outcomes: binary outcome with 0 or 1 simulated</p>
+<p><strong>500 draws: predicted outcomes</strong> for each observation compared observed data vs predicted outcomes (binary outcome = 0 or 1) simulated</p>
 <div class="panel-tabset">
-<ul id="tabset-11" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-11-1">Pred vs obs outcome (proportion)</a></li><li><a href="#tabset-11-2">Outcome Proportion</a></li><li><a href="#tabset-11-3">Outcome Mean and SD</a></li><li><a href="#tabset-11-4">Code</a></li></ul>
+<ul id="tabset-11" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-11-1">Pred vs Obs Outcome</a></li><li><a href="#tabset-11-2">Pred Outcome Proportion</a></li><li><a href="#tabset-11-3">Outcome Mean and SD</a></li><li><a href="#tabset-11-4">Code</a></li></ul>
 <div class="tab-content">
 <div id="tabset-11-1">
 <p><img data-src="images/clipboard-2418526955.png" width="274"><br>
 <strong>Fig</strong>: a bar plot comparing counts/frequencies of each category (0 vs 1) in the observed data (y) and in the posterior predictive samples (y-rep)<br>
-Bars for y (observed) fall within the range of yrep (simulated): <strong>model predicts the overall diabetes prevalence well</strong></p>
+</p>
+<p><strong>Bars for y (observed) fall within the range of yrep (simulated):</strong> <strong>model predicts the overall diabetes prevalence well</strong></p>
 </div>
 <div id="tabset-11-2">
-<p>x-axis: proportion of diabetics (1s), y-axis: frequency of posterior draws with that proportion<br>
-<img data-src="images/clipboard-122565288.png" width="216"><br>
-Spread shows the uncertainty in predicted prevalence<br>
-<img data-src="images/clipboard-2142249375.png" width="246"><br>
-The model’s posterior mean diabetes prevalence was 10.95% (95% CI: 8.5%–12.8%), slightly higher than the NHANES estimate of 8.9% (SE = 0.0048)<br>
-but the credible interval overlaps the survey estimate, indicating reasonable calibration.</p>
+<p><img data-src="images/clipboard-122565288.png" width="216"></p>
+<p>Fig: Histogram: Spread shows the uncertainty in predicted prevalence<br>
+</p>
+<p>x-axis: proportion of diabetics (1s)<br>
+y-axis: frequency of posterior draws<br>
+</p>
 </div>
 <div id="tabset-11-3">
 <p><img data-src="images/clipboard-2726352750.png" width="340"></p>
@@ -950,9 +951,8 @@ but the credible interval overlaps the survey estimate, indicating reasonable ca
 <div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>pp_samples \<span class="ot">&lt;-</span> <span class="fu">posterior_predict</span>(bayes_fit, <span class="at">ndraws =</span> <span class="dv">500</span>) </span>
 <span id="cb7-2"><a></a><span class="co"># 500 draws </span></span>
 <span id="cb7-3"><a></a></span>
-<span id="cb7-4"><a></a><span class="co"># Check dimensions dim(pp_samples) # rows = draws, cols = observations\ </span></span>
-<span id="cb7-5"><a></a></span>
-<span id="cb7-6"><a></a><span class="fu">ppc_bars</span>(<span class="at">y =</span> adult_imp1\<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples\[<span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>, \]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-4"><a></a><span class="co"># Check dimensions dim(pp_samples) # rows = draws, cols = observations\</span></span>
+<span id="cb7-5"><a></a><span class="fu">ppc_bars</span>(<span class="at">y =</span> adult_imp1\<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples\[<span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>, \]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="co"># pp_proportion &lt;- rowMeans(pp_samples)  # if not already done</span></span>
 <span id="cb8-2"><a></a>known_prev <span class="ot">&lt;-</span> <span class="fl">0.089</span>   <span class="co"># NHANES prevalence</span></span>
 <span id="cb8-3"><a></a>posterior_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(pp_proportion)</span>
@@ -977,31 +977,20 @@ but the credible interval overlaps the survey estimate, indicating reasonable ca
 <section class="slide level2">
 
 <h4 id="diabetes-prevalence-survey-weighted-nhanes-vs-predicted">Diabetes Prevalence (Survey weighted NHANES vs Predicted)</h4>
-<div class="panel-tabset">
-<ul id="tabset-12" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-12-1">Result and Visualization</a></li><li><a href="#tabset-12-2">Interpretation</a></li></ul>
-<div class="tab-content">
-<div id="tabset-12-1">
-<p><img data-src="images/clipboard-4013951629.png" width="576">| <img data-src="images/clipboard-3433503019.png" width="466"></p>
-</div>
-<div id="tabset-12-2">
-<p><strong>Prevalence of diabetes</strong> (Posterior-predicted vs NHANES survey-weighted)</p>
+<p><img data-src="images/clipboard-3433503019.png" width="362">| <img data-src="images/clipboard-2142249375.png" width="365"></p>
 <ul>
-<li>NHANES survey-weighted estimate (8.9%, SE = 0.0048).</li>
-<li>The predicted posterior mean was 10.95%, with a 95% credible interval of 8.5%–12.8%.</li>
-<li>Although the model predicts slightly higher prevalence, the credible interval overlaps the NHANES estimate.</li>
+<li>Model’s posterior mean diabetes prevalence = 10.95% (95% CI: 8.5%–12.8%) &gt; NHANES estimate of 8.9% (SE = 0.0048)</li>
 </ul>
-<p><strong>Model is well-calibrated, with NHANES falling near the lower end of the posterior distribution but still within a plausible range</strong></p>
-</div>
-</div>
-</div>
+<p><strong>Slightly higher</strong> mean prevalenc, but the credible interval overlaps the survey estimate = reasonable calibration.</p>
+<p><strong>Model is well-calibrated, with NHANES falling near the lower end of the posterior distribution but still within a plausible range</strong> :::</p>
 </section>
 <section class="slide level2">
 
 <h4 id="observed-vs.-predicted-average-diabetes-aross-individuals">Observed vs.&nbsp;Predicted Average diabetes (aross individuals)</h4>
 <div class="panel-tabset">
-<ul id="tabset-13" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-13-1">Plot</a></li><li><a href="#tabset-13-2">Plot</a></li><li><a href="#tabset-13-3">Code</a></li></ul>
+<ul id="tabset-12" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-12-1">Plot</a></li><li><a href="#tabset-12-2">Plot</a></li><li><a href="#tabset-12-3">Code</a></li></ul>
 <div class="tab-content">
-<div id="tabset-13-1">
+<div id="tabset-12-1">
 <p><img data-src="images/clipboard-2608056459.png" width="287"></p>
 <ul>
 <li>Each point = one observation (an individual)</li>
@@ -1010,7 +999,7 @@ but the credible interval overlaps the survey estimate, indicating reasonable ca
 <li>Points near (0, 0) or (1, 1) → good prediction</li>
 </ul>
 </div>
-<div id="tabset-13-2">
+<div id="tabset-12-2">
 <p><img data-src="images/clipboard-2167517988.png" width="340"></p>
 <ul>
 <li>Each point represents an individual’s observed BMI versus the model’s predicted mean.</li>
@@ -1018,7 +1007,7 @@ but the credible interval overlaps the survey estimate, indicating reasonable ca
 <li>The plot demonstrates that the model’s predictions generally align with the observed data</li>
 </ul>
 </div>
-<div id="tabset-13-3">
+<div id="tabset-12-3">
 <div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a><span class="co"># PP checks with bayesplot options</span></span>
 <span id="cb9-2"><a></a><span class="fu">color_scheme_set</span>(<span class="st">"blue"</span>)</span>
 <span id="cb9-3"><a></a><span class="fu">ppc_scatter_avg</span>(<span class="at">y =</span> adult_imp1<span class="sc">$</span>diabetes_dx, <span class="at">yrep =</span> pp_samples[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ]) <span class="sc">+</span></span>
@@ -1031,9 +1020,9 @@ but the credible interval overlaps the survey estimate, indicating reasonable ca
 
 <h4 id="compare-models">Compare Models</h4>
 <div class="panel-tabset">
-<ul id="tabset-14" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-14-1">Comapre Models</a></li><li><a href="#tabset-14-2">Interpretation</a></li></ul>
+<ul id="tabset-13" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-13-1">Comapre Models</a></li><li><a href="#tabset-13-2">Interpretation</a></li></ul>
 <div class="tab-content">
-<div id="tabset-14-1">
+<div id="tabset-13-1">
 <ol type="1">
 <li><strong>Survey-weighted maximum likelihood estimation (MLE)</strong></li>
 <li><strong>Bayesian regression</strong></li>
@@ -1047,7 +1036,7 @@ but the credible interval overlaps the survey estimate, indicating reasonable ca
 <li>The Bayesian model used normalized weights, which approximates the effect of survey weights but does not fully account for stratification, clustering, or design-based variance adjustments.</li>
 </ul>
 </div>
-<div id="tabset-14-2">
+<div id="tabset-13-2">
 <ul>
 <li><p>The Bayesian model shows minimal shrinkage and similar uncertainty, supporting the reliability and robustness of the results</p></li>
 <li><p>Bayesian estimates are pulled slightly toward the prior mean (often toward zero or toward more moderate values) compared to classical estimates.</p></li>
@@ -1063,12 +1052,12 @@ but the credible interval overlaps the survey estimate, indicating reasonable ca
 
 <h3 id="correlation-diagnostics">Correlation Diagnostics</h3>
 <div class="panel-tabset">
-<ul id="tabset-15" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-15-1">Pairwise correlation</a></li><li><a href="#tabset-15-2">Code</a></li><li><a href="#tabset-15-3">Interpretation</a></li></ul>
+<ul id="tabset-14" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-14-1">Pairwise correlation</a></li><li><a href="#tabset-14-2">Code</a></li><li><a href="#tabset-14-3">Interpretation</a></li></ul>
 <div class="tab-content">
-<div id="tabset-15-1">
+<div id="tabset-14-1">
 <p><img data-src="images/clipboard-1737198687.png" width="521"></p>
 </div>
-<div id="tabset-15-2">
+<div id="tabset-14-2">
 <div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a><span class="co"># Extract posterior draws</span></span>
 <span id="cb11-2"><a></a>post <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(bayes_fit)</span>
 <span id="cb11-3"><a></a><span class="co"># Select numeric parameters of interest</span></span>
@@ -1082,7 +1071,7 @@ but the credible interval overlaps the survey estimate, indicating reasonable ca
 <span id="cb11-11"><a></a>           <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"b_age_c"</span>, <span class="st">"b_bmi_c"</span>, <span class="st">"b_sexFemale"</span>),</span>
 <span id="cb11-12"><a></a>           <span class="at">off_diag_args =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-15-3">
+<div id="tabset-14-3">
 <ul>
 <li>The absence of strong linear relationships between age, BMI, and sex</li>
 <li>Independently contribute to the prediction of diabetes status.</li>
@@ -1124,15 +1113,15 @@ but the credible interval overlaps the survey estimate, indicating reasonable ca
 
 <h3 id="translational-research-perspective">Translational Research Perspective</h3>
 <div class="panel-tabset">
-<ul id="tabset-16" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-16-1">Personalized Risk Estimation</a></li><li><a href="#tabset-16-2">Internal Validation</a></li><li><a href="#tabset-16-3">Plot</a></li><li><a href="#tabset-16-4">External Validation</a></li><li><a href="#tabset-16-5">Plot</a></li></ul>
+<ul id="tabset-15" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-15-1">Personalized Risk Estimation</a></li><li><a href="#tabset-15-2">Internal Validation</a></li><li><a href="#tabset-15-3">Plot</a></li><li><a href="#tabset-15-4">External Validation</a></li><li><a href="#tabset-15-5">Plot</a></li></ul>
 <div class="tab-content">
-<div id="tabset-16-1">
+<div id="tabset-15-1">
 <ul>
 <li>Model enables individualized diabetes risk prediction using age, BMI, sex, race and outputs can guide actionable thresholds (e.g., risk &gt;30%)</li>
 <li>BMI is modifiable- interventions can lower risk while sex and race remain constant.</li>
 </ul>
 </div>
-<div id="tabset-16-2">
+<div id="tabset-15-2">
 <ul>
 <li>Selected one participant (adult[1, ]) with all covariates (age, BMI, sex, race)</li>
 <li>Obtain predicted probabilities from the logistic regression model.&nbsp;<strong>posterior_linpred(transform = TRUE)</strong></li>
@@ -1150,11 +1139,11 @@ but the credible interval overlaps the survey estimate, indicating reasonable ca
 <span id="cb13-10"><a></a>  <span class="fu">ggtitle</span>(<span class="st">'Posterior Predictive Distribution 95% Credible Interval'</span>) <span class="sc">+</span></span>
 <span id="cb13-11"><a></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-16-3">
+<div id="tabset-15-3">
 <p><img data-src="images/clipboard-2754134965.png" width="196">|</p>
 <p>Result: Median predicted probability ≈ 0.25, with a 95% credible interval of 0.20–0.31, indicate a ~1 in 4 chance of diabetes.</p>
 </div>
-<div id="tabset-16-4">
+<div id="tabset-15-4">
 <ul>
 <li>We computed the posterior predicted probability for a new participant data (age, BMI, sex, and race)).<br>
 </li>
@@ -1163,7 +1152,7 @@ but the credible interval overlaps the survey estimate, indicating reasonable ca
 </ul>
 <div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a>new_participant <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">age_c=</span> <span class="dv">40</span>, <span class="at">bmi_c=</span> <span class="dv">25</span>, <span class="at">sex=</span> <span class="st">"Female"</span>, <span class="at">race =</span> <span class="st">"Mexican American"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-16-5">
+<div id="tabset-15-5">
 <p><img data-src="images/clipboard-2142022257.png" width="166"><br>
 </p>
 <p>Results<br>
@@ -1182,12 +1171,12 @@ but the credible interval overlaps the survey estimate, indicating reasonable ca
 <h3 id="reverse-prediction">Reverse Prediction</h3>
 <p><strong>Predict BMI for estimated Diabetes</strong></p>
 <div class="panel-tabset">
-<ul id="tabset-17" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-17-1">Plot</a></li><li><a href="#tabset-17-2">Interpretation</a></li><li><a href="#tabset-17-3">Code</a></li><li><a href="#tabset-17-4">Practical Implications</a></li></ul>
+<ul id="tabset-16" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-16-1">Plot</a></li><li><a href="#tabset-16-2">Interpretation</a></li><li><a href="#tabset-16-3">Code</a></li><li><a href="#tabset-16-4">Practical Implications</a></li></ul>
 <div class="tab-content">
-<div id="tabset-17-1">
+<div id="tabset-16-1">
 <p><img data-src="images/clipboard-3125514674.png"></p>
 </div>
-<div id="tabset-17-2">
+<div id="tabset-16-2">
 <p>X-axis: BMI values (centered or raw, depending on the model).<br>
 Y-axis: Predicted probability of diabetes for a representative individual (Age = 40, Female, Mexican American).<br>
 Blue curve: predicted probability of diabetes across the BMI range; consistently high (≈1) for most BMI values.<br>
@@ -1195,7 +1184,7 @@ Red horizontal line: Target probability of diabetes = 0.3.<br>
 Red vertical line is the targeted BMI: when the predicted probability of diabetes is closest to the target bmi probability (≈18).<br>
 </p>
 </div>
-<div id="tabset-17-3">
+<div id="tabset-16-3">
 <div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a>bmi_seq <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">18</span>, <span class="dv">40</span>, <span class="at">by =</span> <span class="fl">0.5</span>)</span>
 <span id="cb15-2"><a></a></span>
 <span id="cb15-3"><a></a>newdata_grid <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
@@ -1205,7 +1194,7 @@ Red vertical line is the targeted BMI: when the predicted probability of diabete
 <span id="cb15-7"><a></a>  <span class="at">race  =</span> <span class="st">"Mexican American"</span></span>
 <span id="cb15-8"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-17-4">
+<div id="tabset-16-4">
 <p><strong>This is the inverse prediction—the BMI needed to reach a 30% diabetes risk</strong>.<br>
 </p>
 <p>For this demographic profile, even a relatively low BMI (~18) is associated with a 30% diabetes risk<br>
