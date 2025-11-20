@@ -493,14 +493,11 @@ Other/Multi: small positive effect (≈ +0.3, wide CrI).
 ::: panel-tabset
 ##### Plot
 
-![](images/clipboard-1978292710.png){width="342"}\
+![](images/clipboard-1978292710.png){width="268"}\
 **Prior and posterior distributions** for the coefficient estimates of "Age (per 1 SD)" and "BMI (per 1 SD)"
 
--   **Prior distribution: wide spread (variance)** - shows a high degree of initial uncertainty or a non-informative prior
-
--   P**osterior distribution: Narrower and taller**
-
--   **Data has significantly updated the initial beliefs**
+-   **Prior distribution: wide spread (variance)** high degree of initial uncertainty
+-   P**osterior distribution: Narrower and taller, Data significantly updated the initial beliefs**
 
 ##### Code
 
