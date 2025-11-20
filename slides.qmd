@@ -35,15 +35,13 @@ execute:
 ::: panel-tabset
 ### Aim
 
--   **Predict Diabetes** by early identification of **risk factors**
-
--   Implementing Bayesian logistic regression for predicting diabetes
+-   **Implementing Bayesian logistic regression** for predicting diabetes
 
 -   **Compare** the Frequentist Regression model vs Bayesian Regression Model.
 
--   **Application in Targeted Interventions**:
+-   **Application**
 
-    -   To improve estimation of disease burden and risk factors in specific subgroups or individuals by combining survey data, prior research, and posterior predictive modeling
+    -   To improve the estimate of disease burden and risk factors in specific subgroups by combining survey data, prior research, and posterior predictive modeling
 
 ### Frequentist Methods
 
@@ -58,22 +56,22 @@ execute:
 
 -   Probability represents a **degree of statisticians belief** about before observing the data.
 
--   **Parameter is not known but is considered random variable**
-
 -   **Incorporates prior and regularizes estimates** based on the probability distribution ![](images/clipboard-2228883614.png){width="37" height="20"}, called the prior distribution.
 
 -   Quantifies uncertainty under missingness or imputation (Baldwin & Larson, 2017; Kruschke & Liddell, 2017).
-
--   **Provides credible intervals via MCMC** to predict outcomes.
-
--   Supports **model checking, variable selection,** and the model is flexible.
-
--   Better for individualized/personalized risk prediction
 
 -   Flexible for handling complex models
 
     -   Hierarchical structure
     -   Missing data
+
+-   **Provides credible intervals via MCMC to predict outcomes.**
+
+-   **Parameters are not known but are considered random variable**
+
+-   Supports **model checking, variable selection**
+
+-   **Application**: individualized/personalized risk prediction
 :::
 
 ------------------------------------------------------------------------
@@ -88,7 +86,7 @@ $$
 
 -   **θ (Parameters):**- Regression coefficients of predictors
 
--   **D (Data):**- Data (eg:NHANES) with outcome (diabetes) and predictors(eg:age, BMI, sex, and race)
+-   **D (Data):**- Data (eg: NHANES) with outcome (diabetes) and predictors(eg:age, BMI, sex, and race)
 
 -   **Prior P(θ):**\
     Prior beliefs about effect sizes before seeing data\
@@ -257,23 +255,21 @@ svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibino
     **Multivariate Imputation by Chained Equation**\
     *van Buuren & Groothuis-Oudshoorn, 2011; van Buuren, 2012*\
 
-    -   Iteratively imputes incomplete variables using regression models.\
-    -   MICE run 5 iterations for each of the 5 imputed datasets to ensure stability and convergence and provides multiple realistic versions of missing data\
-    -   Use PMM method for continuous (*Predictive Mean Matching)* to fill missing values with the observed values “closest” to predicted values)\
-    -   Use logistic regression for binary variables.\
-    -   Rubin’s rule finds pooled Estimates from across posterior distributions to yield full posterior\
-
-    **Posterior (parameters + missing data uncertainty)**
+    -   **Iteratively imputes incomplete variables** using regression models.\
+    -   MICE run **5 iterations for each of the 5 imputed datasets** to ensure stability and convergence and provides multiple realistic versions of missing data\
+    -   Use **PMM method** **for continuous** **(*Predictive Mean Matching)*** to fill missing values with the observed values “closest” to predicted values)\
+    -   Use **logistic regression for binary variables.**\
+    -   **Rubin’s rule finds pooled Estimates** from across posterior distributions to yield full posterior\
+        **Posterior (parameters + missing data uncertainty)**
 
     #### Bayesian Logistic Regression Model
 
-    Model is fitted to each imputed dataset in **R** using brms **(Stan backend)**, **2000 itirations**\
+    Model is fitted to each imputed dataset in **R** using brms **(Stan backend)**, **2000 iterations**\
 
     **Bayesian Regression Formula**\
 
     ***diabetes_dx \| weights(wt_norm) \~ age_c + bmi_c + sex + race***
 
-    \
     **Data set**: Pooled Imputed dataset-1\
     **Bernoulli family**\
     **Chains = 4, Iteration = 2000, seed = 123**\
@@ -424,13 +420,14 @@ Chain mixing, convergence, and correlation of draws with lagged values across it
 ::: panel-tabset
 ### Posterior draws
 
-**After seeing the data,** Posterior draws = 4000 draws (4 chains × 1000 iterations) via MCMC gives a posterior distribution of predictors
+Posterior draws = 4000 draws (4 chains × 1000 iterations) via MCMC gives a posterior distribution of predictors
 
 -   **Conditional distribution** of the parameter given the data.
--   **Subjective** -\> prior distribution influences the conclusions.
--   Influence of the prior **goes to zero as the sample size increases.**
+-   **Influence of the prior:**
+    -   **Subjectivity**
+    -   **Sample size** - influence goes to zero as the sample size increases.
 -   It is the **full probability distribution** of the parameter **(mountain)**
--   Mean and credible interval are just summaries of that distribution, not the distribution itself.
+-   **Mean and credible interval are just summaries** of that distribution, not the distribution itself.
 
 ### Code
 
@@ -521,17 +518,17 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
 
 #### Posterior Predictive Checks
 
-**500 draws: predicted outcomes** for each observation compared observed data vs predicted outcomes (binary outcome = 0 or 1) simulated
+**500 draws: predicted outcomes** for each observation (binary outcome = 0 or 1)
 
-::: panel-tabset
 #### Pred vs Obs Outcome
 
+::: panel-tabset
 ![](images/clipboard-2418526955.png){width="274"}\
-**Fig**: a bar plot comparing counts/frequencies of each category (0 vs 1) in the observed data (y) and in the posterior predictive samples (y-rep)\
+**Fig**: Bar plot comparing counts/frequencies of each category (0 vs 1) in the observed data (y) and predictive samples (y-rep)\
 
 **Bars for y (observed) fall within the range of yrep (simulated):** **model predicts the overall diabetes prevalence well**
 
-#### Pred Outcome Proportion
+#### Predicted Outcome Prevalence (Diabetes =1)
 
 ![](images/clipboard-122565288.png){width="216"}
 
@@ -579,7 +576,7 @@ ggplot(pp_df, aes(x = proportion)) +
 
 ------------------------------------------------------------------------
 
-#### Diabetes Prevalence (Survey weighted NHANES vs Predicted)
+#### Bayesian vs Survey-weighted NHANES (Diabetes Prevalence)
 
 ![](images/clipboard-3433503019.png){width="362"}\| ![](images/clipboard-2142249375.png){width="365"}
 
@@ -587,31 +584,33 @@ ggplot(pp_df, aes(x = proportion)) +
 
 **Slightly higher** mean prevalence, but the credible interval overlaps the survey estimate = reasonable calibration.
 
-**Model is well-calibrated, with NHANES falling near the lower end of the posterior distribution but still within a plausible range** :::
+**Model is well-calibrated, with NHANES falling near the lower end of the posterior distribution but still within a plausible range**
 
 ------------------------------------------------------------------------
 
-#### Observed vs. Predicted Average diabetes (aross individuals)
+#### Observed vs. Predicted in individuals
 
 ::: panel-tabset
-##### Plot
+#### Average Diabetes
 
-![](images/clipboard-2608056459.png){width="287"}
+![](images/clipboard-2608056459.png){width="404"}
 
 -   Each point = one observation (an individual)
 -   **x-axis = observed value** (`0` or `1` in your binary diabetes variable)
 -   **y-axis = average predicted posterior probability** for that same individual across simulated datasets
--   Points near (0, 0) or (1, 1) → good prediction
+-   **Points near (0, 0) or (1, 1) → good prediction**
 
-##### Plot
+#### Mean BMI
 
-![](images/clipboard-2167517988.png){width="340"}
+![](images/clipboard-2167517988.png){width="434"}
 
 -   Each point represents an individual’s observed BMI versus the model’s predicted mean.
--   Error bars indicate the 95% credible intervals of the predictions.
--   The plot demonstrates that the model’s predictions generally align with the observed data
 
-##### Code
+**Error bars indicate the 95% credible intervals of the predictions.**
+
+**Model predictions generally align with the observed data**
+
+#### Code
 
 ``` r
 # PP checks with bayesplot options
@@ -638,35 +637,34 @@ bayes_tbl <- bayes_or %>% mutate(Model = "Bayesian")
 
 ![](images/clipboard-2112440543.png)
 
--   Both models consistently identified **Age** and **BMI** as strong predictors of diabetes.
+-   Both models consistently identified Age and BMI as strong predictors of diabetes.
 
--   The **Bayesian model complements frequentist approaches** by providing **stable, interpretable estimates with quantified uncertainty**.
-
--   The model broadly reproduces **population-level prevalence.**
-
--   **Normalized weights** were used to approximate survey weighting, but the **model does not fully account for stratification, clustering, or design-based variance adjustments.**
+    -   **Bayesian model**: Complements frequentist approach, provided stable, interpretable estimates, quantified uncertainty, and produced population-level prevalence.
+    -   **Survey-weighted** : used Normalized weights, model does not fully account for stratification, clustering, or design-based variance adjustments.
 
 ##### Interpretation
 
--   Minimal shrinkage and similar uncertainty - reliability and robustness
+-   M**inimal shrinkage and similar uncertainty** - reliability and robustness of the model
 
--   Estimates are pulled slightly towards the prior mean (often toward zero or toward more moderate values) compared to classical estimates.
+<!-- -->
 
--   The Bayesian posterior did not pull the estimates very much.
-
--   **The observed data was strong enough to dominate the prior.**
+-   **Posterior estimates are slightly pulled towards the prior mean** (often toward zero or toward more moderate values) compared to classical estimates.
 
 -   **The prior was weakly informative, exerting only a small influence.**
 
--   **The Bayesian results remain very similar to the classical (survey-weighted) results.**
+<!-- -->
+
+-   **The observed data were strong enough to dominate the prior.**
+
+    **Bayesian results remain very similar to the classical (survey-weighted)**
 :::
 
 ------------------------------------------------------------------------
 
-### Correlation Diagnostics
+### Model Diagnostics
 
 ::: panel-tabset
-##### Pairwise correlation
+##### Pairwise Correlation
 
 ![](images/clipboard-1737198687.png){width="521"}
 
@@ -729,54 +727,54 @@ Model fit: bayes_R2(bayes_fit)
 
 ### Translational Research
 
-::: panel-tabset
-### Internal Validation
+-   ::: panel-tabset
+    ### Internal Validation
 
-**Personalized Risk Estimation**
+    **Personalized Risk Estimation**
 
-Model enables individualized diabetes risk prediction using age, BMI, sex, race can guide actionable thresholds (e.g., risk \>30%)
+    **Threshold** \>30%\
+    **BMI is modifiable** - interventions lower risk (Sex & race = constant). Used **posterior_linpred(transform = TRUE)**\
 
--   BMI is modifiable - interventions can lower risk (Sex and race remain constant)
--   Selected one participant (adult\[1, \]) with all covariates (age, BMI, sex, race)
--   using **posterior_linpred(transform = TRUE)**, we obtained predicted probabilities with the 95% credible interval to predict probability\
+    **Participant-1**
 
-![](images/clipboard-2754134965.png){width="196"}
+    ![](images/clipboard-1367040468.png)
 
-**Median predicted probability ≈ 0.25, with a 95% credible interval of 0.20–0.31, indicate a \~1 in 4 chance of diabetes.**
+    ![](images/clipboard-2754134965.png){width="334"}
 
-### Participant Data
+    **Median predicted probability ≈ 0.25, 95% CrI = 0.20–0.31: \~1 in 4 chance of diabetes.**
 
-``` r
-participant1_data  <- adult[1, ]
-phat1 <- posterior_linpred(bayes_fit, newdata = participant1_data, transform = TRUE)
-post_pred_df <- data.frame(pred = phat1)
-ci_95_participant1 <- quantile(phat1, c(0.025, 0.975))
-ggplot(post_pred_df, aes(x = pred)) + 
-  geom_density(color='darkblue', fill='lightblue') +
-  geom_vline(xintercept = ci_95_participant1[1], color='red', linetype='dashed') +
-  geom_vline(xintercept = ci_95_participant1[2], color='red', linetype='dashed') +
-  xlab('Probability of being diabetic (Outcome=1)') +
-  ggtitle('Posterior Predictive Distribution 95% Credible Interval') +
-  theme_bw()
-```
+    ### Participant Data
 
-### External Validation
+    ``` r
+    participant1_data  <- adult[1, ]
+    phat1 <- posterior_linpred(bayes_fit, newdata = participant1_data, transform = TRUE)
+    post_pred_df <- data.frame(pred = phat1)
+    ci_95_participant1 <- quantile(phat1, c(0.025, 0.975))
+    ggplot(post_pred_df, aes(x = pred)) + 
+      geom_density(color='darkblue', fill='lightblue') +
+      geom_vline(xintercept = ci_95_participant1[1], color='red', linetype='dashed') +
+      geom_vline(xintercept = ci_95_participant1[2], color='red', linetype='dashed') +
+      xlab('Probability of being diabetic (Outcome=1)') +
+      ggtitle('Posterior Predictive Distribution 95% Credible Interval') +
+      theme_bw()
+    ```
 
--   Computed the posterior predicted probability with 95% credible intervals for a new participant data on age, BMI, sex, and race.\
+    ``` r
+    new_participant <- data.frame(age_c= 40, bmi_c= 25, sex= "Female", race = "Mexican American")
+    ```
 
-``` r
-new_participant <- data.frame(age_c= 40, bmi_c= 25, sex= "Female", race = "Mexican American")
-```
+    ### External Validation
 
-![](images/clipboard-2142022257.png){width="166"}\
+    Computed the posterior predicted probability with 95% credible intervals for a new participant data: **age_c= 40, bmi_c= 25, sex= "Female", race = "Mexican American"**
 
--   X-axis: Predicted probability of diabetes (Outcome = 1)\
--   Y-axis: Density of predicted probabilities\
--   Blue curve: Posterior predictive distribution\
--   Shaded area: High probability values near 1 = diabetes risk\
--   Red dashed line: Upper bound of 95% credible interval\
--   Peak: Most likely predicted probability ≈ 1
-:::
+    ![](images/clipboard-2142022257.png){width="367"}\
+    X-axis: Predicted probability of diabetes (Outcome = 1)\
+    Y-axis: Density of predicted probabilities\
+    Blue curve: Posterior predictive distribution\
+    Shaded area: High probability values near 1 = diabetes risk\
+    Red dashed line: Upper bound of 95% credible interval\
+    Peak: Most likely predicted probability ≈ 1
+    :::
 
 ------------------------------------------------------------------------
 
@@ -784,7 +782,7 @@ new_participant <- data.frame(age_c= 40, bmi_c= 25, sex= "Female", race = "Mexic
 
 Reverse prediction illustrates the BMI value associated with a specific diabetes probability for a given individual
 
-![](images/clipboard-3125514674.png)
+![](images/clipboard-3125514674.png)\
 
 -   ::: panel-tabset
     #### Interpretation
@@ -872,5 +870,3 @@ Van de Schoot, R. et al. (2013, 2021). Weakly Informative Priors in Bayesian Reg
 -   Department of Mathematics and Statistics
 
 ------------------------------------------------------------------------
-
-::::::::::::

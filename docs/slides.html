@@ -445,12 +445,11 @@
 <div class="tab-content">
 <div id="tabset-1-1">
 <ul>
-<li><p><strong>Predict Diabetes</strong> by early identification of <strong>risk factors</strong></p></li>
-<li><p>Implementing Bayesian logistic regression for predicting diabetes</p></li>
+<li><p><strong>Implementing Bayesian logistic regression</strong> for predicting diabetes</p></li>
 <li><p><strong>Compare</strong> the Frequentist Regression model vs Bayesian Regression Model.</p></li>
-<li><p><strong>Application in Targeted Interventions</strong>:</p>
+<li><p><strong>Application</strong></p>
 <ul>
-<li>To improve estimation of disease burden and risk factors in specific subgroups or individuals by combining survey data, prior research, and posterior predictive modeling</li>
+<li>To improve the estimate of disease burden and risk factors in specific subgroups by combining survey data, prior research, and posterior predictive modeling</li>
 </ul></li>
 </ul>
 </div>
@@ -467,17 +466,17 @@
 <div id="tabset-1-3">
 <ul>
 <li><p>Probability represents a <strong>degree of statisticians belief</strong> about before observing the data.</p></li>
-<li><p><strong>Parameter is not known but is considered random variable</strong></p></li>
 <li><p><strong>Incorporates prior and regularizes estimates</strong> based on the probability distribution&nbsp;<img data-src="images/clipboard-2228883614.png" width="37" height="20">, called the prior distribution.</p></li>
 <li><p>Quantifies uncertainty under missingness or imputation (Baldwin &amp; Larson, 2017; Kruschke &amp; Liddell, 2017).</p></li>
-<li><p><strong>Provides credible intervals via MCMC</strong> to predict outcomes.</p></li>
-<li><p>Supports <strong>model checking, variable selection,</strong> and the model is flexible.</p></li>
-<li><p>Better for individualized/personalized risk prediction</p></li>
 <li><p>Flexible for handling complex models</p>
 <ul>
 <li>Hierarchical structure</li>
 <li>Missing data</li>
 </ul></li>
+<li><p><strong>Provides credible intervals via MCMC to predict outcomes.</strong></p></li>
+<li><p><strong>Parameters are not known but are considered random variable</strong></p></li>
+<li><p>Supports <strong>model checking, variable selection</strong></p></li>
+<li><p><strong>Application</strong>: individualized/personalized risk prediction</p></li>
 </ul>
 </div>
 </div>
@@ -492,7 +491,7 @@ P(\theta \mid D) = \frac{P(D \mid \theta)\, P(\theta)}{P(D)}
 \]</span></p>
 <ul>
 <li><p><strong>θ (Parameters):</strong>- Regression coefficients of predictors</p></li>
-<li><p><strong>D (Data):</strong>- Data (eg:NHANES) with outcome (diabetes) and predictors(eg:age, BMI, sex, and race)</p></li>
+<li><p><strong>D (Data):</strong>- Data (eg: NHANES) with outcome (diabetes) and predictors(eg:age, BMI, sex, and race)</p></li>
 <li><p><strong>Prior P(θ):</strong><br>
 Prior beliefs about effect sizes before seeing data<br>
 (weakly informative priors centered around “no effect”).</p></li>
@@ -666,27 +665,25 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <em>van Buuren &amp; Groothuis-Oudshoorn, 2011; van Buuren, 2012</em><br>
 </p>
 <ul>
-<li>Iteratively imputes incomplete variables using regression models.<br>
+<li><strong>Iteratively imputes incomplete variables</strong> using regression models.<br>
 </li>
-<li>MICE run 5 iterations for each of the 5 imputed datasets to ensure stability and convergence and provides multiple realistic versions of missing data<br>
+<li>MICE run <strong>5 iterations for each of the 5 imputed datasets</strong> to ensure stability and convergence and provides multiple realistic versions of missing data<br>
 </li>
-<li>Use PMM method for continuous (<em>Predictive Mean Matching)</em> to fill missing values with the observed values “closest” to predicted values)<br>
+<li>Use <strong>PMM method</strong> <strong>for continuous</strong> <strong>(<em>Predictive Mean Matching)</em></strong> to fill missing values with the observed values “closest” to predicted values)<br>
 </li>
-<li>Use logistic regression for binary variables.<br>
+<li>Use <strong>logistic regression for binary variables.</strong><br>
 </li>
-<li>Rubin’s rule finds pooled Estimates from across posterior distributions to yield full posterior<br>
-</li>
+<li><strong>Rubin’s rule finds pooled Estimates</strong> from across posterior distributions to yield full posterior<br>
+<strong>Posterior (parameters + missing data uncertainty)</strong></li>
 </ul>
-<p><strong>Posterior (parameters + missing data uncertainty)</strong></p>
 </div>
 <div id="tabset-5-3">
-<p>Model is fitted to each imputed dataset in <strong>R</strong> using brms <strong>(Stan backend)</strong>, <strong>2000 itirations</strong><br>
+<p>Model is fitted to each imputed dataset in <strong>R</strong> using brms <strong>(Stan backend)</strong>, <strong>2000 iterations</strong><br>
 </p>
 <p><strong>Bayesian Regression Formula</strong><br>
 </p>
 <p><strong><em>diabetes_dx | weights(wt_norm) ~ age_c + bmi_c + sex + race</em></strong></p>
-<p><br>
-<strong>Data set</strong>: Pooled Imputed dataset-1<br>
+<p><strong>Data set</strong>: Pooled Imputed dataset-1<br>
 <strong>Bernoulli family</strong><br>
 <strong>Chains = 4, Iteration = 2000, seed = 123</strong><br>
 <strong>prior</strong><br>
@@ -837,13 +834,16 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">Posterior draws</a></li><li><a href="#tabset-8-2">Code</a></li><li><a href="#tabset-8-3">Plot</a></li></ul>
 <div class="tab-content">
 <div id="tabset-8-1">
-<p><strong>After seeing the data,</strong> Posterior draws = 4000 draws (4 chains × 1000 iterations) via MCMC gives a posterior distribution of predictors</p>
+<p>Posterior draws = 4000 draws (4 chains × 1000 iterations) via MCMC gives a posterior distribution of predictors</p>
 <ul>
 <li><strong>Conditional distribution</strong> of the parameter given the data.</li>
-<li><strong>Subjective</strong> -&gt; prior distribution influences the conclusions.</li>
-<li>Influence of the prior <strong>goes to zero as the sample size increases.</strong></li>
+<li><strong>Influence of the prior:</strong>
+<ul>
+<li><strong>Subjectivity</strong></li>
+<li><strong>Sample size</strong> - influence goes to zero as the sample size increases.</li>
+</ul></li>
 <li>It is the <strong>full probability distribution</strong> of the parameter <strong>(mountain)</strong></li>
-<li>Mean and credible interval are just summaries of that distribution, not the distribution itself.</li>
+<li><strong>Mean and credible interval are just summaries</strong> of that distribution, not the distribution itself.</li>
 </ul>
 </div>
 <div id="tabset-8-2">
@@ -921,17 +921,12 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <section class="slide level2">
 
 <h4 id="posterior-predictive-checks">Posterior Predictive Checks</h4>
-<p><strong>500 draws: predicted outcomes</strong> for each observation compared observed data vs predicted outcomes (binary outcome = 0 or 1) simulated</p>
+<p><strong>500 draws: predicted outcomes</strong> for each observation (binary outcome = 0 or 1)</p>
+<h4 id="pred-vs-obs-outcome">Pred vs Obs Outcome</h4>
 <div class="panel-tabset">
-<ul id="tabset-11" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-11-1">Pred vs Obs Outcome</a></li><li><a href="#tabset-11-2">Pred Outcome Proportion</a></li><li><a href="#tabset-11-3">Outcome Mean and SD</a></li><li><a href="#tabset-11-4">Code</a></li></ul>
+<ul id="tabset-11" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-11-1">Predicted Outcome Prevalence (Diabetes =1)</a></li><li><a href="#tabset-11-2">Outcome Mean and SD</a></li><li><a href="#tabset-11-3">Code</a></li></ul>
 <div class="tab-content">
 <div id="tabset-11-1">
-<p><img data-src="images/clipboard-2418526955.png" width="274"><br>
-<strong>Fig</strong>: a bar plot comparing counts/frequencies of each category (0 vs 1) in the observed data (y) and in the posterior predictive samples (y-rep)<br>
-</p>
-<p><strong>Bars for y (observed) fall within the range of yrep (simulated):</strong> <strong>model predicts the overall diabetes prevalence well</strong></p>
-</div>
-<div id="tabset-11-2">
 <p><img data-src="images/clipboard-122565288.png" width="216"></p>
 <p>Fig: Histogram: Spread shows the uncertainty in predicted prevalence<br>
 </p>
@@ -939,11 +934,11 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 y-axis: frequency of posterior draws<br>
 </p>
 </div>
-<div id="tabset-11-3">
+<div id="tabset-11-2">
 <p><img data-src="images/clipboard-2726352750.png" width="340"></p>
 <p><img data-src="images/clipboard-1023519991.png" width="331"></p>
 </div>
-<div id="tabset-11-4">
+<div id="tabset-11-3">
 <div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>pp_samples \<span class="ot">&lt;-</span> <span class="fu">posterior_predict</span>(bayes_fit, <span class="at">ndraws =</span> <span class="dv">500</span>) </span>
 <span id="cb7-2"><a></a><span class="co"># 500 draws </span></span>
 <span id="cb7-3"><a></a></span>
@@ -972,36 +967,36 @@ y-axis: frequency of posterior draws<br>
 </section>
 <section class="slide level2">
 
-<h4 id="diabetes-prevalence-survey-weighted-nhanes-vs-predicted">Diabetes Prevalence (Survey weighted NHANES vs Predicted)</h4>
+<h4 id="bayesian-vs-survey-weighted-nhanes-diabetes-prevalence">Bayesian vs Survey-weighted NHANES (Diabetes Prevalence)</h4>
 <p><img data-src="images/clipboard-3433503019.png" width="362">| <img data-src="images/clipboard-2142249375.png" width="365"></p>
 <ul>
 <li>Model’s posterior mean diabetes prevalence = 10.95% (95% CI: 8.5%–12.8%) &gt; NHANES estimate of 8.9% (SE = 0.0048)</li>
 </ul>
 <p><strong>Slightly higher</strong> mean prevalence, but the credible interval overlaps the survey estimate = reasonable calibration.</p>
-<p><strong>Model is well-calibrated, with NHANES falling near the lower end of the posterior distribution but still within a plausible range</strong> :::</p>
+<p><strong>Model is well-calibrated, with NHANES falling near the lower end of the posterior distribution but still within a plausible range</strong></p>
 </section>
 <section class="slide level2">
 
-<h4 id="observed-vs.-predicted-average-diabetes-aross-individuals">Observed vs.&nbsp;Predicted Average diabetes (aross individuals)</h4>
+<h4 id="observed-vs.-predicted-in-individuals">Observed vs.&nbsp;Predicted in individuals</h4>
 <div class="panel-tabset">
-<ul id="tabset-12" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-12-1">Plot</a></li><li><a href="#tabset-12-2">Plot</a></li><li><a href="#tabset-12-3">Code</a></li></ul>
+<ul id="tabset-12" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-12-1">Average Diabetes</a></li><li><a href="#tabset-12-2">Mean BMI</a></li><li><a href="#tabset-12-3">Code</a></li></ul>
 <div class="tab-content">
 <div id="tabset-12-1">
-<p><img data-src="images/clipboard-2608056459.png" width="287"></p>
+<p><img data-src="images/clipboard-2608056459.png" width="404"></p>
 <ul>
 <li>Each point = one observation (an individual)</li>
 <li><strong>x-axis = observed value</strong> (<code>0</code> or <code>1</code> in your binary diabetes variable)</li>
 <li><strong>y-axis = average predicted posterior probability</strong> for that same individual across simulated datasets</li>
-<li>Points near (0, 0) or (1, 1) → good prediction</li>
+<li><strong>Points near (0, 0) or (1, 1) → good prediction</strong></li>
 </ul>
 </div>
 <div id="tabset-12-2">
-<p><img data-src="images/clipboard-2167517988.png" width="340"></p>
+<p><img data-src="images/clipboard-2167517988.png" width="434"></p>
 <ul>
 <li>Each point represents an individual’s observed BMI versus the model’s predicted mean.</li>
-<li>Error bars indicate the 95% credible intervals of the predictions.</li>
-<li>The plot demonstrates that the model’s predictions generally align with the observed data</li>
 </ul>
+<p><strong>Error bars indicate the 95% credible intervals of the predictions.</strong></p>
+<p><strong>Model predictions generally align with the observed data</strong></p>
 </div>
 <div id="tabset-12-3">
 <div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a><span class="co"># PP checks with bayesplot options</span></span>
@@ -1027,20 +1022,26 @@ y-axis: frequency of posterior draws<br>
 <span id="cb10-2"><a></a>bayes_tbl <span class="ot">&lt;-</span> bayes_or <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="st">"Bayesian"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><img data-src="images/clipboard-2112440543.png"></p>
 <ul>
-<li><p>Both models consistently identified <strong>Age</strong> and <strong>BMI</strong> as strong predictors of diabetes.</p></li>
-<li><p>The <strong>Bayesian model complements frequentist approaches</strong> by providing <strong>stable, interpretable estimates with quantified uncertainty</strong>.</p></li>
-<li><p>The model broadly reproduces <strong>population-level prevalence.</strong></p></li>
-<li><p><strong>Normalized weights</strong> were used to approximate survey weighting, but the <strong>model does not fully account for stratification, clustering, or design-based variance adjustments.</strong></p></li>
+<li><p>Both models consistently identified Age and BMI as strong predictors of diabetes.</p>
+<ul>
+<li><strong>Bayesian model</strong>: Complements frequentist approach, provided stable, interpretable estimates, quantified uncertainty, and produced population-level prevalence.</li>
+<li><strong>Survey-weighted</strong> : used Normalized weights, model does not fully account for stratification, clustering, or design-based variance adjustments.</li>
+</ul></li>
 </ul>
 </div>
 <div id="tabset-13-2">
 <ul>
-<li><p>Minimal shrinkage and similar uncertainty - reliability and robustness</p></li>
-<li><p>Estimates are pulled slightly towards the prior mean (often toward zero or toward more moderate values) compared to classical estimates.</p></li>
-<li><p>The Bayesian posterior did not pull the estimates very much.</p></li>
-<li><p><strong>The observed data was strong enough to dominate the prior.</strong></p></li>
+<li>M<strong>inimal shrinkage and similar uncertainty</strong> - reliability and robustness of the model</li>
+</ul>
+<!-- -->
+<ul>
+<li><p><strong>Posterior estimates are slightly pulled towards the prior mean</strong> (often toward zero or toward more moderate values) compared to classical estimates.</p></li>
 <li><p><strong>The prior was weakly informative, exerting only a small influence.</strong></p></li>
-<li><p><strong>The Bayesian results remain very similar to the classical (survey-weighted) results.</strong></p></li>
+</ul>
+<!-- -->
+<ul>
+<li><p><strong>The observed data were strong enough to dominate the prior.</strong></p>
+<p><strong>Bayesian results remain very similar to the classical (survey-weighted)</strong></p></li>
 </ul>
 </div>
 </div>
@@ -1048,9 +1049,9 @@ y-axis: frequency of posterior draws<br>
 </section>
 <section class="slide level2">
 
-<h3 id="correlation-diagnostics">Correlation Diagnostics</h3>
+<h3 id="model-diagnostics-1">Model Diagnostics</h3>
 <div class="panel-tabset">
-<ul id="tabset-14" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-14-1">Pairwise correlation</a></li><li><a href="#tabset-14-2">Code</a></li></ul>
+<ul id="tabset-14" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-14-1">Pairwise Correlation</a></li><li><a href="#tabset-14-2">Code</a></li></ul>
 <div class="tab-content">
 <div id="tabset-14-1">
 <p><img data-src="images/clipboard-1737198687.png" width="521"></p>
@@ -1107,20 +1108,19 @@ y-axis: frequency of posterior draws<br>
 <section class="slide level2">
 
 <h3 id="translational-research">Translational Research</h3>
-<div class="panel-tabset">
+<ul>
+<li><div class="panel-tabset">
 <ul id="tabset-15" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-15-1">Internal Validation</a></li><li><a href="#tabset-15-2">Participant Data</a></li><li><a href="#tabset-15-3">External Validation</a></li></ul>
 <div class="tab-content">
 <div id="tabset-15-1">
 <p><strong>Personalized Risk Estimation</strong></p>
-<p>Model enables individualized diabetes risk prediction using age, BMI, sex, race can guide actionable thresholds (e.g., risk &gt;30%)</p>
-<ul>
-<li>BMI is modifiable - interventions can lower risk (Sex and race remain constant)</li>
-<li>Selected one participant (adult[1, ]) with all covariates (age, BMI, sex, race)</li>
-<li>using <strong>posterior_linpred(transform = TRUE)</strong>, we obtained predicted probabilities with the 95% credible interval to predict probability<br>
-</li>
-</ul>
-<p><img data-src="images/clipboard-2754134965.png" width="196"></p>
-<p><strong>Median predicted probability ≈ 0.25, with a 95% credible interval of 0.20–0.31, indicate a ~1 in 4 chance of diabetes.</strong></p>
+<p><strong>Threshold</strong> &gt;30%<br>
+<strong>BMI is modifiable</strong> - interventions lower risk (Sex &amp; race = constant). Used <strong>posterior_linpred(transform = TRUE)</strong><br>
+</p>
+<p><strong>Participant-1</strong></p>
+<p><img data-src="images/clipboard-1367040468.png"></p>
+<p><img data-src="images/clipboard-2754134965.png" width="334"></p>
+<p><strong>Median predicted probability ≈ 0.25, 95% CrI = 0.20–0.31: ~1 in 4 chance of diabetes.</strong></p>
 </div>
 <div id="tabset-15-2">
 <div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a>participant1_data  <span class="ot">&lt;-</span> adult[<span class="dv">1</span>, ]</span>
@@ -1134,38 +1134,29 @@ y-axis: frequency of posterior draws<br>
 <span id="cb13-9"><a></a>  <span class="fu">xlab</span>(<span class="st">'Probability of being diabetic (Outcome=1)'</span>) <span class="sc">+</span></span>
 <span id="cb13-10"><a></a>  <span class="fu">ggtitle</span>(<span class="st">'Posterior Predictive Distribution 95% Credible Interval'</span>) <span class="sc">+</span></span>
 <span id="cb13-11"><a></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a>new_participant <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">age_c=</span> <span class="dv">40</span>, <span class="at">bmi_c=</span> <span class="dv">25</span>, <span class="at">sex=</span> <span class="st">"Female"</span>, <span class="at">race =</span> <span class="st">"Mexican American"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="tabset-15-3">
-<ul>
-<li>Computed the posterior predicted probability with 95% credible intervals for a new participant data on age, BMI, sex, and race.<br>
-</li>
+<p>Computed the posterior predicted probability with 95% credible intervals for a new participant data: <strong>age_c= 40, bmi_c= 25, sex= “Female”, race = “Mexican American”</strong></p>
+<p><img data-src="images/clipboard-2142022257.png" width="367"><br>
+X-axis: Predicted probability of diabetes (Outcome = 1)<br>
+Y-axis: Density of predicted probabilities<br>
+Blue curve: Posterior predictive distribution<br>
+Shaded area: High probability values near 1 = diabetes risk<br>
+Red dashed line: Upper bound of 95% credible interval<br>
+Peak: Most likely predicted probability ≈ 1</p>
+</div>
+</div>
+</div></li>
 </ul>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a>new_participant <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">age_c=</span> <span class="dv">40</span>, <span class="at">bmi_c=</span> <span class="dv">25</span>, <span class="at">sex=</span> <span class="st">"Female"</span>, <span class="at">race =</span> <span class="st">"Mexican American"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><img data-src="images/clipboard-2142022257.png" width="166"><br>
-</p>
-<ul>
-<li>X-axis: Predicted probability of diabetes (Outcome = 1)<br>
-</li>
-<li>Y-axis: Density of predicted probabilities<br>
-</li>
-<li>Blue curve: Posterior predictive distribution<br>
-</li>
-<li>Shaded area: High probability values near 1 = diabetes risk<br>
-</li>
-<li>Red dashed line: Upper bound of 95% credible interval<br>
-</li>
-<li>Peak: Most likely predicted probability ≈ 1</li>
-</ul>
-</div>
-</div>
-</div>
 </section>
 <section class="slide level2">
 
 <h3 id="reverse-prediction">Reverse Prediction</h3>
 <p>Reverse prediction illustrates the BMI value associated with a specific diabetes probability for a given individual</p>
-
-<img data-src="images/clipboard-3125514674.png" class="r-stretch"><ul>
+<p><img data-src="images/clipboard-3125514674.png"><br>
+</p>
+<ul>
 <li><div class="panel-tabset">
 <ul id="tabset-16" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-16-1">Interpretation</a></li><li><a href="#tabset-16-2">Code</a></li><li><a href="#tabset-16-3">Practical Implications</a></li></ul>
 <div class="tab-content">
@@ -1241,7 +1232,6 @@ Red vertical line is the targeted BMI: when the predicted probability of diabete
 </section>
 <section class="slide level2 smaller scrollable" id="references">
 
-<p>::::::::::::</p>
 
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">

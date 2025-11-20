@@ -2302,7 +2302,7 @@ _   This approach allows personalized risk assessment, enabling
 # Use the first participant 
 # using multiple covariates to select someone
 participant1_data  <- adult[1, ]
-
+participant1_data
 
 # predicted probabilities for patient 1
 phat1 <- posterior_linpred(bayes_fit, newdata = participant1_data, transform = TRUE)
