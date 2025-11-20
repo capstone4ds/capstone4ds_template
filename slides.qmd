@@ -318,6 +318,8 @@ svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibino
 ::: panel-tabset
 #### Markov Process
 
+MCMC convergence: the point where the information from the prior and the data (likelihood) has been fully combined, and the GIBBS sampler has reached the posterior distribution — and the chain is now drawing valid samples from that posterior.
+
 -   **GIBBS SAMPLER: A specific algorithm under the MCMC category** - Produces a sequence of random vectors of parameters ![](images/clipboard-1640325740.png){width="73" height="22"}
 -   **Burn in period:** **first 500–1,000 iterations** (early draws) that are **not representative** of the true posterior are discarded
 -   After the burn-in period: the chain reaches the *stationarity*
@@ -374,8 +376,6 @@ bayes_results <- post %>%  left_join(diag, by = "term") %>%  mutate(
 ::: panel-tabset
 #### MCMC Convergence
 
-MCMC convergence: the GIBBS sampler has reached the posterior distribution — the point where the information from the prior and the data (likelihood) has been fully combined, and the chain is now drawing valid samples from that posterior.
-
 Good Convergence shows:
 
 -   **no drift across iterations**
@@ -392,9 +392,9 @@ Good Convergence shows:
 
 #### Trace Plots (stable posteriors)
 
--   After convergence across all mcmc draws have
+After convergence across all mcmc draws have
 
-    precise estimates, high uncertainty, narrow distributions, smooth and unimodal → no multimodality **confirming stable posteriors.**
+-   **Stable posteriors**: precise estimates, high uncertainty, narrow distributions, smooth and unimodal (no multimodality)
 
 -   **Density Plot** **(Left Panel)** : histogram shows distribution of sampled coeffs.
 
@@ -518,61 +518,62 @@ ggplot(combined_draws, aes(x = estimate, fill = type)) +
 
 #### Posterior Predictive Checks
 
-**500 draws: predicted outcomes** for each observation (binary outcome = 0 or 1)
+-   ::: panel-tabset
+    #### Proportion of Diabetes
 
-#### Pred vs Obs Outcome
+    We draw **500 draws** of predicted outcomes for each observation and calculated the proportion of outcome (Diabetes = 1)\
+    ![](images/clipboard-2418526955.png){width="274"}\
 
-::: panel-tabset
-![](images/clipboard-2418526955.png){width="274"}\
-**Fig**: Bar plot comparing counts/frequencies of each category (0 vs 1) in the observed data (y) and predictive samples (y-rep)\
+    **Fig**: Bar plot comparing counts/frequencies of each category (0 vs 1) in the observed data (y) and predictive samples (y-rep)\
 
-**Bars for y (observed) fall within the range of yrep (simulated):** **model predicts the overall diabetes prevalence well**
+    **Bars for y (observed) fall within the range of yrep (simulated):** **model predicts the overall diabetes prevalence well**
 
-#### Predicted Outcome Prevalence (Diabetes =1)
+    #### Posterior Distribution of Diabetes 
 
-![](images/clipboard-122565288.png){width="216"}
+    ![](images/clipboard-122565288.png){width="216"}
 
-Fig: Histogram: Spread shows the uncertainty in predicted prevalence\
+    Histogram: Posterior distribution of the population proportion of diabetes. x-axis: proportion of diabetics (1s), y-axis: frequency of posterior draws
 
-x-axis: proportion of diabetics (1s)\
-y-axis: frequency of posterior draws\
+    -   The highest bar is around 0.11 (11%) **Symmetric**, centered at \~0.11
 
-#### Outcome Mean and SD
+    -   Spread: 95% credible interval is roughly 9%–13% diabetes prevalence
 
-![](images/clipboard-2726352750.png){width="340"}
+    #### Outcome Mean and SD
 
-![](images/clipboard-1023519991.png){width="331"}
+    ![](images/clipboard-2726352750.png){width="340"}
 
-#### Code
+    ![](images/clipboard-1023519991.png){width="331"}
 
-``` r
-pp_samples \<- posterior_predict(bayes_fit, ndraws = 500) 
-# 500 draws 
+    #### Code
 
-# Check dimensions dim(pp_samples) # rows = draws, cols = observations\
-ppc_bars(y = adult_imp1\$diabetes_dx, yrep = pp_samples\[1:500, \]) 
-```
+    ``` r
+    pp_samples \<- posterior_predict(bayes_fit, ndraws = 500) 
+    # 500 draws 
 
-``` r
-# pp_proportion <- rowMeans(pp_samples)  # if not already done
-known_prev <- 0.089   # NHANES prevalence
-posterior_mean <- mean(pp_proportion)
-posterior_ci <- quantile(pp_proportion, c(0.025, 0.975))  # 95% credible interval
-pp_df <- tibble(proportion = pp_proportion)
-ggplot(pp_df, aes(x = proportion)) +
-  geom_histogram(binwidth = 0.005, fill = "skyblue", color = "black") +
-  geom_vline(xintercept = known_prev, color = "red", linetype = "dashed", size = 1) +
-  geom_vline(xintercept = posterior_mean, color = "blue", linetype = "solid", size = 1) +
-  labs(
-    title = "Posterior Predicted Diabetes Proportion vs NHANES Prevalence",
-    subtitle = paste0("Red dashed = NHANES prevalence (", known_prev, 
-                      "), Blue solid = Posterior mean (", round(posterior_mean,3), ")"),
-    x = "Proportion of Diabetes = 1",
-    y = "Frequency"
-  ) +
-  theme_minimal()
-```
-:::
+    # Check dimensions dim(pp_samples) # rows = draws, cols = observations\
+    ppc_bars(y = adult_imp1\$diabetes_dx, yrep = pp_samples\[1:500, \]) 
+    ```
+
+    ``` r
+    # pp_proportion <- rowMeans(pp_samples)  # if not already done
+    known_prev <- 0.089   # NHANES prevalence
+    posterior_mean <- mean(pp_proportion)
+    posterior_ci <- quantile(pp_proportion, c(0.025, 0.975))  # 95% credible interval
+    pp_df <- tibble(proportion = pp_proportion)
+    ggplot(pp_df, aes(x = proportion)) +
+      geom_histogram(binwidth = 0.005, fill = "skyblue", color = "black") +
+      geom_vline(xintercept = known_prev, color = "red", linetype = "dashed", size = 1) +
+      geom_vline(xintercept = posterior_mean, color = "blue", linetype = "solid", size = 1) +
+      labs(
+        title = "Posterior Predicted Diabetes Proportion vs NHANES Prevalence",
+        subtitle = paste0("Red dashed = NHANES prevalence (", known_prev, 
+                          "), Blue solid = Posterior mean (", round(posterior_mean,3), ")"),
+        x = "Proportion of Diabetes = 1",
+        y = "Frequency"
+      ) +
+      theme_minimal()
+    ```
+    :::
 
 ------------------------------------------------------------------------
 

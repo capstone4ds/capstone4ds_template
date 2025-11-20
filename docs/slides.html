@@ -745,6 +745,7 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">Markov Process</a></li><li><a href="#tabset-6-2">Code</a></li><li><a href="#tabset-6-3">Result</a></li></ul>
 <div class="tab-content">
 <div id="tabset-6-1">
+<p>MCMC convergence: the point where the information from the prior and the data (likelihood) has been fully combined, and the GIBBS sampler has reached the posterior distribution — and the chain is now drawing valid samples from that posterior.</p>
 <ul>
 <li><strong>GIBBS SAMPLER: A specific algorithm under the MCMC category</strong> - Produces a sequence of random vectors of parameters <img data-src="images/clipboard-1640325740.png" width="73" height="22"></li>
 <li><strong>Burn in period:</strong> <strong>first 500–1,000 iterations</strong> (early draws) that are <strong>not representative</strong> of the true posterior are discarded</li>
@@ -794,7 +795,6 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 <ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">MCMC Convergence</a></li><li><a href="#tabset-7-2">Trace Plots (stable posteriors)</a></li><li><a href="#tabset-7-3">Autocorrelation Plot</a></li></ul>
 <div class="tab-content">
 <div id="tabset-7-1">
-<p>MCMC convergence: the GIBBS sampler has reached the posterior distribution — the point where the information from the prior and the data (likelihood) has been fully combined, and the chain is now drawing valid samples from that posterior.</p>
 <p>Good Convergence shows:</p>
 <ul>
 <li><p><strong>no drift across iterations</strong></p></li>
@@ -808,9 +808,9 @@ Updated probability distribution for predictor effects (eg: age, BMI, sex, and r
 </ul>
 </div>
 <div id="tabset-7-2">
+<p>After convergence across all mcmc draws have</p>
 <ul>
-<li><p>After convergence across all mcmc draws have</p>
-<p>precise estimates, high uncertainty, narrow distributions, smooth and unimodal → no multimodality <strong>confirming stable posteriors.</strong></p></li>
+<li><p><strong>Stable posteriors</strong>: precise estimates, high uncertainty, narrow distributions, smooth and unimodal (no multimodality)</p></li>
 <li><p><strong>Density Plot</strong> <strong>(Left Panel)</strong> : histogram shows distribution of sampled coeffs.</p></li>
 <li><p><strong>Trace plots (Right Panel)</strong></p>
 <ul>
@@ -923,24 +923,31 @@ Can reproduce the observed distribution of diabetes outcomes.</strong><br>
 <section class="slide level2">
 
 <h4 id="posterior-predictive-checks">Posterior Predictive Checks</h4>
-<p><strong>500 draws: predicted outcomes</strong> for each observation (binary outcome = 0 or 1)</p>
-<h4 id="pred-vs-obs-outcome">Pred vs Obs Outcome</h4>
-<div class="panel-tabset">
-<ul id="tabset-11" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-11-1">Predicted Outcome Prevalence (Diabetes =1)</a></li><li><a href="#tabset-11-2">Outcome Mean and SD</a></li><li><a href="#tabset-11-3">Code</a></li></ul>
+<ul>
+<li><div class="panel-tabset">
+<ul id="tabset-11" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-11-1">Proportion of Diabetes</a></li><li><a href="#tabset-11-2">Posterior Distribution of Diabetes</a></li><li><a href="#tabset-11-3">Outcome Mean and SD</a></li><li><a href="#tabset-11-4">Code</a></li></ul>
 <div class="tab-content">
 <div id="tabset-11-1">
-<p><img data-src="images/clipboard-122565288.png" width="216"></p>
-<p>Fig: Histogram: Spread shows the uncertainty in predicted prevalence<br>
+<p>We draw <strong>500 draws</strong> of predicted outcomes for each observation and calculated the proportion of outcome (Diabetes = 1)<br>
+<img data-src="images/clipboard-2418526955.png" width="274"><br>
 </p>
-<p>x-axis: proportion of diabetics (1s)<br>
-y-axis: frequency of posterior draws<br>
+<p><strong>Fig</strong>: Bar plot comparing counts/frequencies of each category (0 vs 1) in the observed data (y) and predictive samples (y-rep)<br>
 </p>
+<p><strong>Bars for y (observed) fall within the range of yrep (simulated):</strong> <strong>model predicts the overall diabetes prevalence well</strong></p>
 </div>
 <div id="tabset-11-2">
+<p><img data-src="images/clipboard-122565288.png" width="216"></p>
+<p>Histogram: Posterior distribution of the population proportion of diabetes. x-axis: proportion of diabetics (1s), y-axis: frequency of posterior draws</p>
+<ul>
+<li><p>The highest bar is around 0.11 (11%) <strong>Symmetric</strong>, centered at ~0.11</p></li>
+<li><p>Spread: 95% credible interval is roughly 9%–13% diabetes prevalence</p></li>
+</ul>
+</div>
+<div id="tabset-11-3">
 <p><img data-src="images/clipboard-2726352750.png" width="340"></p>
 <p><img data-src="images/clipboard-1023519991.png" width="331"></p>
 </div>
-<div id="tabset-11-3">
+<div id="tabset-11-4">
 <div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>pp_samples \<span class="ot">&lt;-</span> <span class="fu">posterior_predict</span>(bayes_fit, <span class="at">ndraws =</span> <span class="dv">500</span>) </span>
 <span id="cb7-2"><a></a><span class="co"># 500 draws </span></span>
 <span id="cb7-3"><a></a></span>
@@ -965,7 +972,8 @@ y-axis: frequency of posterior draws<br>
 <span id="cb8-17"><a></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-</div>
+</div></li>
+</ul>
 </section>
 <section class="slide level2">
 
