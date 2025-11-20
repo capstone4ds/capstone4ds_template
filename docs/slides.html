@@ -981,7 +981,7 @@ y-axis: frequency of posterior draws<br>
 <ul>
 <li>Model’s posterior mean diabetes prevalence = 10.95% (95% CI: 8.5%–12.8%) &gt; NHANES estimate of 8.9% (SE = 0.0048)</li>
 </ul>
-<p><strong>Slightly higher</strong> mean prevalenc, but the credible interval overlaps the survey estimate = reasonable calibration.</p>
+<p><strong>Slightly higher</strong> mean prevalence, but the credible interval overlaps the survey estimate = reasonable calibration.</p>
 <p><strong>Model is well-calibrated, with NHANES falling near the lower end of the posterior distribution but still within a plausible range</strong> :::</p>
 </section>
 <section class="slide level2">
@@ -1029,20 +1029,22 @@ y-axis: frequency of posterior draws<br>
 </ol>
 <div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a>svy_tbl   <span class="ot">&lt;-</span> svy_or   <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="st">"Survey-weighted MLE"</span>)</span>
 <span id="cb10-2"><a></a>bayes_tbl <span class="ot">&lt;-</span> bayes_or <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="st">"Bayesian"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><img data-src="images/clipboard-329828759.png" width="363"></p>
+<p><img data-src="images/clipboard-2112440543.png"></p>
 <ul>
-<li><strong>Age and BMI: strong risk factors in both models for diabetes predictors</strong>.</li>
-<li>The Bayesian model complements frequentist approaches by providing stable, interpretable, and uncertainty-quantified estimates, while broadly reproducing population-level prevalence.</li>
-<li>The Bayesian model used normalized weights, which approximates the effect of survey weights but does not fully account for stratification, clustering, or design-based variance adjustments.</li>
+<li><p>Both models consistently identified <strong>Age</strong> and <strong>BMI</strong> as strong predictors of diabetes.</p></li>
+<li><p>The <strong>Bayesian model complements frequentist approaches</strong> by providing <strong>stable, interpretable estimates with quantified uncertainty</strong>.</p></li>
+<li><p>The model broadly reproduces <strong>population-level prevalence.</strong></p></li>
+<li><p><strong>Normalized weights</strong> were used to approximate survey weighting, but the <strong>model does not fully account for stratification, clustering, or design-based variance adjustments.</strong></p></li>
 </ul>
 </div>
 <div id="tabset-13-2">
 <ul>
-<li><p>The Bayesian model shows minimal shrinkage and similar uncertainty, supporting the reliability and robustness of the results</p></li>
-<li><p>Bayesian estimates are pulled slightly toward the prior mean (often toward zero or toward more moderate values) compared to classical estimates.</p></li>
-<li><p>The Bayesian posterior did not pull the estimates very much. The observed data was strong enough to dominate the prior.</p></li>
-<li><p>The prior was weakly informative, exerting only a small influence.</p></li>
-<li><p>The Bayesian results remain very similar to the classical (survey-weighted) results.</p></li>
+<li><p>Minimal shrinkage and similar uncertainty - reliability and robustness</p></li>
+<li><p>Estimates are pulled slightly towards the prior mean (often toward zero or toward more moderate values) compared to classical estimates.</p></li>
+<li><p>The Bayesian posterior did not pull the estimates very much.</p></li>
+<li><p><strong>The observed data was strong enough to dominate the prior.</strong></p></li>
+<li><p><strong>The prior was weakly informative, exerting only a small influence.</strong></p></li>
+<li><p><strong>The Bayesian results remain very similar to the classical (survey-weighted) results.</strong></p></li>
 </ul>
 </div>
 </div>
@@ -1052,10 +1054,16 @@ y-axis: frequency of posterior draws<br>
 
 <h3 id="correlation-diagnostics">Correlation Diagnostics</h3>
 <div class="panel-tabset">
-<ul id="tabset-14" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-14-1">Pairwise correlation</a></li><li><a href="#tabset-14-2">Code</a></li><li><a href="#tabset-14-3">Interpretation</a></li></ul>
+<ul id="tabset-14" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-14-1">Pairwise correlation</a></li><li><a href="#tabset-14-2">Code</a></li></ul>
 <div class="tab-content">
 <div id="tabset-14-1">
 <p><img data-src="images/clipboard-1737198687.png" width="521"></p>
+<ul>
+<li><p>No strong linear relationships between <strong>Age, BMI, and Sex</strong>; each independently contributes to predicting diabetes.</p></li>
+<li><p><strong>Diagonal histograms</strong> are smooth and unimodal, confirming <strong>stable convergence</strong> and well-behaved posterior samples.</p></li>
+<li><p>Mild negative correlation between <strong>Age</strong> and <strong>Sex (Female)</strong>: as the effect of Age increases, the effect of being female slightly decreases.</p></li>
+</ul>
+<p><strong>Weak correlation indicates both predictors provide</strong> distinct information** for diabetes outcome.**</p>
 </div>
 <div id="tabset-14-2">
 <div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a><span class="co"># Extract posterior draws</span></span>
@@ -1071,16 +1079,6 @@ y-axis: frequency of posterior draws<br>
 <span id="cb11-11"><a></a>           <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"b_age_c"</span>, <span class="st">"b_bmi_c"</span>, <span class="st">"b_sexFemale"</span>),</span>
 <span id="cb11-12"><a></a>           <span class="at">off_diag_args =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-14-3">
-<ul>
-<li>The absence of strong linear relationships between age, BMI, and sex</li>
-<li>Independently contribute to the prediction of diabetes status.</li>
-<li>The smooth, unimodal histograms along the diagonals confirmed stable model convergence and well-behaved posterior samples.</li>
-<li>A mild negative tilt between b_age_c and b_sexFemale: a slight negative correlation:</li>
-<li>As the posterior estimate for age increases, the effect of being female slightly decreases.</li>
-</ul>
-<p><strong>Weak correlation: confirms both predictors contribute distinct information to the diabetes outcome</strong>.</p>
-</div>
 </div>
 </div>
 </section>
@@ -1089,10 +1087,11 @@ y-axis: frequency of posterior draws<br>
 <h3 id="r-square">R Square</h3>
 <div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>Model fit<span class="sc">:</span> <span class="fu">bayes_R2</span>(bayes_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
-<img data-src="images/clipboard-2402173436.png" class="r-stretch"><p>Interpretation</p>
+<img data-src="images/clipboard-2402173436.png" width="359" class="r-stretch"><p><strong>Interpretation</strong></p>
 <ul>
-<li>Explains about 13% of the variability in diabetes status, with credible uncertainty bounds suggesting reasonable but modest explanatory power.</li>
-<li>but other factors (e.g., genetics, lifestyle, environment) also contribute to outcome variability.</li>
+<li>Approx. 13% of the variability in diabetes status, with credible uncertainty bounds suggests reasonable but modest explanatory power.</li>
+<li>Predictors (Age, BMI, Sex, etc.) capture some, but not all, of the factors affecting diabetes.</li>
+<li>Other factors (e.g., genetics, lifestyle, environment) also contribute to outcome variability.</li>
 </ul>
 </section>
 <section class="slide level2">
@@ -1111,22 +1110,23 @@ y-axis: frequency of posterior draws<br>
 </section>
 <section class="slide level2">
 
-<h3 id="translational-research-perspective">Translational Research Perspective</h3>
+<h3 id="translational-research">Translational Research</h3>
 <div class="panel-tabset">
-<ul id="tabset-15" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-15-1">Personalized Risk Estimation</a></li><li><a href="#tabset-15-2">Internal Validation</a></li><li><a href="#tabset-15-3">Plot</a></li><li><a href="#tabset-15-4">External Validation</a></li><li><a href="#tabset-15-5">Plot</a></li></ul>
+<ul id="tabset-15" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-15-1">Internal Validation</a></li><li><a href="#tabset-15-2">Participant Data</a></li><li><a href="#tabset-15-3">External Validation</a></li></ul>
 <div class="tab-content">
 <div id="tabset-15-1">
+<p><strong>Personalized Risk Estimation</strong></p>
+<p>Model enables individualized diabetes risk prediction using age, BMI, sex, race can guide actionable thresholds (e.g., risk &gt;30%)</p>
 <ul>
-<li>Model enables individualized diabetes risk prediction using age, BMI, sex, race and outputs can guide actionable thresholds (e.g., risk &gt;30%)</li>
-<li>BMI is modifiable- interventions can lower risk while sex and race remain constant.</li>
+<li>BMI is modifiable - interventions can lower risk (Sex and race remain constant)</li>
+<li>Selected one participant (adult[1, ]) with all covariates (age, BMI, sex, race)</li>
+<li>using <strong>posterior_linpred(transform = TRUE)</strong>, we obtained predicted probabilities with the 95% credible interval to predict probability<br>
+</li>
 </ul>
+<p><img data-src="images/clipboard-2754134965.png" width="196"></p>
+<p><strong>Median predicted probability ≈ 0.25, with a 95% credible interval of 0.20–0.31, indicate a ~1 in 4 chance of diabetes.</strong></p>
 </div>
 <div id="tabset-15-2">
-<ul>
-<li>Selected one participant (adult[1, ]) with all covariates (age, BMI, sex, race)</li>
-<li>Obtain predicted probabilities from the logistic regression model.&nbsp;<strong>posterior_linpred(transform = TRUE)</strong></li>
-<li>Posterior draws: calculate the 95% credible interval for the predicted probability</li>
-</ul>
 <div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a>participant1_data  <span class="ot">&lt;-</span> adult[<span class="dv">1</span>, ]</span>
 <span id="cb13-2"><a></a>phat1 <span class="ot">&lt;-</span> <span class="fu">posterior_linpred</span>(bayes_fit, <span class="at">newdata =</span> participant1_data, <span class="at">transform =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb13-3"><a></a>post_pred_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">pred =</span> phat1)</span>
@@ -1140,28 +1140,26 @@ y-axis: frequency of posterior draws<br>
 <span id="cb13-11"><a></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="tabset-15-3">
-<p><img data-src="images/clipboard-2754134965.png" width="196">|</p>
-<p>Result: Median predicted probability ≈ 0.25, with a 95% credible interval of 0.20–0.31, indicate a ~1 in 4 chance of diabetes.</p>
-</div>
-<div id="tabset-15-4">
 <ul>
-<li>We computed the posterior predicted probability for a new participant data (age, BMI, sex, and race)).<br>
-</li>
-<li>The density plot with 95% credible intervals captures both the most likely risk and uncertainty.<br>
+<li>Computed the posterior predicted probability with 95% credible intervals for a new participant data on age, BMI, sex, and race.<br>
 </li>
 </ul>
 <div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a>new_participant <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">age_c=</span> <span class="dv">40</span>, <span class="at">bmi_c=</span> <span class="dv">25</span>, <span class="at">sex=</span> <span class="st">"Female"</span>, <span class="at">race =</span> <span class="st">"Mexican American"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="tabset-15-5">
 <p><img data-src="images/clipboard-2142022257.png" width="166"><br>
 </p>
-<p>Results<br>
-- X-axis: Predicted probability of diabetes (Outcome = 1)<br>
-- Y-axis: Density of predicted probabilities<br>
-- Blue curve: Posterior predictive distribution<br>
-- Shaded area: High probability values near 1 = diabetes risk<br>
-- Red dashed line: Upper bound of 95% credible interval<br>
-- Peak: Most likely predicted probability ≈ 1</p>
+<ul>
+<li>X-axis: Predicted probability of diabetes (Outcome = 1)<br>
+</li>
+<li>Y-axis: Density of predicted probabilities<br>
+</li>
+<li>Blue curve: Posterior predictive distribution<br>
+</li>
+<li>Shaded area: High probability values near 1 = diabetes risk<br>
+</li>
+<li>Red dashed line: Upper bound of 95% credible interval<br>
+</li>
+<li>Peak: Most likely predicted probability ≈ 1</li>
+</ul>
 </div>
 </div>
 </div>
@@ -1169,14 +1167,13 @@ y-axis: frequency of posterior draws<br>
 <section class="slide level2">
 
 <h3 id="reverse-prediction">Reverse Prediction</h3>
-<p><strong>Predict BMI for estimated Diabetes</strong></p>
-<div class="panel-tabset">
-<ul id="tabset-16" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-16-1">Plot</a></li><li><a href="#tabset-16-2">Interpretation</a></li><li><a href="#tabset-16-3">Code</a></li><li><a href="#tabset-16-4">Practical Implications</a></li></ul>
+<p>Reverse prediction illustrates the BMI value associated with a specific diabetes probability for a given individual</p>
+
+<img data-src="images/clipboard-3125514674.png" class="r-stretch"><ul>
+<li><div class="panel-tabset">
+<ul id="tabset-16" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-16-1">Interpretation</a></li><li><a href="#tabset-16-2">Code</a></li><li><a href="#tabset-16-3">Practical Implications</a></li></ul>
 <div class="tab-content">
 <div id="tabset-16-1">
-<p><img data-src="images/clipboard-3125514674.png"></p>
-</div>
-<div id="tabset-16-2">
 <p>X-axis: BMI values (centered or raw, depending on the model).<br>
 Y-axis: Predicted probability of diabetes for a representative individual (Age = 40, Female, Mexican American).<br>
 Blue curve: predicted probability of diabetes across the BMI range; consistently high (≈1) for most BMI values.<br>
@@ -1184,7 +1181,7 @@ Red horizontal line: Target probability of diabetes = 0.3.<br>
 Red vertical line is the targeted BMI: when the predicted probability of diabetes is closest to the target bmi probability (≈18).<br>
 </p>
 </div>
-<div id="tabset-16-3">
+<div id="tabset-16-2">
 <div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a>bmi_seq <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">18</span>, <span class="dv">40</span>, <span class="at">by =</span> <span class="fl">0.5</span>)</span>
 <span id="cb15-2"><a></a></span>
 <span id="cb15-3"><a></a>newdata_grid <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
@@ -1194,14 +1191,18 @@ Red vertical line is the targeted BMI: when the predicted probability of diabete
 <span id="cb15-7"><a></a>  <span class="at">race  =</span> <span class="st">"Mexican American"</span></span>
 <span id="cb15-8"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="tabset-16-4">
-<p><strong>This is the inverse prediction—the BMI needed to reach a 30% diabetes risk</strong>.<br>
+<div id="tabset-16-3">
+<p>“At what BMI does this individual have a 30% chance of being diabetic?”<br>
+<strong>This is the inverse prediction—the BMI needed to reach a 30% diabetes risk</strong>.<br>
 </p>
-<p>For this demographic profile, even a relatively low BMI (~18) is associated with a 30% diabetes risk<br>
-Indicating that other factors (age, sex, race) and the model’s coefficients contribute strongly to predicted diabetes risk.</p>
+<ul>
+<li><p>For this demographic profile, even a relatively low BMI (~18) is associated with a 30% diabetes risk</p></li>
+<li><p>Indicating that other factors (age, sex, race) and the model’s coefficients contribute strongly to predicted diabetes risk.</p></li>
+</ul>
 </div>
 </div>
-</div>
+</div></li>
+</ul>
 </section>
 <section class="slide level2">
 
