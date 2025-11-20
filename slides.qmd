@@ -104,7 +104,7 @@ $$
 
 ------------------------------------------------------------------------
 
-#### Bayesian Regression
+#### Bayesian Logistic Regression
 
 -   ::: panel-tabset
     #### Logistic Link Function
@@ -234,7 +234,7 @@ svy_fit <- survey::svyglm(formula = form_cc, design = des_cc, family = quasibino
 
 ------------------------------------------------------------------------
 
-### Bayesian Logistic Regression
+### Implementing Bayesian Logistic Regression
 
 -   ::: panel-tabset
     #### Data (Adults)
@@ -422,33 +422,32 @@ Chain mixing, convergence, and correlation of draws with lagged values across it
 
 Posterior draws = 4000 draws (4 chains × 1000 iterations) via MCMC gives a posterior distribution of predictors
 
--   **Conditional distribution** of the parameter given the data.
--   **Influence of the prior:**
-    -   **Subjectivity**
-    -   **Sample size** - influence goes to zero as the sample size increases.
--   It is the **full probability distribution** of the parameter **(mountain)**
--   **Mean and credible interval are just summaries** of that distribution, not the distribution itself.
+-   **Conditional distribution**
+-   **Full probability distribution** of the parameter given the data.
+    -   **Mean and credible interval are just summaries** of that distribution, not the distribution itself.
+-   **Influenced by prior (Prior Subjectivity)**
+-   **Sample size** - influence goes to zero as the sample size increases.
 
 ### Code
 
 ``` r
 # Posterior predictive check comparing observed vs. simulated outcomes
 pp_check(bayes_fit, nsamples = 100) +
-  labs(title = "Posterior Predictive Check: Observed vs. Replicated Outcomes")
+      labs(title = "Posterior Predictive Check: Observed vs. Replicated Outcomes")
 ```
 
 ### Plot
 
 ![](images/clipboard-2255770791.png){width="369"}
 
-**y-axis:**Density (how frequent each predicted probability occurs)\
-**x-axis:** Predicted probability values (from 0 to 1).
+-   **y-axis:**Density (how frequently each predicted probability occurs)
 
-The model can generate data that **looks like the observed data**\
+-   **x-axis:** Predicted probability values (from 0 to 1).
 
-Can **reproduce the observed distribution of diabetes outcomes**. \\
+-   Most participants have low predicted probabilities of diabetes (near 0), with a smaller peak at high probability (near 1)
 
-Most participants have low predicted probabilities of diabetes (near 0), with a smaller peak at high probability (near 1)
+**The model data looks like the observed data\
+Can reproduce the observed distribution of diabetes outcomes.**\
 :::
 
 ------------------------------------------------------------------------
@@ -494,7 +493,8 @@ Other/Multi: small positive effect (≈ +0.3, wide CrI).
 **Prior and posterior distributions** for the coefficient estimates of "Age (per 1 SD)" and "BMI (per 1 SD)"
 
 -   **Prior distribution: wide spread (variance)** high degree of initial uncertainty
--   P**osterior distribution: Narrower and taller, Data significantly updated the initial beliefs**
+-   P**osterior distribution: Narrower and taller**
+-   **Data significantly updated the initial beliefs**
 
 ##### Code
 
@@ -580,11 +580,14 @@ ggplot(pp_df, aes(x = proportion)) +
 
 ![](images/clipboard-3433503019.png){width="362"}\| ![](images/clipboard-2142249375.png){width="365"}
 
--   Model’s posterior mean diabetes prevalence = 10.95% (95% CI: 8.5%–12.8%) \> NHANES estimate of 8.9% (SE = 0.0048)
+-   Model’s mean diabetes prevalence = 10.95% (95% CI: 8.5%–12.8%)
+-   NHANES diabetes prevalence = 8.9% (SE = 0.0048)
 
-**Slightly higher** mean prevalence, but the credible interval overlaps the survey estimate = reasonable calibration.
+**Slightly higher** mean prevalence
 
-**Model is well-calibrated, with NHANES falling near the lower end of the posterior distribution but still within a plausible range**
+Credible interval overlaps showing = reasonable calibration.
+
+**With NHANES falling near the lower end of the posterior distribution but still within a plausible range, the Model is well-calibrated,**
 
 ------------------------------------------------------------------------
 
@@ -639,8 +642,10 @@ bayes_tbl <- bayes_or %>% mutate(Model = "Bayesian")
 
 -   Both models consistently identified Age and BMI as strong predictors of diabetes.
 
-    -   **Bayesian model**: Complements frequentist approach, provided stable, interpretable estimates, quantified uncertainty, and produced population-level prevalence.
-    -   **Survey-weighted** : used Normalized weights, model does not fully account for stratification, clustering, or design-based variance adjustments.
+    -   **Bayesian model**: **Complements** frequentist approach
+        -   provided stable, interpretable estimates, quantified uncertainty, and produced population-level prevalence.
+    -   **Survey-weighted** : used Normalized weights
+        -   model does not fully account for stratification, clustering, or design-based variance adjustments.
 
 ##### Interpretation
 
@@ -727,25 +732,21 @@ Model fit: bayes_R2(bayes_fit)
 
 ### Translational Research
 
--   ::: panel-tabset
-    ### Internal Validation
+::: panel-tabset
+### Internal Validation
 
-    **Personalized Risk Estimation**
+**Personalized Risk Estimation**
 
-    **Threshold** \>30%\
-    **BMI is modifiable** - interventions lower risk (Sex & race = constant). Used **posterior_linpred(transform = TRUE)**\
+**Threshold** \>30%\
+**BMI is modifiable** - interventions lower risk (Sex & race = constant). Used **posterior_linpred(transform = TRUE)**\
 
-    **Participant-1**
+![](images/clipboard-1367040468.png) ![](images/clipboard-2754134965.png){width="334"}
 
-    ![](images/clipboard-1367040468.png)
+**Median predicted probability ≈ 0.25, 95% CrI = 0.20–0.31: \~1 in 4 chance of diabetes.**
 
-    ![](images/clipboard-2754134965.png){width="334"}
+### Participant Data
 
-    **Median predicted probability ≈ 0.25, 95% CrI = 0.20–0.31: \~1 in 4 chance of diabetes.**
-
-    ### Participant Data
-
-    ``` r
+``` r
     participant1_data  <- adult[1, ]
     phat1 <- posterior_linpred(bayes_fit, newdata = participant1_data, transform = TRUE)
     post_pred_df <- data.frame(pred = phat1)
@@ -757,45 +758,44 @@ Model fit: bayes_R2(bayes_fit)
       xlab('Probability of being diabetic (Outcome=1)') +
       ggtitle('Posterior Predictive Distribution 95% Credible Interval') +
       theme_bw()
-    ```
+```
 
-    ``` r
+``` r
     new_participant <- data.frame(age_c= 40, bmi_c= 25, sex= "Female", race = "Mexican American")
-    ```
+```
 
-    ### External Validation
+### External Validation
 
-    Computed the posterior predicted probability with 95% credible intervals for a new participant data: **age_c= 40, bmi_c= 25, sex= "Female", race = "Mexican American"**
+Computed the posterior predicted probability with 95% credible intervals for a new participant data: **age_c= 40, bmi_c= 25, sex= "Female", race = "Mexican American"**
 
-    ![](images/clipboard-2142022257.png){width="367"}\
-    X-axis: Predicted probability of diabetes (Outcome = 1)\
-    Y-axis: Density of predicted probabilities\
-    Blue curve: Posterior predictive distribution\
-    Shaded area: High probability values near 1 = diabetes risk\
-    Red dashed line: Upper bound of 95% credible interval\
-    Peak: Most likely predicted probability ≈ 1
-    :::
+![](images/clipboard-2142022257.png){width="367"}\
+X-axis: Predicted probability of diabetes (Outcome = 1)\
+Y-axis: Density of predicted probabilities\
+Blue curve: Posterior predictive distribution\
+Shaded area: High probability values near 1 = diabetes risk\
+Red dashed line: Upper bound of 95% credible interval\
+**Peak: Most likely predicted probability ≈ 1**
+:::
 
 ------------------------------------------------------------------------
 
 ### Reverse Prediction
 
-Reverse prediction illustrates the BMI value associated with a specific diabetes probability for a given individual
+::: panel-tabset
+### Predicting BMI
 
-![](images/clipboard-3125514674.png)\
+Predicting BMI value for a given individual (Diabetic, Age = 40, Female, Mexican American)\
+**logit(Diabetes**i**​)=**β**0​+**β**Age**i**​+**β**BMI**i**​+**β**Sex**i**​+**β**​Race**i ![](images/clipboard-3125514674.png){width="463"}
 
--   ::: panel-tabset
-    #### Interpretation
+X-axis: BMI values (centered or raw, depending on the model).\
+Y-axis: Predicted probability of diabetes for a representative individual\
+**Blue curve**: predicted probability (diabetes) across the BMI range; consistently high (≈1)\
+**Red horizontal line**: Target probability of diabetes = 0.3.\
+**Red vertical line**: targeted BMI, when the predicted probability of diabetes is closest to the target bmi probability (≈18).\
 
-    X-axis: BMI values (centered or raw, depending on the model).\
-    Y-axis: Predicted probability of diabetes for a representative individual (Age = 40, Female, Mexican American).\
-    Blue curve: predicted probability of diabetes across the BMI range; consistently high (≈1) for most BMI values.\
-    Red horizontal line: Target probability of diabetes = 0.3.\
-    Red vertical line is the targeted BMI: when the predicted probability of diabetes is closest to the target bmi probability (≈18).\
+### Code
 
-    #### Code
-
-    ``` r
+``` r
     bmi_seq <- seq(18, 40, by = 0.5)
 
     newdata_grid <- data.frame(
@@ -803,18 +803,19 @@ Reverse prediction illustrates the BMI value associated with a specific diabetes
       bmi_c = bmi_seq,
       sex   = "Female",
       race  = "Mexican American"
-    )
-    ```
+  )
+```
 
-    #### Practical Implications
+### Practical Implications
 
-    “At what BMI does this individual have a 30% chance of being diabetic?”\
-    **This is the inverse prediction—the BMI needed to reach a 30% diabetes risk**.\
+“***At what BMI does this individual have a 30% chance of being diabetic?”***
 
-    -   For this demographic profile, even a relatively low BMI (\~18) is associated with a 30% diabetes risk
+*(Diabetic, Age = 40, Female, Mexican American)*\
+**This is the inverse prediction—the BMI needed to reach a 30% diabetes risk**.
 
-    -   Indicating that other factors (age, sex, race) and the model’s coefficients contribute strongly to predicted diabetes risk.
-    :::
+-   For this demographic profile, even a relatively low BMI (\~18) is associated with a 30% diabetes risk
+-   Indicating that other factors (age, sex, race) contribute strongly to the predicted diabetes risk.
+:::
 
 ------------------------------------------------------------------------
 
@@ -832,7 +833,7 @@ Reverse prediction illustrates the BMI value associated with a specific diabetes
 
 -   **Self-reported** variables may introduce recall/reporting bias.
 
--   **Interaction effects** (e.g., age × BMI) not tested. :::
+-   **Interaction effects** (e.g., age × BMI) not tested.
 
 ------------------------------------------------------------------------
 
