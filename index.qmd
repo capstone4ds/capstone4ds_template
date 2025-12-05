@@ -1570,7 +1570,7 @@ mcmc_areas(
     levels of uncertainty relative to the reference group (Non-Hispanic
     White).
 
--   The shaded regions indicate the 80% credible intervalswithin which
+-   The shaded regions indicate the 80% credible intervals within which
     the true parameter values are most likely to lie based on the
     posterior samples.
 
@@ -1667,6 +1667,16 @@ pp_samples <- posterior_predict(bayes_fit, ndraws = 500)  # 500 draws
 # Check dimensions
 dim(pp_samples)  # rows = draws, cols = observations
 ppc_bars(y = adult_imp1$diabetes_dx, yrep = pp_samples[1:500, ])
+
+percent_pred1_each_obs <- colMeans(pp_samples) * 100
+head(percent_pred1_each_obs)
+
+
+
+overall_percent_pred1 <- mean(pp_samples) * 100
+overall_percent_pred1
+
+
 
 ```
 
@@ -2658,4 +2668,100 @@ population-level prevalence.
     clinical decision-making. External validation in independent cohorts
     is needed before application.
     
+```{r}
+library(brms)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(posterior)
+
+# Extract posterior draws
+post <- as_draws_df(bayes_fit)
+
+# Extract prior draws (if not saved earlier)
+pri <- prior_draws
+
+# Put both into long format
+
+
+post_long <- post %>%
+  select(where(is.numeric)) %>%   # only numeric columns
+  pivot_longer(
+    cols = everything(),
+    names_to = "term",
+    values_to = "value"
+  ) %>%
+  mutate(type = "Posterior")
+pri_long <- pri %>%
+  select(where(is.numeric)) %>%   # only numeric columns
+  pivot_longer(
+    cols = everything(),
+    names_to = "term",
+    values_to = "value"
+  ) %>%
+  mutate(type = "Prior")
+
+
+all_draws <- bind_rows(pri_long, post_long)
+
+# Plot
+ggplot(all_draws, aes(x = value, fill = type, color = type)) +
+  geom_density(alpha = 0.3) +
+  facet_wrap(~ term, scales = "free") +
+  theme_bw() +
+  labs(title = "Prior vs Posterior Density",
+       subtitle = "Shows shrinkage and prior influence")
+```
+
+```{r}
+#| label: sd calculated
+
+yrep <- posterior_predict(bayes_fit)
+
+pp_sd <- apply(yrep, 1, sd)
+mean(pp_sd)
+
+
+
+```
+
+```{r}
+library(dplyr)
+library(broom)
+library(broom.mixed)
+
+# Survey-weighted estimates with confidence intervals
+svy_est <- tidy(svy_fit, conf.int = TRUE) %>%
+  filter(term %in% c("age_c", "bmi_c")) %>%
+  mutate(
+    term = recode(term, "age_c" = "Age", "bmi_c" = "BMI"),
+    svy = paste0(
+      round(estimate, 3), 
+      " (", 
+      round(conf.low, 3), ", ", 
+      round(conf.high, 3), ")"
+    )
+  ) %>%
+  select(term, svy)
+
+# Bayesian estimates with credible intervals
+bayes_est <- tidy(bayes_fit, conf.int = TRUE) %>%
+  filter(term %in% c("age_c", "bmi_c")) %>%
+  mutate(
+    term = recode(term, "age_c" = "Age", "bmi_c" = "BMI"),
+    bayes = paste0(
+      round(estimate, 3), 
+      " (", 
+      round(conf.low, 3), ", ", 
+      round(conf.high, 3), ")"
+    )
+  ) %>%
+  select(term, bayes)
+
+# Combine into a final table
+final_table <- left_join(svy_est, bayes_est, by = "term")
+final_table
+
+```
+
 # References
