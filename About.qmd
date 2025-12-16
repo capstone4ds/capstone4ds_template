@@ -1,0 +1,27 @@
+---
+title: "About"
+format: html
+---
+
+# Contributors
+
+-   Namita Mishra – analytic coding, content draft, developed project plan, collaborated via GitHub.
+-   Autumn Wilcox – analytic coding, content draft, structured project workflow, collaborated via GitHub.
+
+![](images/clipboard-3361740677.png){width="212"}
+
+Dr. Namita Mishra is a physician, a Head and Neck surgeon and a public health researcher with a strong foundation in medicine, epidemiology, and data science. She is a graduate student in Data Science (Health Analytics).
+
+Her work focuses on early detection and prevention of non-communicable diseases (cancer, obesity) and on health disparities at community level. She has researched salivary gland tumors, cardiac implants and community based research on healthy food access. Leveraging skills from Data Science, she integrates statistical modeling and Bayesian methods into her analyses. Her Bioinformatics expertise utilizes geodata visualization tools (3D Maps and GIS) for presentations.Passionate about bridging clinical insight with data-driven approaches, dedicated to advancing sustainable, evidence-based solutions in epidemiology and community health.
+
+Outside work she explores - gardening, cooking, singing, and sewing.
+
+📧 Contact: nmishra\@uwf.edu
+
+![](images/clipboard-1601697641.jpeg){width="208"}
+
+Autumn S. Wilcox is a U.S. Navy veteran and Data Science graduate student at the University of West Florida, specializing in Analytics and Modeling. She has over nine years of experience in Network Operations and Technical Writing, including her current role at Navy Federal Credit Union, where she supports enterprise technology and process documentation initiatives. Autumn also holds certification in Clinical Research Quality Management (CRQM) and has contributed to quality oversight and compliance efforts in clinical research settings.
+
+Her background bridges technology, analytics, and healthcare, with a focus on applying data-driven approaches to improve communication and systems reliability. Outside of work, Autumn enjoys traveling, photography, and finding creative inspiration through music.
+
+📧 Contact: awr12\@students.uwf.edu

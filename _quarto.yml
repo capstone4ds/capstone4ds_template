@@ -1,0 +1,25 @@
+
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Bayesian Logistic Regression Capstone"
+  navbar:
+    left:
+      - text: "Introduction"
+        href: Introduction.qmd
+      - text: "Research"
+        href: index.qmd
+      - text: "Slides"
+        href: slides.qmd
+      - text: "About Us"
+        href: About.qmd
+      
+format:
+  html:
+    theme: flatly
+    toc: true
+    code-fold: true
+    page-layout: full
+    
