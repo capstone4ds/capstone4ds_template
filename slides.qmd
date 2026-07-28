@@ -65,6 +65,17 @@ nocite: |
 
 - MCA extends CA by conducting CA on a table where the rows are the total number of observations and the columns are expanded observation levels of the features
 
+## Methods - MCA
+
+- MCA is mathematically grounded in the **generalized singular value decomposition (GSVD)** applied to the standardized residual matrix
+
+- The Benzécri correction adjusts eigenvalues to prevent artificial inflation of the first dimension:
+
+  $$
+  \lambda_l^* = \left[ \left( \frac{K}{K-1} \right) \left( \lambda_l - \frac{1}{K} \right) \right]^2 \quad \text{if } \lambda_l > \frac{1}{K}
+  $$
+
+- *Full derivation (SVD & GSVD) available in the written report.*
 
 ## Data Exploration and Visualization
 
