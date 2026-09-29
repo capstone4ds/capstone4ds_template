@@ -12,7 +12,7 @@ install.packages(c("tidyverse", "survival", "survminer", "skimr", "naniar"))
 library(tidyverse)
 library(survival)
 library(survminer)
-library(skimr)    
+library(skimr)   
 ```
 
 ```{r}
